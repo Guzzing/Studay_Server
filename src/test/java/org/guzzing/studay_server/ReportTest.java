@@ -25,7 +25,7 @@ class ReportTest {
     public void createReport_nullReporterId_throwIllegalArgumentException() {
         //given
         Long postId = 1L;
-        Long reporterId = 2L;
+        Long reporterId = null;
         String contents = "This is a report.";
         ReportItem item = ReportItem.FAKED_SALE;
 
