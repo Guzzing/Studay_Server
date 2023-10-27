@@ -36,7 +36,7 @@ jobs:
 
       - name: Build with gradle
         run: ./gradlew build
-        
+
       - name: Make Zip File
         run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
