@@ -4,12 +4,19 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/studay
+
 permissions:
   - object: /home/ubuntu/studay/
     owner: ubuntu
     group: ubuntu
 hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+
   AfterInstall:
     - location: scripts/deploy.sh
       timeout: 60
       runas: ubuntu
+
