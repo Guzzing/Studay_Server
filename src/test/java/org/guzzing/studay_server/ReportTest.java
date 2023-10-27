@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReportTest {
-
     @Test
     @DisplayName("필수로 들어가야 하는 게시글 id가 들어가지 않은 경우 예외를 던진다.")
     public void createReport_nullPostId_throwIllegalArgumentException() {
