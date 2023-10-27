@@ -11,7 +11,7 @@ permissions:
     group: ubuntu
 hooks:
   BeforeInstall:
-    - location: scripts/install_dependencies.sh
+    - location: scripts/deploy.sh
       timeout: 300
       runas: root
 
