@@ -8,6 +8,12 @@ on:
 
   workflow_dispatch:
 
+env:
+  BUCKET_NAME: team09-cicd-bucket
+  PROJECT_NAME: studay
+  DEPLOYMENT_GROUP_NAME: studay_cicd
+  CODE_DEPLOY_APP_NAME: studay_cicd
+
 jobs:
   # 작업의 이름
   build_and_test:
@@ -30,3 +36,24 @@ jobs:
 
       - name: Build with gradle
         run: ./gradlew build
+        
+      - name: Make Zip File
+        run: zip -qq -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+         aws-region: ap-northeast-1
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-1 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
+      - name: Code Deploy To EC2 instance
+        run: aws deploy create-deployment
+         --application-name $CODE_DEPLOY_APP_NAME
+         --deployment-config-name CodeDeployDefault.AllAtOnce
+         --deployment-group-name $DEPLOYMENT_GROUP_NAME
+         --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
