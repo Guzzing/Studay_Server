@@ -1,6 +1,13 @@
 package org.guzzing.studayserver.domain.member.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.NickName;
@@ -36,7 +43,8 @@ public class Member {
 
     }
 
-    protected Member(Long id, NickName nickName, String email, String socialId, MemberProvider memberProvider, RoleType roleType) {
+    protected Member(Long id, NickName nickName, String email, String socialId, MemberProvider memberProvider,
+            RoleType roleType) {
         this.id = id;
         this.nickName = nickName;
         this.email = email;

@@ -1,6 +1,5 @@
 package org.guzzing.studay_server.region.service;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.guzzing.studay_server.region.controller.SidoResult;

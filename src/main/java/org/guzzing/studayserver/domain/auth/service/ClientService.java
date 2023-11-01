@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.auth.service;
 
+import java.util.Optional;
 import org.guzzing.studayserver.domain.auth.client.ClientProxy;
 import org.guzzing.studayserver.domain.auth.client.ClientStrategy;
 import org.guzzing.studayserver.domain.auth.dto.AuthResponse;
@@ -10,8 +11,6 @@ import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class ClientService {
 
@@ -20,7 +19,8 @@ public class ClientService {
     private final MemberRepository memberJpaRepository;
     private final RefreshTokenService refreshTokenService;
 
-    public ClientService(ClientStrategy clientStrategy, AuthTokenProvider authTokenProvider, MemberRepository memberJpaRepository, RefreshTokenService refreshTokenService) {
+    public ClientService(ClientStrategy clientStrategy, AuthTokenProvider authTokenProvider,
+            MemberRepository memberJpaRepository, RefreshTokenService refreshTokenService) {
         this.clientStrategy = clientStrategy;
         this.authTokenProvider = authTokenProvider;
         this.memberJpaRepository = memberJpaRepository;
@@ -36,8 +36,8 @@ public class ClientService {
 
         Optional<Member> memberOptional = memberJpaRepository.findMemberIfExisted(socialId);
         Member savedMember = memberOptional.orElseGet(() -> memberJpaRepository.save(clientMember));
-        
-        AuthToken newAuthToken = refreshTokenService.saveAccessTokenCache(savedMember.getId(),socialId);
+
+        AuthToken newAuthToken = refreshTokenService.saveAccessTokenCache(savedMember.getId(), socialId);
 
         return AuthResponse.builder()
                 .appToken(newAuthToken.getToken())

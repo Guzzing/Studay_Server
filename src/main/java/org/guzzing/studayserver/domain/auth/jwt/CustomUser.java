@@ -1,14 +1,13 @@
 package org.guzzing.studayserver.domain.auth.jwt;
 
-import lombok.Builder;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import lombok.Builder;
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 public class CustomUser implements UserDetails {
@@ -29,8 +28,12 @@ public class CustomUser implements UserDetails {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         var that = (CustomUser) obj;
         return Objects.equals(this.memberId, that.memberId) &&
                 Objects.equals(this.socialId, that.socialId) &&
