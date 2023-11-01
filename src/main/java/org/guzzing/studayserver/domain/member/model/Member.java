@@ -21,6 +21,7 @@ public class Member {
 
     private String email;
 
+    @Column(nullable = false)
     private String socialId;
 
     @Enumerated(EnumType.STRING)
