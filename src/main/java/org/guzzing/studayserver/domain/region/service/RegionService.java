@@ -1,10 +1,10 @@
-package org.guzzing.studay_server.region.service;
+package org.guzzing.studayserver.domain.region.service;
 
 import java.util.List;
-import org.guzzing.studay_server.region.controller.SidoResult;
-import org.guzzing.studay_server.region.repository.RegionRepository;
-import org.guzzing.studay_server.region.service.dto.SigunguResult;
-import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.controller.SidoResult;
+import org.guzzing.studayserver.domain.region.repository.RegionRepository;
+import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class RegionService {
 
-    private static final List BASE_REGION_SIDO = List.of("서울특별시", "경기도");
+    private static final List<String> BASE_REGION_SIDO = List.of("서울특별시", "경기도");
 
     private final RegionRepository regionRepository;
 

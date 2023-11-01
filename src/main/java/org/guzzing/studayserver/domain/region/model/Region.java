@@ -1,4 +1,4 @@
-package org.guzzing.studay_server.region.model;
+package org.guzzing.studayserver.domain.region.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

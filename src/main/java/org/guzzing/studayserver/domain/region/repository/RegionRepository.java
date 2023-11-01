@@ -1,4 +1,4 @@
-package org.guzzing.studay_server.region.repository;
+package org.guzzing.studayserver.domain.region.repository;
 
 import java.util.List;
 

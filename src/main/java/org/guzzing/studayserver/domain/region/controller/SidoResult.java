@@ -1,4 +1,4 @@
-package org.guzzing.studay_server.region.controller;
+package org.guzzing.studayserver.domain.region.controller;
 
 import java.util.List;
 

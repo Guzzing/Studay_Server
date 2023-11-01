@@ -1,10 +1,10 @@
-package org.guzzing.studay_server.region.controller.dto;
+package org.guzzing.studayserver.domain.region.controller.dto;
 
 import java.text.MessageFormat;
 import java.util.List;
-import org.guzzing.studay_server.region.controller.SidoResult;
-import org.guzzing.studay_server.region.service.dto.SigunguResult;
-import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.controller.SidoResult;
+import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
 
 public record RegionResponse(
         String targetRegion,

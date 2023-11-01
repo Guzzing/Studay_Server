@@ -1,7 +1,7 @@
-package org.guzzing.studay_server.region.repository;
+package org.guzzing.studayserver.domain.region.repository;
 
 import java.util.List;
-import org.guzzing.studay_server.region.model.Region;
+import org.guzzing.studayserver.domain.region.model.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
