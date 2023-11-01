@@ -24,11 +24,11 @@ public class Region {
     @Column(name = "upmyeondong", nullable = false)
     private String upmyeondong;
 
-    @Column(name = "latitutde", nullable = false)
-    private double latitute;
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
 
-    @Column(name = "longitutde", nullable = false)
-    private double longitute;
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
 
     protected Region() {
     }
@@ -37,13 +37,13 @@ public class Region {
             final String sido,
             final String sigungu,
             final String upmyeondong,
-            final double latitute,
-            final double longitute
+            final double latitude,
+            final double longitude
     ) {
         this.sido = sido;
         this.sigungu = sigungu;
         this.upmyeondong = upmyeondong;
-        this.latitute = latitute;
-        this.longitute = longitute;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

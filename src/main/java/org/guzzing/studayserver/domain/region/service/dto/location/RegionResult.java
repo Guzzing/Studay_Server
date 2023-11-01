@@ -15,8 +15,8 @@ public record RegionResult(
                 region.getSido(),
                 region.getSigungu(),
                 region.getUpmyeondong(),
-                region.getLatitute(),
-                region.getLongitute());
+                region.getLatitude(),
+                region.getLongitude());
     }
 
 }

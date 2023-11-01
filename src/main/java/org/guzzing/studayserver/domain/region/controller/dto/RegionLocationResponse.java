@@ -6,8 +6,8 @@ public record RegionLocationResponse(
         String sido,
         String sigungu,
         String upmyeondong,
-        double latitute,
-        double longitute
+        double latitude,
+        double longitude
 ) {
 
     public static RegionLocationResponse from(final RegionResult regionResult) {

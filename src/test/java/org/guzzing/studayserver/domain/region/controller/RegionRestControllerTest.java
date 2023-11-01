@@ -146,8 +146,8 @@ class RegionRestControllerTest {
         final String sido = "경기도";
         final String sigungu = "용인시";
         final String upmyeondong = "성복동";
-        final double expectedLatitute = 37.3164158;
-        final double expectedLongitute = 127.0690127;
+        final double expectedlatitude = 37.3164158;
+        final double expectedlongitude = 127.0690127;
 
         // When
         ResultActions perform = mockMvc.perform(get("/regions/location")
@@ -164,8 +164,8 @@ class RegionRestControllerTest {
                 .andExpect(jsonPath("$.sido").value(sido))
                 .andExpect(jsonPath("$.sigungu").value(sigungu))
                 .andExpect(jsonPath("$.upmyeondong").value(upmyeondong))
-                .andExpect(jsonPath("$.latitute").value(expectedLatitute))
-                .andExpect(jsonPath("$.longitute").value(expectedLongitute))
+                .andExpect(jsonPath("$.latitude").value(expectedlatitude))
+                .andExpect(jsonPath("$.longitude").value(expectedlongitude))
                 .andDo(document("get-region-location",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -178,8 +178,8 @@ class RegionRestControllerTest {
                                 fieldWithPath("sido").type(STRING).description("조회된 시도"),
                                 fieldWithPath("sigungu").type(STRING).description("조회된 시군구"),
                                 fieldWithPath("upmyeondong").type(STRING).description("조회된 읍면동"),
-                                fieldWithPath("latitute").type(NUMBER).description("조회된 위도"),
-                                fieldWithPath("longitute").type(NUMBER).description("조회된 경도")
+                                fieldWithPath("latitude").type(NUMBER).description("조회된 위도"),
+                                fieldWithPath("longitude").type(NUMBER).description("조회된 경도")
                         )
                 ));
     }
