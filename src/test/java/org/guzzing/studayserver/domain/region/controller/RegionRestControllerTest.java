@@ -1,4 +1,4 @@
-package org.guzzing.studay_server.region.controller;
+package org.guzzing.studayserver.domain.region.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -19,12 +19,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.transaction.Transactional;
+import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
+@ActiveProfiles({"dev", "oauth"})
 class RegionRestControllerTest {
 
     @Autowired
@@ -39,6 +42,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("시도를 파라미터로 요청하면 해당 시도, 시군구, 개수 데이터를 반환한다.")
+    @WithMockCustomOAuth2LoginUser
     void getSubRegions_Sido_RegionResponse() throws Exception {
         // Given
         final String sido = "서울특별시";
@@ -72,6 +76,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("시도, 시군구를 요청 파라미터로 받아 해당 시도군구의 읍면동 데이터를 응답한다.")
+    @WithMockCustomOAuth2LoginUser
     void getSubRegions_SidoAndSigungu_RegionResponse() throws Exception {
         // Given
         final String sido = "서울특별시";
@@ -108,6 +113,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("아무런 파라미터 없이 요청하면 조회 가능한 시도 데이터를 반환한다.")
+    @WithMockCustomOAuth2LoginUser
     void getSubRegions_None_RegionResponse() throws Exception {
         // Given & When
         ResultActions perform = mockMvc.perform(get("/regions/beopjungdong")

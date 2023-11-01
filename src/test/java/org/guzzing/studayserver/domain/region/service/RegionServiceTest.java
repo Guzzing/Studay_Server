@@ -1,18 +1,20 @@
-package org.guzzing.studay_server.region.service;
+package org.guzzing.studayserver.domain.region.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.guzzing.studay_server.region.controller.SidoResult;
-import org.guzzing.studay_server.region.service.dto.SigunguResult;
-import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.controller.SidoResult;
+import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles({"dev", "oauth"})
 class RegionServiceTest {
 
     @Autowired
@@ -29,7 +31,7 @@ class RegionServiceTest {
 
         // Then
         assertThat(result.sido()).isEqualTo(sido);
-        assertThat(result.sigunguCount()).isGreaterThan(0);
+        assertThat(result.sigunguCount()).isPositive();
     }
 
     @Test
@@ -45,7 +47,7 @@ class RegionServiceTest {
         // Then
         assertThat(result.sido()).isEqualTo(sido);
         assertThat(result.sigungu()).isEqualTo(sigungu);
-        assertThat(result.upmyeondongCount()).isGreaterThan(0);
+        assertThat(result.upmyeondongCount()).isPositive();
     }
 
     @Test
