@@ -3,8 +3,10 @@ package org.guzzing.studay_server.region.controller;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.guzzing.studay_server.region.controller.dto.RegionResponse;
 import org.guzzing.studay_server.region.service.RegionService;
-import org.guzzing.studay_server.region.service.SigunguResult;
+import org.guzzing.studay_server.region.service.dto.SigunguResult;
+import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

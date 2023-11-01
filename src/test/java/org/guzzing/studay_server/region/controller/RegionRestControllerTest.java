@@ -39,7 +39,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("시도를 파라미터로 요청하면 해당 시도, 시군구, 개수 데이터를 반환한다.")
-    void getSigungus_Sido_SigunguResponse() throws Exception {
+    void getSigungus_Sido_RegionResponse() throws Exception {
         // Given
         final String sido = "서울특별시";
 
@@ -63,9 +63,9 @@ class RegionRestControllerTest {
                                 parameterWithName("sido").description("시도")
                         ),
                         responseFields(
-                                fieldWithPath("targetRegion").type(STRING).description("탐색 지역 구분"),
-                                fieldWithPath("subRegion").type(ARRAY).description("탐색 지역 하위 조회 결과"),
-                                fieldWithPath("subRegionCount").type(NUMBER).description("탐색 지역 하위 조회 결과 수")
+                                fieldWithPath("targetRegion").type(STRING).description("탐색한 시도명"),
+                                fieldWithPath("subRegion").type(ARRAY).description("탐색한 시군구 조회 결과 리스트"),
+                                fieldWithPath("subRegionCount").type(NUMBER).description("탐색한 시군구 조회 결과 수")
                         )
                 ));
     }

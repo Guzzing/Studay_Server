@@ -2,6 +2,7 @@ package org.guzzing.studay_server.region.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.guzzing.studay_server.region.service.dto.SigunguResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

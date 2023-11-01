@@ -1,4 +1,4 @@
-package org.guzzing.studay_server.region.service;
+package org.guzzing.studay_server.region.service.dto;
 
 import java.util.List;
 
