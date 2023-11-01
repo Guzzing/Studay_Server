@@ -34,6 +34,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Create application.yml
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
+          echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+
       - name: Build with gradle
         run: ./gradlew build
 
