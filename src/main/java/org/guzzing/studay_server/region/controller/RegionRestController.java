@@ -28,7 +28,14 @@ public class RegionRestController {
             @RequestParam(required = false) String sido,
             @RequestParam(required = false) String sigungu
     ) {
-        SigunguResult result = regionService.findSigungusBySido(sido);
+        if (sigungu == null) {
+            SigunguResult result = regionService.findSigungusBySido(sido);
+            return ResponseEntity
+                    .status(OK)
+                    .body(RegionResponse.from(result));
+        }
+
+        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
         return ResponseEntity
                 .status(OK)
                 .body(RegionResponse.from(result));

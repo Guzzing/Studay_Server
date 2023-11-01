@@ -3,6 +3,7 @@ package org.guzzing.studay_server.region.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.guzzing.studay_server.region.service.dto.SigunguResult;
+import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,22 @@ class RegionServiceTest {
         // Then
         assertThat(result.sido()).isEqualTo(sido);
         assertThat(result.sigunguCount()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("시도, 시군구를 받아 해당 시도군구의 읍면동을 반환한다.")
+    void findUpmyeondongBySidoAndSigungu_SidoAndSigungu_UpmyeondongResult() {
+        // Given
+        final String sido = "서울특별시";
+        final String sigungu = "중구";
+
+        // When
+        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
+
+        // Then
+        assertThat(result.sido()).isEqualTo(sido);
+        assertThat(result.sigungu()).isEqualTo(sigungu);
+        assertThat(result.upmyeondongCount()).isGreaterThan(0);
     }
 
 }

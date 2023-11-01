@@ -70,5 +70,41 @@ class RegionRestControllerTest {
                 ));
     }
 
+    @Test
+    @DisplayName("시도, 시군구를 요청 파라미터로 받아 해당 시도군구의 읍면동 데이터를 응답한다.")
+    void getSigungus_SidoAndSigungu_RegionResponse() throws Exception {
+        // Given
+        final String sido = "서울특별시";
+        final String sigungu = "중구";
+
+        // When
+        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong")
+                .param("sido", sido)
+                .param("sigungu", sigungu)
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.targetRegion").value(sido + " " + sigungu))
+                .andExpect(jsonPath("$.subRegion").isNotEmpty())
+                .andExpect(jsonPath("$.subRegionCount").isNumber())
+                .andDo(document("get-region-upmyeondong",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("sido").description("시도"),
+                                parameterWithName("sigungu").description("시군구")
+                        ),
+                        responseFields(
+                                fieldWithPath("targetRegion").type(STRING).description("탐색한 시도군구명"),
+                                fieldWithPath("subRegion").type(ARRAY).description("탐색한 읍면동 조회 결과 리스트"),
+                                fieldWithPath("subRegionCount").type(NUMBER).description("탐색한 읍면동 조회 결과 수")
+                        )
+                ));
+    }
+
 
 }
