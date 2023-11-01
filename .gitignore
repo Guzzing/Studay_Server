@@ -127,4 +127,8 @@ replay_pid*
 #Sonar generated dir
 /.sonar/
 
+### Springboot settingfile ###
+src/main/resources/application.*
+src/test/resources/application.*
+
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij+all,sonar
