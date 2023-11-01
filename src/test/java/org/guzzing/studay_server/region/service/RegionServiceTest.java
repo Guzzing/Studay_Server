@@ -1,7 +1,9 @@
 package org.guzzing.studay_server.region.service;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.guzzing.studay_server.region.controller.SidoResult;
 import org.guzzing.studay_server.region.service.dto.SigunguResult;
 import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +47,18 @@ class RegionServiceTest {
         assertThat(result.sido()).isEqualTo(sido);
         assertThat(result.sigungu()).isEqualTo(sigungu);
         assertThat(result.upmyeondongCount()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("조회 가능한 시도를 반환한다.")
+    void findSido_None_SidoResult() {
+        // Given & When
+        SidoResult result = regionService.findSido();
+
+        // Then
+        assertThat(result.nation()).isEqualTo("전국");
+        assertThat(result.sidos()).isNotEmpty();
+        assertThat(result.sidoCount()).isEqualTo(2);
     }
 
 }

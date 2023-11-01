@@ -24,20 +24,37 @@ public class RegionRestController {
     }
 
     @GetMapping(path = "/beopjungdong")
-    public ResponseEntity<RegionResponse> getSigungus(
+    public ResponseEntity<RegionResponse> getSubRegions(
             @RequestParam(required = false) String sido,
             @RequestParam(required = false) String sigungu
     ) {
-        if (sigungu == null) {
-            SigunguResult result = regionService.findSigungusBySido(sido);
-            return ResponseEntity
-                    .status(OK)
-                    .body(RegionResponse.from(result));
+        if (sido == null) {
+            return getSidoData();
+        } else if (sigungu == null) {
+            return getSigunguData(sido);
         }
+        return getUpmyeondongData(sido, sigungu);
+    }
 
+    private ResponseEntity<RegionResponse> getUpmyeondongData(String sido, String sigungu) {
         UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
         return ResponseEntity
                 .status(OK)
                 .body(RegionResponse.from(result));
     }
+
+    private ResponseEntity<RegionResponse> getSigunguData(String sido) {
+        SigunguResult result = regionService.findSigungusBySido(sido);
+        return ResponseEntity
+                .status(OK)
+                .body(RegionResponse.from(result));
+    }
+
+    private ResponseEntity<RegionResponse> getSidoData() {
+        SidoResult result = regionService.findSido();
+        return ResponseEntity
+                .status(OK)
+                .body(RegionResponse.from(result));
+    }
+
 }

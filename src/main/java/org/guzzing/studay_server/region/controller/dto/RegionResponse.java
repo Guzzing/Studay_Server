@@ -2,6 +2,7 @@ package org.guzzing.studay_server.region.controller.dto;
 
 import java.text.MessageFormat;
 import java.util.List;
+import org.guzzing.studay_server.region.controller.SidoResult;
 import org.guzzing.studay_server.region.service.dto.SigunguResult;
 import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
 
@@ -20,6 +21,10 @@ public record RegionResponse(
                 MessageFormat.format("{0} {1}", upmyeondongResult.sido(), upmyeondongResult.sigungu()),
                 upmyeondongResult.upmyeondongs(),
                 upmyeondongResult.upmyeondongCount());
+    }
+
+    public static RegionResponse from(final SidoResult sidoResult) {
+        return new RegionResponse(sidoResult.nation(), sidoResult.sidos(), sidoResult.sidoCount());
     }
 
 }

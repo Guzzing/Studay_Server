@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("시도를 파라미터로 요청하면 해당 시도, 시군구, 개수 데이터를 반환한다.")
-    void getSigungus_Sido_RegionResponse() throws Exception {
+    void getSubRegions_Sido_RegionResponse() throws Exception {
         // Given
         final String sido = "서울특별시";
 
@@ -72,7 +73,7 @@ class RegionRestControllerTest {
 
     @Test
     @DisplayName("시도, 시군구를 요청 파라미터로 받아 해당 시도군구의 읍면동 데이터를 응답한다.")
-    void getSigungus_SidoAndSigungu_RegionResponse() throws Exception {
+    void getSubRegions_SidoAndSigungu_RegionResponse() throws Exception {
         // Given
         final String sido = "서울특별시";
         final String sigungu = "중구";
@@ -105,6 +106,31 @@ class RegionRestControllerTest {
                         )
                 ));
     }
+    
+    @Test
+    @DisplayName("아무런 파라미터 없이 요청하면 조회 가능한 시도 데이터를 반환한다.")
+    void getSubRegions_None_RegionResponse() throws Exception {
+        // Given & When
+        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong")
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE));
 
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.targetRegion").value("전국"))
+                .andExpect(jsonPath("$.subRegion").exists())
+                .andExpect(jsonPath("$.subRegionCount").isNumber())
+                .andDo(document("get-region-sido",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("targetRegion").type(STRING).description("전국"),
+                                fieldWithPath("subRegion").type(ARRAY).description("탐색 가능한 시도 조회 결과 리스트"),
+                                fieldWithPath("subRegionCount").type(NUMBER).description("탐색 가능한 시도 조회 결과 수")
+                        )
+                ));
+    }
 
 }

@@ -1,6 +1,7 @@
 package org.guzzing.studay_server.region.service;
 
 import java.util.List;
+import org.guzzing.studay_server.region.controller.SidoResult;
 import org.guzzing.studay_server.region.repository.RegionRepository;
 import org.guzzing.studay_server.region.service.dto.SigunguResult;
 import org.guzzing.studay_server.region.service.dto.UpmyeondongResult;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class RegionService {
+
+    private static final List BASE_REGION_SIDO = List.of("서울특별시", "경기도");
 
     private final RegionRepository regionRepository;
 
@@ -25,5 +28,9 @@ public class RegionService {
     public UpmyeondongResult findUpmyeondongBySidoAndSigungu(final String sido, final String sigungu) {
         List<String> upmyeondong = regionRepository.findUpmyeondongBySidoAndSigungu(sido, sigungu);
         return UpmyeondongResult.from(sido, sigungu, upmyeondong);
+    }
+
+    public SidoResult findSido() {
+        return SidoResult.from(BASE_REGION_SIDO);
     }
 }
