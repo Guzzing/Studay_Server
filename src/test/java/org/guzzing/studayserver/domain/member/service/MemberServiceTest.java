@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles({"test", "oauth"})
+@ActiveProfiles({"dev", "oauth"})
 class MemberServiceTest {
 
     @Autowired
