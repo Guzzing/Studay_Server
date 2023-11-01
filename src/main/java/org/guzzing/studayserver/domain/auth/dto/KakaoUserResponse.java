@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.domain.child.model.NickName;
 
 @Getter
 @NoArgsConstructor
