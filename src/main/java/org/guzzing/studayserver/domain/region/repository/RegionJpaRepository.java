@@ -13,4 +13,6 @@ public interface RegionJpaRepository extends JpaRepository<Region, Long>, Region
     @Query("select r.upmyeondong from Region r where r.sido = :sido and r.sigungu = :sigungu")
     List<String> findUpmyeondongBySidoAndSigungu(final String sido, final String sigungu);
 
+    Region findBySidoAndSigunguAndUpmyeondong(final String sido, final String sigungu, final String upmyeondong);
+
 }

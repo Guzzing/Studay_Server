@@ -2,9 +2,9 @@ package org.guzzing.studayserver.domain.region.controller.dto;
 
 import java.text.MessageFormat;
 import java.util.List;
-import org.guzzing.studayserver.domain.region.controller.SidoResult;
-import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
-import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
 
 public record RegionResponse(
         String targetRegion,

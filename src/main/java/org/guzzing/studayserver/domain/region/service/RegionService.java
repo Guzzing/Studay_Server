@@ -1,10 +1,12 @@
 package org.guzzing.studayserver.domain.region.service;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.region.controller.SidoResult;
+import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
-import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
-import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,4 +35,10 @@ public class RegionService {
     public SidoResult findSido() {
         return SidoResult.from(BASE_REGION_SIDO);
     }
+
+    public RegionResult findLocation(final String sido, final String sigungu, final String upmyeondong) {
+        Region region = regionRepository.findBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
+        return RegionResult.from(region);
+    }
+
 }

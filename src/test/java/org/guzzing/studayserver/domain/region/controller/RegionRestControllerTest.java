@@ -60,7 +60,7 @@ class RegionRestControllerTest {
                 .andExpect(jsonPath("$.targetRegion").value(sido))
                 .andExpect(jsonPath("$.subRegion").isNotEmpty())
                 .andExpect(jsonPath("$.subRegionCount").isNumber())
-                .andDo(document("get-region-sigungu",
+                .andDo(document("get-region-beopjungdong-sigungu",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
@@ -96,7 +96,7 @@ class RegionRestControllerTest {
                 .andExpect(jsonPath("$.targetRegion").value(sido + " " + sigungu))
                 .andExpect(jsonPath("$.subRegion").isNotEmpty())
                 .andExpect(jsonPath("$.subRegionCount").isNumber())
-                .andDo(document("get-region-upmyeondong",
+                .andDo(document("get-region-beopjungdong-upmyeondong",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
@@ -127,13 +127,59 @@ class RegionRestControllerTest {
                 .andExpect(jsonPath("$.targetRegion").value("전국"))
                 .andExpect(jsonPath("$.subRegion").exists())
                 .andExpect(jsonPath("$.subRegionCount").isNumber())
-                .andDo(document("get-region-sido",
+                .andDo(document("get-region-beopjungdong-sido",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("targetRegion").type(STRING).description("전국"),
                                 fieldWithPath("subRegion").type(ARRAY).description("탐색 가능한 시도 조회 결과 리스트"),
                                 fieldWithPath("subRegionCount").type(NUMBER).description("탐색 가능한 시도 조회 결과 수")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("시도, 시군구, 읍면동 데이터를 요청받아, 해당하는 위경도 데이터를 응답한다.")
+    @WithMockCustomOAuth2LoginUser
+    void getLocation_AllAddress_RegionLocationResponse() throws Exception {
+        // Given
+        final String sido = "경기도";
+        final String sigungu = "용인시";
+        final String upmyeondong = "성복동";
+        final double expectedLatitute = 37.3164158;
+        final double expectedLongitute = 127.0690127;
+
+        // When
+        ResultActions perform = mockMvc.perform(get("/regions/location")
+                .param("sido", sido)
+                .param("sigungu", sigungu)
+                .param("upmyeondong", upmyeondong)
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.sido").value(sido))
+                .andExpect(jsonPath("$.sigungu").value(sigungu))
+                .andExpect(jsonPath("$.upmyeondong").value(upmyeondong))
+                .andExpect(jsonPath("$.latitute").value(expectedLatitute))
+                .andExpect(jsonPath("$.longitute").value(expectedLongitute))
+                .andDo(document("get-region-location",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("sido").description("시도"),
+                                parameterWithName("sigungu").description("시군구"),
+                                parameterWithName("upmyeondong").description("읍면동")
+                        ),
+                        responseFields(
+                                fieldWithPath("sido").type(STRING).description("조회된 시도"),
+                                fieldWithPath("sigungu").type(STRING).description("조회된 시군구"),
+                                fieldWithPath("upmyeondong").type(STRING).description("조회된 읍면동"),
+                                fieldWithPath("latitute").type(NUMBER).description("조회된 위도"),
+                                fieldWithPath("longitute").type(NUMBER).description("조회된 경도")
                         )
                 ));
     }

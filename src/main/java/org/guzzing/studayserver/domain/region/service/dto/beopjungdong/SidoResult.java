@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.region.controller;
+package org.guzzing.studayserver.domain.region.service.dto.beopjungdong;
 
 import java.util.List;
 

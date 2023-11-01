@@ -3,10 +3,13 @@ package org.guzzing.studayserver.domain.region.controller;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.guzzing.studayserver.domain.region.controller.dto.RegionLocationResponse;
 import org.guzzing.studayserver.domain.region.controller.dto.RegionResponse;
 import org.guzzing.studayserver.domain.region.service.RegionService;
-import org.guzzing.studayserver.domain.region.service.dto.SigunguResult;
-import org.guzzing.studayserver.domain.region.service.dto.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
+import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +37,18 @@ public class RegionRestController {
             return getSigunguData(sido);
         }
         return getUpmyeondongData(sido, sigungu);
+    }
+
+    @GetMapping(path = "/location")
+    public ResponseEntity<RegionLocationResponse> getLocation(
+            @RequestParam String sido,
+            @RequestParam String sigungu,
+            @RequestParam String upmyeondong
+    ) {
+        RegionResult regionResult = regionService.findLocation(sido, sigungu, upmyeondong);
+        return ResponseEntity
+                .status(OK)
+                .body(RegionLocationResponse.from(regionResult));
     }
 
     private ResponseEntity<RegionResponse> getUpmyeondongData(String sido, String sigungu) {
