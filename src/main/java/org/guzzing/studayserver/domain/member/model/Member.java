@@ -83,4 +83,8 @@ public class Member {
     public String getNickName() {
         return nickName.getValue();
     }
+
+    public String getEmail() {
+        return email.getValue();
+    }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NickName {
 
-    private static final int NAME_MAX_LENGTH = 200;
+    public static final int NAME_MAX_LENGTH = 200;
 
     @Column(name = "nickname")
     private String value;
