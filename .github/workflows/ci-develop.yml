@@ -15,6 +15,7 @@ jobs:
   build_and_test:
     # GitHub Actions 러너의 운영 체제
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0.21
@@ -29,6 +30,7 @@ jobs:
         ports:
           - 6379:6379
         options: --entrypoint redis-server
+
     # 순차적으로 실행될 단계들을 정의하는 섹션
     steps:
       - name: Checkout code
@@ -40,11 +42,13 @@ jobs:
           distribution: 'corretto'
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
           echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+
       - name: Build with gradle
         run: ./gradlew build
