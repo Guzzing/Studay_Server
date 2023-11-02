@@ -18,7 +18,7 @@ public class RegionService {
 
     private final RegionRepository regionRepository;
 
-    public RegionService(RegionRepository regionRepository) {
+    public RegionService(final RegionRepository regionRepository) {
         this.regionRepository = regionRepository;
     }
 
@@ -38,6 +38,14 @@ public class RegionService {
 
     public RegionResult findLocation(final String sido, final String sigungu, final String upmyeondong) {
         Region region = regionRepository.findBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
+        return RegionResult.from(region);
+    }
+
+    public RegionResult createRegion(
+            final String sido, final String sigungu, final String upmyeondong,
+            final double latitude, final double longitude
+    ) {
+        Region region = regionRepository.save(Region.of(sido, sigungu, upmyeondong, latitude, longitude));
         return RegionResult.from(region);
     }
 

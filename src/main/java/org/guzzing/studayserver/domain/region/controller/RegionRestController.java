@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/regions", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/regions")
 public class RegionRestController {
 
     private final RegionService regionService;
@@ -26,7 +26,7 @@ public class RegionRestController {
         this.regionService = regionService;
     }
 
-    @GetMapping(path = "/beopjungdong")
+    @GetMapping(path = "/beopjungdong", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegionResponse> getSubRegions(
             @RequestParam(required = false) String sido,
             @RequestParam(required = false) String sigungu
@@ -39,7 +39,7 @@ public class RegionRestController {
         return getUpmyeondongData(sido, sigungu);
     }
 
-    @GetMapping(path = "/location")
+    @GetMapping(path = "/location", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegionLocationResponse> getLocation(
             @RequestParam String sido,
             @RequestParam String sigungu,

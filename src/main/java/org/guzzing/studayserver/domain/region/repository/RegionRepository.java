@@ -10,4 +10,6 @@ public interface RegionRepository {
     List<String> findUpmyeondongBySidoAndSigungu(final String sido, final String sigungu);
 
     Region findBySidoAndSigunguAndUpmyeondong(final String sido, final String sigungu, final String upmyeondong);
+
+    Region save(Region region);
 }
