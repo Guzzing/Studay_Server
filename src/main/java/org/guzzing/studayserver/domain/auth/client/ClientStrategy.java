@@ -1,11 +1,10 @@
 package org.guzzing.studayserver.domain.auth.client;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class ClientStrategy {
