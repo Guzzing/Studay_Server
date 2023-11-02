@@ -3,8 +3,10 @@ package org.guzzing.studayserver.global.error.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
+
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import static org.guzzing.studayserver.global.error.response.ErrorCode.*;
+
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Slf4j
@@ -26,7 +30,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.warn("Handle MethodArgumentNotValidException", e.getMessage());
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_METHOD_ERROR, e.getBindingResult());
+        final ErrorResponse response = ErrorResponse.of(INVALID_METHOD_ERROR, e.getBindingResult());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -69,7 +73,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(JsonProcessingException.class)
     protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex) {
         log.warn("handleJsonProcessingException", ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(REQUEST_BODY_MISSING_ERROR, ex.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -95,7 +99,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handleHttpMediaTypeException(HttpMediaTypeNotSupportedException e) {
         log.warn("Handle HttpMediaTypeNotSupportedException : ", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(INVALID_INPUT_VALUE_ERROR, e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -108,7 +112,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
     protected ResponseEntity<ErrorResponse> handleNotFoundException(ChangeSetPersister.NotFoundException e) {
         log.warn("Handle NotFoundException : ", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_FOUND_ENTITY, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(NOT_FOUND_ENTITY, e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -121,7 +125,8 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllException(Exception e) {
         log.error("Handle Exception :", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(INTERNAL_SERVER_ERROR, e.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);

@@ -1,4 +1,4 @@
-package org.guzzing;
+package org.guzzing.studayserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

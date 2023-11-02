@@ -62,6 +62,22 @@ dependencies {
 
     //swagger
     swaggerUI 'org.webjars:swagger-ui:4.11.1'
+
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Spring Security 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    testImplementation "org.springframework.security:spring-security-test"
+
+    //JWT 토큰 생성
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 }
 
 tasks.withType(GenerateSwaggerUI) {
