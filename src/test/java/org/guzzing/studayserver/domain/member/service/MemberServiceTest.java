@@ -35,8 +35,8 @@ class MemberServiceTest {
         Member savedMember = memberRepository.save(member);
 
         MemberRegisterParam param = new MemberRegisterParam(savedMember.getId(), memberNickname, memberEmail, List.of(
-                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname1", "grade1"),
-                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname2", "grade2")
+                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname1", "초등학교 1학년"),
+                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname2", "초등학교 3학년")
         ));
 
         // When
