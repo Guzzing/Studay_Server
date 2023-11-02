@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/studay?serverTimezone=Asia/Seoul
+    username: root
+    password: 7351
+    driver-class-name:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: debug
+
+springdoc:
+  default-consumes-media-type: application/yml;charset=UTF-8
+  default-produces-media-type: application/yml;charset=UTF-8
+
