@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.region.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import lombok.Getter;
 public class Region {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "sido", nullable = false)
@@ -45,5 +47,12 @@ public class Region {
         this.upmyeondong = upmyeondong;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public static Region of(
+            final String sido, final String sigungu, final String upmyeondong,
+            final double latitude, final double longitude
+    ) {
+        return new Region(sido, sigungu, upmyeondong, latitude, longitude);
     }
 }
