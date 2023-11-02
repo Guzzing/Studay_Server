@@ -1,9 +1,12 @@
 package org.guzzing.studayserver.domain.like.controller;
 
+import static org.guzzing.studayserver.testutil.TestConfig.AUTHORIZATION_HEADER;
+import static org.guzzing.studayserver.testutil.TestConfig.BEARER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -12,6 +15,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,7 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.like.controller.dto.LikeRequest;
+import org.guzzing.studayserver.domain.like.service.LikeService;
+import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
+import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
 import org.guzzing.studayserver.testutil.TestConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +56,18 @@ class LikeRestControllerTest {
     @Autowired
     private TestConfig testConfig;
 
+    @Autowired
+    private LikeService likeService;
+
     private final Long academyId = 1L;
+    private LikeParam param;
+
+    @BeforeEach
+    void setUp() {
+        Long memberId = 1L;
+        LikeRequest request = new LikeRequest(academyId);
+        param = LikeRequest.to(request, memberId);
+    }
 
     @Test
     @DisplayName("헤더에 JWT 로 들어오는 멤버 아이디와 바디로 전달되는 학원 아이디를 이용해서 좋아요를 등록한다.")
@@ -58,7 +78,7 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(post("/likes")
-                .header("Authorization", "Bearer " + testConfig.getJwtToken())
+                .header("Authorization", "Bearer " + testConfig.getJwt())
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -83,6 +103,30 @@ class LikeRestControllerTest {
                                 fieldWithPath("likeId").type(NUMBER).description("좋아요 아이디"),
                                 fieldWithPath("memberId").type(NUMBER).description("학원 아이디"),
                                 fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("등록한 좋아요를 제거한다.")
+    void removeLike_LikeId_Remove() throws Exception {
+        // Given
+        LikeResult likeResult = likeService.createLikeOfAcademy(param);
+
+        // When
+        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", likeResult.likeId())
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-like",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("likeId").description("좋아요 아이디")
                         )
                 ));
     }

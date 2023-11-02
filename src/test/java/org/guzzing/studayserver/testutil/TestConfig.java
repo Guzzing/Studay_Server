@@ -1,14 +1,23 @@
 package org.guzzing.studayserver.testutil;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ConfigurationProperties(prefix = "test")
 public class TestConfig {
 
-    private static final String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTQ0OTg2NTgzIiwicm9sZSI6IlJPTEVfVVNFUiIsIm1lbWJlcklkIjoyLCJleHAiOjE2OTg5MjQ4OTJ9.mOJLR9VBMtB0xTcgiL9jnCfFdaygBTGRHOSX0TxVWcw";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER = "Bearer ";
 
-    public String getJwtToken() {
-        return jwtToken;
+    private String jwt;
+
+    public String getJwt() {
+        return this.jwt;
+    }
+
+    public void setJwt(final String jwt) {
+        this.jwt = jwt;
     }
 
 }

@@ -10,6 +10,8 @@ import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +23,13 @@ public class LikeRestController {
 
     private final LikeService likeService;
 
-    public LikeRestController(LikeService likeService) {
+    public LikeRestController(final LikeService likeService) {
         this.likeService = likeService;
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<LikeResponse> createLike(
-            @Validated @RequestBody LikeRequest request,
+            @RequestBody LikeRequest request,
             @MemberId Long memberId
     ) {
         LikeResult result = likeService.createLikeOfAcademy(LikeRequest.to(request, memberId));
@@ -35,6 +37,17 @@ public class LikeRestController {
         return ResponseEntity
                 .status(CREATED)
                 .body(LikeResponse.from(result));
+    }
+
+    @DeleteMapping("/{likeId}")
+    public ResponseEntity<Void> removeLike(
+            @PathVariable Long likeId
+    ) {
+        likeService.removeLikeOfAcademy(likeId);
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
 }
