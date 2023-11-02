@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.region.service;
 
+import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SIDO;
+
 import java.util.List;
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
@@ -13,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class RegionService {
-
-    private static final List<String> BASE_REGION_SIDO = List.of("서울특별시", "경기도");
 
     private final RegionRepository regionRepository;
 
