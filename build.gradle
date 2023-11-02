@@ -100,11 +100,6 @@ tasks.withType(GenerateSwaggerUI) {
            into("./build/resources/main/static/docs")
 }
 
-// 3.4.3
-// bootJar 실행 전, copySwaggerUI 를 실행하도록 설정
-tasks.withType(BootJar) {
-    dependsOn 'copySwaggerUI'
- }
 
 tasks.named('test') {
     useJUnitPlatform()
