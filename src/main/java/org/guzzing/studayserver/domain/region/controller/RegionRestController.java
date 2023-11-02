@@ -3,6 +3,9 @@ package org.guzzing.studayserver.domain.region.controller;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.guzzing.studayserver.domain.region.aop.ValidSido;
+import org.guzzing.studayserver.domain.region.aop.ValidSigungu;
+import org.guzzing.studayserver.domain.region.aop.ValidUpmyeondong;
 import org.guzzing.studayserver.domain.region.controller.dto.RegionLocationResponse;
 import org.guzzing.studayserver.domain.region.controller.dto.RegionResponse;
 import org.guzzing.studayserver.domain.region.service.RegionService;
@@ -26,6 +29,8 @@ public class RegionRestController {
         this.regionService = regionService;
     }
 
+    @ValidSido
+    @ValidSigungu
     @GetMapping(path = "/beopjungdong", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegionResponse> getSubRegions(
             @RequestParam(required = false) String sido,
@@ -39,6 +44,9 @@ public class RegionRestController {
         return getUpmyeondongData(sido, sigungu);
     }
 
+    @ValidSido
+    @ValidSigungu
+    @ValidUpmyeondong
     @GetMapping(path = "/location", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegionLocationResponse> getLocation(
             @RequestParam String sido,
