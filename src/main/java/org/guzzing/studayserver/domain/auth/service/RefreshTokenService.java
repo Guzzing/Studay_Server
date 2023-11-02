@@ -21,7 +21,7 @@ public class RefreshTokenService {
 
     public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
         AuthToken refreshToken = findRefreshToken(accessToken);
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId,memberId);
+        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
 
         refreshTokenRepository.save(new JwtTokenCache(memberId, refreshToken.getToken(), newAccessToken.getToken()));
 
@@ -29,7 +29,7 @@ public class RefreshTokenService {
     }
 
     public AuthToken saveAccessTokenCache(Long memberId, String socialId) {
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId,memberId);
+        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
         AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
 
         refreshTokenRepository.save(new JwtTokenCache(memberId, newRefreshToken.getToken(), newAccessToken.getToken()));
@@ -37,12 +37,12 @@ public class RefreshTokenService {
         return newAccessToken;
     }
 
-    public boolean isExpiredRefreshToken (String accessToken) {
+    public boolean isExpiredRefreshToken(String accessToken) {
         return findRefreshToken(accessToken).isValidTokenClaims();
     }
 
-    @Transactional(readOnly=true)
-    public AuthToken findRefreshToken (String accessToken) {
+    @Transactional(readOnly = true)
+    public AuthToken findRefreshToken(String accessToken) {
         JwtTokenCache jwtTokenCache = refreshTokenRepository.findByAccessToken(accessToken)
                 .orElseThrow(() -> new RuntimeException()); // to do : 예외 고치기
         return authTokenProvider.convertAuthToken(jwtTokenCache.getRefreshToken());
