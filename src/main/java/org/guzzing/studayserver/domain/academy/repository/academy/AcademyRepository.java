@@ -4,11 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 
-public interface AcademyRepository extends AcademyJpaRepository {
+public interface AcademyRepository  {
 
-    default Academy getById(Long academyId) {
-        return findById(academyId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.getMessage()));
-    }
+    Academy getById(Long academyId);
+
+    Academy save(Academy academy);
+
 
 }
