@@ -8,12 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
 
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "children")
+@Entity
 public class Child {
 
     @Id

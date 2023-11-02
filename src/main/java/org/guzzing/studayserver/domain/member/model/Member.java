@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -20,6 +22,7 @@ import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 
 @Getter
+@Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"socialId", "memberProvider"}))
 @Entity
 public class Member {
 
