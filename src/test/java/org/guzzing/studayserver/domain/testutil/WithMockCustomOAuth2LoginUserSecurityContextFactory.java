@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.testutil;
+package org.guzzing.studayserver.domain.testutil;
 
 import org.guzzing.studayserver.domain.auth.jwt.CustomUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

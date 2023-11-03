@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.testutil;
+package org.guzzing.studayserver.domain.testutil;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
