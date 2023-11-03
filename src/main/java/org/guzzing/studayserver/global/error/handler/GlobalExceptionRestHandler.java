@@ -1,9 +1,15 @@
 package org.guzzing.studayserver.global.error.handler;
 
+import static org.guzzing.studayserver.global.error.response.ErrorCode.INTERNAL_SERVER_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_INPUT_VALUE_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_METHOD_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.NOT_FOUND_ENTITY;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_BODY_MISSING_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_PARAM_MISSING_ERROR;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 
@@ -18,12 +24,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import static org.guzzing.studayserver.global.error.response.ErrorCode.*;
-
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionRestHandler {
+
     /**
      * [Exception] 객체 혹은 파라미터의 데이터 값이 유효하지 않은 경우
      */
@@ -58,7 +63,8 @@ public class GlobalExceptionRestHandler {
      * </pre>
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException e) {
         log.warn("Handle MethodArgumentTypeMismatchException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getMessage());
 

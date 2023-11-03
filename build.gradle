@@ -19,28 +19,12 @@ plugins {
 
 }
 
-// 3.2. swaggerSources 설정 추가
-swaggerSources {
-    sample {
-        setInputFile(file("build/api-spec/openapi3.yml"))
-    }
-}
-
 group = 'org.guzzing'
 version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
 }
-
-openapi3 {
-    setServer("http://localhost:8080") // API 요청을 보낼 서버 주소 설정
-    title = "restdocs-swagger API Documentation" // API 문서 제목
-    description = "Spring REST Docs with SwaggerUI." // API 문서 설명
-    version = "0.0.1" // API 문서 버전
-    format = "yml" // API 문서 출력 포맷 (default = JSON)
-}
-
 
 repositories {
     mavenCentral()
@@ -78,32 +62,41 @@ dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+swaggerSources {
+    sample {
+        setInputFile(file("${project.buildDir}/api-spec/openapi3.yml"))
+    }
+}
+
+openapi3 {
+    setServer("http://localhost:8080") // API 요청을 보낼 서버 주소 설정
+    title = "restdocs-swagger API Documentation" // API 문서 제목
+    description = "Spring REST Docs with SwaggerUI." // API 문서 설명
+    version = "0.0.1" // API 문서 버전
+    outputFileNamePrefix = "openapi3"
+    format = "yml" // API 문서 출력 포맷 (default = JSON)
 }
 
 tasks.withType(GenerateSwaggerUI) {
     dependsOn 'openapi3'
 }
 
- // GenerateSwaggerUI 태스크가, openapi3 task 를 의존하도록 설정
- tasks.withType(GenerateSwaggerUI) {
-             dependsOn 'openapi3'
+tasks.register('copySwaggerUI', Copy) {
+    dependsOn 'generateSwaggerUISample'
+
+    def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
+    from("${generateSwaggerUISampleTask.outputDir}")
+    into("${project.buildDir}/resources/main/static/docs")
 }
 
-// 3.4.2
-// 생성된 SwaggerUI 를 jar 에 포함시키기 위해 build/resources 경로로 로 복사
- tasks.register('copySwaggerUI', Copy) {
-      dependsOn 'generateSwaggerUISample'
-
-        def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
-
-         from("${generateSwaggerUISampleTask.outputDir}")
-           into("./build/resources/main/static/docs")
-}
-
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
+tasks.withType(BootJar) {
+         dependsOn 'copySwaggerUI'
+     }
 
 

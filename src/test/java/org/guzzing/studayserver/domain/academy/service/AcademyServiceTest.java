@@ -9,7 +9,7 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.academy.service.dto.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.LessonGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.ReviewPercentGetResult;
-import org.guzzing.studayserver.domain.testutil.fixture.AcademyFixture;
+import org.guzzing.studayserver.testutil.fixture.AcademyFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

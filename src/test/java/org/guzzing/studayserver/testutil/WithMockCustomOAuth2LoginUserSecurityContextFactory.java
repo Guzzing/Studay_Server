@@ -1,5 +1,8 @@
-package org.guzzing.studayserver.domain.testutil;
+package org.guzzing.studayserver.testutil;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.guzzing.studayserver.domain.auth.jwt.CustomUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -8,11 +11,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+public class WithMockCustomOAuth2LoginUserSecurityContextFactory implements
+        WithSecurityContextFactory<WithMockCustomOAuth2LoginUser> {
 
-public class WithMockCustomOAuth2LoginUserSecurityContextFactory implements WithSecurityContextFactory<WithMockCustomOAuth2LoginUser> {
     @Override
     public SecurityContext createSecurityContext(WithMockCustomOAuth2LoginUser oAuth2LoginUser) {
         final SecurityContext context = SecurityContextHolder.createEmptyContext();

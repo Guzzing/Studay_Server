@@ -1,19 +1,15 @@
 name: Build and Deploy to EC2
-
 on:
   push:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
-
   workflow_dispatch:
-
 env:
   BUCKET_NAME: team09-cicd-bucket
   PROJECT_NAME: studay
   DEPLOYMENT_GROUP_NAME: studay_cicd
   CODE_DEPLOY_APP_NAME: studay_cicd
-
 jobs:
   # 작업의 이름
   build_and_test:
@@ -39,13 +35,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3.13.0
         with:
           java-version: '17'
           distribution: 'corretto'
-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
