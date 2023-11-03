@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.testutil.fixture;
+package org.guzzing.studayserver.testutil.fixture;
 
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;

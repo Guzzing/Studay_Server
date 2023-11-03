@@ -13,7 +13,7 @@ public record AcademyGetResponse(
         LessonGetResponses lessonGetResponses,
         ReviewPercentGetResponse reviewPercentGetResponse
 ) {
-    public static AcademyGetResponse of(AcademyGetResult academyGetResult) {
+    public static AcademyGetResponse form(AcademyGetResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),
                 academyGetResult.contact(),
@@ -23,8 +23,8 @@ public record AcademyGetResponse(
                 academyGetResult.updatedDate(),
                 academyGetResult.areaOfExpertise(),
 
-                LessonGetResponses.of(academyGetResult.lessonGetResults()),
-                ReviewPercentGetResponse.of(academyGetResult.reviewPercentGetResult())
+                LessonGetResponses.from(academyGetResult.lessonGetResults()),
+                ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult())
         );
 
     }

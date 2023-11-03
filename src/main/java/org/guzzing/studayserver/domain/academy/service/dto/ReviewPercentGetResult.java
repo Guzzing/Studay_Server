@@ -9,7 +9,7 @@ public record ReviewPercentGetResult(
         int goodManagementPercent,
         int lovelyTeachingPercent
 ) {
-    public static ReviewPercentGetResult of(ReviewCount reviewCount) {
+    public static ReviewPercentGetResult from(ReviewCount reviewCount) {
         return new ReviewPercentGetResult(
                 reviewCount.makePercent(reviewCount.getKindnessCount()),
                 reviewCount.makePercent(reviewCount.getGoodFacilityCount()),

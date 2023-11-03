@@ -7,12 +7,12 @@ import java.util.List;
 public record LessonGetResponses(
         List<LessonGetResponse> lessons
 ) {
-    public static LessonGetResponses of(LessonGetResults lessonGetResults) {
+    public static LessonGetResponses from(LessonGetResults lessonGetResults) {
         return new LessonGetResponses(
                 lessonGetResults
                         .lessonGetResults()
                         .stream()
-                        .map(lesson -> LessonGetResponse.of(lesson))
+                        .map(lesson -> LessonGetResponse.from(lesson))
                         .toList());
     }
 }

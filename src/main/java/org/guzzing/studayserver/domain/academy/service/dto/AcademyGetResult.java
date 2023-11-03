@@ -17,9 +17,9 @@ public record AcademyGetResult(
         LessonGetResults lessonGetResults,
         ReviewPercentGetResult reviewPercentGetResult
 ) {
-    public static AcademyGetResult of(Academy academy,
-                                      List<Lesson> lessons,
-                                      ReviewCount reviewCount) {
+    public static AcademyGetResult from(Academy academy,
+                                        List<Lesson> lessons,
+                                        ReviewCount reviewCount) {
         return new AcademyGetResult(
                 academy.getName(),
                 academy.getContact(),
@@ -29,8 +29,8 @@ public record AcademyGetResult(
                 academy.getUpdatedDate().toString(),
                 academy.getAreaOfExpertise(),
 
-                LessonGetResults.of(lessons),
-                ReviewPercentGetResult.of(reviewCount)
+                LessonGetResults.from(lessons),
+                ReviewPercentGetResult.from(reviewCount)
         );
 
     }
