@@ -6,4 +6,8 @@ import org.springframework.stereotype.Service;
 public class MemberAccessServiceImpl implements
         MemberAccessService {
 
+    @Override
+    public boolean existsMember(Long memberId) {
+        return false;
+    }
 }
