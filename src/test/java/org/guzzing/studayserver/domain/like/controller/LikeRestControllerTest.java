@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.like.controller.dto.LikeRequest;
+import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
 import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
@@ -65,15 +65,15 @@ class LikeRestControllerTest {
     @BeforeEach
     void setUp() {
         Long memberId = 1L;
-        LikeRequest request = new LikeRequest(academyId);
-        param = LikeRequest.to(request, memberId);
+        LikePostRequest request = new LikePostRequest(academyId);
+        param = LikePostRequest.to(request, memberId);
     }
 
     @Test
     @DisplayName("헤더에 JWT 로 들어오는 멤버 아이디와 바디로 전달되는 학원 아이디를 이용해서 좋아요를 등록한다.")
     void createLike_MemberIdAndAcademyId_RegisterLike() throws Exception {
         // Given
-        LikeRequest request = new LikeRequest(academyId);
+        LikePostRequest request = new LikePostRequest(academyId);
         String jsonBody = objectMapper.writeValueAsString(request);
 
         // When

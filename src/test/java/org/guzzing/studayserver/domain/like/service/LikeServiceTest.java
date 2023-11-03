@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.like.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.guzzing.studayserver.domain.like.controller.dto.LikeRequest;
+import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
 import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
@@ -31,8 +31,8 @@ class LikeServiceTest {
 
     @BeforeEach
     void setUp() {
-        LikeRequest request = new LikeRequest(academyId);
-        param = LikeRequest.to(request, memberId);
+        LikePostRequest request = new LikePostRequest(academyId);
+        param = LikePostRequest.to(request, memberId);
     }
 
     @Test

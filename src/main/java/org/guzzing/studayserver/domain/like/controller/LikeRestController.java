@@ -4,8 +4,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
-import org.guzzing.studayserver.domain.like.controller.dto.LikeRequest;
-import org.guzzing.studayserver.domain.like.controller.dto.LikeResponse;
+import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
+import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
+import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +29,15 @@ public class LikeRestController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<LikeResponse> createLike(
-            @RequestBody LikeRequest request,
+    public ResponseEntity<LikePostResponse> createLike(
+            @Validated @RequestBody LikePostRequest request,
             @MemberId Long memberId
     ) {
-        LikeResult result = likeService.createLikeOfAcademy(LikeRequest.to(request, memberId));
+        LikeResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
 
         return ResponseEntity
                 .status(CREATED)
-                .body(LikeResponse.from(result));
+                .body(LikePostResponse.from(result));
     }
 
     @DeleteMapping("/{likeId}")
