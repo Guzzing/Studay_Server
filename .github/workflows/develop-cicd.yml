@@ -2,9 +2,9 @@ name: Build and Deploy to EC2
 on:
   push:
     branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+  
   workflow_dispatch:
+  
 env:
   BUCKET_NAME: team09-cicd-bucket
   PROJECT_NAME: studay
