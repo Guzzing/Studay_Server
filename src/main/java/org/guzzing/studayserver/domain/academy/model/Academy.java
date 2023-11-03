@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
@@ -8,6 +9,7 @@ import org.guzzing.studayserver.global.BaseEntity;
 
 import java.util.Objects;
 
+@Getter
 @Entity
 @Table(name = "academies")
 public class Academy extends BaseEntity {
@@ -48,20 +50,8 @@ public class Academy extends BaseEntity {
         this.maxEducationFee = maxEducationFee;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getAddress() {
         return address.getFullAddress();
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public Long getMaxEducationFee() {
-        return maxEducationFee;
     }
 
     public String getName() {
