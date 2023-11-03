@@ -27,7 +27,16 @@ public class LikeService {
 
     @Transactional
     public LikeResult createLikeOfAcademy(final LikeParam param) {
-        // todo : 학원 아이디가 실제로 존재하는지 확인
+        // todo : 아카데미 모듈, 멤버 모듈 머지 시 연결 요망
+//        boolean isExistUser = memberAccessService.existsMember(param.memberId());
+//        boolean isExistAcademy = academyAccessService.existsAcademy(param.academyId());
+//
+//        if (!isExistUser) {
+//            throw new RuntimeException("존재하지 않는 멤버입니다.");
+//        }
+//        if (!isExistAcademy) {
+//            throw new RuntimeException("존재하지 않는 학원입니다.");
+//        }
 
         Like savedLike = likeRepository.save(
                 Like.of(param.memberId(), param.academyId()));
