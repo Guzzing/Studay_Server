@@ -6,6 +6,8 @@ import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.domain.like.service.external.AcademyAccessService;
+import org.guzzing.studayserver.domain.like.service.external.MemberAccessService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,8 @@ public class LikeService {
     }
 
     @Transactional
-    public LikeResult createLikeOfAcademy(final LikeParam param) {
+    public LikePostResult createLikeOfAcademy(final LikePostParam param) {
+        // todo : 한 멤버 당 10개의 좋아요만 등록 가능
         // todo : 아카데미 모듈, 멤버 모듈 머지 시 연결 요망
 //        boolean isExistUser = memberAccessService.existsMember(param.memberId());
 //        boolean isExistAcademy = academyAccessService.existsAcademy(param.academyId());

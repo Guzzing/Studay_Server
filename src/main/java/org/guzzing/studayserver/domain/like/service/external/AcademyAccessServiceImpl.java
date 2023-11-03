@@ -1,6 +1,5 @@
-package org.guzzing.studayserver.domain.like.service;
+package org.guzzing.studayserver.domain.like.service.external;
 
-import java.io.Serial;
 import org.springframework.stereotype.Service;
 
 @Service
