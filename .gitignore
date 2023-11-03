@@ -7,7 +7,6 @@ HELP.md
 .gradle/
 build/
 studay_server.iml
-src/main/resources/application.yaml
 
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -126,5 +125,9 @@ replay_pid*
 ### Sonar ###
 #Sonar generated dir
 /.sonar/
+
+### Springboot settingfile ###
+src/main/resources/application.*
+src/test/resources/application.*
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij+all,sonar

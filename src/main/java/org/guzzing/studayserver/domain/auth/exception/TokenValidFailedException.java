@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.auth.exception;
 
-import org.guzzing.studayserver.global.error.response.ErrorCode;
 import lombok.Getter;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 @Getter
 public class TokenValidFailedException extends IllegalStateException {

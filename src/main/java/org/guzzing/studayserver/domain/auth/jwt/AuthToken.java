@@ -1,13 +1,18 @@
 package org.guzzing.studayserver.domain.auth.jwt;
 
-import io.jsonwebtoken.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AuthToken {
@@ -61,7 +66,7 @@ public class AuthToken {
     public boolean isValidTokenClaims() {
         Optional<Object> claims = Optional.empty();
         try {
-            claims= Optional.ofNullable(getTokenClaims());
+            claims = Optional.ofNullable(getTokenClaims());
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
         } catch (MalformedJwtException e) {

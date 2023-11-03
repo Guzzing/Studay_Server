@@ -1,39 +1,54 @@
 name: Build and Deploy to EC2
-
 on:
   push:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
-
   workflow_dispatch:
-
 env:
   BUCKET_NAME: team09-cicd-bucket
   PROJECT_NAME: studay
   DEPLOYMENT_GROUP_NAME: studay_cicd
   CODE_DEPLOY_APP_NAME: studay_cicd
-
 jobs:
   # 작업의 이름
   build_and_test:
     # GitHub Actions 러너의 운영 체제
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0.21
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
     # 순차적으로 실행될 단계들을 정의하는 섹션
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3.13.0
         with:
           java-version: '17'
           distribution: 'corretto'
-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Create application.yml
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
+          echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+
       - name: Build with gradle
         run: ./gradlew build
-

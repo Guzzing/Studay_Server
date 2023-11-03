@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<AuthResponse> refreshToken( HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) {
 
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
