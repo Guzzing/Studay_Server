@@ -64,10 +64,13 @@ class LikeServiceTest {
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        given(memberAccessService.existsMember(any())).willReturn(true);
+
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
-        likeService.removeLikeOfAcademy(savedLike.likeId());
+        likeService.removeLikeOfAcademy(savedLike.likeId(), memberId);
 
         // Then
         boolean result = likeRepository.existsById(savedLike.likeId());
