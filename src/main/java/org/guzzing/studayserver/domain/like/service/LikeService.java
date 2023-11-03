@@ -31,17 +31,14 @@ public class LikeService {
 
     @Transactional
     public LikePostResult createLikeOfAcademy(final LikePostParam param) {
-        // todo : 한 멤버 당 10개의 좋아요만 등록 가능
-        // todo : 아카데미 모듈, 멤버 모듈 머지 시 연결 요망
-//        boolean isExistUser = memberAccessService.existsMember(param.memberId());
-//        boolean isExistAcademy = academyAccessService.existsAcademy(param.academyId());
-//
-//        if (!isExistUser) {
-//            throw new RuntimeException("존재하지 않는 멤버입니다.");
-//        }
-//        if (!isExistAcademy) {
-//            throw new RuntimeException("존재하지 않는 학원입니다.");
-//        }
+        validateMember(param.memberId());
+        validateAcademy(param.academyId());
+
+        long likeCount = likeRepository.countByMemberId(param.memberId());
+
+        if (likeCount >= 10) {
+            throw new LikeException("좋아요 개수는 10개를 넘을 수 없습니다.");
+        }
 
         Like savedLike = likeRepository.save(
                 Like.of(param.memberId(), param.academyId()));
