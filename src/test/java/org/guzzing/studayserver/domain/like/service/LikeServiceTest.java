@@ -7,6 +7,8 @@ import static org.mockito.BDDMockito.given;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.external.AcademyAccessService;
 import org.guzzing.studayserver.domain.like.service.external.MemberAccessService;
@@ -76,6 +78,24 @@ class LikeServiceTest {
         boolean result = likeRepository.existsById(savedLike.likeId());
 
         assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("내가 좋아요한 모든 학원 비용 정보를 조회한다.")
+    void findAllLikesOfMember_MemberId_AcademyInfo() {
+        // Given
+        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        given(memberAccessService.existsMember(any())).willReturn(true);
+
+        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
+
+        // When
+        LikeGetResult result = likeService.findAllLikesOfMember(savedLike.memberId());
+
+        // Then
+        assertThat(result.likeAcademyInfos()).isNotEmpty();
+        assertThat(result.totalFee()).isEqualTo(100);
     }
 
 }

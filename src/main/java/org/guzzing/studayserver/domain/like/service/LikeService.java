@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.like.service;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
@@ -8,6 +9,9 @@ import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.external.AcademyAccessService;
 import org.guzzing.studayserver.domain.like.service.external.MemberAccessService;
+import org.guzzing.studayserver.global.exception.AcademyException;
+import org.guzzing.studayserver.global.exception.LikeException;
+import org.guzzing.studayserver.global.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +54,20 @@ public class LikeService {
         validateMember(memberId);
 
         likeRepository.deleteById(likeId);
+    }
+
+    public LikeGetResult findAllLikesOfMember(Long memberId) {
+        List<Like> likes = likeRepository.findByMemberId(memberId);
+
+        List<AcademyFeeInfo> academyFeeInfos = likes.stream()
+                .map(like -> academyAccessService.findAcademyFeeInfo(like.getAcademyId()))
+                .toList();
+
+        long totalFee = academyFeeInfos.stream()
+                .mapToLong(AcademyFeeInfo::expectedFee)
+                .sum();
+
+        return LikeGetResult.of(academyFeeInfos, totalFee);
     }
 
     private void validateMember(final Long memberId) {

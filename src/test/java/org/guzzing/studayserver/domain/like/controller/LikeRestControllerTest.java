@@ -9,6 +9,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.external.AcademyAccessService;
 import org.guzzing.studayserver.domain.like.service.external.MemberAccessService;
@@ -145,6 +147,40 @@ class LikeRestControllerTest {
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("likeId").description("좋아요 아이디")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("좋아요한 학원 비용 정보를 응답받는다.")
+    void getAllLikes_MemberId() throws Exception {
+        // Given
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        given(memberAccessService.existsMember(any())).willReturn(true);
+        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
+
+        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
+
+        // When
+        ResultActions perform = mockMvc.perform(get("/likes")
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.likeAcademyInfos").isArray())
+                .andExpect(jsonPath("$.totalFee").isNumber())
+                .andDo(document("get-like",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
+                                fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
+                                fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
+                                fieldWithPath("totalFee").type(NUMBER).description("총 비용")
                         )
                 ));
     }
