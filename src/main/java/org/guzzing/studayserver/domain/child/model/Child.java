@@ -41,5 +41,6 @@ public class Child {
         this.nickName = new NickName(nickName);
         this.grade = Grade.fromDescription(grade);
         this.member = member;
+        member.addChild(this);
     }
 }

@@ -39,13 +39,9 @@ class MemberTest {
     @DisplayName("아이 추가 성공")
     @Test
     void addChild_success() {
-        // Given
-        Child child1 = new Child("child1", "중학교 1학년", member);
-        Child child2 = new Child("child2", "중학교 2학년", member);
-
-        // When
-        member.addChild(child1);
-        member.addChild(child2);
+        // Given & When
+        new Child("child1", "중학교 1학년", member);
+        new Child("child2", "중학교 2학년", member);
 
         // Then
         Assertions.assertThat(member.getChildren()).size().isEqualTo(2);
@@ -56,13 +52,11 @@ class MemberTest {
     void addChild_failure_exceedsLimit() {
         // Given
         for (int i = 0; i < 5; i++) {
-            member.addChild(new Child("child1", "중학교 1학년", member));
+            new Child("child1", "중학교 1학년", member);
         }
 
-        Child additionalChild = new Child("child1", "중학교 1학년", member);
-
         // When & Then
-        assertThatThrownBy(() -> member.addChild(additionalChild))
+        assertThatThrownBy(() -> new Child("child1", "중학교 1학년", member))
                 .isInstanceOf(IllegalStateException.class);
     }
 }
