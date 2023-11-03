@@ -6,12 +6,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.util.List;
 import lombok.Getter;
 
 @Getter
 @Entity
 @Table(name = "regions")
 public class Region {
+
+    @Transient
+    public static final List<String> BASE_REGION_SIDO = List.of("서울특별시", "경기도");
+
+    @Transient
+    public static final List<String> SIGUNGU_POSTFIX = List.of("시", "구", "군");
+
+    @Transient
+    public static final List<String> UPMYEONDONG_POSTFIX = List.of("읍", "면", "동", "군", "구");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
