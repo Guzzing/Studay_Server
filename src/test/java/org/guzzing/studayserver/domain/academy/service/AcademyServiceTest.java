@@ -65,8 +65,8 @@ class AcademyServiceTest {
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
         assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
-        assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(LessonGetResult.of(savedALessonAboutSungnam));
-        assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(ReviewPercentGetResult.of(savedReviewCountAboutSungnam));
+        assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(LessonGetResult.from(savedALessonAboutSungnam));
+        assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(ReviewPercentGetResult.from(savedReviewCountAboutSungnam));
     }
 
 }

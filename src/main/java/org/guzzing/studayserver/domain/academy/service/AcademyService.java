@@ -31,7 +31,7 @@ public class AcademyService {
         List<Lesson> lessons = lessonRepository.findAllByAcademyId(academyId);
         ReviewCount reviewCount = reviewCountRepository.getByAcademyId(academyId);
 
-        return AcademyGetResult.of(academy, lessons, reviewCount);
+        return AcademyGetResult.from(academy, lessons, reviewCount);
     }
 
 }
