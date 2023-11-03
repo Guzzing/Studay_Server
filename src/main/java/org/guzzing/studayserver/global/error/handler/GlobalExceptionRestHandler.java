@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.global.error.response.ErrorResponse;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
+
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 
 @RequiredArgsConstructor
 @RestControllerAdvice
@@ -48,7 +49,7 @@ public class GlobalExceptionRestHandler {
     protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderExceptionException(
             MissingServletRequestParameterException ex) {
         log.warn("Handle MissingServletRequestParameterException", ex);
-        final ErrorResponse response = ErrorResponse.of(REQUEST_PARAM_MISSING_ERROR, ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_PARAM_MISSING_ERROR, ex.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -65,7 +66,7 @@ public class GlobalExceptionRestHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException e) {
         log.warn("Handle MethodArgumentTypeMismatchException", e);
-        final ErrorResponse response = ErrorResponse.of(INVALID_INPUT_VALUE_ERROR, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -91,7 +92,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         log.warn("Handle BindException : ", e);
-        final ErrorResponse response = ErrorResponse.of(INVALID_INPUT_VALUE_ERROR, e.getBindingResult());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getBindingResult());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -131,6 +132,7 @@ public class GlobalExceptionRestHandler {
     public ResponseEntity<ErrorResponse> handleAllException(Exception e) {
         log.error("Handle Exception :", e);
         final ErrorResponse response = ErrorResponse.of(INTERNAL_SERVER_ERROR, e.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
