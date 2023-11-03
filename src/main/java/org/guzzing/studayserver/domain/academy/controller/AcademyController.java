@@ -22,11 +22,11 @@ public class AcademyController {
     }
 
     @GetMapping(
-            value = "/{academyId}",
+            path = "/{academyId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademyGetResponse> getAcademy(@PathVariable Long academyId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademyGetResponse.of(academyService.getAcademy(academyId)));
+                .body(AcademyGetResponse.form(academyService.getAcademy(academyId)));
     }
 
 }
