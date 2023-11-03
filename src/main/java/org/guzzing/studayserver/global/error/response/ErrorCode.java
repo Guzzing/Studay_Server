@@ -19,6 +19,7 @@ public enum ErrorCode {
     UNAUTHORIZED_TOKEN("L002", "인증되지 않은 토큰입니다."),
     OAUTH_CLIENT_SERVER_ERROR("L003", "oauth 클라이언트 서버 에러입니다.");
 
+
     private final String code;
     private final String message;
 
