@@ -12,9 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeService {
 
     private final LikeRepository likeRepository;
+    private final AcademyAccessService academyAccessService;
+    private final MemberAccessService memberAccessService;
 
-    public LikeService(final LikeRepository likeRepository) {
+    public LikeService(
+            final LikeRepository likeRepository,
+            final AcademyAccessService academyAccessService,
+            final MemberAccessService memberAccessService
+    ) {
         this.likeRepository = likeRepository;
+        this.academyAccessService = academyAccessService;
+        this.memberAccessService = memberAccessService;
     }
 
     @Transactional
@@ -27,7 +35,16 @@ public class LikeService {
         return LikeResult.from(savedLike);
     }
 
-    public void removeLikeOfAcademy(final Long likeId) {
+    public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
+        // todo : 아카데미 모듈 머지 시 연결 요망.
+//        boolean isExistUser = memberAccessService.existsMember(memberId);
+//
+//        if (!isExistUser) {
+//            throw new RuntimeException("존재하지 않는 멤버입니다.");
+//        }
+
         likeRepository.deleteById(likeId);
     }
+
+
 }

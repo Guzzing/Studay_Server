@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,9 +43,10 @@ public class LikeRestController {
 
     @DeleteMapping("/{likeId}")
     public ResponseEntity<Void> removeLike(
-            @PathVariable Long likeId
+            @PathVariable Long likeId,
+            @MemberId Long memberId
     ) {
-        likeService.removeLikeOfAcademy(likeId);
+        likeService.removeLikeOfAcademy(likeId, memberId);
 
         return ResponseEntity
                 .noContent()
