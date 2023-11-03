@@ -85,12 +85,15 @@ class LikeRestControllerTest {
     @DisplayName("헤더에 JWT 로 들어오는 멤버 아이디와 바디로 전달되는 학원 아이디를 이용해서 좋아요를 등록한다.")
     void createLike_MemberIdAndAcademyId_RegisterLike() throws Exception {
         // Given
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        given(memberAccessService.existsMember(any())).willReturn(true);
+
         LikePostRequest request = new LikePostRequest(academyId);
         String jsonBody = objectMapper.writeValueAsString(request);
 
         // When
         ResultActions perform = mockMvc.perform(post("/likes")
-                .header("Authorization", "Bearer " + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
