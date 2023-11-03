@@ -1,6 +1,3 @@
-import org.hidetake.gradle.swagger.generator.GenerateSwaggerUI
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 buildscript {
     ext {
         restdocsApiSpecVersion = '0.16.2'
@@ -83,12 +80,6 @@ openapi3 {
     format = "yml" // API 문서 출력 포맷 (default = JSON)
 }
 
-tasks.withType(GenerateSwaggerUI) {
-    dependsOn 'openapi3'
-}
 
-tasks.withType(BootJar) {
-         dependsOn 'copySwaggerUI'
-     }
 
 
