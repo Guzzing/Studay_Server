@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.like.controller;
 
 import static org.guzzing.studayserver.testutil.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.TestConfig.BEARER;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -11,7 +13,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -27,6 +31,8 @@ import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostReque
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.domain.like.service.external.AcademyAccessService;
+import org.guzzing.studayserver.domain.like.service.external.MemberAccessService;
 import org.guzzing.studayserver.testutil.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -58,6 +65,11 @@ class LikeRestControllerTest {
 
     @Autowired
     private LikeService likeService;
+
+    @MockBean
+    private AcademyAccessService academyAccessService;
+    @MockBean
+    private MemberAccessService memberAccessService;
 
     private final Long academyId = 1L;
     private LikePostParam param;
@@ -111,6 +123,9 @@ class LikeRestControllerTest {
     @DisplayName("등록한 좋아요를 제거한다.")
     void removeLike_LikeId_Remove() throws Exception {
         // Given
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        given(memberAccessService.existsMember(any())).willReturn(true);
+
         LikePostResult likePostResult = likeService.createLikeOfAcademy(param);
 
         // When

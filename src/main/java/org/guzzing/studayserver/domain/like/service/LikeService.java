@@ -47,15 +47,24 @@ public class LikeService {
     }
 
     public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
-        // todo : 아카데미 모듈 머지 시 연결 요망.
-//        boolean isExistUser = memberAccessService.existsMember(memberId);
-//
-//        if (!isExistUser) {
-//            throw new RuntimeException("존재하지 않는 멤버입니다.");
-//        }
+        validateMember(memberId);
 
         likeRepository.deleteById(likeId);
     }
 
+    private void validateMember(final Long memberId) {
+        boolean isExistMember = memberAccessService.existsMember(memberId);
 
+        if (!isExistMember) {
+            throw new MemberException("존재하지 않는 멤버입니다.");
+        }
+    }
+
+    private void validateAcademy(final Long academyId) {
+        boolean isExistAcademy = academyAccessService.existsAcademy(academyId);
+
+        if (!isExistAcademy) {
+            throw new AcademyException("존재하지 않는 학원입니다.");
+        }
+    }
 }
