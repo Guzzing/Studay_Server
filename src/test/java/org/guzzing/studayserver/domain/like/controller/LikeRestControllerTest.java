@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.service.LikeService;
-import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
-import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
+import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.testutil.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +60,7 @@ class LikeRestControllerTest {
     private LikeService likeService;
 
     private final Long academyId = 1L;
-    private LikeParam param;
+    private LikePostParam param;
 
     @BeforeEach
     void setUp() {
@@ -111,10 +111,10 @@ class LikeRestControllerTest {
     @DisplayName("등록한 좋아요를 제거한다.")
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        LikeResult likeResult = likeService.createLikeOfAcademy(param);
+        LikePostResult likePostResult = likeService.createLikeOfAcademy(param);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", likeResult.likeId())
+        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", likePostResult.likeId())
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));

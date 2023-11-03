@@ -2,8 +2,10 @@ package org.guzzing.studayserver.domain.like.service;
 
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
-import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
-import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
+import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class LikeService {
         Like savedLike = likeRepository.save(
                 Like.of(param.memberId(), param.academyId()));
 
-        return LikeResult.from(savedLike);
+        return LikePostResult.from(savedLike);
     }
 
     public void removeLikeOfAcademy(final Long likeId, final Long memberId) {

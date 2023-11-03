@@ -4,11 +4,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
-import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
+import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;
 import org.guzzing.studayserver.domain.like.service.LikeService;
-import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class LikeRestController {
             @Validated @RequestBody LikePostRequest request,
             @MemberId Long memberId
     ) {
-        LikeResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
+        LikePostResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
 
         return ResponseEntity
                 .status(CREATED)

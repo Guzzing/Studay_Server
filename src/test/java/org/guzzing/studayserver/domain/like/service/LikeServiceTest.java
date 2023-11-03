@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
-import org.guzzing.studayserver.domain.like.service.dto.LikeParam;
-import org.guzzing.studayserver.domain.like.service.dto.LikeResult;
+import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class LikeServiceTest {
 
     private final Long memberId = 1L;
     private final Long academyId = 1L;
-    private LikeParam param;
+    private LikePostParam param;
 
     @BeforeEach
     void setUp() {
@@ -39,7 +39,7 @@ class LikeServiceTest {
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
     void createLikeOfAcademy_WithMemberId() {
         // Given & When
-        LikeResult result = likeService.createLikeOfAcademy(param);
+        LikePostResult result = likeService.createLikeOfAcademy(param);
 
         // Then
         assertThat(result.memberId()).isEqualTo(memberId);
@@ -50,7 +50,7 @@ class LikeServiceTest {
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
-        LikeResult savedLike = likeService.createLikeOfAcademy(param);
+        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
         likeService.removeLikeOfAcademy(savedLike.likeId());
