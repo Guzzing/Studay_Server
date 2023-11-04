@@ -8,5 +8,6 @@ public interface AcademyRepository {
 
     Academy save(Academy academy);
 
+    boolean existsById(final Long academyId);
 
 }
