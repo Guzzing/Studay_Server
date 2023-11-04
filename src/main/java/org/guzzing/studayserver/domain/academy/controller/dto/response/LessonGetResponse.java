@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
 
 public record LessonGetResponse(
         Long lessonId,

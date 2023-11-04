@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.LessonGetResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResults;
 
 import java.util.List;
 
