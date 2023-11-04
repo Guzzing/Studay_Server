@@ -1,10 +1,11 @@
 package org.guzzing.studayserver.domain.child.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
+import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,28 @@ public class ChildService {
         this.childRepository = childRepository;
     }
 
+    @Transactional
     public Long create(ChildCreateParam param) {
-        Member foundMember = getMember(param);
+        Member member = getMember(param.memberId());
 
-        Child savedChild = childRepository.save(new Child(param.nickname(), param.grade(), foundMember));
+        Child savedChild = childRepository.save(new Child(param.nickname(), param.grade()));
+        savedChild.assignToNewMemberOnly(member);
 
         return savedChild.getId();
     }
 
+    @Transactional
     public ChildrenFindResult findByMemberId(Long memberId) {
-        return new ChildrenFindResult(new ArrayList<>());
+        Member member = getMember(memberId);
+        List<Child> children = member.getChildren();
+
+        return new ChildrenFindResult(children.stream()
+                .map(child -> new ChildFindResult(child.getId(), child.getNickName(), child.getGrade(), "휴식 중!"))
+                .toList());
     }
 
-    private Member getMember(ChildCreateParam param) {
-        return memberRepository.findById(param.memberId())
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + param.memberId()));
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
     }
 }
