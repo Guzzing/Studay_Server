@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,33 +22,32 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kindness", nullable = false)
-    private boolean kindness;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
-    @Column(name = "good_facility", nullable = false)
-    private boolean goodFacility;
+    @Column(name = "academy_id", nullable = false)
+    private Long academyId;
 
-    @Column(name = "cheap_fee", nullable = false)
-    private boolean cheapFee;
+    @Column(name = "reviewed_type", nullable = false)
+    private List<ReviewType> reviewTypes;
 
-    @Column(name = "good_management", nullable = false)
-    private boolean goodManagement;
-
-    @Column(name = "lovely_teaching", nullable = false)
-    private boolean lovelyTeaching;
-
-    protected Review(
-            final boolean kindness,
-            final boolean goodFacility,
-            final boolean cheapFee,
-            final boolean goodManagement,
-            final boolean lovelyTeaching
+    public Review(
+            final Long memberId,
+            final Long academyId,
+            final List<ReviewType> reviewTypes
     ) {
-        this.kindness = kindness;
-        this.goodFacility = goodFacility;
-        this.cheapFee = cheapFee;
-        this.goodManagement = goodManagement;
-        this.lovelyTeaching = lovelyTeaching;
+        this.memberId = memberId;
+        this.academyId = academyId;
+        this.reviewTypes = reviewTypes;
     }
 
+    public static Review of(
+            final Long memberId,
+            final Long academyId,
+            final Map<ReviewType, Boolean> selectedReviewMap
+    ) {
+        List<ReviewType> reviewTypes = ReviewType.convertReviewMapToReviewList(selectedReviewMap);
+
+        return new Review(memberId, academyId, reviewTypes);
+    }
 }
