@@ -18,11 +18,21 @@ public class ReviewFixture {
     public static final Long academyId = 1L;
 
     public static ReviewPostParam makeReviewPostParam(boolean isValid) {
-        Map<ReviewType, Boolean> reviewMap = isValid ? makeValidReviewMap() : makeInvalidReviewMap();
-
-        ReviewPostRequest request = makeReviewPostRequest(reviewMap);
+        ReviewPostRequest request = makeReviewPostRequest(isValid);
 
         return ReviewPostRequest.to(1L, request);
+    }
+
+    public static ReviewPostRequest makeReviewPostRequest(boolean isValid) {
+        Map<ReviewType, Boolean> reviewMap = isValid ? makeValidReviewMap() : makeInvalidReviewMap();
+
+        return new ReviewPostRequest(
+                1L,
+                reviewMap.get(KINDNESS),
+                reviewMap.get(CHEAP_FEE),
+                reviewMap.get(GOOD_FACILITY),
+                reviewMap.get(GOOD_MANAGEMENT),
+                reviewMap.get(LOVELY_TEACHING));
     }
 
     public static Map<ReviewType, Boolean> makeInvalidReviewMap() {
@@ -47,16 +57,6 @@ public class ReviewFixture {
         validReviewMap.put(LOVELY_TEACHING, true);
 
         return validReviewMap;
-    }
-
-    public static ReviewPostRequest makeReviewPostRequest(Map<ReviewType, Boolean> invalidReviewMap) {
-        return new ReviewPostRequest(
-                1L,
-                invalidReviewMap.get(KINDNESS),
-                invalidReviewMap.get(CHEAP_FEE),
-                invalidReviewMap.get(GOOD_FACILITY),
-                invalidReviewMap.get(GOOD_MANAGEMENT),
-                invalidReviewMap.get(LOVELY_TEACHING));
     }
 
 }

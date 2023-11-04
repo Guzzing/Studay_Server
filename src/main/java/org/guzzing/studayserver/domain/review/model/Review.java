@@ -50,4 +50,5 @@ public class Review {
 
         return new Review(memberId, academyId, reviewTypes);
     }
+
 }
