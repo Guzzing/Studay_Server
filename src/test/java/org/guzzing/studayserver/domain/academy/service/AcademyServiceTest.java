@@ -6,16 +6,20 @@ import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.LessonGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.ReviewPercentGetResult;
-import org.guzzing.studayserver.testutil.fixture.AcademyFixture;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
+import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,20 +59,42 @@ class AcademyServiceTest {
     }
 
     @Test
-    void getAcademy() {
-        //Given
+    @DisplayName("학원 ID로 학원 정보를 조회할 때 학원 정보, 수업 정보, 리뷰를 확인할 수 있다.")
+    void getAcademy_academyId_reviewsAndLessons() {
+        //When
         AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId());
 
-        //When
+        //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getName());
         assertThat(academyGetResult.contact()).isEqualTo(savedAcademyAboutSungnam.getContact());
-        assertThat(academyGetResult.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getAddress());
+        assertThat(academyGetResult.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
         assertThat(academyGetResult.shuttleAvailability()).isEqualTo(savedAcademyAboutSungnam.getShuttleAvailability().toString());
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
         assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
         assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(LessonGetResult.from(savedALessonAboutSungnam));
         assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(ReviewPercentGetResult.from(savedReviewCountAboutSungnam));
+    }
+
+    @Test
+    @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 조회된다.")
+    void findAcademiesByLocation_academiesWithinDistance_equalsSize() {
+        //Given
+        double latitude = 37.4449168;
+        double longitude = 127.1388684;
+
+        List<Academy> academies = AcademyFixture.randomAcademies(latitude, longitude);
+        for(Academy academy : academies) {
+            Academy savedAcademy = academyRepository.save(academy);
+            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+        }
+
+        //When
+        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(latitude,longitude));
+
+        //Then
+        assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
     }
 
 }
