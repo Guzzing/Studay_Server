@@ -43,4 +43,8 @@ public class Child {
         this.member = member;
         member.addChild(this);
     }
+
+    public Long getId() {
+        return id;
+    }
 }
