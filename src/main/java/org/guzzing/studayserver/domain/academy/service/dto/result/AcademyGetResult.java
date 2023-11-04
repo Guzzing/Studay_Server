@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
@@ -23,7 +23,7 @@ public record AcademyGetResult(
         return new AcademyGetResult(
                 academy.getName(),
                 academy.getContact(),
-                academy.getAddress(),
+                academy.getFullAddress(),
                 academy.getShuttleAvailability(),
                 academy.getMaxEducationFee(),
                 academy.getUpdatedDate().toString(),
