@@ -10,10 +10,12 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
+import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -162,4 +164,75 @@ class ChildServiceTest {
 
     }
 
+    @Nested
+    class Delete {
+
+        @DisplayName("할당된 아이를 삭제한다.")
+        @Test
+        void deleteChild() {
+            // Given
+            Long memberId = 1L;
+            Long childId = 20L;
+
+            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+
+            Child child = new Child("아이 닉네임", "초등학교 1학년");
+
+            Child spyChild = spy(child);
+            spyChild.assignToNewMemberOnly(member);
+            given(spyChild.getId()).willReturn(childId);
+
+            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+
+            ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
+
+            // When
+            childService.delete(param);
+
+            // Then
+            assertThat(member.getChildren()).isEmpty();
+        }
+
+        @DisplayName("멤버에 할당되지 않은 아이일 경우 삭제하지 않는다.")
+        @Test
+        void givenChildNotAssignedToMember_doNothing() {
+            Long memberId = 1L;
+            Long childId = 20L;
+
+            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+            Member differentMember = Member.of(new NickName("다른 멤버 닉네임"), "456", MemberProvider.KAKAO, RoleType.USER);
+
+            Child child = new Child("아이 닉네임", "초등학교 1학년");
+            Child spyChild = spy(child);
+            spyChild.assignToNewMemberOnly(differentMember);
+            given(spyChild.getId()).willReturn(childId);
+
+            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+            given(childRepository.findById(childId)).willReturn(Optional.of(spyChild));
+
+            ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
+
+            // When
+            childService.delete(param);
+
+            // Then
+            assertThat(differentMember.getChildren()).containsExactly(spyChild);
+        }
+
+        @DisplayName("잘못된 멤버 아이디인 경우 예외를 발생시킨다.")
+        @Test
+        void givenInvalidMemberId_throwsException() {
+            // Given
+            Long invalidMemberId = 999L;
+
+            given(memberRepository.findById(invalidMemberId)).willReturn(Optional.empty());
+
+            ChildDeleteParam param = new ChildDeleteParam(invalidMemberId, 1L);
+
+            // When & Then
+            Assertions.assertThatThrownBy(() -> childService.delete(param))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("잘못된 멤버 아이디입니다");
+        }
+    }
 }

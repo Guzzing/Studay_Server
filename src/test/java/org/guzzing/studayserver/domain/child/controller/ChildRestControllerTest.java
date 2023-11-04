@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.child.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,4 +113,15 @@ class ChildRestControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @DisplayName("아이를 삭제한다.")
+    @WithMockCustomOAuth2LoginUser()
+    @Test
+    void delete_success() throws Exception {
+        // Given
+        Long existingChildId = 200L;
+
+        // When & Then
+        mockMvc.perform(delete("/children/{childId}", existingChildId))
+                .andExpect(status().isNoContent());
+    }
 }

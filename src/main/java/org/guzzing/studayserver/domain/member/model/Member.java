@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.model.NickName;
@@ -82,6 +83,10 @@ public class Member {
         }
 
         children.add(child);
+    }
+
+    public void removeChild(Long childId) {
+        children.removeIf(child -> child.getId().equals(childId));
     }
 
     public String getNickName() {

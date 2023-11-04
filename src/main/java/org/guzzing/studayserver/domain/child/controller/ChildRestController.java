@@ -5,11 +5,14 @@ import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
 import org.guzzing.studayserver.domain.child.service.ChildService;
+import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,4 +51,12 @@ public class ChildRestController {
                 .body(ChildrenFindResponse.from(result));
     }
 
+    @DeleteMapping(path = "/{childId}")
+    public ResponseEntity<Void> delete(@MemberId Long memberId, @PathVariable Long childId) {
+        childService.delete(new ChildDeleteParam(memberId, childId));
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

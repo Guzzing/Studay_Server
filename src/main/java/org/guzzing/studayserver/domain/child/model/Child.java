@@ -62,4 +62,8 @@ public class Child {
     public String getGrade() {
         return grade.getDescription();
     }
+
+    public Member getMember() {
+        return member;
+    }
 }

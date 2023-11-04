@@ -4,6 +4,7 @@ import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
+import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -41,6 +42,12 @@ public class ChildService {
         return new ChildrenFindResult(children.stream()
                 .map(child -> new ChildFindResult(child.getId(), child.getNickName(), child.getGrade(), "휴식 중!"))
                 .toList());
+    }
+
+    public void delete(ChildDeleteParam param) {
+        Member member = getMember(param.memberId());
+
+        member.removeChild(param.childId());
     }
 
     private Member getMember(Long memberId) {
