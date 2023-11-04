@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
@@ -11,7 +12,12 @@ import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
+import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.domain.member.service.MemberService;
+import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +37,8 @@ class LikeServiceTest {
 
     @Autowired
     private LikeRepository likeRepository;
+    @Autowired
+    private MemberService memberService;
 
     @MockBean
     private AcademyAccessService academyAccessService;
@@ -45,10 +53,18 @@ class LikeServiceTest {
     void setUp() {
         LikePostRequest request = new LikePostRequest(academyId);
         param = LikePostRequest.to(request, memberId);
+
+//        Member.of(
+//                new NickName("박세영"),
+//                "3136348033",
+//                MemberProvider.KAKAO,
+//                RoleType.USER
+//        );
     }
 
     @Test
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
+    @WithMockCustomOAuth2LoginUser(memberId = 1L)
     void createLikeOfAcademy_WithMemberId() {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -64,6 +80,7 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
+    @WithMockCustomOAuth2LoginUser(memberId = 1L)
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -82,6 +99,7 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("내가 좋아요한 모든 학원 비용 정보를 조회한다.")
+    @WithMockCustomOAuth2LoginUser(memberId = 1L)
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
         given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
