@@ -27,7 +27,7 @@ import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 @Entity
 public class Member {
 
-    private static final int CHILDREN_MAX_SIZE = 5;
+    public static final int CHILDREN_MAX_SIZE = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
