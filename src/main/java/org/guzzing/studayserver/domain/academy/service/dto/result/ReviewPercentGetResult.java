@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.response;
 
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 

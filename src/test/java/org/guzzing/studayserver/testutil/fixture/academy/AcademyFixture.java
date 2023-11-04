@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 
 import java.util.List;
 
@@ -41,4 +42,12 @@ public class AcademyFixture {
         return ReviewCount.makeDefaultReviewCount(academy);
     }
 
+    public static AcademiesByLocationParam academiesByLocationParam() {
+        return AcademiesByLocationParam.of(37.4449168,127.1388684,0);
+    }
+
+
+
+
 }
+
