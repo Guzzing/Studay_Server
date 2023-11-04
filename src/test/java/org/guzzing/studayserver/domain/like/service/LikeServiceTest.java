@@ -37,8 +37,6 @@ class LikeServiceTest {
 
     @Autowired
     private LikeRepository likeRepository;
-    @Autowired
-    private MemberService memberService;
 
     @MockBean
     private AcademyAccessService academyAccessService;
@@ -53,13 +51,6 @@ class LikeServiceTest {
     void setUp() {
         LikePostRequest request = new LikePostRequest(academyId);
         param = LikePostRequest.to(request, memberId);
-
-//        Member.of(
-//                new NickName("박세영"),
-//                "3136348033",
-//                MemberProvider.KAKAO,
-//                RoleType.USER
-//        );
     }
 
     @Test
