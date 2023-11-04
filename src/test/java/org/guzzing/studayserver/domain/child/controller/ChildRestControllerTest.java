@@ -1,14 +1,21 @@
 package org.guzzing.studayserver.domain.child.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
+import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
 import org.guzzing.studayserver.domain.child.service.ChildService;
+import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
+import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -82,6 +89,27 @@ class ChildRestControllerTest {
                     Arguments.of(new ChildCreateRequest("a".repeat(11), ""))
             );
         }
+    }
+
+    @DisplayName("멤버에 할당된 아이들의 정보를 반환한다.")
+    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @Test
+    void findChildren_success() throws Exception {
+        // Given
+        ChildrenFindResult result = new ChildrenFindResult(List.of(
+                new ChildFindResult(1L, "Nickname1", "초등학교 1학년", "휴식 중!"),
+                new ChildFindResult(2L, "Nickname2", "초등학교 2학년", "휴식 중!")
+        ));
+
+        given(childService.findByMemberId(1L)).willReturn(result);
+
+        ChildrenFindResponse response = ChildrenFindResponse.from(result);
+
+        // When & Then
+        mockMvc.perform(get("/children")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(response)))
+                .andExpect(status().isOk());
     }
 
 }

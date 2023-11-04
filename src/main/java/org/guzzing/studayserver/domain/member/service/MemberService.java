@@ -20,7 +20,7 @@ public class MemberService {
 
     @Transactional
     public Long register(MemberRegisterParam param) {
-        Member member = findMember(param.memberId());
+        Member member = getMember(param.memberId());
 
         member.update(param.nickname(), param.email());
 
@@ -31,7 +31,7 @@ public class MemberService {
         return member.getId();
     }
 
-    private Member findMember(Long memberId) {
+    private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
     }
