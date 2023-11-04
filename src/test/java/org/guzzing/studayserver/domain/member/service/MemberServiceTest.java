@@ -8,6 +8,7 @@ import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
+import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberAdditionalChildParam;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,8 +36,8 @@ class MemberServiceTest {
         Member savedMember = memberRepository.save(member);
 
         MemberRegisterParam param = new MemberRegisterParam(savedMember.getId(), memberNickname, memberEmail, List.of(
-                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname1", "초등학교 1학년"),
-                new MemberRegisterParam.MemberRegisterChildInfoParam("childNickname2", "초등학교 3학년")
+                new MemberAdditionalChildParam("childNickname1", "초등학교 1학년"),
+                new MemberAdditionalChildParam("childNickname2", "초등학교 3학년")
         ));
 
         // When
