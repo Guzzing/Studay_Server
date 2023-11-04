@@ -37,14 +37,29 @@ public class Child {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public Child(String nickName, String grade, Member member) {
+    public Child(String nickName, String grade) {
         this.nickName = new NickName(nickName);
         this.grade = Grade.fromDescription(grade);
+    }
+
+    public void assignToNewMemberOnly(Member member) {
+        if (this.member != null) {
+            throw new IllegalStateException("이미 멤버가 할당되어 있습니다.");
+        }
+
         this.member = member;
         member.addChild(this);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getNickName() {
+        return nickName.getValue();
+    }
+
+    public String getGrade() {
+        return grade.getDescription();
     }
 }

@@ -40,8 +40,11 @@ class MemberTest {
     @Test
     void addChild_success() {
         // Given & When
-        new Child("child1", "중학교 1학년", member);
-        new Child("child2", "중학교 2학년", member);
+        Child child1 = new Child("child1", "중학교 1학년");
+        child1.assignToNewMemberOnly(member);
+
+        Child child2 = new Child("child2", "중학교 2학년");
+        child2.assignToNewMemberOnly(member);
 
         // Then
         Assertions.assertThat(member.getChildren()).size().isEqualTo(2);
@@ -52,11 +55,15 @@ class MemberTest {
     void addChild_failure_exceedsLimit() {
         // Given
         for (int i = 0; i < 5; i++) {
-            new Child("child1", "중학교 1학년", member);
+            Child child = new Child("child1", "중학교 1학년");
+            child.assignToNewMemberOnly(member);
         }
 
+        Child exceededChild = new Child("child1", "중학교 1학년");
+
         // When & Then
-        assertThatThrownBy(() -> new Child("child1", "중학교 1학년", member))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> exceededChild.assignToNewMemberOnly(member))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
     }
 }

@@ -25,7 +25,8 @@ public class MemberService {
         member.update(param.nickname(), param.email());
 
         for (MemberAdditionalChildParam childParam : param.children()) {
-            new Child(childParam.nickname(), childParam.grade(), member);
+            Child child = new Child(childParam.nickname(), childParam.grade());
+            child.assignToNewMemberOnly(member);
         }
 
         return member.getId();
