@@ -8,6 +8,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -17,6 +18,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -25,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.domain.review.controller.dto.ReviewPostRequest;
+import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.ReviewFixture;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
@@ -102,6 +105,43 @@ class ReviewRestControllerTest {
                         responseFields(
                                 fieldWithPath("reviewId").type(NUMBER).description("리뷰 아이디"),
                                 fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
+    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    void getReviewable_NotExistsReview_Reviewable() throws Exception {
+        // Given
+        given(memberAccessService.existsMember(any())).willReturn(true);
+        given(academyAccessService.existsAcademy(any())).willReturn(true);
+
+        // When
+        ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
+                .param("academyId", String.valueOf(1L))
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.academyId").value(1L))
+                .andExpect(jsonPath("$.reviewable").value(true))
+                .andDo(document("get-reviewable",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                        ),
+                        queryParameters(
+                                parameterWithName("academyId").description("학원 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                fieldWithPath("reviewable").type(BOOLEAN).description("리뷰 등록 가능 여부")
                         )
                 ));
     }

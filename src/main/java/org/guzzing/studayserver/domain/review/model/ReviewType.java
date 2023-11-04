@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostParam;
+import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.global.exception.ReviewException;
 
 public enum ReviewType {

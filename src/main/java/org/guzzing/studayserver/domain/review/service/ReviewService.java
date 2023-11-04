@@ -5,8 +5,9 @@ import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostParam;
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostResult;
+import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
+import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
+import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.MemberException;
 import org.guzzing.studayserver.global.exception.ReviewException;
@@ -31,11 +32,18 @@ public class ReviewService {
         this.memberAccessService = memberAccessService;
     }
 
+    @Transactional
     public ReviewPostResult createReviewOfAcademy(final ReviewPostParam reviewPostParam) {
         validateMember(reviewPostParam.memberId());
         validateAcademy(reviewPostParam.academyId());
 
-        validateReviewedYet(reviewPostParam);
+        ReviewableResult reviewableResult = isReviewableToAcademy(
+                reviewPostParam.memberId(),
+                reviewPostParam.academyId());
+
+        if (!reviewableResult.reviewable()) {
+            throw new ReviewException("이미 리뷰를 남겼습니다.");
+        }
 
         final Review review = Review.of(
                 reviewPostParam.academyId(),
@@ -47,14 +55,13 @@ public class ReviewService {
         return ReviewPostResult.from(savedReview);
     }
 
-    private void validateReviewedYet(ReviewPostParam reviewPostParam) {
-        boolean existsReview = reviewRepository.existsByMemberIdAndAcademyId(
-                reviewPostParam.memberId(),
-                reviewPostParam.academyId());
+    public ReviewableResult isReviewableToAcademy(final Long memberId, final Long academyId) {
+        validateMember(memberId);
+        validateAcademy(academyId);
 
-        if (existsReview) {
-            throw new ReviewException("이미 리뷰를 남겼습니다.");
-        }
+        boolean existsReview = reviewRepository.existsByMemberIdAndAcademyId(memberId, academyId);
+
+        return ReviewableResult.of(memberId, academyId, !existsReview);
     }
 
     private void validateMember(final Long memberId) {

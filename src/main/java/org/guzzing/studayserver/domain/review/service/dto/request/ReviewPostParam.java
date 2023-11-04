@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.review.service.dto;
+package org.guzzing.studayserver.domain.review.service.dto.request;
 
 public record ReviewPostParam(
         Long memberId,

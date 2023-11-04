@@ -1,8 +1,8 @@
-package org.guzzing.studayserver.domain.review.controller.dto;
+package org.guzzing.studayserver.domain.review.controller.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostParam;
+import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 
 public record ReviewPostRequest(
         @Positive Long academyId,

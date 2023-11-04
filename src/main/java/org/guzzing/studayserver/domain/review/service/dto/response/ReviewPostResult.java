@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.review.service.dto;
+package org.guzzing.studayserver.domain.review.service.dto.response;
 
 import static org.guzzing.studayserver.domain.review.model.ReviewType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_FACILITY;

@@ -1,6 +1,6 @@
-package org.guzzing.studayserver.domain.review.controller.dto;
+package org.guzzing.studayserver.domain.review.controller.dto.response;
 
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostResult;
+import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 
 public record ReviewPostResponse(
         Long reviewId,

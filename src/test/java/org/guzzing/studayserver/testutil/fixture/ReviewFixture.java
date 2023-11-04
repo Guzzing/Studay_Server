@@ -8,9 +8,9 @@ import static org.guzzing.studayserver.domain.review.model.ReviewType.LOVELY_TEA
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.guzzing.studayserver.domain.review.controller.dto.ReviewPostRequest;
+import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
-import org.guzzing.studayserver.domain.review.service.dto.ReviewPostParam;
+import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 
 public class ReviewFixture {
 
