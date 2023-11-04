@@ -5,14 +5,12 @@ import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_I
 import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_METHOD_ERROR;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.NOT_FOUND_ENTITY;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_BODY_MISSING_ERROR;
-import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_PARAM_MISSING_ERROR;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
-
+import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

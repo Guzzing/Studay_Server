@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.springframework.stereotype.Service;
 

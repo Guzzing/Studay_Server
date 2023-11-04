@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.member.service;
 
-import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.springframework.stereotype.Service;
 
 @Service
