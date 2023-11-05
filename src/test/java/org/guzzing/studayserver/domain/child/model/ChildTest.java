@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.child.model;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -17,6 +16,7 @@ class ChildTest {
 
     @Nested
     class AssignToNewMemberOnly {
+
         private Child child;
         private Member member;
 
@@ -30,7 +30,7 @@ class ChildTest {
         @Test
         void whenChildHasNoMember_assignsMember() {
             // When & Then
-            assertThatCode(() ->child.assignToNewMemberOnly(member))
+            assertThatCode(() -> child.assignToNewMemberOnly(member))
                     .doesNotThrowAnyException();
         }
 
@@ -45,5 +45,22 @@ class ChildTest {
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessageContaining("이미 멤버가 할당되어 있습니다.");
         }
+    }
+
+    @DisplayName("아이의 정보를 수정한다.")
+    @Test
+    void update_success() {
+        // Given
+        Child child = new Child("아이 닉네임", "초등학교 1학년");
+
+        String updatedNickname = "닉네임 수정";
+        String updatedGrade = "초등학교 2학년";
+
+        // When
+        child.update(updatedNickname, updatedGrade);
+
+        // Then
+        Assertions.assertThat(child.getNickName()).isEqualTo(updatedNickname);
+        Assertions.assertThat(child.getGrade()).isEqualTo(updatedGrade);
     }
 }

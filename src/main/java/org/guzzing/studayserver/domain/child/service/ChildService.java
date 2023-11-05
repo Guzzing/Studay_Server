@@ -5,6 +5,7 @@ import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
+import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -48,6 +49,16 @@ public class ChildService {
         Member member = getMember(param.memberId());
 
         member.removeChild(param.childId());
+    }
+
+    public Long modify(ChildModifyParam param) {
+        Member member = getMember(param.memberId());
+
+        Child child = member.findChild(param.childId())
+                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 아이입니다: " + param.childId()));
+        child.update(param.nickname(), param.grade());
+
+        return child.getId();
     }
 
     private Member getMember(Long memberId) {

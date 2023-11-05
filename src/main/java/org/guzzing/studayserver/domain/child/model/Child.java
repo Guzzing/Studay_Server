@@ -66,4 +66,9 @@ public class Child {
     public Member getMember() {
         return member;
     }
+
+    public void update(String nickname, String grade) {
+        this.nickName = new NickName(nickname);
+        this.grade = Grade.fromDescription(grade);
+    }
 }

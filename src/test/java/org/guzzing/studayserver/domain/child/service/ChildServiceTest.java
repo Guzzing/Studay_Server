@@ -16,6 +16,7 @@ import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
+import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -233,6 +234,62 @@ class ChildServiceTest {
             Assertions.assertThatThrownBy(() -> childService.delete(param))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("잘못된 멤버 아이디입니다");
+        }
+    }
+
+    @Nested
+    class Modify {
+
+        @DisplayName("원하는 아이의 정보를 수정한다.")
+        @Test
+        void success() {
+            // Given
+            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+
+            Child mockChild = mock(Child.class);
+            given(mockChild.getId()).willReturn(param.childId());
+
+            Member mockMember = mock(Member.class);
+            given(mockMember.findChild(param.childId())).willReturn(Optional.of(mockChild));
+
+            given(memberRepository.findById(param.memberId())).willReturn(Optional.of(mockMember));
+
+            // When
+            Long updatedChildId = childService.modify(param);
+
+            // Then
+            assertThat(updatedChildId).isEqualTo(param.childId());
+            verify(mockChild).update(param.nickname(), param.grade());
+        }
+
+        @DisplayName("존재하지 않는 멤버라면 예외를 발생시킨다.")
+        @Test
+        void whenNonExistentMember_throwException() {
+            // Given
+            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+
+            given(memberRepository.findById(param.memberId())).willReturn(Optional.empty());
+
+            // When & Then
+            assertThatThrownBy(() -> childService.modify(param))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("잘못된 멤버 아이디입니다");
+        }
+
+        @DisplayName("멤버에 존재하지 않는 아이라면 예외를 발생시킨다.")
+        @Test
+        void whenUnassignedChildId_throwsException() {
+            // Given
+            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+
+            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+
+            given(memberRepository.findById(param.memberId())).willReturn(Optional.of(member));
+
+            // When & Then
+            assertThatThrownBy(() -> childService.modify(param))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("찾을 수 없는 아이입니다");
         }
     }
 }

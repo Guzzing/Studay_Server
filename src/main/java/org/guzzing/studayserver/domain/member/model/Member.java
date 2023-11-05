@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.model.NickName;
@@ -95,5 +95,11 @@ public class Member {
 
     public String getEmail() {
         return email.getValue();
+    }
+
+    public Optional<Child> findChild(Long childId) {
+        return children.stream()
+                .filter(child -> child.getId().equals(childId))
+                .findFirst();
     }
 }
