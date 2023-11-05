@@ -15,6 +15,7 @@ import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.Upmyeondo
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,19 +30,40 @@ public class RegionRestController {
         this.regionService = regionService;
     }
 
+    @GetMapping(path = "/beopjungdong", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RegionResponse> getSido() {
+        SidoResult result = regionService.findSido();
+
+        return ResponseEntity
+                .status(OK)
+                .body(RegionResponse.from(result));
+
+    }
+
+    @ValidSido
+    @GetMapping(path = "/beopjungdong/{sido}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RegionResponse> getSigungu(
+            @PathVariable String sido
+    ) {
+        SigunguResult result = regionService.findSigungusBySido(sido);
+
+        return ResponseEntity
+                .status(OK)
+                .body(RegionResponse.from(result));
+    }
+
     @ValidSido
     @ValidSigungu
-    @GetMapping(path = "/beopjungdong", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RegionResponse> getSubRegions(
-            @RequestParam(required = false) String sido,
-            @RequestParam(required = false) String sigungu
+    @GetMapping(path = "/beopjungdong/{sido}/{sigungu}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RegionResponse> getUpmyeondong(
+            @PathVariable String sido,
+            @PathVariable String sigungu
     ) {
-        if (sido == null) {
-            return getSidoData();
-        } else if (sigungu == null) {
-            return getSigunguData(sido);
-        }
-        return getUpmyeondongData(sido, sigungu);
+        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
+
+        return ResponseEntity
+                .status(OK)
+                .body(RegionResponse.from(result));
     }
 
     @ValidSido
@@ -57,27 +79,6 @@ public class RegionRestController {
         return ResponseEntity
                 .status(OK)
                 .body(RegionLocationResponse.from(regionResult));
-    }
-
-    private ResponseEntity<RegionResponse> getUpmyeondongData(String sido, String sigungu) {
-        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
-        return ResponseEntity
-                .status(OK)
-                .body(RegionResponse.from(result));
-    }
-
-    private ResponseEntity<RegionResponse> getSigunguData(String sido) {
-        SigunguResult result = regionService.findSigungusBySido(sido);
-        return ResponseEntity
-                .status(OK)
-                .body(RegionResponse.from(result));
-    }
-
-    private ResponseEntity<RegionResponse> getSidoData() {
-        SidoResult result = regionService.findSido();
-        return ResponseEntity
-                .status(OK)
-                .body(RegionResponse.from(result));
     }
 
 }

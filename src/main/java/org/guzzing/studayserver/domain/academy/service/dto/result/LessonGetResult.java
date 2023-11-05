@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 
@@ -9,6 +9,7 @@ public record LessonGetResult(
         String duration,
         Long totalFee
 ) {
+
     public static LessonGetResult from(Lesson lesson) {
         return new LessonGetResult(
                 lesson.getId(),

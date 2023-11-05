@@ -3,10 +3,9 @@ package org.guzzing.studayserver.domain.academy.model.vo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.util.Objects;
 import lombok.Getter;
 import org.springframework.util.Assert;
-
-import java.util.Objects;
 
 @Getter
 @Embeddable
@@ -20,7 +19,8 @@ public class Address {
         this.fullAddress = address;
     }
 
-    protected Address() { }
+    protected Address() {
+    }
 
     public static Address of(final String address) {
         return new Address(address);
@@ -28,8 +28,12 @@ public class Address {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Address address = (Address) o;
         return Objects.equals(fullAddress, address.fullAddress);
     }
