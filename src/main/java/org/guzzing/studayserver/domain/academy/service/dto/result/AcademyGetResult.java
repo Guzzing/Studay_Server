@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
@@ -21,9 +21,9 @@ public record AcademyGetResult(
             List<Lesson> lessons,
             ReviewCount reviewCount) {
         return new AcademyGetResult(
-                academy.getName(),
+                academy.getAcademyName(),
                 academy.getContact(),
-                academy.getAddress(),
+                academy.getFullAddress(),
                 academy.getShuttleAvailability(),
                 academy.getMaxEducationFee(),
                 academy.getUpdatedDate().toString(),
