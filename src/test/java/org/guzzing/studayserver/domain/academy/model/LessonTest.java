@@ -19,6 +19,7 @@ class LessonTest {
     }
 
     @Test
+    @DisplayName("수업 정원이 음수인 경우 예외를 던진다.")
     void makeLesson_minusCapacity_throwException() {
         //Then
         assertThatThrownBy(
@@ -27,6 +28,7 @@ class LessonTest {
     }
 
     @Test
+    @DisplayName("강의료가 음수인 경우 예외를 던진다.")
     void makeLesson_minusTotalFee_throwException() {
         //Then
         assertThatThrownBy(
