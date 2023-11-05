@@ -6,7 +6,8 @@ public class GeometryUtil {
 
     private static final Double EARTH_RADIUS = 6371.01;
 
-    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";;
+    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";
+    ;
 
     public static Location calculateLocationWithinRadiusInDirection(Double baseLatitude,
                                                                     Double baseLongitude,

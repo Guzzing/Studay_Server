@@ -5,9 +5,9 @@ public record AcademiesByLocationParam(
         Double baseLongitude,
         int pageNumber
 ) {
-    public static AcademiesByLocationParam of( Double baseLatitude,
-                                               Double baseLongitude,
-                                               int pageNumber) {
+    public static AcademiesByLocationParam of(Double baseLatitude,
+                                              Double baseLongitude,
+                                              int pageNumber) {
         return new AcademiesByLocationParam(baseLatitude, baseLongitude, pageNumber);
     }
 }

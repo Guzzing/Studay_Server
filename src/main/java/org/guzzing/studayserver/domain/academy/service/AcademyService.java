@@ -30,7 +30,6 @@ public class AcademyService {
 
     private final ReviewCountRepository reviewCountRepository;
 
-
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository, ReviewCountRepository reviewCountRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;

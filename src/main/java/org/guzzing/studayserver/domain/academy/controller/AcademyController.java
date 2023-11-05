@@ -26,7 +26,9 @@ public class AcademyController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademyGetResponse> getAcademy(@PathVariable Long academyId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademyGetResponse.form(academyService.getAcademy(academyId)));
+                .body(AcademyGetResponse.from(academyService.getAcademy(academyId)));
     }
+
+
 
 }

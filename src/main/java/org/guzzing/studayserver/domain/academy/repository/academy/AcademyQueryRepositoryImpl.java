@@ -2,10 +2,8 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.hibernate.transform.ResultTransformer;
-import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
 import java.util.List;

@@ -7,7 +7,6 @@ public record AcademiesByNameResult(
         String academyName,
         String address
 ) {
-
     public static AcademiesByNameResult from(AcademiesByName academiesByName) {
         return new AcademiesByNameResult(
                 academiesByName.getAcademyId(),

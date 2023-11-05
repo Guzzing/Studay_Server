@@ -14,7 +14,7 @@ public record AcademiesByLocationResult(
         return new AcademiesByLocationResult(
                 academiesByLocation.academyId(),
                 academiesByLocation.academyName(),
-                academiesByLocation.address(),
+                academiesByLocation.fullAddress(),
                 academiesByLocation.contact(),
                 academiesByLocation.areaOfExpertise()
         );

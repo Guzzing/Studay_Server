@@ -22,7 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-@ActiveProfiles({"oauth","dev"})
+@ActiveProfiles({"oauth", "dev"})
 @SpringBootTest
 class AcademyServiceTest {
 
@@ -88,14 +88,14 @@ class AcademyServiceTest {
         double longitude = 127.1388684;
 
         List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(latitude, longitude);
-        for(Academy academy : academies) {
+        for (Academy academy : academies) {
             Academy savedAcademy = academyRepository.save(academy);
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
             reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
         }
 
         //When
-        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(latitude,longitude));
+        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(latitude, longitude));
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
@@ -106,7 +106,7 @@ class AcademyServiceTest {
     void findAcademiesByName_academyName_relatedAcademies() {
         //Given
         List<Academy> academies = AcademyFixture.academies();
-        for(Academy academy : academies) {
+        for (Academy academy : academies) {
             Academy savedAcademy = academyRepository.save(academy);
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
             reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
@@ -118,7 +118,7 @@ class AcademyServiceTest {
         );
 
         //Then
-        for(AcademiesByNameResult academiesByNameResult : academiesByNameResults.academiesByNameResults()) {
+        for (AcademiesByNameResult academiesByNameResult : academiesByNameResults.academiesByNameResults()) {
             assertThat(academiesByNameResult.academyName()).contains(ACADEMY_NAME_FOR_SEARCH);
         }
     }
