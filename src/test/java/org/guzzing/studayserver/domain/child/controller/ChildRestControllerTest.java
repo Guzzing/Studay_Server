@@ -5,14 +5,16 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
+import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
@@ -123,5 +125,53 @@ class ChildRestControllerTest {
         // When & Then
         mockMvc.perform(delete("/children/{childId}", existingChildId))
                 .andExpect(status().isNoContent());
+    }
+
+    @Nested
+    class modify {
+
+        @DisplayName("아이의 정보를 수정한다.")
+        @WithMockCustomOAuth2LoginUser(memberId = 1L)
+        @Test
+        void success() throws Exception {
+            // Given
+            Long childId = 100L;
+
+            ChildModifyRequest request = new ChildModifyRequest("아이 닉네임", "초등학교 1학년");
+
+            given(childService.modify(any())).willReturn(childId);
+
+            // Then
+            mockMvc.perform(patch("/children/{childId}", childId)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(childId.toString()));
+        }
+
+        @DisplayName("잘못된 요청이 들어오면 예외를 발생시킨다.")
+        @WithMockCustomOAuth2LoginUser()
+        @ParameterizedTest
+        @MethodSource("provideInvalidRequests")
+        void givenInvalidRequest_throwsException(ChildModifyRequest invalidRequest) throws Exception {
+            // When & Then
+            mockMvc.perform(patch("/children/{childId}", 100L)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(objectMapper.writeValueAsString(invalidRequest)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        private static Stream<Arguments> provideInvalidRequests() {
+            return Stream.of(
+                    // 빈 닉네임
+                    Arguments.of(new ChildModifyRequest("", "초등학교 1학년")),
+
+                    // 긴 닉네임
+                    Arguments.of(new ChildModifyRequest("a".repeat(11), "초등학교 1학년")),
+
+                    // 빈 학년
+                    Arguments.of(new ChildModifyRequest("a".repeat(11), ""))
+            );
+        }
     }
 }

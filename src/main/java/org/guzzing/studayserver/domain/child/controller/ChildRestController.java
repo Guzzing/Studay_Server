@@ -3,7 +3,9 @@ package org.guzzing.studayserver.domain.child.controller;
 import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
+import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
+import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,5 +61,20 @@ public class ChildRestController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @PatchMapping(path = "/{childId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Long> modify(
+            @MemberId Long memberId,
+            @PathVariable Long childId,
+            @Valid @RequestBody ChildModifyRequest request) {
+        Long modifiedChildId = childService.modify(request.toParam(memberId, childId));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(modifiedChildId);
     }
 }
