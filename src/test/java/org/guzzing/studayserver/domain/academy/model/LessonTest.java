@@ -28,7 +28,7 @@ class LessonTest {
     }
 
     @Test
-    @DisplayName("강의료가 음수인 경우 예외를 던진다.")
+    @DisplayName("강의료가 음수인 경우 예외를 던진다. ")
     void makeLesson_minusTotalFee_throwException() {
         //Then
         assertThatThrownBy(
