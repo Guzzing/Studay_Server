@@ -7,7 +7,9 @@ public record AcademiesByLocationResult(
         String academyName,
         String address,
         String contact,
-        String areaOfExpertise
+        String areaOfExpertise,
+        Double latitude,
+        Double longitude
 ) {
 
     public static AcademiesByLocationResult from(AcademiesByLocation academiesByLocation) {
@@ -16,7 +18,9 @@ public record AcademiesByLocationResult(
                 academiesByLocation.academyName(),
                 academiesByLocation.fullAddress(),
                 academiesByLocation.contact(),
-                academiesByLocation.areaOfExpertise()
+                academiesByLocation.areaOfExpertise(),
+                academiesByLocation.latitude(),
+                academiesByLocation.longitude()
         );
     }
 }
