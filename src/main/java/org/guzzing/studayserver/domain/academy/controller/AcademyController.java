@@ -37,6 +37,7 @@ public class AcademyController {
     }
 
     @GetMapping(
+            path = "/complexes",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByLocationResponses> findByLocation(@ModelAttribute @Valid AcademiesByLocationRequest request)  {
         AcademiesByLocationResults academiesByLocation =
