@@ -6,7 +6,6 @@ import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByName;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +19,6 @@ public interface AcademyRepository extends AcademyJpaRepository, AcademyQueryRep
 
     Slice<AcademiesByName> findAcademiesByName(String academyName, Pageable pageable);
 
-    List<AcademiesByLocation> findAcademiesByLocation(Location northEast, Location southWest);
-
+    List<AcademiesByLocation> findAcademiesByLocation(String pointFormat);
 
 }
