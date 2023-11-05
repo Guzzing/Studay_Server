@@ -4,11 +4,13 @@ import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class LessonTest {
 
     @Test
+    @DisplayName("수업을 등록할 때 학원이 없으면 예외를 던진다.")
     void makeLesson_nullAcademy_throwException() {
         //Then
         assertThatThrownBy(
