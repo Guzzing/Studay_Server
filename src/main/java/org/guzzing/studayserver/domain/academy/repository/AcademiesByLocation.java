@@ -5,6 +5,8 @@ public record AcademiesByLocation(
         String academyName,
         String fullAddress,
         String contact,
-        String areaOfExpertise
+        String areaOfExpertise,
+        Double latitude,
+        Double longitude
 ) {
 }

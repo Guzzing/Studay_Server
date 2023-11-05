@@ -7,7 +7,9 @@ public record AcademiesByLocationResponse(
         String academyName,
         String address,
         String contact,
-        String areaOfExpertise
+        String areaOfExpertise,
+        Double latitude,
+        Double longitude
 ) {
     public static AcademiesByLocationResponse from(AcademiesByLocationResult academiesByLocationResult) {
         return new AcademiesByLocationResponse(
@@ -15,7 +17,9 @@ public record AcademiesByLocationResponse(
                 academiesByLocationResult.academyName(),
                 academiesByLocationResult.address(),
                 academiesByLocationResult.contact(),
-                academiesByLocationResult.areaOfExpertise()
+                academiesByLocationResult.areaOfExpertise(),
+                academiesByLocationResult.latitude(),
+                academiesByLocationResult.longitude()
         );
     }
 }

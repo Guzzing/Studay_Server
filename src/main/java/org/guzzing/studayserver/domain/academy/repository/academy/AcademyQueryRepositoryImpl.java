@@ -18,7 +18,8 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     public List<AcademiesByLocation> findAcademiesByLocation(String pointFormat) {
 
         Query query = em.createNativeQuery(
-                "SELECT a.id AS academyId, a.academy_name AS academyName, a.contact , a.full_address AS fullAddress, a.area_of_expertise AS areaOfExpertise FROM academies AS a " +
+                "SELECT a.id AS academyId, a.academy_name AS academyName, a.contact , a.full_address AS fullAddress," +
+                        " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude FROM academies AS a " +
                         "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", a.point)=1");
 
         List<AcademiesByLocation> academies = query.unwrap(org.hibernate.query.NativeQuery.class)
@@ -27,6 +28,8 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .addScalar("contact", StandardBasicTypes.STRING)
                 .addScalar("fullAddress", StandardBasicTypes.STRING)
                 .addScalar("areaOfExpertise", StandardBasicTypes.STRING)
+                .addScalar("latitude", StandardBasicTypes.DOUBLE)
+                .addScalar("longitude", StandardBasicTypes.DOUBLE)
                 .setResultTransformer(
                         new ResultTransformer() {
                             @Override
@@ -36,7 +39,9 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                         (String) tuple[1],
                                         (String) tuple[2],
                                         (String) tuple[3],
-                                        (String) tuple[4]
+                                        (String) tuple[4],
+                                        (Double) tuple[5],
+                                        (Double) tuple[6]
                                 );
                             }
 
@@ -50,4 +55,5 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
 
         return academies;
     }
+
 }
