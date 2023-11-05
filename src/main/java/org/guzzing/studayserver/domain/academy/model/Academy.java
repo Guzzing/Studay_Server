@@ -54,7 +54,7 @@ public class Academy extends BaseEntity {
         return address.getFullAddress();
     }
 
-    public String getName() {
+    public String getAcademyName() {
         return academyInfo.getAcademyName();
     }
 

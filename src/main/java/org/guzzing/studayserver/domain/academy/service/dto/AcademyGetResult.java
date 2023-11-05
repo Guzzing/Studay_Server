@@ -21,7 +21,7 @@ public record AcademyGetResult(
                                         List<Lesson> lessons,
                                         ReviewCount reviewCount) {
         return new AcademyGetResult(
-                academy.getName(),
+                academy.getAcademyName(),
                 academy.getContact(),
                 academy.getAddress(),
                 academy.getShuttleAvailability(),

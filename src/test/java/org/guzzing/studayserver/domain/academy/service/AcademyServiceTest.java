@@ -60,7 +60,7 @@ class AcademyServiceTest {
         AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId());
 
         //When
-        assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getName());
+        assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
         assertThat(academyGetResult.contact()).isEqualTo(savedAcademyAboutSungnam.getContact());
         assertThat(academyGetResult.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getAddress());
         assertThat(academyGetResult.shuttleAvailability()).isEqualTo(savedAcademyAboutSungnam.getShuttleAvailability().toString());
