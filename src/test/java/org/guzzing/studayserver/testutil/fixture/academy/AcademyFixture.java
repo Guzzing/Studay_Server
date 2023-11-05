@@ -66,7 +66,7 @@ public class AcademyFixture {
     }
 
     public static AcademiesByLocationParam academiesByLocationParam(double latitude, double longitude) {
-        return AcademiesByLocationParam.of(latitude, longitude, 0);
+        return AcademiesByLocationParam.of(latitude, longitude);
     }
 
 }
