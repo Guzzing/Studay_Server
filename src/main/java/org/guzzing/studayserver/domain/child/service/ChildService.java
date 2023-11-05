@@ -45,12 +45,14 @@ public class ChildService {
                 .toList());
     }
 
+    @Transactional
     public void delete(ChildDeleteParam param) {
         Member member = getMember(param.memberId());
 
         member.removeChild(param.childId());
     }
 
+    @Transactional
     public Long modify(ChildModifyParam param) {
         Member member = getMember(param.memberId());
 
