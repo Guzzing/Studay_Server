@@ -1,0 +1,19 @@
+package org.guzzing.studayserver.domain.academy.service.dto.result;
+
+import org.guzzing.studayserver.domain.academy.repository.AcademiesByName;
+
+public record AcademiesByNameResult(
+        Long academyId,
+        String academyName,
+        String address
+) {
+
+    public static AcademiesByNameResult from(AcademiesByName academiesByName) {
+        return new AcademiesByNameResult(
+                academiesByName.getAcademyId(),
+                academiesByName.getAcademyName(),
+                academiesByName.getFullAddress()
+        );
+    }
+
+}
