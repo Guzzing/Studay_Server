@@ -46,7 +46,7 @@ public class AcademyService {
         return AcademyGetResult.from(academy, lessons, reviewCount);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AcademiesByLocationResults findAcademiesByLocation(AcademiesByLocationParam param) {
         Location northEast = GeometryUtil.calculateLocationWithinRadiusInDirection(
                 param.baseLatitude(),
@@ -58,12 +58,20 @@ public class AcademyService {
                 param.baseLongitude(),
                 Direction.SOUTHWEST.getBearing(),
                 DISTANCE);
-
+        String diagonal = GeometryUtil.makeDiagonalByLineString(northEast, southWest);
 
         return AcademiesByLocationResults.to(
-                academyRepository.findAcademiesByLocation(northEast, southWest)
+                academyRepository.findAcademiesByLocation(diagonal)
         );
+    }
 
+    @Transactional(readOnly = true)
+    public AcademiesByNameResults findAcademiesByName(AcademiesByNameParam param) {
+        PageRequest requestPageAble = PageRequest.of(param.pageNumber(), PAGE_SIZE);
+
+        return AcademiesByNameResults.to(
+                academyRepository.findAcademiesByName(param.academyName(), requestPageAble)
+        );
     }
 
 }
