@@ -9,6 +9,7 @@ public record LessonGetResponse(
         String duration,
         Long totalFee
 ) {
+
     public static LessonGetResponse from(LessonGetResult lesson) {
         return new LessonGetResponse(
                 lesson.lessonId(),

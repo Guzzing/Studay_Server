@@ -1,14 +1,18 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.global.BaseEntity;
 import org.locationtech.jts.geom.Point;
-
-import java.util.Objects;
 
 @Getter
 @Entity
@@ -82,12 +86,11 @@ public class Academy extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, academyInfo, fullAddress, location);
+        return Objects.hash(id, academyInfo, fullAddress, location, maxEducationFee, point);
     }
-
 }

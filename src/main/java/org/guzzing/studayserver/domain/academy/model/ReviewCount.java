@@ -1,11 +1,18 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name="review_counts")
+@Table(name = "review_counts")
 public class ReviewCount {
 
     private static final int INIT_VALUE = 0;
@@ -36,18 +43,20 @@ public class ReviewCount {
     @JoinColumn(name = "academies_id")
     private Academy academy;
 
-    public int makePercent(int reviewCount){
-        if(reviewersCount==0) {
+    public int makePercent(int reviewCount) {
+        if (reviewersCount == 0) {
             return INIT_VALUE;
         }
 
-        return reviewCount/reviewersCount * 100 ;
+        return reviewCount / reviewersCount * 100;
     }
 
     protected ReviewCount() {
 
     }
-    protected ReviewCount( int kindnessCount, int goodFacilityCount, int cheapFeeCount, int goodManagementCount, int lovelyTeachingCount, int reviewersCount, Academy academy) {
+
+    protected ReviewCount(int kindnessCount, int goodFacilityCount, int cheapFeeCount, int goodManagementCount,
+            int lovelyTeachingCount, int reviewersCount, Academy academy) {
         this.kindnessCount = kindnessCount;
         this.goodFacilityCount = goodFacilityCount;
         this.cheapFeeCount = cheapFeeCount;
@@ -58,7 +67,7 @@ public class ReviewCount {
     }
 
     public static ReviewCount makeDefaultReviewCount(Academy academy) {
-        return new ReviewCount(INIT_VALUE,INIT_VALUE,INIT_VALUE,INIT_VALUE,INIT_VALUE,INIT_VALUE,academy);
+        return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, academy);
     }
 
 }

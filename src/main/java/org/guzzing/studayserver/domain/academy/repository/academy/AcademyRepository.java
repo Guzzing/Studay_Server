@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import org.guzzing.studayserver.domain.academy.model.Academy;
+<<<<<<< HEAD
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByName;
 import org.springframework.data.domain.Pageable;

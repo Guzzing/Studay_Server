@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class AcademyService {
 
@@ -30,7 +29,8 @@ public class AcademyService {
 
     private final ReviewCountRepository reviewCountRepository;
 
-    public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository, ReviewCountRepository reviewCountRepository) {
+    public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
+            ReviewCountRepository reviewCountRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;

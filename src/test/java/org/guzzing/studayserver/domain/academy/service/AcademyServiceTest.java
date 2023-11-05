@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -16,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @ActiveProfiles({"oauth", "dev"})
@@ -55,7 +54,8 @@ class AcademyServiceTest {
         Lesson lessonAboutSungnam = AcademyFixture.lessonForSunganm(savedAcademyAboutSungnam);
         savedALessonAboutSungnam = lessonRepository.save(lessonAboutSungnam);
 
-        savedReviewCountAboutSungnam = reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademyAboutSungnam));
+        savedReviewCountAboutSungnam = reviewCountRepository.save(
+                AcademyFixture.reviewCountDefault(savedAcademyAboutSungnam));
     }
 
     @Test
@@ -72,8 +72,10 @@ class AcademyServiceTest {
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
         assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
-        assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(LessonGetResult.from(savedALessonAboutSungnam));
-        assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(ReviewPercentGetResult.from(savedReviewCountAboutSungnam));
+        assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(
+                LessonGetResult.from(savedALessonAboutSungnam));
+        assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(
+                ReviewPercentGetResult.from(savedReviewCountAboutSungnam));
     }
 
     @Test
