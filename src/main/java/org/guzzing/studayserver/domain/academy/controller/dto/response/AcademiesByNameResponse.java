@@ -5,13 +5,17 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNam
 public record AcademiesByNameResponse(
         Long academyId,
         String academyName,
-        String address
+        String address,
+        Double latitude,
+        Double longitude
 ) {
     public static AcademiesByNameResponse from(AcademiesByNameResult academiesByNameResult) {
         return new AcademiesByNameResponse(
                 academiesByNameResult.academyId(),
                 academiesByNameResult.academyName(),
-                academiesByNameResult.address()
+                academiesByNameResult.address(),
+                academiesByNameResult.latitude(),
+                academiesByNameResult.longitude()
         );
     }
 }

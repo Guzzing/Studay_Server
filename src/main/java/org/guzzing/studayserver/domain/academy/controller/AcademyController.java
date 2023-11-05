@@ -47,6 +47,7 @@ public class AcademyController {
     }
 
     @GetMapping(
+            path = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByNameResponses> findByName(@ModelAttribute @Valid AcademiesByNameRequest request)  {
         AcademiesByNameResults academiesByNameResults = academyService.findAcademiesByName(AcademiesByNameRequest.to(request));

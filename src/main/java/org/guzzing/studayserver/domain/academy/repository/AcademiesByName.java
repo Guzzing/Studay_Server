@@ -7,6 +7,10 @@ public interface AcademiesByName {
 
     String getFullAddress();
 
+    Double getLongitude();
+
+    Double getLatitude();
+
 }
 
 
