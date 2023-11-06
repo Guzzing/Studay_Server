@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.model.NickName;
@@ -27,7 +28,7 @@ import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 @Entity
 public class Member {
 
-    private static final int CHILDREN_MAX_SIZE = 5;
+    public static final int CHILDREN_MAX_SIZE = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,11 +85,21 @@ public class Member {
         children.add(child);
     }
 
+    public void removeChild(Long childId) {
+        children.removeIf(child -> child.getId().equals(childId));
+    }
+
     public String getNickName() {
         return nickName.getValue();
     }
 
     public String getEmail() {
         return email.getValue();
+    }
+
+    public Optional<Child> findChild(Long childId) {
+        return children.stream()
+                .filter(child -> child.getId().equals(childId))
+                .findFirst();
     }
 }

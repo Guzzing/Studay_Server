@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
+import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest.MemberAdditionalChildRequest;
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +48,7 @@ class MemberRestControllerTest {
         void statusIsOk() throws Exception {
             // Given
             MemberRegisterRequest request = new MemberRegisterRequest("nickname", "email@example.com", List.of(
-                    new MemberRegisterRequest.MemberRegisterChildRequest("Child1", "중학교 1학년")));
+                    new MemberAdditionalChildRequest("Child1", "중학교 1학년")));
 
             // When
             when(memberService.register(any())).thenReturn(1L);
@@ -75,32 +76,32 @@ class MemberRestControllerTest {
             return Stream.of(
                     // 빈 닉네임
                     Arguments.of(new MemberRegisterRequest("", "email@example.com", List.of(
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child1", "Grade1")
+                            new MemberAdditionalChildRequest("Child1", "Grade1")
                     ))),
 
                     // 잘못된 이메일
                     Arguments.of(new MemberRegisterRequest("nickname", "invalid_email_format", List.of(
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child1", "Grade1")
+                            new MemberAdditionalChildRequest("Child1", "Grade1")
                     ))),
 
                     // 5명 이상의 아이
                     Arguments.of(new MemberRegisterRequest("nickname", "email@example.com", List.of(
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child1", "Grade1"),
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child2", "Grade2"),
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child3", "Grade3"),
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child4", "Grade4"),
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child5", "Grade5"),
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child6", "Grade6")
+                            new MemberAdditionalChildRequest("Child1", "Grade1"),
+                            new MemberAdditionalChildRequest("Child2", "Grade2"),
+                            new MemberAdditionalChildRequest("Child3", "Grade3"),
+                            new MemberAdditionalChildRequest("Child4", "Grade4"),
+                            new MemberAdditionalChildRequest("Child5", "Grade5"),
+                            new MemberAdditionalChildRequest("Child6", "Grade6")
                     ))),
 
                     // 빈 아이 닉네임
                     Arguments.of(new MemberRegisterRequest("nickname", "email@example.com", List.of(
-                            new MemberRegisterRequest.MemberRegisterChildRequest("", "Grade1")
+                            new MemberAdditionalChildRequest("", "Grade1")
                     ))),
 
                     // 빈 학년
                     Arguments.of(new MemberRegisterRequest("nickname", "email@example.com", List.of(
-                            new MemberRegisterRequest.MemberRegisterChildRequest("Child1", "")
+                            new MemberAdditionalChildRequest("Child1", "")
                     )))
             );
         }
