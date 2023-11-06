@@ -12,6 +12,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.global.BaseEntity;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @Entity
@@ -26,20 +27,22 @@ public class Academy extends BaseEntity {
     private AcademyInfo academyInfo;
 
     @Embedded
-    private Address address;
+    private Address fullAddress;
 
     @Embedded
     private Location location;
 
     private Long maxEducationFee;
 
+    private Point point;
+
     protected Academy(
             final AcademyInfo academyInfo,
-            final Address address,
+            final Address fullAddress,
             final Location location
     ) {
         this.academyInfo = academyInfo;
-        this.address = address;
+        this.fullAddress = fullAddress;
         this.location = location;
     }
 
@@ -54,12 +57,12 @@ public class Academy extends BaseEntity {
         this.maxEducationFee = maxEducationFee;
     }
 
-    public String getAddress() {
-        return address.getFullAddress();
+    public String getFullAddress() {
+        return fullAddress.getFullAddress();
     }
 
-    public String getName() {
-        return academyInfo.getName();
+    public String getAcademyName() {
+        return academyInfo.getAcademyName();
     }
 
     public String getContact() {
@@ -74,22 +77,20 @@ public class Academy extends BaseEntity {
         return academyInfo.getAreaOfExpertise();
     }
 
+    public void changePoint(Point point) {
+        this.point = point;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(
-                address, academy.address) && Objects.equals(location, academy.location);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, academyInfo, address, location);
+        return Objects.hash(id, academyInfo, fullAddress, location, maxEducationFee, point);
     }
-
 }

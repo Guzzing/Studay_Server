@@ -6,10 +6,10 @@ public record MemberRegisterParam(
         Long memberId,
         String nickname,
         String email,
-        List<MemberRegisterChildInfoParam> children
+        List<MemberAdditionalChildParam> children
 ) {
 
-    public record MemberRegisterChildInfoParam(
+    public record MemberAdditionalChildParam(
             String nickname,
             String grade
     ) {
