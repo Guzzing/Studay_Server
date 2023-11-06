@@ -10,7 +10,9 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.academy.util.model.Direction;
 import org.springframework.data.domain.PageRequest;

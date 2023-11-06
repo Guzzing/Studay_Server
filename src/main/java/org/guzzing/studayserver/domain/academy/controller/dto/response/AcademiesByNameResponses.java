@@ -4,9 +4,10 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNam
 import org.springframework.data.domain.Slice;
 
 
-public record AcademiesByNameResponses (
+public record AcademiesByNameResponses(
         Slice<AcademiesByNameResponse> academiesByNameResponses
 ) {
+
     public static AcademiesByNameResponses from(AcademiesByNameResults academiesByNameResults) {
         return new AcademiesByNameResponses(
                 academiesByNameResults.academiesByNameResults()

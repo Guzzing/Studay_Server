@@ -1,11 +1,7 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.Objects;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
@@ -32,6 +28,7 @@ public class Academy extends BaseEntity {
     @Embedded
     private Location location;
 
+    @Column(name="max_education_fee")
     private Long maxEducationFee;
 
     private Point point;

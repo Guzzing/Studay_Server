@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

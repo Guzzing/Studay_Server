@@ -5,7 +5,6 @@ import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
-import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;

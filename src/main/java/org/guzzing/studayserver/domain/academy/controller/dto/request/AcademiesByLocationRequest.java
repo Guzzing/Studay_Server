@@ -12,7 +12,8 @@ public record AcademiesByLocationRequest(
         @NotNull(message = "Longitude cannot be null")
         @DecimalMin(value = "-180", message = "Invalid longitude")
         Double lng
-){
+) {
+
     public static AcademiesByLocationParam to(AcademiesByLocationRequest request) {
         return new AcademiesByLocationParam(
                 request.lat,
