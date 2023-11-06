@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.member.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
@@ -34,7 +35,7 @@ class MemberServiceTest {
         String memberNickname = "nickname";
         String memberEmail = "test@email.com";
 
-        Member member = Member.of(null, "123", MemberProvider.KAKAO, RoleType.USER);
+        Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
         Member savedMember = memberRepository.save(member);
 
         MemberRegisterParam param = new MemberRegisterParam(savedMember.getId(), memberNickname, memberEmail, List.of(
