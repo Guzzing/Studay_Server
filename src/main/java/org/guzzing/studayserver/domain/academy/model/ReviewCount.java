@@ -21,22 +21,22 @@ public class ReviewCount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "kindness_count")
     private int kindnessCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "good_facility_count")
     private int goodFacilityCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="cheap_fee_count")
     private int cheapFeeCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="good_management_count")
     private int goodManagementCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="lovely_teaching_count")
     private int lovelyTeachingCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "reviewers_count")
     private int reviewersCount;
 
     @OneToOne
