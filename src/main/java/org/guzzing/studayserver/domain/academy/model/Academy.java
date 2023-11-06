@@ -83,10 +83,16 @@ public class Academy extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(
+                fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(
+                maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
     }
 
     @Override

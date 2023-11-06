@@ -107,7 +107,7 @@ class ReviewServiceTest {
         given(academyAccessService.existsAcademy(any())).willReturn(true);
 
         // When & Then
-        ReviewableResult result = reviewService.isReviewableToAcademy(100L, 100L);
+        ReviewableResult result = reviewService.getReviewableToAcademy(100L, 100L);
 
         assertThat(result.reviewable()).isTrue();
     }
@@ -126,7 +126,7 @@ class ReviewServiceTest {
         reviewService.createReviewOfAcademy(param);
 
         // When & Then
-        ReviewableResult result = reviewService.isReviewableToAcademy(param.memberId(), param.academyId());
+        ReviewableResult result = reviewService.getReviewableToAcademy(param.memberId(), param.academyId());
 
         assertThat(result.reviewable()).isFalse();
     }

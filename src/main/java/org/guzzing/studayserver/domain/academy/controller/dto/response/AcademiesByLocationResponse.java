@@ -11,6 +11,7 @@ public record AcademiesByLocationResponse(
         Double latitude,
         Double longitude
 ) {
+
     public static AcademiesByLocationResponse from(AcademiesByLocationResult academiesByLocationResult) {
         return new AcademiesByLocationResponse(
                 academiesByLocationResult.academyId(),

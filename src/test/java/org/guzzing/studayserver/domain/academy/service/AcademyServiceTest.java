@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.academy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -9,7 +10,12 @@ import org.guzzing.studayserver.domain.academy.repository.academy.AcademyReposit
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Transactional
 @ActiveProfiles({"oauth", "dev"})
@@ -68,7 +73,8 @@ class AcademyServiceTest {
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
         assertThat(academyGetResult.contact()).isEqualTo(savedAcademyAboutSungnam.getContact());
         assertThat(academyGetResult.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
-        assertThat(academyGetResult.shuttleAvailability()).isEqualTo(savedAcademyAboutSungnam.getShuttleAvailability().toString());
+        assertThat(academyGetResult.shuttleAvailability()).isEqualTo(
+                savedAcademyAboutSungnam.getShuttleAvailability().toString());
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
         assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
@@ -97,7 +103,8 @@ class AcademyServiceTest {
         }
 
         //When
-        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(latitude, longitude));
+        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
+                AcademyFixture.academiesByLocationParam(latitude, longitude));
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());

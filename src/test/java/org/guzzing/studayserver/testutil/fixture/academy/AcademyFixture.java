@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.testutil.fixture.academy;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -9,9 +11,6 @@ import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.locationtech.jts.geom.Point;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AcademyFixture {
 
@@ -27,12 +26,14 @@ public class AcademyFixture {
     }
 
     public static Academy academySungnam() {
-        return Academy.of(AcademyFixture.academyInfos().get(1), Address.of("경기도 성남시 중원구 망포동"), Location.of(37.4449168, 127.1388684));
+        return Academy.of(AcademyFixture.academyInfos().get(1), Address.of("경기도 성남시 중원구 망포동"),
+                Location.of(37.4449168, 127.1388684));
     }
 
     public static List<Academy> academies() {
         return academyInfos().stream()
-                .map(academyInfo -> Academy.of(academyInfo,Address.of("경기도 성남시 중원구 망포동"),Location.of(37.4449168, 127.1388684))).toList();
+                .map(academyInfo -> Academy.of(academyInfo, Address.of("경기도 성남시 중원구 망포동"),
+                        Location.of(37.4449168, 127.1388684))).toList();
     }
 
     /**

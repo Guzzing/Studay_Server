@@ -9,6 +9,7 @@ public record AcademiesByNameResult(
         Double latitude,
         Double longitude
 ) {
+
     public static AcademiesByNameResult from(AcademiesByName academiesByName) {
         return new AcademiesByNameResult(
                 academiesByName.getAcademyId(),

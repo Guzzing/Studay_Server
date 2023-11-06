@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.child.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 
 public record ChildModifyRequest(

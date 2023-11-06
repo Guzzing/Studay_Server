@@ -50,7 +50,7 @@ public class ReviewRestController {
             @MemberId Long memberId,
             @RequestParam Long academyId
     ) {
-        ReviewableResult result = reviewService.isReviewableToAcademy(memberId, academyId);
+        ReviewableResult result = reviewService.getReviewableToAcademy(memberId, academyId);
         ReviewableResponse response = ReviewableResponse.from(result);
 
         return ResponseEntity

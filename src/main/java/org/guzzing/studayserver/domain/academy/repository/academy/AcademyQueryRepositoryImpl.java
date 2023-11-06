@@ -2,13 +2,13 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 
-import java.util.List;
-
 public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
+
     private final EntityManager em;
 
     public AcademyQueryRepositoryImpl(EntityManager em) {
@@ -19,7 +19,8 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
 
         Query query = em.createNativeQuery(
                 "SELECT a.id AS academyId, a.academy_name AS academyName, a.contact , a.full_address AS fullAddress," +
-                        " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude FROM academies AS a " +
+                        " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude FROM academies AS a "
+                        +
                         "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", a.point)=1");
 
         List<AcademiesByLocation> academies = query.unwrap(org.hibernate.query.NativeQuery.class)

@@ -37,7 +37,7 @@ public class ReviewService {
         validateMember(reviewPostParam.memberId());
         validateAcademy(reviewPostParam.academyId());
 
-        ReviewableResult reviewableResult = isReviewableToAcademy(
+        ReviewableResult reviewableResult = getReviewableToAcademy(
                 reviewPostParam.memberId(),
                 reviewPostParam.academyId());
 
@@ -55,7 +55,7 @@ public class ReviewService {
         return ReviewPostResult.from(savedReview);
     }
 
-    public ReviewableResult isReviewableToAcademy(final Long memberId, final Long academyId) {
+    public ReviewableResult getReviewableToAcademy(final Long memberId, final Long academyId) {
         validateMember(memberId);
         validateAcademy(academyId);
 
