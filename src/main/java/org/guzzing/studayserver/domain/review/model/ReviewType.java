@@ -16,7 +16,7 @@ public enum ReviewType {
     GOOD_MANAGEMENT,
     LOVELY_TEACHING;
 
-    private static final int REVIEW_TYPE_LIMIT = 3;
+    private static final int MAX_REVIEW_COUNT = 3;
 
     public static Map<ReviewType, Boolean> getSelectedReviewMap(final ReviewPostParam reviewPostParam) {
         Map<ReviewType, Boolean> selectedReviewMap = new ConcurrentHashMap<>();
@@ -52,7 +52,7 @@ public enum ReviewType {
                 .filter(value -> value)
                 .count();
 
-        if (count > REVIEW_TYPE_LIMIT) {
+        if (count > MAX_REVIEW_COUNT) {
             throw new ReviewException("리뷰는 3개까지만 가능합니다.");
         }
     }
