@@ -15,7 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class LoggingAspect {
 
-    private static final String FORMAT = "invoke method : {} - {} (elapsed time : {}) / {}";
+    private static final String FORMAT = "invoke method : {} - {} ({}) / elapsed time : {}";
     private static final double MILLI_SECOND_TO_SECOND_UNIT = 0.001;
     private static final double MAX_AFFORDABLE_TIME = 3;
 
@@ -46,10 +46,10 @@ public class LoggingAspect {
     private String getRequestUrl() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        
+
         String requestURI = request.getRequestURI();
         String queryString = request.getQueryString();
-        
-        return MessageFormat.format("{0}{1}", requestURI, queryString); 
+
+        return MessageFormat.format("{0}{1}", requestURI, queryString);
     }
 }

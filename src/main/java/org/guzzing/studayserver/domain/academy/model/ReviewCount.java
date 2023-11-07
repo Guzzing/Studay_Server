@@ -24,16 +24,16 @@ public class ReviewCount {
     @Column(nullable = false, name = "kindness_count")
     private int kindnessCount;
 
-    @Column(nullable = false,name = "good_facility_count")
+    @Column(nullable = false, name = "good_facility_count")
     private int goodFacilityCount;
 
-    @Column(nullable = false, name="cheap_fee_count")
+    @Column(nullable = false, name = "cheap_fee_count")
     private int cheapFeeCount;
 
-    @Column(nullable = false, name="good_management_count")
+    @Column(nullable = false, name = "good_management_count")
     private int goodManagementCount;
 
-    @Column(nullable = false, name="lovely_teaching_count")
+    @Column(nullable = false, name = "lovely_teaching_count")
     private int lovelyTeachingCount;
 
     @Column(nullable = false, name = "reviewers_count")

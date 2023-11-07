@@ -1,25 +1,11 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
-import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;

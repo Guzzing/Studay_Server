@@ -1,7 +1,12 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
@@ -28,7 +33,7 @@ public class Academy extends BaseEntity {
     @Embedded
     private Location location;
 
-    @Column(name="max_education_fee")
+    @Column(name = "max_education_fee")
     private Long maxEducationFee;
 
     private Point point;
@@ -80,10 +85,16 @@ public class Academy extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(
+                fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(
+                maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
     }
 
     @Override

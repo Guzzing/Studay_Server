@@ -1,17 +1,6 @@
 package org.guzzing.studayserver.domain.member.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-import org.guzzing.studayserver.domain.child.model.NickName;
-import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
-import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberAdditionalChildParam;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
