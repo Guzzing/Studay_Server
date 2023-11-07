@@ -7,7 +7,8 @@ public record ReviewPostParam(
         boolean cheapFee,
         boolean goodFacility,
         boolean goodManagement,
-        boolean lovelyTeaching
+        boolean lovelyTeaching,
+        boolean shuttleAvailability
 ) {
 
 }

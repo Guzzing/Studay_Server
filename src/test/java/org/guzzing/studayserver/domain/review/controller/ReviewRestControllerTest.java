@@ -100,7 +100,8 @@ class ReviewRestControllerTest {
                                 fieldWithPath("cheapFee").type(BOOLEAN).description("수강료가 싸요 리뷰 선택 여부"),
                                 fieldWithPath("goodFacility").type(BOOLEAN).description("시설이 좋아요 리뷰 선택 여부"),
                                 fieldWithPath("goodManagement").type(BOOLEAN).description("관리가 좋아요 리뷰 선택 여부"),
-                                fieldWithPath("lovelyTeaching").type(BOOLEAN).description("가르침이 사랑스러워요 리뷰 선택 여부")
+                                fieldWithPath("lovelyTeaching").type(BOOLEAN).description("가르침이 사랑스러워요 리뷰 선택 여부"),
+                                fieldWithPath("shuttleAvailability").type(BOOLEAN).description("셔틀을 운행해요 리뷰 선택 여부")
                         ),
                         responseFields(
                                 fieldWithPath("reviewId").type(NUMBER).description("리뷰 아이디"),

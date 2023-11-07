@@ -14,7 +14,8 @@ public enum ReviewType {
     GOOD_FACILITY,
     CHEAP_FEE,
     GOOD_MANAGEMENT,
-    LOVELY_TEACHING;
+    LOVELY_TEACHING,
+    SHUTTLE_AVAILABILITY;
 
     private static final int MAX_REVIEW_COUNT = 3;
 
@@ -26,6 +27,7 @@ public enum ReviewType {
         selectedReviewMap.put(ReviewType.CHEAP_FEE, reviewPostParam.cheapFee());
         selectedReviewMap.put(ReviewType.GOOD_MANAGEMENT, reviewPostParam.goodManagement());
         selectedReviewMap.put(ReviewType.LOVELY_TEACHING, reviewPostParam.lovelyTeaching());
+        selectedReviewMap.put(ReviewType.SHUTTLE_AVAILABILITY, reviewPostParam.shuttleAvailability());
 
         validateThreeReviewLimit(selectedReviewMap);
 
