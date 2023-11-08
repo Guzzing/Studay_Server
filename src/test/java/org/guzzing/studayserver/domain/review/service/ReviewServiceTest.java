@@ -84,7 +84,7 @@ class ReviewServiceTest {
     @Test
     @DisplayName("리뷰를 3 항목 초과로 남겼다면 리뷰 등록에 실패한다.")
     @WithMockCustomOAuth2LoginUser(memberId = 1L)
-    void createReviewOfAcademy_GreaterThanThreeReivewTypes_Fail() {
+    void createReviewOfAcademy_GreaterThanThreeReviewTypes_Fail() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -95,7 +95,7 @@ class ReviewServiceTest {
         // When & Then
         assertThatThrownBy(() -> reviewService.createReviewOfAcademy(param))
                 .isInstanceOf(ReviewException.class)
-                .hasMessage("리뷰는 3개까지만 가능합니다.");
+                .hasMessage("리뷰는 3개 까지 가능합니다.");
     }
 
     @Test

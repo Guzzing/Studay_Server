@@ -55,7 +55,7 @@ public enum ReviewType {
                 .count();
 
         if (count > MAX_REVIEW_COUNT) {
-            throw new ReviewException("리뷰는 3개까지만 가능합니다.");
+            throw new ReviewException("리뷰는 3개 까지 가능합니다.");
         }
     }
 

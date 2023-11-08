@@ -68,7 +68,7 @@ class MemberTest {
         // When & Then
         assertThatThrownBy(() -> exceededChild.assignToNewMemberOnly(member))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
+                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
     }
 
     @Nested
