@@ -9,6 +9,7 @@ import org.guzzing.studayserver.domain.academy.repository.academy.AcademyReposit
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Random;
 
 @Transactional
 @ActiveProfiles({"oauth", "dev"})
@@ -26,6 +28,8 @@ import java.util.List;
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
+    private double LATITUDE = 37.4449168;
+    private double LONGITUDE = 127.1388684;
 
     @Autowired
     private AcademyService academyService;
@@ -86,10 +90,7 @@ class AcademyServiceTest {
         reviewCountRepository.deleteAll();
         academyRepository.deleteAll();
 
-        double latitude = 37.4449168;
-        double longitude = 127.1388684;
-
-        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(latitude, longitude);
+        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
         for (Academy academy : academies) {
             Academy savedAcademy = academyRepository.save(academy);
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
@@ -97,7 +98,7 @@ class AcademyServiceTest {
         }
 
         //When
-        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(latitude, longitude));
+        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE));
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
@@ -123,6 +124,50 @@ class AcademyServiceTest {
         for (AcademiesByNameResult academiesByNameResult : academiesByNameResults.academiesByNameResults()) {
             assertThat(academiesByNameResult.academyName()).contains(ACADEMY_NAME_FOR_SEARCH);
         }
+    }
+
+    @Test
+    @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다.")
+    void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise() {
+        //Given
+        lessonRepository.deleteAll();
+        reviewCountRepository.deleteAll();
+        academyRepository.deleteAll();
+
+        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
+        Long minFee = 10000L;
+        Long maxFee = 1000000L;
+
+        for (Academy academy : academies) {
+            Academy savedAcademy = academyRepository.save(academy);
+            savedAcademy.changeEducationFee(generateRandomAmount(minFee,maxFee));
+
+            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+        }
+        AcademyFilterParam academyFilterParam = AcademyFixture.academyFilterParam(LATITUDE, LONGITUDE, minFee, maxFee);
+
+        //When
+        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam);
+
+        //Then
+        for (AcademyFilterResult academyFilterResult : academyFilterResults.academyFilterResults()) {
+            Academy filtedAcademy = academyRepository.getById(academyFilterResult.academyId());
+
+            assertThat(filtedAcademy.getMaxEducationFee()).
+                    isGreaterThanOrEqualTo(minFee)
+                    .isLessThanOrEqualTo(maxFee);
+            assertThat(academyFilterParam.areaOfExpertises()).containsExactlyInAnyOrder(academyFilterResult.areaOfExpertise());
+        }
+    }
+
+    private long generateRandomAmount(long min, long max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("Min value must be less than max value");
+        }
+
+        Random random = new Random();
+        return min + random.nextInt((int) (max - min + 1));
     }
 
 }
