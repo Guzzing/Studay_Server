@@ -11,13 +11,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.guzzing.studayserver.domain.dashboard.model.vo.EmbeddableSchedules;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.model.vo.schedule.DashboardSchedules;
-import org.guzzing.studayserver.domain.dashboard.model.vo.schedule.Repeatance;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -36,7 +37,7 @@ public class Dashboard {
     private Long lessonId;
 
     @Column(name = "schedules", nullable = false)
-    private DashboardSchedules schedules;
+    private EmbeddableSchedules embeddableSchedules;
 
     @Enumerated(value = EnumType.STRING)
     private Repeatance repeatance;
@@ -44,23 +45,40 @@ public class Dashboard {
     @Embedded
     private FeeInfo feeInfo;
 
+    @Column(name = "payment_day", nullable = false)
+    private LocalDate paymentDay;
+
     @Column(name = "simple_memos", nullable = false)
     private List<SimpleMemoType> simpleMemoTypes;
 
     protected Dashboard(
             final Long childId,
             final Long lessonId,
-            final DashboardSchedules schedules,
+            final EmbeddableSchedules embeddableSchedules,
             final Repeatance repeatance,
             final FeeInfo feeInfo,
+            final LocalDate paymentDay,
             final List<SimpleMemoType> simpleMemoTypes
     ) {
         this.childId = childId;
         this.lessonId = lessonId;
-        this.schedules = schedules;
+        this.embeddableSchedules = embeddableSchedules;
         this.repeatance = repeatance;
         this.feeInfo = feeInfo;
+        this.paymentDay = paymentDay;
         this.simpleMemoTypes = simpleMemoTypes;
+    }
+
+    public static Dashboard of(
+            final Long childId,
+            final Long lessonId,
+            final EmbeddableSchedules embeddableSchedules,
+            final Repeatance repeatance,
+            final FeeInfo feeInfo,
+            final LocalDate paymentDay,
+            final List<SimpleMemoType> simpleMemoTypes
+    ) {
+        return new Dashboard(childId, lessonId, embeddableSchedules, repeatance, feeInfo, paymentDay, simpleMemoTypes);
     }
 
 }

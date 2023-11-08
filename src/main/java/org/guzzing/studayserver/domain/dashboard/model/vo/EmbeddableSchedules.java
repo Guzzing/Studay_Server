@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.model.vo.schedule;
+package org.guzzing.studayserver.domain.dashboard.model.vo;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -11,22 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
-public final class DashboardSchedules {
+public final class EmbeddableSchedules {
 
-    private List<Schedule> schedules;
+    private List<EmbeddableSchedule> schedules;
 
-    protected DashboardSchedules(
-            final List<Schedule> schedules
-    ) {
+    public EmbeddableSchedules(final List<EmbeddableSchedule> schedules) {
         this.schedules = schedules;
-    }
-
-    public static DashboardSchedules of(final List<Schedule> schedules) {
-        return new DashboardSchedules(schedules);
-    }
-
-    public List<Schedule> schedules() {
-        return schedules;
     }
 
     @Override
@@ -37,7 +27,7 @@ public final class DashboardSchedules {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        var that = (DashboardSchedules) obj;
+        var that = (EmbeddableSchedules) obj;
         return Objects.equals(this.schedules, that.schedules);
     }
 
@@ -48,8 +38,8 @@ public final class DashboardSchedules {
 
     @Override
     public String toString() {
-        return "DashboardSchedules[" +
-                "schedules=" + schedules + ']';
+        return "EmbeddableSchedules[" +
+                "embeddableSchedules=" + schedules + ']';
     }
 
 }
