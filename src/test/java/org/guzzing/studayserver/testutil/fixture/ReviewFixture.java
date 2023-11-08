@@ -5,6 +5,7 @@ import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_FACIL
 import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_MANAGEMENT;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.KINDNESS;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.LOVELY_TEACHING;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.SHUTTLE_AVAILABILITY;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,7 +33,8 @@ public class ReviewFixture {
                 reviewMap.get(CHEAP_FEE),
                 reviewMap.get(GOOD_FACILITY),
                 reviewMap.get(GOOD_MANAGEMENT),
-                reviewMap.get(LOVELY_TEACHING));
+                reviewMap.get(LOVELY_TEACHING),
+                reviewMap.get(SHUTTLE_AVAILABILITY));
     }
 
     public static Map<ReviewType, Boolean> makeInvalidReviewMap() {
@@ -43,6 +45,7 @@ public class ReviewFixture {
         invalidReviewMap.put(GOOD_FACILITY, true);
         invalidReviewMap.put(GOOD_MANAGEMENT, false);
         invalidReviewMap.put(LOVELY_TEACHING, true);
+        invalidReviewMap.put(SHUTTLE_AVAILABILITY, false);
 
         return invalidReviewMap;
     }
@@ -55,6 +58,7 @@ public class ReviewFixture {
         validReviewMap.put(GOOD_FACILITY, false);
         validReviewMap.put(GOOD_MANAGEMENT, false);
         validReviewMap.put(LOVELY_TEACHING, true);
+        validReviewMap.put(SHUTTLE_AVAILABILITY, false);
 
         return validReviewMap;
     }

@@ -9,7 +9,8 @@ public record ReviewPostRequest(
         boolean cheapFee,
         boolean goodFacility,
         boolean goodManagement,
-        boolean lovelyTeaching
+        boolean lovelyTeaching,
+        boolean shuttleAvailability
 ) {
 
     public static ReviewPostParam to(final Long memberId, final ReviewPostRequest request) {
@@ -20,7 +21,8 @@ public record ReviewPostRequest(
                 request.cheapFee(),
                 request.goodFacility(),
                 request.goodManagement(),
-                request.lovelyTeaching()
+                request.lovelyTeaching(),
+                request.shuttleAvailability()
         );
     }
 
