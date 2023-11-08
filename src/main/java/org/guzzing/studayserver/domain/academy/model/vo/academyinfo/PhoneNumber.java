@@ -14,20 +14,20 @@ public class PhoneNumber {
     @Transient
     private final String REGEX = "^\\d{2,3}-\\d{3,4}-\\d{3,4}$";
 
-    @Column(name = "contact", nullable = true)
-    private String contact;
+    @Column(name = "phone_number", nullable = true)
+    private String phoneNumber;
 
-    public PhoneNumber(final String contact) {
-        validate(contact);
-        this.contact = contact;
+    public PhoneNumber(final String phoneNumber) {
+        validate(phoneNumber);
+        this.phoneNumber = phoneNumber;
     }
 
     protected PhoneNumber() {
     }
 
-    private void validate(final String contact) {
-        if (!contact.isBlank()) {
-            if (!Pattern.matches(REGEX, contact)) {
+    private void validate(final String phoneNumber) {
+        if (!phoneNumber.isBlank()) {
+            if (!Pattern.matches(REGEX, phoneNumber)) {
                 throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
             }
         }
@@ -42,12 +42,12 @@ public class PhoneNumber {
             return false;
         }
         PhoneNumber that = (PhoneNumber) o;
-        return Objects.equals(REGEX, that.REGEX) && Objects.equals(contact, that.contact);
+        return Objects.equals(REGEX, that.REGEX) && Objects.equals(phoneNumber, that.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(REGEX, contact);
+        return Objects.hash(REGEX, phoneNumber);
     }
 
 }
