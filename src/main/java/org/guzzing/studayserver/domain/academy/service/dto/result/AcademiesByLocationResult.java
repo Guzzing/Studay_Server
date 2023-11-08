@@ -17,7 +17,7 @@ public record AcademiesByLocationResult(
                 academiesByLocation.academyId(),
                 academiesByLocation.academyName(),
                 academiesByLocation.fullAddress(),
-                academiesByLocation.contact(),
+                academiesByLocation.phoneNumber(),
                 academiesByLocation.areaOfExpertise(),
                 academiesByLocation.latitude(),
                 academiesByLocation.longitude()
