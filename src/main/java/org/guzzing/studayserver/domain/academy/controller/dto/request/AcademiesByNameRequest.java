@@ -6,6 +6,7 @@ public record AcademiesByNameRequest(
         String academyName,
         int pageNumber
 ) {
+
     public static AcademiesByNameParam to(AcademiesByNameRequest request) {
         return new AcademiesByNameParam(
                 request.academyName,

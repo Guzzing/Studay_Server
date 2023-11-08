@@ -15,10 +15,12 @@ import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Random;
 
@@ -125,6 +127,7 @@ class AcademyServiceTest {
             assertThat(academiesByNameResult.academyName()).contains(ACADEMY_NAME_FOR_SEARCH);
         }
     }
+
 
     @Test
     @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다.")

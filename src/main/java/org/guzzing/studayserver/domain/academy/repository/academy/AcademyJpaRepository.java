@@ -17,9 +17,11 @@ public interface AcademyJpaRepository extends JpaRepository<Academy, Long> {
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.getMessage()));
     }
 
-    @Query(value = "SELECT a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, a.latitude, a.longitude " +
-            "FROM academies As a " +
-            "WHERE MATCH(a.academy_name) AGAINST(:academyName IN BOOLEAN MODE)",
+    @Query(value =
+            "SELECT a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, a.latitude, a.longitude "
+                    +
+                    "FROM academies As a " +
+                    "WHERE MATCH(a.academy_name) AGAINST(:academyName IN BOOLEAN MODE)",
             countQuery = "SELECT COUNT(a.id) FROM academies As a WHERE MATCH(a.academy_name) AGAINST(:academyName IN BOOLEAN MODE)",
             nativeQuery = true)
     Slice<AcademiesByName> findAcademiesByName(@Param("academyName") String academyName, Pageable pageable);

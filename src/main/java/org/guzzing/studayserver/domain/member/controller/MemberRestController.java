@@ -33,4 +33,5 @@ public class MemberRestController {
                 .status(HttpStatus.OK)
                 .body(registeredMemberId);
     }
+
 }

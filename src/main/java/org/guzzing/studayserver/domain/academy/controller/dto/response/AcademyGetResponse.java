@@ -13,6 +13,7 @@ public record AcademyGetResponse(
         LessonGetResponses lessonGetResponses,
         ReviewPercentGetResponse reviewPercentGetResponse
 ) {
+
     public static AcademyGetResponse from(AcademyGetResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),

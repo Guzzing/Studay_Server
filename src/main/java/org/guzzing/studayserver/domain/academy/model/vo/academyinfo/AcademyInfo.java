@@ -6,7 +6,9 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
 import java.util.Objects;
+
 import lombok.Getter;
 import org.springframework.util.Assert;
 
@@ -36,7 +38,7 @@ public class AcademyInfo {
     }
 
     public static AcademyInfo of(final String name, final String contact, final String shuttle,
-            final String areaOfExpertise) {
+                                 final String areaOfExpertise) {
         return new AcademyInfo(name, contact, shuttle, areaOfExpertise);
     }
 
@@ -64,6 +66,7 @@ public class AcademyInfo {
             return false;
         }
         AcademyInfo that = (AcademyInfo) o;
+
         return Objects.equals(academyName, that.academyName) && Objects.equals(phoneNumber, that.phoneNumber) && shuttle == that.shuttle;
     }
 

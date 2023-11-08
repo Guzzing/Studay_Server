@@ -9,4 +9,5 @@ public record AcademiesByLocation(
         Double latitude,
         Double longitude
 ) {
+
 }

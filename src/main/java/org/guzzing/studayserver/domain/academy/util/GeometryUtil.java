@@ -9,9 +9,9 @@ public class GeometryUtil {
     private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";
 
     public static Location calculateLocationWithinRadiusInDirection(Double baseLatitude,
-                                                                    Double baseLongitude,
-                                                                    Double bearing,
-                                                                    Double distance) {
+            Double baseLongitude,
+            Double bearing,
+            Double distance) {
         Double radianLatitude = toRadian(baseLatitude);
         Double radianLongitude = toRadian(baseLongitude);
         Double radianAngle = toRadian(bearing);

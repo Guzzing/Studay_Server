@@ -15,7 +15,11 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterR
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/academies")
@@ -38,7 +42,8 @@ public class AcademyController {
     @GetMapping(
             path = "/complexes",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademiesByLocationResponses> findByLocation(@ModelAttribute @Valid AcademiesByLocationRequest request)  {
+    public ResponseEntity<AcademiesByLocationResponses> findByLocation(
+            @ModelAttribute @Valid AcademiesByLocationRequest request) {
         AcademiesByLocationResults academiesByLocation =
                 academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request));
 
@@ -49,8 +54,9 @@ public class AcademyController {
     @GetMapping(
             path = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademiesByNameResponses> findByName(@ModelAttribute @Valid AcademiesByNameRequest request)  {
-        AcademiesByNameResults academiesByNameResults = academyService.findAcademiesByName(AcademiesByNameRequest.to(request));
+    public ResponseEntity<AcademiesByNameResponses> findByName(@ModelAttribute @Valid AcademiesByNameRequest request) {
+        AcademiesByNameResults academiesByNameResults = academyService.findAcademiesByName(
+                AcademiesByNameRequest.to(request));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByNameResponses.from(academiesByNameResults));

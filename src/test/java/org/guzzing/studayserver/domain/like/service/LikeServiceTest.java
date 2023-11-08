@@ -22,7 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles(profiles = {"dev", "oauth"})
+@ActiveProfiles(profiles = {"dev", "oauth", "test"})
 @SpringBootTest
 @Transactional
 class LikeServiceTest {

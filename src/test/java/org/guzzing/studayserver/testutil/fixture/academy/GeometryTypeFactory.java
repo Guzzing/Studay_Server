@@ -12,7 +12,7 @@ public final class GeometryTypeFactory {
         throw new RuntimeException("유틸 클레스임!!");
     }
 
-    public static Point createPoint(double latitude, double longitude){
+    public static Point createPoint(double latitude, double longitude) {
         return factory.createPoint(new Coordinate(longitude, latitude));
     }
 
