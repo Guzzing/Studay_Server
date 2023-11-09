@@ -30,8 +30,10 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
+import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +41,12 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@ActiveProfiles(value = {"default", "auth", "local"})
 @SpringBootTest
 @Transactional
 class ReviewRestControllerTest {
@@ -63,6 +63,14 @@ class ReviewRestControllerTest {
     private MemberAccessService memberAccessService;
     @MockBean
     private AcademyAccessService academyAccessService;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @BeforeEach
+    void setUp() {
+        reviewRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("리뷰 타입이 3개 이하고, 해당 학원에 대해서 등록한 학원이 없다면 리뷰를 등록한다.")

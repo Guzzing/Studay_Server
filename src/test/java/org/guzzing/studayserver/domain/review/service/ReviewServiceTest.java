@@ -12,20 +12,20 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
+import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
 import org.guzzing.studayserver.global.exception.ReviewException;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles(value = {"default", "auth", "local"})
 @SpringBootTest
 @Transactional
 class ReviewServiceTest {
@@ -37,6 +37,14 @@ class ReviewServiceTest {
     private AcademyAccessService academyAccessService;
     @MockBean
     private MemberAccessService memberAccessService;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @BeforeEach
+    void setUp() {
+        reviewRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("해당 학원에 리뷰를 남긴 적이 없으면 리뷰를 등록한다.")

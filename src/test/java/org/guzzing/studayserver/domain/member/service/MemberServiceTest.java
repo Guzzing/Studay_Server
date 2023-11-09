@@ -3,12 +3,10 @@ package org.guzzing.studayserver.domain.member.service;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles({"dev", "oauth"})
 class MemberServiceTest {
 
     @Autowired
