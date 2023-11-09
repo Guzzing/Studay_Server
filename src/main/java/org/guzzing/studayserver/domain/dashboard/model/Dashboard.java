@@ -46,12 +46,20 @@ public class Dashboard {
     @Column(name = "simple_memos", nullable = false)
     private List<SimpleMemoType> simpleMemoTypes;
 
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     public Dashboard(
             final Long childId,
             final Long lessonId,
             final List<DashboardSchedule> dashboardSchedules,
             final FeeInfo feeInfo,
-            final List<SimpleMemoType> simpleMemoTypes
+            final List<SimpleMemoType> simpleMemoTypes,
+            final boolean active,
+            final boolean deleted
     ) {
         setScheduleWithDashboard(dashboardSchedules);
 
@@ -60,6 +68,8 @@ public class Dashboard {
         this.dashboardSchedules = dashboardSchedules;
         this.feeInfo = feeInfo;
         this.simpleMemoTypes = simpleMemoTypes;
+        this.active = active;
+        this.deleted = deleted;
     }
 
     private void setScheduleWithDashboard(final List<DashboardSchedule> dashboardSchedules) {

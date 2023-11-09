@@ -20,7 +20,7 @@ public class ClientService {
     private final RefreshTokenService refreshTokenService;
 
     public ClientService(ClientStrategy clientStrategy, AuthTokenProvider authTokenProvider,
-            MemberRepository memberJpaRepository, RefreshTokenService refreshTokenService) {
+                         MemberRepository memberJpaRepository, RefreshTokenService refreshTokenService) {
         this.clientStrategy = clientStrategy;
         this.authTokenProvider = authTokenProvider;
         this.memberJpaRepository = memberJpaRepository;

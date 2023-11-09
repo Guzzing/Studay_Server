@@ -13,7 +13,7 @@ public record AcademyFilterParam(
 ) {
 
     public static AcademyFilterCondition to(AcademyFilterParam param,
-            String pointFormat) {
+                                            String pointFormat) {
         return new AcademyFilterCondition(
                 pointFormat,
                 SqlFormatter.makeWhereInString(param.areaOfExpertises),

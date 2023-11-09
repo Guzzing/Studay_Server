@@ -17,7 +17,7 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     public AuthService(AuthTokenProvider authTokenProvider, MemberRepository memberRepository,
-            RefreshTokenService refreshTokenService) {
+                       RefreshTokenService refreshTokenService) {
         this.authTokenProvider = authTokenProvider;
         this.memberRepository = memberRepository;
         this.refreshTokenService = refreshTokenService;
