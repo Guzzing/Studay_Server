@@ -11,4 +11,5 @@ public record AcademiesByNameResults(
         return new AcademiesByNameResults(
                 academiesByNames.map(AcademiesByNameResult::from));
     }
+
 }

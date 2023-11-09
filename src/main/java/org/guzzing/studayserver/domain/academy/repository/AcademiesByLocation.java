@@ -4,10 +4,12 @@ public record AcademiesByLocation(
         Long academyId,
         String academyName,
         String fullAddress,
-        String contact,
+        String phoneNumber,
         String areaOfExpertise,
         Double latitude,
-        Double longitude
+        Double longitude,
+        String shuttleAvailable,
+        boolean isLiked
 ) {
 
 }

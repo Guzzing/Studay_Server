@@ -19,4 +19,5 @@ public record ReviewPercentGetResult(
                 reviewCount.makePercent(reviewCount.getLovelyTeachingCount())
         );
     }
+
 }

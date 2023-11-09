@@ -45,7 +45,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
-@ActiveProfiles(profiles = {"default", "auth", "local"})
 class LikeRestControllerTest {
 
     @Autowired
@@ -86,7 +84,7 @@ class LikeRestControllerTest {
 
     @Test
     @DisplayName("헤더에 JWT 로 들어오는 멤버 아이디와 바디로 전달되는 학원 아이디를 이용해서 좋아요를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void createLike_MemberIdAndAcademyId_RegisterLike() throws Exception {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -128,7 +126,7 @@ class LikeRestControllerTest {
 
     @Test
     @DisplayName("등록한 좋아요를 제거한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -156,7 +154,7 @@ class LikeRestControllerTest {
 
     @Test
     @DisplayName("좋아요한 학원 비용 정보를 응답받는다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void getAllLikes_MemberId() throws Exception {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);

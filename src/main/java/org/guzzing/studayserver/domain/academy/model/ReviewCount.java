@@ -34,6 +34,7 @@ public class ReviewCount {
     private int goodManagementCount;
 
     @Column(nullable = false, name = "lovely_teaching_count")
+
     private int lovelyTeachingCount;
 
     @Column(nullable = false, name = "reviewers_count")

@@ -41,4 +41,5 @@ public class RandomLocationGenerator {
 
         return randomLocations;
     }
+
 }

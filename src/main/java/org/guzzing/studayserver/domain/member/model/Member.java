@@ -24,7 +24,7 @@ import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 
 @Getter
-@Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"socialId", "memberProvider"}))
+@Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"social_Id", "member_provider"}))
 @Entity
 public class Member {
 
@@ -36,22 +36,22 @@ public class Member {
     private Long id;
 
     @Embedded
-    @Column
+    @Column(name = "nick_name")
     private NickName nickName;
 
     @Embedded
     @Column
     private Email email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "social_id")
     private String socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "member_provider")
     private MemberProvider memberProvider;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "role_type")
     private RoleType roleType;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

@@ -68,7 +68,7 @@ public class Academy extends BaseEntity {
     }
 
     public String getContact() {
-        return academyInfo.getContact();
+        return academyInfo.getPhoneNumber();
     }
 
     public String getShuttleAvailability() {

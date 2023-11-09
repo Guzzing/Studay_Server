@@ -19,10 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles(profiles = {"default", "auth", "local"})
 @SpringBootTest
 @Transactional
 class LikeServiceTest {
@@ -50,7 +48,7 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void createLikeOfAcademy_WithMemberId() {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -66,7 +64,7 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
         given(academyAccessService.existsAcademy(any())).willReturn(true);
@@ -85,7 +83,7 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("내가 좋아요한 모든 학원 비용 정보를 조회한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
         given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));

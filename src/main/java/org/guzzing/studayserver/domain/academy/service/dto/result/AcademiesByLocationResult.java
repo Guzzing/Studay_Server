@@ -9,7 +9,9 @@ public record AcademiesByLocationResult(
         String contact,
         String areaOfExpertise,
         Double latitude,
-        Double longitude
+        Double longitude,
+        String shuttleAvailable,
+        boolean isLiked
 ) {
 
     public static AcademiesByLocationResult from(AcademiesByLocation academiesByLocation) {
@@ -17,10 +19,13 @@ public record AcademiesByLocationResult(
                 academiesByLocation.academyId(),
                 academiesByLocation.academyName(),
                 academiesByLocation.fullAddress(),
-                academiesByLocation.contact(),
+                academiesByLocation.phoneNumber(),
                 academiesByLocation.areaOfExpertise(),
                 academiesByLocation.latitude(),
-                academiesByLocation.longitude()
+                academiesByLocation.longitude(),
+                academiesByLocation.shuttleAvailable(),
+                academiesByLocation.isLiked()
         );
     }
+
 }

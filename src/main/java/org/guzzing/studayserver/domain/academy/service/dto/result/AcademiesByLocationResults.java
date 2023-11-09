@@ -13,4 +13,5 @@ public record AcademiesByLocationResults(
                         .map(AcademiesByLocationResult::from)
                         .toList());
     }
+
 }

@@ -9,4 +9,5 @@ public record AcademiesByLocationParam(
             Double baseLongitude) {
         return new AcademiesByLocationParam(baseLatitude, baseLongitude);
     }
+
 }

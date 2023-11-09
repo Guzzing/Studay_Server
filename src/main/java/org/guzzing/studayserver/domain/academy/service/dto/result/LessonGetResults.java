@@ -14,4 +14,5 @@ public record LessonGetResults(
                         .map(lesson -> LessonGetResult.from(lesson))
                         .toList());
     }
+
 }

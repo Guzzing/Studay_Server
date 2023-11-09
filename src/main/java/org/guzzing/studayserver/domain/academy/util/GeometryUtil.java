@@ -6,9 +6,6 @@ public class GeometryUtil {
 
     private static final Double EARTH_RADIUS = 6371.01;
 
-    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";
-    ;
-
     public static Location calculateLocationWithinRadiusInDirection(Double baseLatitude,
             Double baseLongitude,
             Double bearing,
@@ -46,14 +43,6 @@ public class GeometryUtil {
 
     private static Double normalizeLongitude(Double longitude) {
         return (longitude + 540) % 360 - 180;
-    }
-
-    public static String makeDiagonalByLineString(Location northEast, Location southWest) {
-        return String.format(
-                LINESTRING_SQL,
-                northEast.getLongitude(), northEast.getLatitude(), southWest.getLongitude(), southWest.getLatitude()
-        );
-
     }
 
 }
