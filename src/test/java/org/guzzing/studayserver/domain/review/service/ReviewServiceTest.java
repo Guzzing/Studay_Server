@@ -25,7 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles(value = {"dev", "oauth"})
+@ActiveProfiles(value = {"default", "auth", "local"})
 @SpringBootTest
 @Transactional
 class ReviewServiceTest {

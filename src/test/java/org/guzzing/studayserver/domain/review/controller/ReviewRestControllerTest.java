@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@ActiveProfiles(value = {"dev", "oauth"})
+@ActiveProfiles(value = {"default", "auth", "local"})
 @SpringBootTest
 @Transactional
 class ReviewRestControllerTest {
