@@ -74,7 +74,7 @@ class ReviewRestControllerTest {
 
     @Test
     @DisplayName("리뷰 타입이 3개 이하고, 해당 학원에 대해서 등록한 학원이 없다면 리뷰를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void registerReview_Success() throws Exception {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -120,7 +120,7 @@ class ReviewRestControllerTest {
 
     @Test
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);

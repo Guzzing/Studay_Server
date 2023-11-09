@@ -23,7 +23,7 @@ class LikeAccessServiceImplTest {
 
     @Test
     @DisplayName("멤버가 해당 학원에 대해서 좋아요를 했는지 여부를 반환한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void isLiked_MemberAndAcademy_ReturnTrue() {
         // Given
         final Long memberId = 1L;
@@ -40,7 +40,7 @@ class LikeAccessServiceImplTest {
 
     @Test
     @DisplayName("멤버가 해당 학원에 대해서 좋아요를 했는지 여부를 반환한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void isLiked_MemberAndAcademy_ReturnFalse() {
         // Given
         final Long memberId = 1L;

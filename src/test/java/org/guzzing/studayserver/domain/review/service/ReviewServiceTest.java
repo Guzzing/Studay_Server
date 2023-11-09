@@ -48,7 +48,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("해당 학원에 리뷰를 남긴 적이 없으면 리뷰를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_NotReviewYet_RegisterReview() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -72,7 +72,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("해당 학원에 리뷰를 남겼다면 리뷰 등록에 실패한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_Reviewed_Fail() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -91,7 +91,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("리뷰를 3 항목 초과로 남겼다면 리뷰 등록에 실패한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_GreaterThanThreeReivewTypes_Fail() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -108,7 +108,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("해당 학원에 리뷰를 남긴 적 없으면 리뷰 등록 가능하다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void isReviewableToAcademy_NotExistsReview_Reviewable() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -122,7 +122,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("해당 학원에 리뷰를 남겼다면 리뷰 등록 불가하다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void isReviewableToAcademy_ExistsReview_NotReviewable() {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
