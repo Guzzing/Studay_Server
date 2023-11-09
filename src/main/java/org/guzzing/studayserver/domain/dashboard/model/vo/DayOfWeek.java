@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.dashboard.model.vo;
 
 import java.util.Arrays;
 import java.util.Objects;
-import org.guzzing.studayserver.global.exception.DashboardException;
 
 public enum DayOfWeek {
     NONE,

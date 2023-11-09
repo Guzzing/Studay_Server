@@ -1,10 +1,8 @@
 package org.guzzing.studayserver.domain.dashboard.model.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.NONE;
 
-import org.guzzing.studayserver.global.exception.DashboardException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
