@@ -2,6 +2,7 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -10,6 +11,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.locationtech.jts.geom.Point;
 
 public class AcademyFixture {
@@ -68,6 +70,10 @@ public class AcademyFixture {
 
     public static AcademiesByLocationParam academiesByLocationParam(double latitude, double longitude) {
         return AcademiesByLocationParam.of(latitude, longitude);
+    }
+
+    public static AcademyFilterParam academyFilterParam(Double latitude, Double longitude, Long desiredMinAmount, Long desiredMaxAmount) {
+        return new AcademyFilterParam(latitude, longitude, List.of("예능(대)"), desiredMinAmount, desiredMaxAmount);
     }
 
 }

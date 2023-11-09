@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.repository;
 
-public record AcademiesByLocation(
+public record AcademyByFiltering(
         Long academyId,
         String academyName,
         String fullAddress,
@@ -11,5 +11,4 @@ public record AcademiesByLocation(
         String shuttleAvailable,
         boolean isLiked
 ) {
-
 }

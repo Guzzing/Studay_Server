@@ -11,9 +11,9 @@ public record AcademyGetResponse(
         String updatedDate,
         String areaOfExpertise,
         LessonGetResponses lessonGetResponses,
-        ReviewPercentGetResponse reviewPercentGetResponse
+        ReviewPercentGetResponse reviewPercentGetResponse,
+        boolean isLiked
 ) {
-
     public static AcademyGetResponse from(AcademyGetResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),
@@ -25,7 +25,8 @@ public record AcademyGetResponse(
                 academyGetResult.areaOfExpertise(),
 
                 LessonGetResponses.from(academyGetResult.lessonGetResults()),
-                ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult())
+                ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult()),
+                academyGetResult.isLiked()
         );
 
     }

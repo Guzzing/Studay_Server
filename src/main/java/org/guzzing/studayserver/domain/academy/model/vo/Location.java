@@ -2,7 +2,9 @@ package org.guzzing.studayserver.domain.academy.model.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
+
 import lombok.Getter;
 
 @Getter
