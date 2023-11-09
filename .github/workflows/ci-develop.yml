@@ -46,10 +46,9 @@ jobs:
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_COMMERCIAL_YML_CONTENT }}" > src/main/resources/application-commercial.yml
-          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
-          echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+          echo "${{ secrets.APPLICATION_DEFAULT_YML_CONTENT }}" > src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_LOCAL_YML_CONTENT }}" > src/main/resources/application-local.yml
+          echo "${{ secrets.APPLICATION_AUTH_YML_CONTENT }}" > src/main/resources/application-auth.yml
 
       - name: Build with gradle
         run: ./gradlew build
