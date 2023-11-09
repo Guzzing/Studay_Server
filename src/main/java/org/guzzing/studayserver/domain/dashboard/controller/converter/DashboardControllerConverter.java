@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.DashboardSchedules;
+import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
@@ -27,16 +27,12 @@ import org.springframework.stereotype.Component;
 public class DashboardControllerConverter {
 
     public DashboardPostParam to(final DashboardPostRequest request) {
-        Repeatance repeatance = convertToRepeatance(request.repeatance());
-
         return new DashboardPostParam(
                 request.academyId(),
-                convertToScheduleInfos(request.dashboardSchedules(), repeatance),
-                repeatance,
                 request.childId(),
                 request.lessonId(),
+                convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
-                request.paymentDay(),
                 convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
@@ -48,21 +44,15 @@ public class DashboardControllerConverter {
                 result.lessonId());
     }
 
-    private ScheduleInfos convertToScheduleInfos(final DashboardSchedules dashboardSchedules,
-            final Repeatance repeatance) {
-        List<ScheduleInfo> infos = dashboardSchedules.schedules().stream()
+    private ScheduleInfos convertToScheduleInfos(final List<Schedule> schedules) {
+        List<ScheduleInfo> infos = schedules.stream()
                 .map(schedule -> new ScheduleInfo(
                         DayOfWeek.of(schedule.dayOfWeek()),
-                        schedule.startTime(),
-                        schedule.endTime(),
-                        repeatance))
+                        schedule.startTime(), schedule.endTime(),
+                        Repeatance.of(schedule.repeatance())))
                 .toList();
 
         return new ScheduleInfos(infos);
-    }
-
-    private Repeatance convertToRepeatance(final String repeatance) {
-        return Repeatance.of(repeatance);
     }
 
     private Map<SimpleMemoType, Boolean> convertToSimpleMemoTypeMap(final SimpleMemo simpleMemo) {
