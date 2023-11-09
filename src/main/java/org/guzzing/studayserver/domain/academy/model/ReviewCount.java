@@ -34,6 +34,7 @@ public class ReviewCount {
     private int goodManagementCount;
 
     @Column(nullable = false, name = "lovely_teaching_count")
+
     private int lovelyTeachingCount;
 
     @Column(nullable = false, name = "reviewers_count")
@@ -56,7 +57,7 @@ public class ReviewCount {
     }
 
     protected ReviewCount(int kindnessCount, int goodFacilityCount, int cheapFeeCount, int goodManagementCount,
-            int lovelyTeachingCount, int reviewersCount, Academy academy) {
+                          int lovelyTeachingCount, int reviewersCount, Academy academy) {
         this.kindnessCount = kindnessCount;
         this.goodFacilityCount = goodFacilityCount;
         this.cheapFeeCount = cheapFeeCount;

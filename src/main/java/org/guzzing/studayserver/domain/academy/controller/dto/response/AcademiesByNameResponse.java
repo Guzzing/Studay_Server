@@ -9,7 +9,6 @@ public record AcademiesByNameResponse(
         Double latitude,
         Double longitude
 ) {
-
     public static AcademiesByNameResponse from(AcademiesByNameResult academiesByNameResult) {
         return new AcademiesByNameResponse(
                 academiesByNameResult.academyId(),
