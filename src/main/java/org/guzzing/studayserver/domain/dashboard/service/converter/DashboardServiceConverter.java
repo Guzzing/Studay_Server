@@ -3,11 +3,9 @@ package org.guzzing.studayserver.domain.dashboard.service.converter;
 import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
+import org.guzzing.studayserver.domain.dashboard.model.DashboardSchedule;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.EmbeddableSchedule;
-import org.guzzing.studayserver.domain.dashboard.model.vo.EmbeddableSchedules;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
@@ -19,65 +17,61 @@ import org.springframework.stereotype.Component;
 public class DashboardServiceConverter {
 
     public Dashboard to(final DashboardPostParam param) {
-        return Dashboard.of(
+        return new Dashboard(
                 param.childId(),
                 param.lessonId(),
-                convertToEmbeddedSchedules(param.scheduleInfos()),
-                param.repeatance(),
+                convertToDashboardSchedules(param.scheduleInfos()),
                 convertToFeeInfo(param.paymentInfo()),
-                param.paymentDay(),
                 convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap())
         );
     }
 
     public DashboardResult from(final Long academyId, final Dashboard dashboard) {
-        Repeatance repeatance = dashboard.getRepeatance();
-
         return new DashboardResult(
                 dashboard.getId(),
                 academyId,
-                convertToScheduleInfos(dashboard.getEmbeddableSchedules(), repeatance),
-                repeatance,
                 dashboard.getChildId(),
                 dashboard.getLessonId(),
+                convertToScheduleInfos(dashboard.getDashboardSchedules()),
                 convertToPaymentInfo(dashboard.getFeeInfo()),
-                dashboard.getPaymentDay(),
                 convertToSimpleMemoTypeMap(dashboard.getSimpleMemoTypes())
         );
     }
 
-    private EmbeddableSchedules convertToEmbeddedSchedules(final ScheduleInfos scheduleInfos) {
-        List<EmbeddableSchedule> schedules = scheduleInfos.schedules().stream()
-                .map(scheduleInfo -> new EmbeddableSchedule(
+    private List<DashboardSchedule> convertToDashboardSchedules(final ScheduleInfos scheduleInfos) {
+        return scheduleInfos.schedules()
+                .stream()
+                .map(scheduleInfo -> new DashboardSchedule(
                         scheduleInfo.dayOfWeek(),
                         scheduleInfo.startTime(),
-                        scheduleInfo.endTime()
+                        scheduleInfo.endTime(),
+                        scheduleInfo.repeatance()
                 ))
                 .toList();
-
-        return new EmbeddableSchedules(schedules);
     }
 
     private FeeInfo convertToFeeInfo(final PaymentInfo paymentInfo) {
-        return FeeInfo.of(
+        return new FeeInfo(
                 paymentInfo.educationFee(),
                 paymentInfo.bookFee(),
                 paymentInfo.shuttleFee(),
-                paymentInfo.etcFee());
+                paymentInfo.etcFee(),
+                paymentInfo.paymentDay());
     }
 
     private List<SimpleMemoType> convertToSelectedSimpleMemoTypes(final Map<SimpleMemoType, Boolean> map) {
         return SimpleMemoType.getSelectedSimpleMemos(map);
     }
 
-    private ScheduleInfos convertToScheduleInfos(final EmbeddableSchedules embeddableSchedules,
-            final Repeatance repeatance) {
-        List<ScheduleInfo> scheduleInfos = embeddableSchedules.getSchedules().stream()
-                .map(embeddableSchedule -> new ScheduleInfo(
-                        embeddableSchedule.getDayOfWeek(),
-                        embeddableSchedule.getStartTime(),
-                        embeddableSchedule.getEndTime(),
-                        repeatance))
+    private ScheduleInfos convertToScheduleInfos(
+            final List<DashboardSchedule> dashboardSchedules
+    ) {
+        final List<ScheduleInfo> scheduleInfos = dashboardSchedules.stream()
+                .map(dashboardSchedule -> new ScheduleInfo(
+                        dashboardSchedule.getDayOfWeek(),
+                        dashboardSchedule.getStartTime(),
+                        dashboardSchedule.getEndTime(),
+                        dashboardSchedule.getRepeatance()))
                 .toList();
 
         return new ScheduleInfos(scheduleInfos);
@@ -88,7 +82,8 @@ public class DashboardServiceConverter {
                 feeInfo.getEducationFee(),
                 feeInfo.getBookFee(),
                 feeInfo.getShuttleFee(),
-                feeInfo.getEtcFee());
+                feeInfo.getEtcFee(),
+                feeInfo.getPaymentDay());
     }
 
     private Map<SimpleMemoType, Boolean> convertToSimpleMemoTypeMap(final List<SimpleMemoType> simpleMemoTypes) {

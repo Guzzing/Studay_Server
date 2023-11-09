@@ -1,18 +1,16 @@
 package org.guzzing.studayserver.domain.dashboard.controller.dto.request;
 
-import java.time.LocalDate;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.DashboardSchedules;
+import java.util.List;
+import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 
 public record DashboardPostRequest(
         Long academyId,
-        DashboardSchedules dashboardSchedules,
-        String repeatance,
         Long childId,
         Long lessonId,
+        List<Schedule> schedules,
         PaymentInfo paymentInfo,
-        LocalDate paymentDay,
         SimpleMemo simpleMemo
 ) {
 

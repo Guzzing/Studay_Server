@@ -4,7 +4,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import java.util.StringJoiner;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,34 +25,21 @@ public class FeeInfo {
     @Column(name = "etc_fee", nullable = true)
     private Long etcFee;
 
-    protected FeeInfo(
+    @Column(name = "payment_day", nullable = true, columnDefinition = "VARCHAR(5)")
+    private LocalDate paymentDay;
+
+    public FeeInfo(
             final Long educationFee,
             final Long bookFee,
             final Long shuttleFee,
-            final Long etcFee
+            final Long etcFee,
+            final LocalDate paymentDay
     ) {
         this.educationFee = educationFee;
         this.bookFee = bookFee;
         this.shuttleFee = shuttleFee;
         this.etcFee = etcFee;
+        this.paymentDay = paymentDay;
     }
 
-    public static FeeInfo of(
-            final Long educationFee,
-            final Long bookFee,
-            final Long shuttleFee,
-            final Long etcFee
-    ) {
-        return new FeeInfo(educationFee, bookFee, shuttleFee, etcFee);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", FeeInfo.class.getSimpleName() + "[", "]")
-                .add("educationFee=" + educationFee)
-                .add("bookFee=" + bookFee)
-                .add("shuttleFee=" + shuttleFee)
-                .add("etcFee=" + etcFee)
-                .toString();
-    }
 }
