@@ -24,7 +24,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String AUTHORIZATION_HEADER = request.getHeader("Authorization");
 
-        //Authrization Berear
         if (AUTHORIZATION_HEADER != null && AUTHORIZATION_HEADER.startsWith("Bearer ")) {
             String tokenStr = JwtHeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
@@ -37,9 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
-        filterChain.doFilter(request, response); //
-
+        filterChain.doFilter(request, response);
     }
 
 }

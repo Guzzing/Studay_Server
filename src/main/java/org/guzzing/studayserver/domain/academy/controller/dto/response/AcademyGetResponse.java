@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 
 public record AcademyGetResponse(
         String academyName,
@@ -11,10 +11,10 @@ public record AcademyGetResponse(
         String updatedDate,
         String areaOfExpertise,
         LessonGetResponses lessonGetResponses,
-        ReviewPercentGetResponse reviewPercentGetResponse
+        ReviewPercentGetResponse reviewPercentGetResponse,
+        boolean isLiked
 ) {
-
-    public static AcademyGetResponse form(AcademyGetResult academyGetResult) {
+    public static AcademyGetResponse from(AcademyGetResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),
                 academyGetResult.contact(),
@@ -25,7 +25,8 @@ public record AcademyGetResponse(
                 academyGetResult.areaOfExpertise(),
 
                 LessonGetResponses.from(academyGetResult.lessonGetResults()),
-                ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult())
+                ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult()),
+                academyGetResult.isLiked()
         );
 
     }

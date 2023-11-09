@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.ReviewPercentGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
 
 public record ReviewPercentGetResponse(
         int kindnessPercent,
@@ -9,7 +9,6 @@ public record ReviewPercentGetResponse(
         int goodManagementPercent,
         int lovelyTeachingPercent
 ) {
-
     public static ReviewPercentGetResponse from(ReviewPercentGetResult response) {
         return new ReviewPercentGetResponse(
                 response.kindnessPercent(),

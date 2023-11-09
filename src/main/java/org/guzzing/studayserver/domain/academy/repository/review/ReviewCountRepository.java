@@ -7,4 +7,6 @@ public interface ReviewCountRepository {
     ReviewCount getByAcademyId(Long academyId);
 
     ReviewCount save(ReviewCount reviewCount);
+
+    void deleteAll();
 }

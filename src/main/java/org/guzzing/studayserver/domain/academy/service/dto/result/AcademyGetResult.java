@@ -1,6 +1,7 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -14,25 +15,28 @@ public record AcademyGetResult(
         String updatedDate,
         String areaOfExpertise,
         LessonGetResults lessonGetResults,
-        ReviewPercentGetResult reviewPercentGetResult
+        ReviewPercentGetResult reviewPercentGetResult,
+        boolean isLiked
 ) {
-
-    public static AcademyGetResult from(Academy academy,
+    public static AcademyGetResult from(
+            Academy academy,
             List<Lesson> lessons,
-            ReviewCount reviewCount) {
+            ReviewCount reviewCount,
+            boolean isLiked) {
         return new AcademyGetResult(
-                academy.getName(),
+                academy.getAcademyName(),
                 academy.getContact(),
-                academy.getAddress(),
+                academy.getFullAddress(),
                 academy.getShuttleAvailability(),
                 academy.getMaxEducationFee(),
                 academy.getUpdatedDate().toString(),
                 academy.getAreaOfExpertise(),
 
                 LessonGetResults.from(lessons),
-                ReviewPercentGetResult.from(reviewCount)
-        );
+                ReviewPercentGetResult.from(reviewCount),
 
+                isLiked
+        );
     }
 
 }

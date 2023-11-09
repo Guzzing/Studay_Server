@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.model.NickName;
@@ -23,11 +24,11 @@ import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 
 @Getter
-@Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"socialId", "memberProvider"}))
+@Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"social_Id", "member_provider"}))
 @Entity
 public class Member {
 
-    private static final int CHILDREN_MAX_SIZE = 5;
+    public static final int CHILDREN_MAX_SIZE = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,22 +36,22 @@ public class Member {
     private Long id;
 
     @Embedded
-    @Column
+    @Column(name = "nick_name")
     private NickName nickName;
 
     @Embedded
     @Column
     private Email email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "social_id")
     private String socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "member_provider")
     private MemberProvider memberProvider;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "role_type")
     private RoleType roleType;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -84,11 +85,21 @@ public class Member {
         children.add(child);
     }
 
+    public void removeChild(Long childId) {
+        children.removeIf(child -> child.getId().equals(childId));
+    }
+
     public String getNickName() {
         return nickName.getValue();
     }
 
     public String getEmail() {
         return email.getValue();
+    }
+
+    public Optional<Child> findChild(Long childId) {
+        return children.stream()
+                .filter(child -> child.getId().equals(childId))
+                .findFirst();
     }
 }

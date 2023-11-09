@@ -1,12 +1,10 @@
 package org.guzzing.studayserver.domain.member.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
-import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberRegisterChildInfoParam;
+import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberAdditionalChildParam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +20,20 @@ public class MemberService {
 
     @Transactional
     public Long register(MemberRegisterParam param) {
-        Member member = memberRepository.findById(param.memberId())
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
-
-        List<Child> children = new ArrayList<>();
-        for (MemberRegisterChildInfoParam childInfoParam : param.children()) {
-            children.add(new Child(childInfoParam.nickname(), childInfoParam.grade(), member));
-        }
+        Member member = getMember(param.memberId());
 
         member.update(param.nickname(), param.email());
-        for (Child child : children) {
-            member.addChild(child);
+
+        for (MemberAdditionalChildParam childParam : param.children()) {
+            Child child = new Child(childParam.nickname(), childParam.grade());
+            child.assignToNewMemberOnly(member);
         }
+
         return member.getId();
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
     }
 }

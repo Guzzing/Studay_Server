@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.service.dto;
+package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 
@@ -9,7 +9,6 @@ public record ReviewPercentGetResult(
         int goodManagementPercent,
         int lovelyTeachingPercent
 ) {
-
     public static ReviewPercentGetResult from(ReviewCount reviewCount) {
         return new ReviewPercentGetResult(
                 reviewCount.makePercent(reviewCount.getKindnessCount()),
@@ -19,4 +18,5 @@ public record ReviewPercentGetResult(
                 reviewCount.makePercent(reviewCount.getLovelyTeachingCount())
         );
     }
+
 }
