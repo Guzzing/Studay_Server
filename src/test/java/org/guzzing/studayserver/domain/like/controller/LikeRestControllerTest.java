@@ -54,7 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
-@ActiveProfiles(profiles = {"dev", "oauth"})
+@ActiveProfiles(profiles = {"default", "auth", "local"})
 class LikeRestControllerTest {
 
     @Autowired

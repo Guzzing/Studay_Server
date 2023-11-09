@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles({"dev", "oauth"})
+@ActiveProfiles(profiles = {"default", "auth", "local"})
 class ChildServiceTest {
 
     @Autowired

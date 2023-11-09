@@ -37,7 +37,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
-@ActiveProfiles({"dev", "oauth"})
+@ActiveProfiles(profiles = {"default", "auth", "local"})
 class RegionRestControllerTest {
 
     @Autowired

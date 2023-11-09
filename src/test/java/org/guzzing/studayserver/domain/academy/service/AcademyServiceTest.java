@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@ActiveProfiles({"oauth", "dev"})
+@ActiveProfiles(profiles = {"default", "auth", "local"})
 @SpringBootTest
 class AcademyServiceTest {
 
