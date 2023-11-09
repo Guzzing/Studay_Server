@@ -80,7 +80,7 @@ class AcademyServiceTest {
     @DisplayName("학원 ID로 학원 정보를 조회할 때 학원 정보, 수업 정보, 리뷰를 확인할 수 있다.")
     void getAcademy_academyId_reviewsAndLessons() {
         //When
-        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),savedMember.getId());
+        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(), savedMember.getId());
 
         //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
@@ -157,7 +157,7 @@ class AcademyServiceTest {
 
         for (Academy academy : academies) {
             Academy savedAcademy = academyRepository.save(academy);
-            savedAcademy.changeEducationFee(generateRandomAmount(minFee,maxFee));
+            savedAcademy.changeEducationFee(generateRandomAmount(minFee, maxFee));
 
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
             reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));

@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = ValidAreaOfExpertiseValidator.class)
 public @interface ValidAreaOfExpertise {
     String message() default "유효하지 않은 학원 분야입니다.";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

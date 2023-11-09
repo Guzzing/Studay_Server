@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -33,8 +34,9 @@ public record AcademyGetResult(
 
                 LessonGetResults.from(lessons),
                 ReviewPercentGetResult.from(reviewCount),
+
                 isLiked
         );
-
     }
+
 }

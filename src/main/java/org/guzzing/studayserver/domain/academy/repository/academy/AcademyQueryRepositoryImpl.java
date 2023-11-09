@@ -2,7 +2,9 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
@@ -25,7 +27,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                         " (CASE WHEN r.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked  " +
                         " FROM academies AS a" +
                         " LEFT JOIN reviews AS r" +
-                        " ON a.id = r.academy_id AND r.member_id = "+memberId +
+                        " ON a.id = r.academy_id AND r.member_id = " + memberId +
                         " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", a.point)=1");
 
         List<AcademiesByLocation> academies = query.unwrap(org.hibernate.query.NativeQuery.class)
@@ -72,15 +74,15 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 "(CASE WHEN r.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked " +
                 "FROM academies AS a " +
                 "LEFT JOIN reviews AS r " +
-                "ON a.id = r.academy_id AND r.member_id = "+memberId +
+                "ON a.id = r.academy_id AND r.member_id = " + memberId +
                 " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + academyFilterCondition.pointFormat() + ", a.point)=1 ";
 
         if (academyFilterCondition.areaOfExpertises() != null && !academyFilterCondition.areaOfExpertises().isEmpty()) {
-            nativeQuery += " AND area_of_expertise IN "+ academyFilterCondition.areaOfExpertises();
+            nativeQuery += " AND area_of_expertise IN " + academyFilterCondition.areaOfExpertises();
         }
 
         if (academyFilterCondition.desiredMinAmount() != null && academyFilterCondition.desiredMaxAmount() != null) {
-            nativeQuery += " AND max_education_fee BETWEEN "+academyFilterCondition.desiredMinAmount() +" AND "+academyFilterCondition.desiredMaxAmount();
+            nativeQuery += " AND max_education_fee BETWEEN " + academyFilterCondition.desiredMinAmount() + " AND " + academyFilterCondition.desiredMaxAmount();
         }
 
         Query query = em.createNativeQuery(nativeQuery);

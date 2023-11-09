@@ -51,7 +51,7 @@ public class Member {
     private MemberProvider memberProvider;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "role_tyle")
+    @Column(nullable = false, name = "role_type")
     private RoleType roleType;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

@@ -51,7 +51,7 @@ public class AcademyController {
             @MemberId Long memberId
     ) {
         AcademiesByLocationResults academiesByLocation =
-                academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request),memberId);
+                academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request), memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByLocationResponses.from(academiesByLocation));
@@ -76,10 +76,9 @@ public class AcademyController {
     public ResponseEntity<AcademyFilterResponses> filterAcademies(
             @ModelAttribute @Valid AcademyFilterRequest request,
             @MemberId Long memberId
-    )  {
+    ) {
         AcademyFilterResults academyFilterResults = academyService.filterAcademies(
-                AcademyFilterRequest.to(request), memberId
-        );
+                AcademyFilterRequest.to(request), memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyFilterResponses.from(academyFilterResults));

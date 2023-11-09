@@ -9,7 +9,6 @@ public record ReviewPercentGetResponse(
         int goodManagementPercent,
         int lovelyTeachingPercent
 ) {
-
     public static ReviewPercentGetResponse from(ReviewPercentGetResult response) {
         return new ReviewPercentGetResponse(
                 response.kindnessPercent(),

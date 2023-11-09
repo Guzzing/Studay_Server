@@ -7,7 +7,7 @@ import java.util.List;
 public class SqlFormatter {
     private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";
 
-    public static  String makeWhereInString(List<String> values) {
+    public static String makeWhereInString(List<String> values) {
         StringBuilder builder = new StringBuilder("(");
         for (int i = 0; i < values.size(); i++) {
             builder.append("'");

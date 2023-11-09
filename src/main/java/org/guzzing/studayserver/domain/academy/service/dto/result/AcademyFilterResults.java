@@ -4,7 +4,7 @@ import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
 
 import java.util.List;
 
-public record AcademyFilterResults (
+public record AcademyFilterResults(
         List<AcademyFilterResult> academyFilterResults
 ) {
     public static AcademyFilterResults from(List<AcademyByFiltering> academiesByFiltering) {
@@ -14,4 +14,5 @@ public record AcademyFilterResults (
                         .toList()
         );
     }
+
 }
