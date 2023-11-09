@@ -182,7 +182,6 @@ class AcademyServiceTest {
         if (min >= max) {
             throw new IllegalArgumentException("Min value must be less than max value");
         }
-
         Random random = new Random();
         return min + random.nextInt((int) (max - min + 1));
     }
