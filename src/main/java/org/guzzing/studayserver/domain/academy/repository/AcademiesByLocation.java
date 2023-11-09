@@ -7,7 +7,9 @@ public record AcademiesByLocation(
         String phoneNumber,
         String areaOfExpertise,
         Double latitude,
-        Double longitude
+        Double longitude,
+        String shuttleAvailable,
+        boolean isLiked
 ) {
 
 }

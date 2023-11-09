@@ -8,6 +8,7 @@ public record AcademyByFiltering(
         String areaOfExpertise,
         Double latitude,
         Double longitude,
-        String shuttleAvailable
+        String shuttleAvailable,
+        boolean isLiked
 ) {
 }
