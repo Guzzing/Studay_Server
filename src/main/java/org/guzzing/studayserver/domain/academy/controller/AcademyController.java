@@ -12,6 +12,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
+import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,18 +35,23 @@ public class AcademyController {
     @GetMapping(
             path = "/{academyId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademyGetResponse> getAcademy(@PathVariable Long academyId) {
+    public ResponseEntity<AcademyGetResponse> getAcademy(
+            @PathVariable Long academyId,
+            @MemberId Long memberId
+    ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademyGetResponse.from(academyService.getAcademy(academyId)));
+                .body(AcademyGetResponse.from(academyService.getAcademy(academyId, memberId)));
     }
 
     @GetMapping(
             path = "/complexes",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByLocationResponses> findByLocation(
-            @ModelAttribute @Valid AcademiesByLocationRequest request) {
+            @ModelAttribute @Valid AcademiesByLocationRequest request,
+            @MemberId Long memberId
+    ) {
         AcademiesByLocationResults academiesByLocation =
-                academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request));
+                academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request),memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByLocationResponses.from(academiesByLocation));
@@ -54,7 +60,9 @@ public class AcademyController {
     @GetMapping(
             path = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademiesByNameResponses> findByName(@ModelAttribute @Valid AcademiesByNameRequest request) {
+    public ResponseEntity<AcademiesByNameResponses> findByName(
+            @ModelAttribute @Valid AcademiesByNameRequest request
+    ) {
         AcademiesByNameResults academiesByNameResults = academyService.findAcademiesByName(
                 AcademiesByNameRequest.to(request));
 
@@ -65,8 +73,13 @@ public class AcademyController {
     @GetMapping(
             path = "/filter",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademyFilterResponses> filterAcademies(@ModelAttribute @Valid AcademyFilterRequest request)  {
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(AcademyFilterRequest.to(request));
+    public ResponseEntity<AcademyFilterResponses> filterAcademies(
+            @ModelAttribute @Valid AcademyFilterRequest request,
+            @MemberId Long memberId
+    )  {
+        AcademyFilterResults academyFilterResults = academyService.filterAcademies(
+                AcademyFilterRequest.to(request), memberId
+        );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyFilterResponses.from(academyFilterResults));
