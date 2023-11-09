@@ -10,7 +10,8 @@ public record AcademyFilterResult(
         String areaOfExpertise,
         Double latitude,
         Double longitude,
-        String shuttleAvailable
+        String shuttleAvailable,
+        boolean isLiked
 ) {
 
     public static AcademyFilterResult from(AcademyByFiltering academyByFiltering) {
@@ -22,7 +23,8 @@ public record AcademyFilterResult(
                 academyByFiltering.areaOfExpertise(),
                 academyByFiltering.latitude(),
                 academyByFiltering.longitude(),
-                academyByFiltering.shuttleAvailable()
+                academyByFiltering.shuttleAvailable(),
+                academyByFiltering.isLiked()
         );
     }
 
