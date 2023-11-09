@@ -9,8 +9,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AcademyRepository extends AcademyJpaRepository, AcademyQueryRepository {
+public interface AcademyRepository {
 
     Academy getById(Long academyId);
 
@@ -25,4 +24,6 @@ public interface AcademyRepository extends AcademyJpaRepository, AcademyQueryRep
     AcademyFee findAcademyFeeInfo(Long academyId);
 
     boolean existsByAcademyId(Long academyId);
+
+    void deleteAll();
 }

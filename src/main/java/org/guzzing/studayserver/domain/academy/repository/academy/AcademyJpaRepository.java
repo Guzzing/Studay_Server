@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AcademyJpaRepository extends JpaRepository<Academy, Long> {
+public interface AcademyJpaRepository extends JpaRepository<Academy, Long>, AcademyQueryRepository, AcademyRepository {
 
     default Academy getById(Long academyId) {
         return findById(academyId)

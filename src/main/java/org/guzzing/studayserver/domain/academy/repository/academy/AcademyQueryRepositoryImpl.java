@@ -24,10 +24,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
         Query query = em.createNativeQuery(
                 "SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress," +
                         " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable," +
-                        " (CASE WHEN r.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked  " +
+                        " (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked  " +
                         " FROM academies AS a" +
-                        " LEFT JOIN reviews AS r" +
-                        " ON a.id = r.academy_id AND r.member_id = " + memberId +
+                        " LEFT JOIN likes AS l" +
+                        " ON a.id = l.academy_id AND l.member_id = " + memberId +
                         " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", a.point)=1");
 
         List<AcademiesByLocation> academies = query.unwrap(org.hibernate.query.NativeQuery.class)
@@ -71,10 +71,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     public List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition, Long memberId) {
         String nativeQuery = "SELECT  a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, " +
                 "a.phone_number AS phoneNumber, a.area_of_expertise AS areaOfExpertise, a.latitude, a.longitude, a.shuttle AS shuttleAvailable, " +
-                "(CASE WHEN r.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked " +
+                "(CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked " +
                 "FROM academies AS a " +
-                "LEFT JOIN reviews AS r " +
-                "ON a.id = r.academy_id AND r.member_id = " + memberId +
+                "LEFT JOIN likes AS l " +
+                "ON a.id = l.academy_id AND l.member_id = " + memberId +
                 " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + academyFilterCondition.pointFormat() + ", a.point)=1 ";
 
         if (academyFilterCondition.areaOfExpertises() != null && !academyFilterCondition.areaOfExpertises().isEmpty()) {
