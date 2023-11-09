@@ -58,7 +58,8 @@ public class DashboardFixture {
                 List.of(new DashboardSchedule(MONDAY, LocalTime.of(14, 0), LocalTime.of(18, 0), WEEKLY),
                         new DashboardSchedule(FRIDAY, LocalTime.of(13, 30), LocalTime.of(14, 50), BIWEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
-                List.of(CHEAP_FEE, LOVELY_TEACHING)
+                List.of(CHEAP_FEE, LOVELY_TEACHING),
+                true, true
         );
     }
 

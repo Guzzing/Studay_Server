@@ -12,7 +12,9 @@ public record DashboardResult(
         Long lessonId,
         ScheduleInfos scheduleInfos,
         PaymentInfo paymentInfo,
-        Map<SimpleMemoType, Boolean> simpleMemoTypeMap
+        Map<SimpleMemoType, Boolean> simpleMemoTypeMap,
+        boolean active,
+        boolean deleted
 ) {
 
 }

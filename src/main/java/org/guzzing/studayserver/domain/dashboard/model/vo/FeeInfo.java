@@ -25,7 +25,7 @@ public class FeeInfo {
     @Column(name = "etc_fee", nullable = true)
     private Long etcFee;
 
-    @Column(name = "payment_day", nullable = true, columnDefinition = "VARCHAR(5)")
+    @Column(name = "payment_day", nullable = true)
     private LocalDate paymentDay;
 
     public FeeInfo(

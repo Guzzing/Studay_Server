@@ -22,7 +22,8 @@ public class DashboardServiceConverter {
                 param.lessonId(),
                 convertToDashboardSchedules(param.scheduleInfos()),
                 convertToFeeInfo(param.paymentInfo()),
-                convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap())
+                convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap()),
+                true, false
         );
     }
 
@@ -34,7 +35,9 @@ public class DashboardServiceConverter {
                 dashboard.getLessonId(),
                 convertToScheduleInfos(dashboard.getDashboardSchedules()),
                 convertToPaymentInfo(dashboard.getFeeInfo()),
-                convertToSimpleMemoTypeMap(dashboard.getSimpleMemoTypes())
+                convertToSimpleMemoTypeMap(dashboard.getSimpleMemoTypes()),
+                dashboard.isActive(),
+                dashboard.isDeleted()
         );
     }
 
