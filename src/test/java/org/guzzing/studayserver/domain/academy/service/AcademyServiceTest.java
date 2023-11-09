@@ -11,7 +11,10 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
+import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,6 +48,11 @@ class AcademyServiceTest {
     @Autowired
     private ReviewCountRepository reviewCountRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    private Member savedMember;
+
     private Academy savedAcademyAboutSungnam;
 
     private Lesson savedALessonAboutSungnam;
@@ -53,6 +61,10 @@ class AcademyServiceTest {
 
     @BeforeEach
     void setUp() {
+
+        Member member = MemberFixture.member();
+        savedMember = memberRepository.save(member);
+
         Academy academyAboutSungnam = AcademyFixture.academySungnam();
         academyAboutSungnam.changeEducationFee(100000L);
         savedAcademyAboutSungnam = academyRepository.save(academyAboutSungnam);
@@ -68,7 +80,7 @@ class AcademyServiceTest {
     @DisplayName("학원 ID로 학원 정보를 조회할 때 학원 정보, 수업 정보, 리뷰를 확인할 수 있다.")
     void getAcademy_academyId_reviewsAndLessons() {
         //When
-        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId());
+        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),savedMember.getId());
 
         //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
@@ -100,7 +112,9 @@ class AcademyServiceTest {
         }
 
         //When
-        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE));
+        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
+                AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE),
+                savedMember.getId());
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
@@ -151,7 +165,7 @@ class AcademyServiceTest {
         AcademyFilterParam academyFilterParam = AcademyFixture.academyFilterParam(LATITUDE, LONGITUDE, minFee, maxFee);
 
         //When
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam);
+        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam, savedMember.getId());
 
         //Then
         for (AcademyFilterResult academyFilterResult : academyFilterResults.academyFilterResults()) {
