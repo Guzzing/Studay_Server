@@ -11,4 +11,5 @@ public record AcademyByFiltering(
         String shuttleAvailable,
         boolean isLiked
 ) {
+
 }

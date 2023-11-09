@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.academy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import java.util.Random;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -10,7 +12,14 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
@@ -18,14 +27,10 @@ import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Random;
 
 @Transactional
 @ActiveProfiles({"oauth", "dev"})
@@ -80,13 +85,15 @@ class AcademyServiceTest {
     @DisplayName("학원 ID로 학원 정보를 조회할 때 학원 정보, 수업 정보, 리뷰를 확인할 수 있다.")
     void getAcademy_academyId_reviewsAndLessons() {
         //When
-        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(), savedMember.getId());
+        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),
+                savedMember.getId());
 
         //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
         assertThat(academyGetResult.contact()).isEqualTo(savedAcademyAboutSungnam.getContact());
         assertThat(academyGetResult.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
-        assertThat(academyGetResult.shuttleAvailability()).isEqualTo(savedAcademyAboutSungnam.getShuttleAvailability().toString());
+        assertThat(academyGetResult.shuttleAvailability()).isEqualTo(
+                savedAcademyAboutSungnam.getShuttleAvailability().toString());
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
         assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
@@ -165,7 +172,8 @@ class AcademyServiceTest {
         AcademyFilterParam academyFilterParam = AcademyFixture.academyFilterParam(LATITUDE, LONGITUDE, minFee, maxFee);
 
         //When
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam, savedMember.getId());
+        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam,
+                savedMember.getId());
 
         //Then
         for (AcademyFilterResult academyFilterResult : academyFilterResults.academyFilterResults()) {
@@ -174,7 +182,8 @@ class AcademyServiceTest {
             assertThat(filtedAcademy.getMaxEducationFee()).
                     isGreaterThanOrEqualTo(minFee)
                     .isLessThanOrEqualTo(maxFee);
-            assertThat(academyFilterParam.areaOfExpertises()).containsExactlyInAnyOrder(academyFilterResult.areaOfExpertise());
+            assertThat(academyFilterParam.areaOfExpertises()).containsExactlyInAnyOrder(
+                    academyFilterResult.areaOfExpertise());
         }
     }
 

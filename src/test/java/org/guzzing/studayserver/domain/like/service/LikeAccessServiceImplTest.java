@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.like.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;

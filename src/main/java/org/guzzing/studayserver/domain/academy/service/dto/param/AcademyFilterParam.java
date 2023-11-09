@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.academy.service.dto.param;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
-
-import java.util.List;
 
 public record AcademyFilterParam(
         Double baseLatitude,
@@ -12,8 +11,9 @@ public record AcademyFilterParam(
         Long desiredMinAmount,
         Long desiredMaxAmount
 ) {
+
     public static AcademyFilterCondition to(AcademyFilterParam param,
-                                            String pointFormat) {
+            String pointFormat) {
         return new AcademyFilterCondition(
                 pointFormat,
                 SqlFormatter.makeWhereInString(param.areaOfExpertises),

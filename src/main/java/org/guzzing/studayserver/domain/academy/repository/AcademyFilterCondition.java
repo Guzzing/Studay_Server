@@ -6,4 +6,5 @@ public record AcademyFilterCondition(
         Long desiredMinAmount,
         Long desiredMaxAmount
 ) {
+
 }
