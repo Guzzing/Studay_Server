@@ -9,5 +9,5 @@ public class MemberFixture {
     public static Member member() {
         return Member.of(new NickName("나는왕이다"), "12345678", MemberProvider.KAKAO, RoleType.USER);
     }
-    
+
 }
