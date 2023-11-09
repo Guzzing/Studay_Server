@@ -180,7 +180,7 @@ class AcademyServiceTest {
 
     private long generateRandomAmount(long min, long max) {
         if (min >= max) {
-            throw new IllegalArgumentException("Min value must be less than max value");
+            throw new IllegalArgumentException("최소값은 최대값과 같거나 클 수 없습니다.");
         }
         Random random = new Random();
         return min + random.nextInt((int) (max - min + 1));
