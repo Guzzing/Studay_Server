@@ -17,9 +17,9 @@ public interface AcademyRepository extends AcademyJpaRepository, AcademyQueryRep
 
     Slice<AcademiesByName> findAcademiesByName(String academyName, Pageable pageable);
 
-    List<AcademiesByLocation> findAcademiesByLocation(String pointFormat);
+    List<AcademiesByLocation> findAcademiesByLocation(String pointFormat, Long memberId);
 
-    List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition);
+    List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition, Long memberId);
 
     AcademyFee findAcademyFeeInfo(Long academyId);
 
