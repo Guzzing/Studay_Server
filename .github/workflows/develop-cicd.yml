@@ -48,6 +48,7 @@ jobs:
           mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_DEFAULT_YML_CONTENT }}" > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_AUTH_YML_CONTENT }}" > src/main/resources/application-auth.yml
+          echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
 
       - name: Build with gradle
         run: ./gradlew build
