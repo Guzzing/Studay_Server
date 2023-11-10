@@ -1,28 +1,18 @@
-package org.guzzing.studayserver.domain.auth.dto;
+package org.guzzing.studayserver.domain.auth.client.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.child.model.NickName;
 
-@Getter
-@NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class KakaoUserResponse {
-
-    private Long id;
-    private Properties properties;
-    private KakaoAccount kakaoAccount;
-
-    public KakaoUserResponse(Long id, Properties properties, KakaoAccount kakaoAccount) {
-        this.id = id;
-        this.properties = properties;
-        this.kakaoAccount = kakaoAccount;
-    }
+public record KakaoUser(
+        Long id,
+        Properties properties,
+        KakaoAccount kakaoAccount
+) {
 
     @Getter
-    @NoArgsConstructor
     @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class Properties {
 
@@ -35,7 +25,6 @@ public class KakaoUserResponse {
     }
 
     @Getter
-    @NoArgsConstructor
     public static class KakaoAccount {
 
         private String email;
@@ -43,7 +32,6 @@ public class KakaoUserResponse {
         public KakaoAccount(String email) {
             this.email = email;
         }
-
     }
 
 }
