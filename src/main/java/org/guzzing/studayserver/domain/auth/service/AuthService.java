@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.auth.service;
 
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
-import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.exception.TokenExpiredException;
 import org.guzzing.studayserver.domain.auth.exception.TokenIsLogoutException;
@@ -70,7 +69,7 @@ public class AuthService {
 
         return false;
     }
-    
+
     @Transactional
     public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
         AuthToken refreshToken = findRefreshToken(accessToken);
