@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface LogoutTokenRepository  extends CrudRepository<LogoutCache, Long> {
+public interface LogoutTokenRepository extends CrudRepository<LogoutCache, String> {
 
     Optional<LogoutCache> findByAccessToken(String accessToken);
 }

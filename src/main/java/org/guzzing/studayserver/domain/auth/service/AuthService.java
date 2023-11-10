@@ -12,8 +12,6 @@ import org.guzzing.studayserver.domain.auth.jwt.LogoutCache;
 import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
-import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +23,13 @@ import java.util.Optional;
 public class AuthService {
 
     private final AuthTokenProvider authTokenProvider;
-    private final MemberRepository memberRepository;
     private final LogoutTokenRepository logoutTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public AuthService(AuthTokenProvider authTokenProvider,
-                       MemberRepository memberRepository,
                        LogoutTokenRepository logoutTokenRepository,
                        RefreshTokenRepository refreshTokenRepository) {
         this.authTokenProvider = authTokenProvider;
-        this.memberRepository = memberRepository;
         this.logoutTokenRepository = logoutTokenRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
@@ -43,19 +38,18 @@ public class AuthService {
     public AuthRefreshResult updateToken(AuthToken authToken, Long memberId) {
         Claims claims = authToken.getTokenClaims();
         String socialId = claims.getSubject();
-        Member savedMember = memberRepository.getById(memberId);
 
         if (isNotExpiredRefreshToken(authToken.getToken())) {
             authToken = saveNewAccessTokenInfo(memberId, socialId, authToken.getToken());
         }
 
-        return AuthRefreshResult.of(authToken.getToken(), memberId, savedMember.getNickName());
+        return AuthRefreshResult.of(authToken.getToken(), memberId);
     }
 
     @Transactional
-    public AuthLogoutResult logout(Long memberId, AuthToken authToken) {
-        refreshTokenRepository.deleteById(memberId);
-        logoutTokenRepository.save(LogoutCache.of(memberId, authToken.getToken()));
+    public AuthLogoutResult logout(AuthToken authToken) {
+        refreshTokenRepository.deleteById(authToken.getToken());
+        logoutTokenRepository.save(LogoutCache.of(authToken.getToken()));
 
         return new AuthLogoutResult(true);
     }
@@ -75,7 +69,7 @@ public class AuthService {
         AuthToken refreshToken = findRefreshToken(accessToken);
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
 
-        refreshTokenRepository.save(new JwtTokenCache(memberId, refreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(new JwtTokenCache(refreshToken.getToken(), newAccessToken.getToken()));
 
         return newAccessToken;
     }
@@ -85,7 +79,7 @@ public class AuthService {
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
         AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
 
-        refreshTokenRepository.save(new JwtTokenCache(memberId, newRefreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(new JwtTokenCache(newRefreshToken.getToken(), newAccessToken.getToken()));
 
         return newAccessToken;
     }

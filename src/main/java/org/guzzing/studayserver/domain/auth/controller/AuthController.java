@@ -74,13 +74,12 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<AuthLogoutResult> logout(
-            HttpServletRequest request,
-            @MemberId Long memberId) {
+            HttpServletRequest request) {
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(authService.logout(memberId, authToken));
+                .body(authService.logout(authToken));
     }
 
 }
