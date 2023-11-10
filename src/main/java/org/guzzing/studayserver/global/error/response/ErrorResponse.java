@@ -3,6 +3,9 @@ package org.guzzing.studayserver.global.error.response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +19,12 @@ import org.springframework.validation.BindingResult;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 
-    private String code; //서버 내 에러코드
-    private String message; //에러 메시지
-    private List<FieldDetailError> fieldDetailErrors; //상세 에러 메시지
-    private String reason; //에러 이유 - Exception 정보
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private String code;
+    private String message;
+    private List<FieldDetailError> fieldDetailErrors;
+    private String reason;
 
     public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
         return new ErrorResponse(errorCode, FieldDetailError.of(bindingResult));
@@ -49,6 +54,10 @@ public class ErrorResponse {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.fieldDetailErrors = fieldDetailErrors;
+    }
+
+    public String convertToJson() throws JsonProcessingException {
+        return objectMapper.writeValueAsString(this);
     }
 
     public static class FieldDetailError {
