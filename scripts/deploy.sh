@@ -7,16 +7,14 @@ APP_NAME=studay
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
-CURRENT_PID=$(pgrep -f $APP_NAME)
+# systemd 서비스를 중지합니다.
+sudo systemctl stop $APP_NAME.service
 
-if [ -z $CURRENT_PID ]
-then
-  echo "> 종료할 애플리케이션이 없습니다."
-else
-  echo "> kill -9 $CURRENT_PID"
-  kill -15 $CURRENT_PID
-  sleep 5
-fi
+# 심볼릭 링크를 이용하여 새로운 JAR 파일로 서비스를 업데이트합니다.
+ln -sf $JAR_PATH /home/ubuntu/studay/$APP_NAME-latest.jar
 
-echo "> Deploy - $JAR_PATH "
-nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+# systemd 서비스를 시작합니다.
+sudo systemctl start $APP_NAME.service
+
+# 서비스의 상태를 확인합니다.
+sudo systemctl status $APP_NAME.service
