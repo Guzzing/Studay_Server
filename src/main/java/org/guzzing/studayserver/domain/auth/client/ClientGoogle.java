@@ -36,8 +36,8 @@ public class ClientGoogle implements ClientProxy {
         System.out.println("googleUserResponse:" + googleUser);
 
         return Member.of(
-                googleUser.name(),
-                googleUser.sub(),
+                googleUser.getName(),
+                googleUser.getSub(),
                 MemberProvider.GOOGLE,
                 RoleType.USER
         );

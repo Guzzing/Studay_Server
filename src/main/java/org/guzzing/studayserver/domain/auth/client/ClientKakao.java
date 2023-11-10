@@ -34,8 +34,8 @@ public class ClientKakao implements ClientProxy {
                 .block();
 
         return Member.of(
-                kakaoUser.properties().getNickname(),
-                String.valueOf(kakaoUser.id()),
+                kakaoUser.getProperties().getNickname(),
+                String.valueOf(kakaoUser.getId()),
                 MemberProvider.KAKAO,
                 RoleType.USER
         );
