@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RefreshTokenRepository extends CrudRepository<JwtTokenCache, String> {
 
-    Optional<JwtTokenCache> findByAccessToken(String accessToken);
+    Optional<JwtTokenCache> findById(String accessToken);
 
 }

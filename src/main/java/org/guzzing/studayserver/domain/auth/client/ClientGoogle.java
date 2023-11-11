@@ -33,8 +33,6 @@ public class ClientGoogle implements ClientProxy {
                 .bodyToMono(GoogleUser.class)
                 .block();
 
-        System.out.println("googleUserResponse:" + googleUser);
-
         return Member.of(
                 googleUser.getName(),
                 googleUser.getSub(),

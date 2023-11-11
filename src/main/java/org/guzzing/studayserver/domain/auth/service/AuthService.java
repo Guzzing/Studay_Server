@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.auth.exception.TokenIsLogoutException;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtTokenCache;
-import org.guzzing.studayserver.domain.auth.jwt.LogoutCache;
+import org.guzzing.studayserver.domain.auth.jwt.logout.LogoutCache;
 import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
@@ -56,7 +56,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public boolean isLogout(String accessToken) {
-        Optional<LogoutCache> byAccessToken = logoutTokenRepository.findByAccessToken(accessToken);
+        Optional<LogoutCache> byAccessToken = logoutTokenRepository.findById(accessToken);
         if (byAccessToken.isPresent()) {
             throw new TokenIsLogoutException(ErrorCode.IS_LOGOUT_TOKEN);
         }
@@ -89,7 +89,7 @@ public class AuthService {
     }
 
     private AuthToken findRefreshToken(String accessToken) {
-        JwtTokenCache jwtTokenCache = refreshTokenRepository.findByAccessToken(accessToken)
+        JwtTokenCache jwtTokenCache = refreshTokenRepository.findById(accessToken)
                 .orElseThrow(() -> new TokenExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN));
         return authTokenProvider.convertAuthToken(jwtTokenCache.getRefreshToken());
     }
