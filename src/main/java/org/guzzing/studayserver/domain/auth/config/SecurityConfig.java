@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.auth.exception.SecurityExceptionHandlerFilter;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtAuthenticationFilter;
+import org.guzzing.studayserver.domain.auth.jwt.logout.LogoutAuthenticationFilter;
 import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +40,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter jwtTokenValidationFilter = new JwtAuthenticationFilter(authTokenProvider, authService);
+        JwtAuthenticationFilter jwtTokenValidationFilter = new JwtAuthenticationFilter(authTokenProvider);
+        LogoutAuthenticationFilter logoutAuthenticationFilter = new LogoutAuthenticationFilter(authTokenProvider, authService);
 
         http
                 .authorizeHttpRequests(request -> request
@@ -57,7 +59,8 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
                 .addFilterBefore(jwtTokenValidationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(securityExceptionHandlerFilter, JwtAuthenticationFilter.class);
+                .addFilterBefore(logoutAuthenticationFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(securityExceptionHandlerFilter, LogoutAuthenticationFilter.class);
 
         return http.build();
     }
