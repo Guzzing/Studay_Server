@@ -19,8 +19,6 @@ import org.springframework.validation.BindingResult;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     private String code;
     private String message;
     private List<FieldDetailError> fieldDetailErrors;
@@ -56,9 +54,6 @@ public class ErrorResponse {
         this.fieldDetailErrors = fieldDetailErrors;
     }
 
-    public String convertToJson() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(this);
-    }
 
     public static class FieldDetailError {
 
