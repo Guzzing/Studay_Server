@@ -51,10 +51,6 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
           echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
 
-          echo "${{ secrets.TEST_APPLICATION_YML_CONTENT }}" > src/test/resources/application.yml
-          echo "${{ secrets.TEST_APPLICATION_DEV_YML_CONTENT }}" > src/test/resources/application-dev.yml
-          echo "${{ secrets.TEST_APPLICATION_OAUTH_YML_CONTENT }}" > src/test/resources/application-oauth.yml
-
       - name: Build with gradle
         run: ./gradlew build
 
