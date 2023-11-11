@@ -6,17 +6,17 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @RedisHash(value = "LogoutCache", timeToLive = 24 * 60 * 60)
-public class LogoutCache {
+public class LogoutToken {
 
     @Id
     private String accessToken;
 
-    protected LogoutCache(String accessToken) {
+    protected LogoutToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public static LogoutCache of(String accessToken) {
-        return new LogoutCache(accessToken);
+    public static LogoutToken of(String accessToken) {
+        return new LogoutToken(accessToken);
     }
 
 }

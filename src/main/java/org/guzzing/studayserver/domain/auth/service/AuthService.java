@@ -7,8 +7,8 @@ import org.guzzing.studayserver.domain.auth.exception.TokenExpiredException;
 import org.guzzing.studayserver.domain.auth.exception.TokenIsLogoutException;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
-import org.guzzing.studayserver.domain.auth.jwt.JwtTokenCache;
-import org.guzzing.studayserver.domain.auth.jwt.logout.LogoutCache;
+import org.guzzing.studayserver.domain.auth.jwt.JwtToken;
+import org.guzzing.studayserver.domain.auth.jwt.logout.LogoutToken;
 import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
@@ -49,14 +49,14 @@ public class AuthService {
     @Transactional
     public AuthLogoutResult logout(AuthToken authToken) {
         refreshTokenRepository.deleteById(authToken.getToken());
-        logoutTokenRepository.save(LogoutCache.of(authToken.getToken()));
+        logoutTokenRepository.save(LogoutToken.of(authToken.getToken()));
 
         return new AuthLogoutResult(true);
     }
 
     @Transactional(readOnly = true)
     public boolean isLogout(String accessToken) {
-        Optional<LogoutCache> byAccessToken = logoutTokenRepository.findById(accessToken);
+        Optional<LogoutToken> byAccessToken = logoutTokenRepository.findById(accessToken);
         if (byAccessToken.isPresent()) {
             throw new TokenIsLogoutException(ErrorCode.IS_LOGOUT_TOKEN);
         }
@@ -69,7 +69,7 @@ public class AuthService {
         AuthToken refreshToken = findRefreshToken(accessToken);
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
 
-        refreshTokenRepository.save(new JwtTokenCache(refreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(new JwtToken(refreshToken.getToken(), newAccessToken.getToken()));
 
         return newAccessToken;
     }
@@ -79,7 +79,7 @@ public class AuthService {
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
         AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
 
-        refreshTokenRepository.save(new JwtTokenCache(newRefreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(new JwtToken(newRefreshToken.getToken(), newAccessToken.getToken()));
 
         return newAccessToken;
     }
@@ -89,9 +89,9 @@ public class AuthService {
     }
 
     private AuthToken findRefreshToken(String accessToken) {
-        JwtTokenCache jwtTokenCache = refreshTokenRepository.findById(accessToken)
+        JwtToken jwtToken = refreshTokenRepository.findById(accessToken)
                 .orElseThrow(() -> new TokenExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN));
-        return authTokenProvider.convertAuthToken(jwtTokenCache.getRefreshToken());
+        return authTokenProvider.convertAuthToken(jwtToken.getRefreshToken());
     }
 
 }
