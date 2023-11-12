@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.auth.client;
 
-import org.guzzing.studayserver.domain.auth.dto.KakaoUserResponse;
+import org.guzzing.studayserver.domain.auth.client.dto.KakaoUser;
 import org.guzzing.studayserver.domain.auth.exception.TokenValidFailedException;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
@@ -22,7 +22,7 @@ public class ClientKakao implements ClientProxy {
     @Override
     public Member getUserData(String accessToken) {
 
-        KakaoUserResponse kakaoUserResponse = webClient.get()
+        KakaoUser kakaoUser = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.set("Authorization", accessToken))
                 .retrieve()
@@ -30,12 +30,12 @@ public class ClientKakao implements ClientProxy {
                         response -> Mono.error(new TokenValidFailedException(ErrorCode.UNAUTHORIZED_TOKEN)))
                 .onStatus(status -> status.is5xxServerError(),
                         response -> Mono.error(new TokenValidFailedException(ErrorCode.OAUTH_CLIENT_SERVER_ERROR)))
-                .bodyToMono(KakaoUserResponse.class)
+                .bodyToMono(KakaoUser.class)
                 .block();
 
         return Member.of(
-                kakaoUserResponse.getProperties().getNickname(),
-                String.valueOf(kakaoUserResponse.getId()),
+                kakaoUser.getProperties().getNickname(),
+                String.valueOf(kakaoUser.getId()),
                 MemberProvider.KAKAO,
                 RoleType.USER
         );
