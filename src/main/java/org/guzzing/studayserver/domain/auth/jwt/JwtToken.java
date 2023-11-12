@@ -3,22 +3,17 @@ package org.guzzing.studayserver.domain.auth.jwt;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
-@RedisHash(value = "JwtTokenCache", timeToLive = 60 * 60 * 24 * 3)
-public class JwtTokenCache {
-
-    @Id
-    private Long memberId;
+@RedisHash(value = "JwtTokenCache", timeToLive = 60 * 60 * 24 * 7)
+public class JwtToken {
 
     private String refreshToken;
 
-    @Indexed
+    @Id
     private String accessToken;
 
-    public JwtTokenCache(Long memberId, String refreshToken, String accessToken) {
-        this.memberId = memberId;
+    public JwtToken(String refreshToken, String accessToken) {
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
     }

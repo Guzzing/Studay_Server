@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Random;
+import javax.sql.DataSource;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -29,9 +30,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
+@Import(TestDatabaseConfig.class)
 @SpringBootTest
 class AcademyServiceTest {
 
@@ -61,6 +64,9 @@ class AcademyServiceTest {
     private Lesson savedALessonAboutSungnam;
 
     private ReviewCount savedReviewCountAboutSungnam;
+
+    @Autowired
+    private DataSource dataSource;
 
     @BeforeEach
     void setUp() {
@@ -187,7 +193,7 @@ class AcademyServiceTest {
 
     private long generateRandomAmount(long min, long max) {
         if (min >= max) {
-            throw new IllegalArgumentException("Min value must be less than max value");
+            throw new IllegalArgumentException("최소값은 최대값과 같거나 클 수 없습니다.");
         }
         Random random = new Random();
         return min + random.nextInt((int) (max - min + 1));
