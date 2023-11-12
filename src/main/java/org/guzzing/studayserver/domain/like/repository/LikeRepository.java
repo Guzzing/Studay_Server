@@ -15,4 +15,6 @@ public interface LikeRepository {
 
     long countByMemberId(final Long memberId);
 
+    boolean existsByMemberIdAndAcademyId(final Long memberId, final Long AcademyId);
+
 }

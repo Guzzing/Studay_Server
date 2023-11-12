@@ -14,6 +14,7 @@ public record AcademyGetResponse(
         ReviewPercentGetResponse reviewPercentGetResponse,
         boolean isLiked
 ) {
+
     public static AcademyGetResponse from(AcademyGetResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),

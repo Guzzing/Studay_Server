@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-
 import java.util.List;
-
 import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
@@ -22,8 +20,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     public List<AcademiesByLocation> findAcademiesByLocation(String pointFormat, Long memberId) {
 
         Query query = em.createNativeQuery(
-                "SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress," +
-                        " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable," +
+                "SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress,"
+                        +
+                        " a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,"
+                        +
                         " (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked  " +
                         " FROM academies AS a" +
                         " LEFT JOIN likes AS l" +
@@ -69,20 +69,24 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     }
 
     public List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition, Long memberId) {
-        String nativeQuery = "SELECT  a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, " +
-                "a.phone_number AS phoneNumber, a.area_of_expertise AS areaOfExpertise, a.latitude, a.longitude, a.shuttle AS shuttleAvailable, " +
-                "(CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked " +
-                "FROM academies AS a " +
-                "LEFT JOIN likes AS l " +
-                "ON a.id = l.academy_id AND l.member_id = " + memberId +
-                " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + academyFilterCondition.pointFormat() + ", a.point)=1 ";
+        String nativeQuery =
+                "SELECT  a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, " +
+                        "a.phone_number AS phoneNumber, a.area_of_expertise AS areaOfExpertise, a.latitude, a.longitude, a.shuttle AS shuttleAvailable, "
+                        +
+                        "(CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked " +
+                        "FROM academies AS a " +
+                        "LEFT JOIN likes AS l " +
+                        "ON a.id = l.academy_id AND l.member_id = " + memberId +
+                        " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + academyFilterCondition.pointFormat()
+                        + ", a.point)=1 ";
 
         if (academyFilterCondition.areaOfExpertises() != null && !academyFilterCondition.areaOfExpertises().isEmpty()) {
             nativeQuery += " AND area_of_expertise IN " + academyFilterCondition.areaOfExpertises();
         }
 
         if (academyFilterCondition.desiredMinAmount() != null && academyFilterCondition.desiredMaxAmount() != null) {
-            nativeQuery += " AND max_education_fee BETWEEN " + academyFilterCondition.desiredMinAmount() + " AND " + academyFilterCondition.desiredMaxAmount();
+            nativeQuery += " AND max_education_fee BETWEEN " + academyFilterCondition.desiredMinAmount() + " AND "
+                    + academyFilterCondition.desiredMaxAmount();
         }
 
         Query query = em.createNativeQuery(nativeQuery);

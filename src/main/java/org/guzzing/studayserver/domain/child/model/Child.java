@@ -26,7 +26,7 @@ public class Child {
     private Long id;
 
     @Embedded
-    @Column(nullable = false,name = "nick_name")
+    @Column(nullable = false, name = "nick_name")
     private NickName nickName;
 
     @Enumerated(EnumType.STRING)

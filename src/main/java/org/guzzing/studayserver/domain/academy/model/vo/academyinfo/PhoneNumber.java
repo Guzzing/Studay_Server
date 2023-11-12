@@ -3,10 +3,8 @@ package org.guzzing.studayserver.domain.academy.model.vo.academyinfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
-
 import java.util.Objects;
 import java.util.regex.Pattern;
-
 import lombok.Getter;
 
 @Getter
