@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
+import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
+import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -14,6 +16,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
+import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
+import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -48,16 +53,19 @@ class DashboardControllerTest {
     @Autowired
     private TestConfig testConfig;
 
+    @Autowired
+    private DashboardRepository dashboardRepository;
+
     @Test
     @DisplayName("대시보드를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void registerDashboard_ReturnCreated() throws Exception {
         // Given
         final DashboardPostRequest request = DashboardFixture.makePostRequest();
 
         // When
         final ResultActions perform = mockMvc.perform(post("/dashboards")
-                .header(TestConfig.AUTHORIZATION_HEADER, TestConfig.BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, TestConfig.BEARER + testConfig.getJwt())
                 .content(objectMapper.writeValueAsBytes(request))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));

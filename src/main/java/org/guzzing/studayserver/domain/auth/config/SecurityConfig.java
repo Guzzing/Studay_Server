@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.auth.config;
 
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.guzzing.studayserver.domain.auth.exception.SecurityExceptionHandlerFilter;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtAuthenticationFilter;
@@ -31,7 +30,8 @@ public class SecurityConfig {
     private final AuthService authService;
     private final SecurityExceptionHandlerFilter securityExceptionHandlerFilter;
 
-    public SecurityConfig(AuthTokenProvider authTokenProvider, AuthService authService, SecurityExceptionHandlerFilter securityExceptionHandlerFilter) {
+    public SecurityConfig(AuthTokenProvider authTokenProvider, AuthService authService,
+            SecurityExceptionHandlerFilter securityExceptionHandlerFilter) {
         this.authTokenProvider = authTokenProvider;
         this.authService = authService;
         this.securityExceptionHandlerFilter = securityExceptionHandlerFilter;
@@ -40,7 +40,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtTokenValidationFilter = new JwtAuthenticationFilter(authTokenProvider);
-        LogoutAuthenticationFilter logoutAuthenticationFilter = new LogoutAuthenticationFilter(authTokenProvider, authService);
+        LogoutAuthenticationFilter logoutAuthenticationFilter = new LogoutAuthenticationFilter(authTokenProvider,
+                authService);
 
         http
                 .authorizeHttpRequests(request -> request

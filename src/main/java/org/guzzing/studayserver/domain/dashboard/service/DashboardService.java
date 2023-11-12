@@ -5,6 +5,8 @@ import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.global.exception.DashboardException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +16,16 @@ public class DashboardService {
 
     private final DashboardServiceConverter serviceConverter;
     private final DashboardRepository dashboardRepository;
+    private final MemberAccessService memberAccessService;
 
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
-            final DashboardRepository dashboardRepository
+            final DashboardRepository dashboardRepository,
+            final MemberAccessService memberAccessService
     ) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
+        this.memberAccessService = memberAccessService;
     }
 
     @Transactional

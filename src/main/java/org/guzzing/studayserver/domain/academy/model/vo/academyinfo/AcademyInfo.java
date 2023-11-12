@@ -27,7 +27,7 @@ public class AcademyInfo {
     private String areaOfExpertise;
 
     protected AcademyInfo(final String academyName, final String phoneNumber, final String shuttle,
-                          final String areaOfExpertise) {
+            final String areaOfExpertise) {
         Assert.isTrue(StringUtils.isNotBlank(academyName), "학원명이 주어지지 않았습니다.");
 
         this.academyName = academyName;
@@ -37,7 +37,7 @@ public class AcademyInfo {
     }
 
     public static AcademyInfo of(final String name, final String contact, final String shuttle,
-                                 final String areaOfExpertise) {
+            final String areaOfExpertise) {
         return new AcademyInfo(name, contact, shuttle, areaOfExpertise);
     }
 

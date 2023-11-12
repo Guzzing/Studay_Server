@@ -72,7 +72,7 @@ public class AcademyFixture {
     }
 
     public static AcademyFilterParam academyFilterParam(Double latitude, Double longitude, Long desiredMinAmount,
-                                                        Long desiredMaxAmount) {
+            Long desiredMaxAmount) {
         return new AcademyFilterParam(latitude, longitude, List.of("예능(대)"), desiredMinAmount, desiredMaxAmount);
     }
 

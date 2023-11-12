@@ -32,7 +32,7 @@ public class DashboardRestController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardPostResponse> registerDashBoard(
+    public ResponseEntity<DashboardPostResponse> registerDashboard(
             @Validated @RequestBody final DashboardPostRequest request
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
