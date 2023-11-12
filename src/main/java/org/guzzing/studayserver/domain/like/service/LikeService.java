@@ -9,9 +9,7 @@ import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LikeException;
-import org.guzzing.studayserver.global.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

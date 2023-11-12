@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_FACILITY;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 import java.util.Map;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
@@ -51,9 +49,6 @@ class ReviewServiceTest {
     @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_NotReviewYet_RegisterReview() {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         boolean isValid = true;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
         Map<ReviewType, Boolean> validReviewMap = ReviewFixture.makeValidReviewMap();
@@ -75,9 +70,6 @@ class ReviewServiceTest {
     @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_Reviewed_Fail() {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         boolean isValid = true;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 
@@ -94,9 +86,6 @@ class ReviewServiceTest {
     @WithMockCustomOAuth2LoginUser
     void createReviewOfAcademy_GreaterThanThreeReivewTypes_Fail() {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         boolean isValid = false;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 
@@ -111,11 +100,11 @@ class ReviewServiceTest {
     @WithMockCustomOAuth2LoginUser
     void isReviewableToAcademy_NotExistsReview_Reviewable() {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        final Long memberId = 100L;
+        final Long academyId = 100L;
 
         // When & Then
-        ReviewableResult result = reviewService.getReviewableToAcademy(100L, 100L);
+        ReviewableResult result = reviewService.getReviewableToAcademy(memberId, academyId);
 
         assertThat(result.reviewable()).isTrue();
     }
@@ -125,9 +114,6 @@ class ReviewServiceTest {
     @WithMockCustomOAuth2LoginUser
     void isReviewableToAcademy_ExistsReview_NotReviewable() {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         boolean isValid = true;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 

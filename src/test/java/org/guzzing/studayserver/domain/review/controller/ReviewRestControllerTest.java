@@ -2,8 +2,6 @@ package org.guzzing.studayserver.domain.review.controller;
 
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -77,9 +75,6 @@ class ReviewRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void registerReview_Success() throws Exception {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         ReviewPostRequest request = ReviewFixture.makeReviewPostRequest(true);
         String jsonBody = objectMapper.writeValueAsString(request);
 
@@ -123,12 +118,11 @@ class ReviewRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        final Long academyId = 1L;
 
         // When
         ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
-                .param("academyId", String.valueOf(1L))
+                .param("academyId", String.valueOf(academyId))
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));

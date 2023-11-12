@@ -8,8 +8,6 @@ import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
-import org.guzzing.studayserver.global.exception.AcademyException;
-import org.guzzing.studayserver.global.exception.MemberException;
 import org.guzzing.studayserver.global.exception.ReviewException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
