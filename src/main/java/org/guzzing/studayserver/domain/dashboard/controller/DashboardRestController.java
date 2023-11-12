@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.dashboard.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
@@ -33,10 +34,11 @@ public class DashboardRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPostResponse> registerDashboard(
-            @Validated @RequestBody final DashboardPostRequest request
+            @Validated @RequestBody final DashboardPostRequest request,
+            @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
-        final DashboardResult result = dashboardService.createDashboard(param);
+        final DashboardResult result = dashboardService.createDashboard(param, memberId);
         final DashboardPostResponse response = controllerConverter.from(result);
 
         return ResponseEntity

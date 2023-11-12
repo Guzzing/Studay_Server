@@ -6,6 +6,8 @@ public interface AcademyAccessService {
 
     AcademyFeeInfo findAcademyFeeInfo(final Long academyId);
 
-    boolean existsAcademy(final Long academyId);
+    void validateAcademy(final Long academyId);
+
+    void validateLesson(final Long lessonId);
 
 }

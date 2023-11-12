@@ -35,8 +35,8 @@ public class LikeService {
 
     @Transactional
     public LikePostResult createLikeOfAcademy(final LikePostParam param) {
-        validateMember(param.memberId());
-        validateAcademy(param.academyId());
+        memberAccessService.validateMember(param.memberId());
+        academyAccessService.validateAcademy(param.academyId());
 
         long likeCount = likeRepository.countByMemberId(param.memberId());
 
@@ -51,12 +51,14 @@ public class LikeService {
     }
 
     public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
-        validateMember(memberId);
+        memberAccessService.validateMember(memberId);
 
         likeRepository.deleteById(likeId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {
+        memberAccessService.validateMember(memberId);
+
         List<Like> likes = likeRepository.findByMemberId(memberId);
 
         List<AcademyFeeInfo> academyFeeInfos = likes.stream()
@@ -70,19 +72,4 @@ public class LikeService {
         return LikeGetResult.of(academyFeeInfos, totalFee);
     }
 
-    private void validateMember(final Long memberId) {
-        boolean isExistMember = memberAccessService.existsMember(memberId);
-
-        if (!isExistMember) {
-            throw new MemberException("존재하지 않는 멤버입니다.");
-        }
-    }
-
-    private void validateAcademy(final Long academyId) {
-        boolean isExistAcademy = academyAccessService.existsAcademy(academyId);
-
-        if (!isExistAcademy) {
-            throw new AcademyException("존재하지 않는 학원입니다.");
-        }
-    }
 }

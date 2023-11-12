@@ -24,7 +24,7 @@ public interface AcademyRepository {
 
     AcademyFee findAcademyFeeInfo(Long academyId);
 
-    boolean existsByAcademyId(Long academyId);
+    boolean existsById(Long academyId);
 
     void deleteAll();
 }

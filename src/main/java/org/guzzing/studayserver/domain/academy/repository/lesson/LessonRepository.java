@@ -11,4 +11,6 @@ public interface LessonRepository {
 
     void deleteAll();
 
+    boolean existsById(final Long lessonId);
+
 }
