@@ -18,7 +18,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0.21
+        image: mysql:8.0.35
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: test
@@ -46,9 +46,16 @@ jobs:
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_DEFAULT_YML_CONTENT }}" > src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_AUTH_YML_CONTENT }}" > src/main/resources/application-auth.yml
+          mkdir -p src/test/resources
+          
+          echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
+          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
+          echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+
+          echo "${{ secrets.TEST_APPLICATION_YML_CONTENT }}" > src/test/resources/application.yml
+          echo "${{ secrets.TEST_APPLICATION_TEST_YML_CONTENT }}" > src/test/resources/application-test.yml
+          echo "${{ secrets.TEST_APPLICATION_OAUTH_YML_CONTENT }}" > src/test/resources/application-oauth.yml
 
       - name: Build with gradle
         run: ./gradlew build

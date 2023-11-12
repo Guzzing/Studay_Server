@@ -29,13 +29,13 @@ public class ChildService {
     public Long create(ChildCreateParam param) {
         Member member = getMember(param.memberId());
 
-        Child savedChild = childRepository.save(new Child(param.nickname(), param.grade()));
-        savedChild.assignToNewMemberOnly(member);
+        Child child = new Child(param.nickname(), param.grade());
+        child.assignToNewMemberOnly(member);
 
+        Child savedChild = childRepository.save(child);
         return savedChild.getId();
     }
 
-    @Transactional
     public ChildrenFindResult findByMemberId(Long memberId) {
         Member member = getMember(memberId);
         List<Child> children = member.getChildren();
