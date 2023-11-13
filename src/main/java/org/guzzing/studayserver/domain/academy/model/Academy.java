@@ -36,6 +36,7 @@ public class Academy extends BaseEntity {
     @Column(name = "max_education_fee")
     private Long maxEducationFee;
 
+    @Column(nullable = false, columnDefinition = "point")
     private Point point;
 
     protected Academy(

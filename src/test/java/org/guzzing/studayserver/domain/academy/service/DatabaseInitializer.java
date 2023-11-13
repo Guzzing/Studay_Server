@@ -1,29 +1,40 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DatabaseInitializer {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public DatabaseInitializer(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         initializeDatabase();
     }
 
     private void initializeDatabase() {
-        // 인덱스 존재 여부 확인
-        String checkIndexQuery = "SELECT COUNT(*) FROM information_schema.statistics " +
+
+        String updateSIDQuery =  "UPDATE academies SET point = ST_SRID(point, 4326) WHERE ST_SRID(point) <> 4326";
+        jdbcTemplate.execute(updateSIDQuery);
+
+        String checkFulltextIndexQuery = "SELECT COUNT(*) FROM information_schema.statistics " +
                 "WHERE table_schema = DATABASE() AND table_name = 'academies' AND index_name = 'ft_index'";
 
-        Integer count = jdbcTemplate.queryForObject(checkIndexQuery, Integer.class);
+        String checkRIndexQuery = "SELECT COUNT(*) FROM information_schema.statistics " +
+                "WHERE table_schema = DATABASE() AND table_name = 'academies' AND index_name = 'sp_index'";
 
-        // 인덱스가 존재하지 않으면 생성
-        if (count != null && count == 0) {
-            String createIndexQuery = "ALTER TABLE academies ADD FULLTEXT INDEX ft_index (academy_name) WITH PARSER ngram";
+
+        Integer fulltextIndexCount = jdbcTemplate.queryForObject(checkFulltextIndexQuery, Integer.class);
+        Integer rIndexCount = jdbcTemplate.queryForObject(checkRIndexQuery,Integer.class);
+
+        if (fulltextIndexCount != null && fulltextIndexCount == 0) {
+            String createIndexQuery = "CREATE FULLTEXT INDEX ft_index ON academies (academy_name) WITH PARSER ngram";
             jdbcTemplate.execute(createIndexQuery);
         }
+
+        if (rIndexCount != null && rIndexCount == 0) {
+            String createIndexQuery = "CREATE SPATIAL INDEX sp_index ON academies (point)";
+            jdbcTemplate.execute(createIndexQuery);
+        }
+
     }
 }
