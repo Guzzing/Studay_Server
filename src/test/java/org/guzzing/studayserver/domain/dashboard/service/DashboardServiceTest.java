@@ -13,6 +13,7 @@ import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.global.exception.DashboardException;
@@ -169,6 +170,20 @@ class DashboardServiceTest {
 
         assertThat(results).isNotEmpty();
         assertThat(results.get(0).isDeleted()).isTrue();
+    }
+
+    @Test
+    @DisplayName("대시보드 활성화 여부를 반전한다.")
+    void toggleActive_DashboardActiveBoolean_Revert() {
+        // Given
+        final long memberId = 1L;
+        final Dashboard activeEntity = dashboardFixture.createActiveEntity();
+
+        // When
+        final DashboardPatchResult result = dashboardService.toggleActiveOfDashboard(activeEntity.getId(), memberId);
+
+        // Then
+        assertThat(result.active()).isFalse();
     }
 
 }

@@ -10,11 +10,13 @@ import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardC
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -105,6 +107,13 @@ public class DashboardRestController {
                 .body(responses);
     }
 
+    /**
+     * 비활성화된 대시보드 제거
+     *
+     * @param dashboardId
+     * @param memberId
+     * @return Void
+     */
     @PatchMapping(path = "/{dashboardId}")
     public ResponseEntity<Void> removeDashboard(
             @PathVariable final Long dashboardId,
@@ -115,6 +124,26 @@ public class DashboardRestController {
         return ResponseEntity
                 .status(NO_CONTENT)
                 .build();
+    }
+
+    /**
+     * 대시보드 활성화 여부 반전
+     *
+     * @param dashboardId
+     * @param memberId
+     * @return DashboardPatchResponse
+     */
+    @PatchMapping(path = "/{dashboardId}/toggle")
+    public ResponseEntity<DashboardPatchResponse> revertActiveOfDashboard(
+            @PathVariable final Long dashboardId,
+            @MemberId final Long memberId
+    ) {
+        final DashboardPatchResult result = dashboardService.toggleActiveOfDashboard(dashboardId, memberId);
+        final DashboardPatchResponse response = controllerConverter.from(result);
+
+        return ResponseEntity
+                .status(OK)
+                .body(response);
     }
 
 }

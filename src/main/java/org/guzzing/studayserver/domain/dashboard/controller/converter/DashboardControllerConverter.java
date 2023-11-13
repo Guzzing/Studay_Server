@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
@@ -22,6 +23,7 @@ import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
@@ -68,6 +70,10 @@ public class DashboardControllerConverter {
                 .toList();
 
         return new DashboardGetResponses(responses);
+    }
+
+    public DashboardPatchResponse from(final DashboardPatchResult result) {
+        return new DashboardPatchResponse(result.dashboardId(), result.active());
     }
 
     private List<Schedule> convertToSchedules(final ScheduleInfos scheduleInfos) {

@@ -335,4 +335,43 @@ class DashboardControllerTest {
                 ));
     }
 
+    @Test
+    @DisplayName("대시보의 활성화여부를 반전한다.")
+    @WithMockCustomOAuth2LoginUser
+    void revertToggleActive_Dashboard() throws Exception {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
+
+        final Dashboard dashboard = dashboardFixture.createActiveEntity();
+
+        // When
+        final ResultActions perform = mockMvc.perform(patch("/dashboards/{dashboardId}/toggle", dashboard.getId())
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.dashboardId").value(dashboard.getId()))
+                .andExpect(jsonPath("$.active").value(false))
+                .andDo(document("toggle-dashboard",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("dashboardId").description("대시보드 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                fieldWithPath("active").type(BOOLEAN).description("대시보드 활성화 여부")
+                        )
+                ));
+    }
+
 }

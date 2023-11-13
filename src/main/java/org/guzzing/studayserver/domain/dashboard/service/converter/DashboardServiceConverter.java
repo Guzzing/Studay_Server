@@ -10,6 +10,7 @@ import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardServiceConverter {
 
-    // Post
     public Dashboard to(final DashboardPostParam param) {
         return new Dashboard(
                 param.childId(),
@@ -48,7 +48,6 @@ public class DashboardServiceConverter {
         );
     }
 
-    // Get
     public DashboardGetResult from(
             final Dashboard entity,
             final ChildInfo childInfo,
@@ -70,6 +69,10 @@ public class DashboardServiceConverter {
 
     public DashboardGetResults from(final List<DashboardGetResult> results) {
         return new DashboardGetResults(results);
+    }
+
+    public DashboardPatchResult fromPatch(final Dashboard entity) {
+        return new DashboardPatchResult(entity.getId(), entity.isActive());
     }
 
     private List<DashboardSchedule> convertToDashboardSchedules(final ScheduleInfos scheduleInfos) {

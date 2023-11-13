@@ -77,6 +77,11 @@ public class Dashboard {
         this.deleted = deleted;
     }
 
+    public Dashboard toggleActive() {
+        this.active = !active;
+        return this;
+    }
+
     public void delete() {
         this.deleted = true;
     }

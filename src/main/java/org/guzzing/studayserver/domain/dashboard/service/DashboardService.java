@@ -9,6 +9,7 @@ import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServ
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
@@ -97,6 +98,15 @@ public class DashboardService {
         }
 
         dashboard.delete();
+    }
+
+    public DashboardPatchResult toggleActiveOfDashboard(final long dashboardId, final long memberId) {
+        memberAccessService.validateMember(memberId);
+
+        final Dashboard dashboard = getDashboard(dashboardId)
+                .toggleActive();
+
+        return serviceConverter.fromPatch(dashboard);
     }
 
     private Dashboard getDashboard(final long dashboardId) {
