@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
     //global
     INTERNAL_SERVER_ERROR("G001", "Internal Server Error"),
+    ILLEGAL_ARGUMENT_ERROR("E001", "잘못된 입력입니다."),
+    ILLEGAL_STATE_ERROR("E002", "잘못된 상태입니다"),
 
     INVALID_INPUT_VALUE_ERROR("G002", "유효하지 않은 입력값입니다."),
     INVALID_METHOD_ERROR("G003", "Method Argument가 적절하지 않습니다."),

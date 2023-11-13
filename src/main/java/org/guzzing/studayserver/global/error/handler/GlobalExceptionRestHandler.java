@@ -1,15 +1,17 @@
 package org.guzzing.studayserver.global.error.handler;
 
+import static org.guzzing.studayserver.global.error.response.ErrorCode.ILLEGAL_ARGUMENT_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.ILLEGAL_STATE_ERROR;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.INTERNAL_SERVER_ERROR;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_INPUT_VALUE_ERROR;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.INVALID_METHOD_ERROR;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.NOT_FOUND_ENTITY;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_BODY_MISSING_ERROR;
+import static org.guzzing.studayserver.global.error.response.ErrorCode.REQUEST_PARAM_MISSING_ERROR;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -47,7 +49,7 @@ public class GlobalExceptionRestHandler {
     protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderExceptionException(
             MissingServletRequestParameterException ex) {
         log.warn("Handle MissingServletRequestParameterException", ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_PARAM_MISSING_ERROR, ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(REQUEST_PARAM_MISSING_ERROR, ex.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -64,7 +66,7 @@ public class GlobalExceptionRestHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException e) {
         log.warn("Handle MethodArgumentTypeMismatchException", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(INVALID_INPUT_VALUE_ERROR, e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -90,7 +92,7 @@ public class GlobalExceptionRestHandler {
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         log.warn("Handle BindException : ", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE_ERROR, e.getBindingResult());
+        final ErrorResponse response = ErrorResponse.of(INVALID_INPUT_VALUE_ERROR, e.getBindingResult());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -120,6 +122,27 @@ public class GlobalExceptionRestHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleAllException(IllegalArgumentException e) {
+        log.error("Handle Exception :", e);
+        final ErrorResponse response = ErrorResponse.of(ILLEGAL_ARGUMENT_ERROR, e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleAllException(IllegalStateException e) {
+        log.error("Handle Exception :", e);
+        final ErrorResponse response = ErrorResponse.of(ILLEGAL_STATE_ERROR, e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
 
