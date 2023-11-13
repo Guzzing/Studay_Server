@@ -12,9 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.DayOfWeek;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 
 @Getter

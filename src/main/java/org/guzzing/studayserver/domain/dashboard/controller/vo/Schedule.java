@@ -6,7 +6,7 @@ import java.util.List;
 import org.guzzing.studayserver.global.exception.DashboardException;
 
 public record Schedule(
-        String dayOfWeek,
+        Integer dayOfWeek,
         String startTime,
         String endTime,
         String repeatance

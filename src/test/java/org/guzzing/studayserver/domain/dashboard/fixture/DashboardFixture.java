@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.dashboard.fixture;
 
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.FRIDAY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.MONDAY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.NONE;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.SATURDAY;
+import static java.time.DayOfWeek.FRIDAY;
+import static java.time.DayOfWeek.MONDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
@@ -44,7 +43,7 @@ public class DashboardFixture {
     public DashboardPostRequest makePostRequest() {
         return new DashboardPostRequest(
                 childId, academyId, lessonId,
-                List.of(new Schedule("SATURDAY", "12:00", "21:04", "BIWEEKLY")),
+                List.of(new Schedule(6, "12:00", "21:04", "BIWEEKLY")),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 new SimpleMemo(true, false, false, true, false, true));
     }
@@ -53,8 +52,8 @@ public class DashboardFixture {
         return new DashboardPostParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
-                        new ScheduleInfo(NONE, "14:00", "18:00", DAILY),
-                        new ScheduleInfo(SATURDAY, "12:30", "12:04", BIWEEKLY))),
+                        new ScheduleInfo(null, "14:00", "18:00", DAILY),
+                        new ScheduleInfo(SUNDAY, "12:30", "12:04", BIWEEKLY))),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 Map.of(
                         SimpleMemoType.KINDNESS, true,

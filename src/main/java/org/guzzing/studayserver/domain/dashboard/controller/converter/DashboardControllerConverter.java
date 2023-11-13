@@ -7,6 +7,7 @@ import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.SHUTTLE_AVAILABILITY;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +17,6 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
@@ -73,7 +73,7 @@ public class DashboardControllerConverter {
     private List<Schedule> convertToSchedules(final ScheduleInfos scheduleInfos) {
         return scheduleInfos.schedules().stream()
                 .map(scheduleInfo -> new Schedule(
-                        scheduleInfo.dayOfWeek().name(),
+                        scheduleInfo.dayOfWeek().getValue(),
                         scheduleInfo.startTime(),
                         scheduleInfo.endTime(),
                         scheduleInfo.repeatance().name()))

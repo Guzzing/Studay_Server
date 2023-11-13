@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.dashboard.model;
 
+import static java.time.DayOfWeek.FRIDAY;
+import static java.time.DayOfWeek.MONDAY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.FRIDAY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.MONDAY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;

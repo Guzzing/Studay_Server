@@ -102,7 +102,7 @@ class DashboardControllerTest {
                                 fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
                                 fieldWithPath("lessonId").type(NUMBER).description("수업 아이디"),
                                 fieldWithPath("schedules").type(ARRAY).description("일정 메모 목록"),
-                                fieldWithPath("schedules[].dayOfWeek").type(STRING).description("요일"),
+                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
                                 fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
                                 fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
                                 fieldWithPath("schedules[].repeatance").type(STRING).description("반복 종류"),
@@ -184,7 +184,7 @@ class DashboardControllerTest {
                                 fieldWithPath("lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
                                 fieldWithPath("lessonInfo.subject").type(STRING).description("수업 과목"),
                                 fieldWithPath("schedules").type(ARRAY).description("스케줄 메모 목록"),
-                                fieldWithPath("schedules[].dayOfWeek").type(STRING).description("요일"),
+                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
                                 fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
                                 fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
                                 fieldWithPath("schedules[].repeatance").type(STRING)
@@ -276,7 +276,7 @@ class DashboardControllerTest {
                                 fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
                                 fieldWithPath("responses[].lessonInfo.subject").type(STRING).description("수업 과목"),
                                 fieldWithPath("responses[].schedules").type(ARRAY).description("스케줄 메모 목록"),
-                                fieldWithPath("responses[].schedules[].dayOfWeek").type(STRING).description("요일"),
+                                fieldWithPath("responses[].schedules[].dayOfWeek").type(NUMBER).description("요일"),
                                 fieldWithPath("responses[].schedules[].startTime").type(STRING).description("시작 시간"),
                                 fieldWithPath("responses[].schedules[].endTime").type(STRING).description("종료 시간"),
                                 fieldWithPath("responses[].schedules[].repeatance").type(STRING)
