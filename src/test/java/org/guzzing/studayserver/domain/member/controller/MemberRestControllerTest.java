@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
@@ -17,7 +16,6 @@ import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterR
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -117,13 +115,14 @@ class MemberRestControllerTest {
     class getInformation {
 
         @Test
+        @WithMockCustomOAuth2LoginUser(memberId = 999L)
         @DisplayName("멤버가 존재하지 않는다면 예외를 발생시킨다.")
         void whenMemberIdDoesNotExist_shouldThrowException() throws Exception {
-            // given
+            // Given
             Long nonExistentMemberId = 999L;
             given(memberService.getById(nonExistentMemberId)).willThrow(new IllegalArgumentException());
 
-            // when & then
+            // When & Then
             mockMvc.perform(get("/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
@@ -132,21 +131,24 @@ class MemberRestControllerTest {
         }
 
         @Test
+        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         @DisplayName("멤버가 존재한다면 상세 정보를 반환한다.")
         void whenMemberIdExists_shouldReturnMemberInformation() throws Exception {
-            // given
+            // Given
+            String memberNickname = "테스트 닉네임";
+            String memberEmail = "test@example.com";
             Long existingMemberId = 1L;
-            MemberInformationResult mockResult = new MemberInformationResult("테스트 닉네임", "test@example.com", List.of());
+            MemberInformationResult mockResult = new MemberInformationResult(memberNickname, memberEmail, List.of());
             given(memberService.getById(existingMemberId)).willReturn(mockResult);
 
-            // when & then
+            // When & Then
             mockMvc.perform(get("/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .param("memberId", existingMemberId.toString()))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.nickname").value("TestNickname"))
-                    .andExpect(jsonPath("$.email").value("test@example.com"));
+                    .andExpect(jsonPath("$.nickname").value(memberNickname))
+                    .andExpect(jsonPath("$.email").value(memberEmail));
         }
     }
 }

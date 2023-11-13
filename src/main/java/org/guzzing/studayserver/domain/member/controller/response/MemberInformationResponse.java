@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.member.controller.response;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
+import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult.MemberChildInformationResult;
 
 public record MemberInformationResponse(
         String nickname,
@@ -17,7 +18,11 @@ public record MemberInformationResponse(
     }
 
     public static MemberInformationResponse from(MemberInformationResult result) {
-        return new MemberInformationResponse(null, null, null);
+        List<MemberChildInformationResponse> childInformationResponses = result.memberChildInformationResults().stream()
+                .map(MemberChildInformationResponse::from)
+                .toList();
+
+        return new MemberInformationResponse(result.nickname(), result.email(), childInformationResponses);
     }
 
     public record MemberChildInformationResponse(
@@ -26,5 +31,8 @@ public record MemberInformationResponse(
             String schedule
     ) {
 
+        static MemberChildInformationResponse from(MemberChildInformationResult result) {
+            return new MemberChildInformationResponse(result.childId(), result.childName(), result.schedule());
+        }
     }
 }
