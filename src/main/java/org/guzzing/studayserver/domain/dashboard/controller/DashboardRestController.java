@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.dashboard.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -18,6 +19,7 @@ import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardP
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,6 +103,18 @@ public class DashboardRestController {
         return ResponseEntity
                 .status(OK)
                 .body(responses);
+    }
+
+    @PatchMapping(path = "/{dashboardId}")
+    public ResponseEntity<Void> removeDashboard(
+            @PathVariable final Long dashboardId,
+            @MemberId final Long memberId
+    ) {
+        dashboardService.deleteDashboard(dashboardId, memberId);
+
+        return ResponseEntity
+                .status(NO_CONTENT)
+                .build();
     }
 
 }

@@ -9,6 +9,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -301,6 +302,35 @@ class DashboardControllerTest {
                                         .description("셔틀 운행 여부 메모"),
                                 fieldWithPath("responses[].active").type(BOOLEAN).description("활성화 여부"),
                                 fieldWithPath("responses[].deleted").type(BOOLEAN).description("삭제 여부")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("비활성화된 대시보드를 제거한다.")
+    @WithMockCustomOAuth2LoginUser
+    void removeDashboard_InActiveDashboard_Success() throws Exception {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
+
+        final Dashboard dashboard = dashboardFixture.createNotActiveEntity();
+
+        // When
+        final ResultActions perform = mockMvc.perform(patch("/dashboards/{dashboardId}", dashboard.getId())
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-dashboard",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("dashboardId").description("대시보드 아이디")
                         )
                 ));
     }

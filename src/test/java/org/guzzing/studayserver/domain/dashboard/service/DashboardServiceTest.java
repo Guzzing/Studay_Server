@@ -1,9 +1,11 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
@@ -13,6 +15,7 @@ import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardG
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.global.exception.DashboardException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +129,46 @@ class DashboardServiceTest {
             assertThat(result.get(0).active()).isTrue();
             assertThat(result.get(1).active()).isFalse();
         });
+    }
+
+    @Test
+    @DisplayName("활성화된 대시보드는 제거할 수 없다.")
+    void deleteDashboard_ActiveDashboard_NotDeletable() {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
+
+        final long memberId = 1L;
+
+        final Dashboard activeDashboard = dashboardFixture.createActiveEntity();
+
+        // When & Then
+        assertThatThrownBy(() -> dashboardService.deleteDashboard(activeDashboard.getId(), memberId))
+                .isInstanceOf(DashboardException.class)
+                .hasMessage("비활성화된 대시보드만 삭제가 가능합니다.");
+    }
+
+    @Test
+    @DisplayName("바활성화된 대시보드는 제거할 수 있다.")
+    void deleteDashboard_InActiveDashboard_Deletable() {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
+
+        final long memberId = 1L;
+
+        final Dashboard inActiveDashboard = dashboardFixture.createNotActiveEntity();
+
+        // When
+        dashboardService.deleteDashboard(inActiveDashboard.getId(), memberId);
+
+        // Then
+        final List<Dashboard> results = dashboardFixture.findAll();
+
+        assertThat(results).isNotEmpty();
+        assertThat(results.get(0).isDeleted()).isTrue();
     }
 
 }

@@ -110,4 +110,8 @@ public class DashboardFixture {
         return dashboardRepository.save(dashboard);
     }
 
+    public List<Dashboard> findAll() {
+        return dashboardRepository.findAll();
+    }
+
 }

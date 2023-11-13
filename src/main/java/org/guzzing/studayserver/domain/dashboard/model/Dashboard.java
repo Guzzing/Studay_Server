@@ -77,6 +77,10 @@ public class Dashboard {
         this.deleted = deleted;
     }
 
+    public void delete() {
+        this.deleted = true;
+    }
+
     private void setScheduleWithDashboard(final List<DashboardSchedule> dashboardSchedules) {
         dashboardSchedules.forEach(dashboardSchedule -> dashboardSchedule.setDashboard(this));
     }
