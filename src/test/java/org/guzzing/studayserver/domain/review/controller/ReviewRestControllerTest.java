@@ -30,8 +30,10 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
+import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +64,17 @@ class ReviewRestControllerTest {
     @MockBean
     private AcademyAccessService academyAccessService;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @BeforeEach
+    void setUp() {
+        reviewRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("리뷰 타입이 3개 이하고, 해당 학원에 대해서 등록한 학원이 없다면 리뷰를 등록한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void registerReview_Success() throws Exception {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);
@@ -110,7 +120,7 @@ class ReviewRestControllerTest {
 
     @Test
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
+    @WithMockCustomOAuth2LoginUser
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
         given(memberAccessService.existsMember(any())).willReturn(true);

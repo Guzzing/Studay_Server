@@ -3,9 +3,7 @@ package org.guzzing.studayserver.domain.academy.model.vo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
-
 import lombok.Getter;
 import org.springframework.util.Assert;
 

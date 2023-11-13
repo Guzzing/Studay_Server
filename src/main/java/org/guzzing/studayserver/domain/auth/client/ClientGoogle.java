@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.auth.client;
 
-import org.guzzing.studayserver.domain.auth.dto.GoogleUserResponse;
+import org.guzzing.studayserver.domain.auth.client.dto.GoogleUser;
 import org.guzzing.studayserver.domain.auth.exception.TokenValidFailedException;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
@@ -22,7 +22,7 @@ public class ClientGoogle implements ClientProxy {
     @Override
     public Member getUserData(String accessToken) {
 
-        GoogleUserResponse googleUserResponse = webClient.get()
+        GoogleUser googleUser = webClient.get()
                 .uri("https://www.googleapis.com/oauth2/v3/userinfo")
                 .headers(h -> h.set("Authorization", accessToken))
                 .retrieve()
@@ -30,14 +30,12 @@ public class ClientGoogle implements ClientProxy {
                         response -> Mono.error(new TokenValidFailedException(ErrorCode.UNAUTHORIZED_TOKEN)))
                 .onStatus(status -> status.is5xxServerError(),
                         response -> Mono.error(new TokenValidFailedException(ErrorCode.OAUTH_CLIENT_SERVER_ERROR)))
-                .bodyToMono(GoogleUserResponse.class)
+                .bodyToMono(GoogleUser.class)
                 .block();
 
-        System.out.println("googleUserResponse:" + googleUserResponse);
-
         return Member.of(
-                googleUserResponse.getName(),
-                googleUserResponse.getSub(),
+                googleUser.getName(),
+                googleUser.getSub(),
                 MemberProvider.GOOGLE,
                 RoleType.USER
         );

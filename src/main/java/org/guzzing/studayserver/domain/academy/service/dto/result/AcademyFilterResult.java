@@ -13,6 +13,7 @@ public record AcademyFilterResult(
         String shuttleAvailable,
         boolean isLiked
 ) {
+
     public static AcademyFilterResult from(AcademyByFiltering academyByFiltering) {
         return new AcademyFilterResult(
                 academyByFiltering.academyId(),

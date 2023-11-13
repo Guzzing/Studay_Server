@@ -10,4 +10,6 @@ public interface LikeJpaRepository extends JpaRepository<Like, Long>, LikeReposi
 
     long countByMemberId(final Long memberId);
 
+    boolean existsByMemberIdAndAcademyId(final Long memberId, final Long AcademyId);
+
 }

@@ -4,8 +4,9 @@ public record AcademiesByNameParam(
         String academyName,
         int pageNumber
 ) {
+
     public static AcademiesByNameParam of(String academyName,
-                                          int pageNumber) {
+            int pageNumber) {
         return new AcademiesByNameParam(academyName, pageNumber);
     }
 

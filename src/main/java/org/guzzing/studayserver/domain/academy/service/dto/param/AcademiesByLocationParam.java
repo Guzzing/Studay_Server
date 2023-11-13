@@ -4,8 +4,9 @@ public record AcademiesByLocationParam(
         Double baseLatitude,
         Double baseLongitude
 ) {
+
     public static AcademiesByLocationParam of(Double baseLatitude,
-                                              Double baseLongitude) {
+            Double baseLongitude) {
         return new AcademiesByLocationParam(baseLatitude, baseLongitude);
     }
 

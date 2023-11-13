@@ -13,6 +13,7 @@ public record AcademiesByLocationResult(
         String shuttleAvailable,
         boolean isLiked
 ) {
+
     public static AcademiesByLocationResult from(AcademiesByLocation academiesByLocation) {
         return new AcademiesByLocationResult(
                 academiesByLocation.academyId(),

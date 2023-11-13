@@ -6,6 +6,7 @@ import org.springframework.data.domain.Slice;
 public record AcademiesByNameResponses(
         Slice<AcademiesByNameResponse> academiesByNameResponses
 ) {
+
     public static AcademiesByNameResponses from(AcademiesByNameResults academiesByNameResults) {
         return new AcademiesByNameResponses(
                 academiesByNameResults.academiesByNameResults()

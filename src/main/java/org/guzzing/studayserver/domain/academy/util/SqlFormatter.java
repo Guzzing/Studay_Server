@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.academy.util;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
-
-import java.util.List;
 
 public class SqlFormatter {
     private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)',4326)";
