@@ -16,6 +16,9 @@ import org.locationtech.jts.geom.Point;
 
 public class AcademyFixture {
 
+    private static final double LATITUDE = 37.4449168;
+    private static final double LONGITUDE = 127.1388684;
+
     public static List<AcademyInfo> academyInfos() {
         return List.of(
                 AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
@@ -28,14 +31,20 @@ public class AcademyFixture {
     }
 
     public static Academy academySungnam() {
-        return Academy.of(AcademyFixture.academyInfos().get(1), Address.of("경기도 성남시 중원구 망포동"),
-                Location.of(37.4449168, 127.1388684));
+        Academy academy = Academy.of(AcademyFixture.academyInfos().get(1), Address.of("경기도 성남시 중원구 망포동"),
+                Location.of(LATITUDE, LONGITUDE));
+        academy.changePoint(GeometryTypeFactory.createPoint(LATITUDE, LONGITUDE));
+        return academy;
     }
 
     public static List<Academy> academies() {
         return academyInfos().stream()
-                .map(academyInfo -> Academy.of(academyInfo, Address.of("경기도 성남시 중원구 망포동"),
-                        Location.of(37.4449168, 127.1388684))).toList();
+                .map(academyInfo -> {
+                    Academy academy = Academy.of(academyInfo, Address.of("경기도 성남시 중원구 망포동"),
+                            Location.of(37.4449168, 127.1388684));
+                    academy.changePoint(GeometryTypeFactory.createPoint(LATITUDE, LONGITUDE));
+                    return academy;
+                }).toList();
     }
 
     /**
