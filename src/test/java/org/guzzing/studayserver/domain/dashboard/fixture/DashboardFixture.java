@@ -23,14 +23,21 @@ import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
+import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
+import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 
 public class DashboardFixture {
 
+    public static long childId = 1L;
+    public static long academyId = 1L;
+    public static long lessonId = 1L;
+
     public static DashboardPostRequest makePostRequest() {
         return new DashboardPostRequest(
-                1L, 1L, 1L,
+                childId, academyId, lessonId,
                 List.of(new Schedule("SATURDAY", LocalTime.of(12, 30), LocalTime.of(21, 4), "BIWEEKLY")),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 new SimpleMemo(true, false, false, true, false, true));
@@ -54,13 +61,25 @@ public class DashboardFixture {
 
     public static Dashboard makeEntity() {
         return new Dashboard(
-                1L, 1L,
+                1L, 1L, 1L,
                 List.of(new DashboardSchedule(MONDAY, LocalTime.of(14, 0), LocalTime.of(18, 0), WEEKLY),
                         new DashboardSchedule(FRIDAY, LocalTime.of(13, 30), LocalTime.of(14, 50), BIWEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
                 List.of(CHEAP_FEE, LOVELY_TEACHING),
                 true, true
         );
+    }
+
+    public static ChildInfo makeChildInfo() {
+        return new ChildInfo(childId, "홍길동");
+    }
+
+    public static AcademyInfo makeAcademyInfo() {
+        return new AcademyInfo(academyId, "메가스터디", "서울특별시 동작구 노량진동 메가스터디타워");
+    }
+
+    public static LessonInfo makeLessonInfo() {
+        return new LessonInfo(lessonId, "국어");
     }
 
 }

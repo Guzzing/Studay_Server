@@ -7,19 +7,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -50,33 +50,25 @@ public class DashboardRestController {
             @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
-        final DashboardResult result = dashboardService.createDashboard(param, memberId);
-        final DashboardPostResponse response = controllerConverter.postResponseFromResult(result);
+        final DashboardPostResult result = dashboardService.createDashboard(param, memberId);
+        final DashboardPostResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(CREATED)
                 .body(response);
     }
 
-    /**
-     * 대시보드 활성화 여부에 따라서 아이의 대시보드 조회
-     *
-     * @param childId
-     * @param activeOnly
-     * @param memberId
-     * @return DashboardGetResponses
-     */
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardGetResponses> getDashboard(
-            @RequestParam final Long childId,
-            @RequestParam(name = "active-only", defaultValue = "false") final Boolean activeOnly,
+    @GetMapping(path = "/{dashboardId}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DashboardGetResponse> getDashboard(
+            @PathVariable final Long dashboardId,
             @MemberId final Long memberId
     ) {
-        final DashboardResults results = dashboardService.findDashboardOfChild(childId, activeOnly, memberId);
-        final DashboardGetResponses responses = controllerConverter.getResponsesFromResults(results);
+        final DashboardGetResult result = dashboardService.findDashboard(dashboardId, memberId);
+        final DashboardGetResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(OK)
-                .body(responses);
+                .body(response);
     }
+
 }

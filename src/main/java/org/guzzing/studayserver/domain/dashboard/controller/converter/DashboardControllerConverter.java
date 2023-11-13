@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
@@ -20,8 +19,8 @@ import org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -31,39 +30,33 @@ public class DashboardControllerConverter {
 
     public DashboardPostParam to(final DashboardPostRequest request) {
         return new DashboardPostParam(
-                request.academyId(),
                 request.childId(),
+                request.academyId(),
                 request.lessonId(),
                 convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
                 convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
-    public DashboardPostResponse postResponseFromResult(final DashboardResult result) {
+    public DashboardPostResponse from(final DashboardPostResult result) {
         return new DashboardPostResponse(
                 result.dashboardId(),
                 result.childId(),
+                result.academyId(),
                 result.lessonId());
     }
 
-    public DashboardGetResponse getResponseFromResult(final DashboardResult result) {
+    public DashboardGetResponse from(final DashboardGetResult result) {
         return new DashboardGetResponse(
                 result.dashboardId(),
-                result.childId(),
-                result.lessonId(),
+                result.childInfo(),
+                result.academyInfo(),
+                result.lessonInfo(),
                 convertToSchedules(result.scheduleInfos()),
                 result.paymentInfo(),
                 convertToSimpleMemo(result.simpleMemoTypeMap()),
-                result.active());
-    }
-
-    public DashboardGetResponses getResponsesFromResults(final DashboardResults results) {
-        final List<DashboardGetResponse> responses = results.results()
-                .stream()
-                .map(this::getResponseFromResult)
-                .toList();
-
-        return new DashboardGetResponses(responses);
+                result.active(),
+                result.deleted());
     }
 
     private List<Schedule> convertToSchedules(final ScheduleInfos scheduleInfos) {

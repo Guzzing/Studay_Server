@@ -32,6 +32,9 @@ public class Dashboard {
     @Column(name = "child_id", nullable = false)
     private Long childId;
 
+    @Column(name = "academy_id", nullable = false)
+    private Long academyId;
+
     @Column(name = "lesson_id", nullable = false)
     private Long lessonId;
 
@@ -54,6 +57,7 @@ public class Dashboard {
 
     public Dashboard(
             final Long childId,
+            final Long academyId,
             final Long lessonId,
             final List<DashboardSchedule> dashboardSchedules,
             final FeeInfo feeInfo,
@@ -64,6 +68,7 @@ public class Dashboard {
         setScheduleWithDashboard(dashboardSchedules);
 
         this.childId = childId;
+        this.academyId = academyId;
         this.lessonId = lessonId;
         this.dashboardSchedules = dashboardSchedules;
         this.feeInfo = feeInfo;

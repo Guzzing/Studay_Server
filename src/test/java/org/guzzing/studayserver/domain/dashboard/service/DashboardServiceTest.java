@@ -1,14 +1,16 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
-import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ class DashboardServiceTest {
     private MemberAccessService accessService;
     @MockBean
     private AcademyAccessService academyAccessService;
+    @MockBean
+    private ChildAccessService childAccessService;
 
     @Autowired
     private DashboardRepository dashboardRepository;
@@ -36,7 +40,7 @@ class DashboardServiceTest {
     @DisplayName("대시보드 생성에 성공한다.")
     void createDashboard_ByDashboardPostParam_ReturnDashboardResult() {
         // Given & Wnen
-        DashboardResult result = createDashboard(1L);
+        DashboardPostResult result = createDashboard(1L);
 
         // Then
         assertThat(result).satisfies(value -> {
@@ -46,46 +50,28 @@ class DashboardServiceTest {
     }
 
     @Test
-    @DisplayName("활성화된 대시보드만 조회한다.")
-    void findDashboardOfChild_OnlyActiveDashboard() {
+    @DisplayName("아이디로 대시보드를 조회한다.")
+    void findDashboard_ByDashboardId() {
         // Given
-        final Long childId = 1L;
-        final Boolean activeOnly = true;
-        final Long memberId = 1L;
+        given(childAccessService.findChildInfo(anyLong())).willReturn(DashboardFixture.makeChildInfo());
+        given(academyAccessService.findACademyInfo(anyLong())).willReturn(DashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(DashboardFixture.makeLessonInfo());
 
-        createDashboard(memberId);
+        final long memberId = 1L;
+        final DashboardPostResult postResult = createDashboard(memberId);
 
         // When
-        final DashboardResults dashboardResults = dashboardService.findDashboardOfChild(childId, activeOnly, memberId);
+        final DashboardGetResult getResult = dashboardService.findDashboard(postResult.dashboardId(), memberId);
 
         // Then
-        final List<DashboardResult> results = dashboardResults.results();
-
-        assertThat(results).isNotEmpty();
-        assertThat(results.get(0).active()).isTrue();
+        assertThat(getResult).satisfies(result -> {
+            assertThat(result.dashboardId()).isEqualTo(postResult.dashboardId());
+            assertThat(result.childInfo().childId()).isEqualTo(postResult.childId());
+            assertThat(result.lessonInfo().lessonId()).isEqualTo(postResult.lessonId());
+        });
     }
 
-    @Test
-    @DisplayName("아이의 모든 대시보드를 조회한다.")
-    void findDashboardOfChild_AllDashboard() {
-        // Given
-        final Long childId = 1L;
-        final Boolean activeOnly = true;
-        final Long memberId = 1L;
-
-        createDashboard(memberId);
-
-        // When
-        final DashboardResults dashboardResults = dashboardService.findDashboardOfChild(childId, activeOnly, memberId);
-
-        // Then
-        final List<DashboardResult> results = dashboardResults.results();
-
-        assertThat(results).isNotEmpty();
-        ;
-    }
-
-    private DashboardResult createDashboard(final Long memberId) {
+    private DashboardPostResult createDashboard(final Long memberId) {
         final DashboardPostParam param = DashboardFixture.makePostParam();
 
         return dashboardService.createDashboard(param, memberId);

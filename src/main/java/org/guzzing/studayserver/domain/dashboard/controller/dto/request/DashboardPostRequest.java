@@ -6,8 +6,8 @@ import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 
 public record DashboardPostRequest(
-        Long academyId,
         Long childId,
+        Long academyId,
         Long lessonId,
         List<Schedule> schedules,
         PaymentInfo paymentInfo,

@@ -1,14 +1,18 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
-import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResults;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
+import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
+import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.global.exception.DashboardException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,21 +24,24 @@ public class DashboardService {
     private final DashboardRepository dashboardRepository;
     private final MemberAccessService memberAccessService;
     private final AcademyAccessService academyAccessService;
+    private final ChildAccessService childAccessService;
 
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
             final DashboardRepository dashboardRepository,
             final MemberAccessService memberAccessService,
-            final AcademyAccessService academyAccessService
+            final AcademyAccessService academyAccessService,
+            final ChildAccessService childAccessService
     ) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
         this.memberAccessService = memberAccessService;
         this.academyAccessService = academyAccessService;
+        this.childAccessService = childAccessService;
     }
 
     @Transactional
-    public DashboardResult createDashboard(final DashboardPostParam param, final Long memberId) {
+    public DashboardPostResult createDashboard(final DashboardPostParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(param.academyId());
         academyAccessService.validateLesson(param.lessonId());
@@ -45,21 +52,17 @@ public class DashboardService {
         return serviceConverter.from(savedDashboard);
     }
 
-    public DashboardResults findDashboardOfChild(
-            final long childId,
-            final boolean activeOnly,
-            final long memberId
-    ) {
+    public DashboardGetResult findDashboard(final long dashboardId, final long memberId) {
         memberAccessService.validateMember(memberId);
 
-        if (activeOnly) {
-            final List<Dashboard> dashboards = dashboardRepository.findActiveOnlyByChildId(childId);
+        final Dashboard dashboard = dashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new DashboardException("해당하는 대시보드가 없습니다."));
 
-            return serviceConverter.from(dashboards);
-        }
+        final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
+        final AcademyInfo academyInfo = academyAccessService.findACademyInfo(dashboard.getAcademyId());
+        final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
 
-        final List<Dashboard> dashboards = dashboardRepository.findAllByChildId(childId);
-
-        return serviceConverter.from(dashboards);
+        return serviceConverter.from(dashboard, childInfo, academyInfo, lessonInfo);
     }
+
 }
