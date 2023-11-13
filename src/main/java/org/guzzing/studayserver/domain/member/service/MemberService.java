@@ -5,6 +5,7 @@ import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberAdditionalChildParam;
+import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,5 +36,9 @@ public class MemberService {
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
+    }
+
+    public MemberInformationResult getById(Long memberId) {
+        return new MemberInformationResult(null, null, null);
     }
 }
