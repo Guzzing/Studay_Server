@@ -1,11 +1,16 @@
 package org.guzzing.studayserver.domain.academy.util;
 
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 import java.util.List;
 
 public class SqlFormatter {
-    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)')";
+    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)',4326)";
+
+    private SqlFormatter() {
+        throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());
+    }
 
     public static String makeWhereInString(List<String> values) {
         StringBuilder builder = new StringBuilder("(");
@@ -24,7 +29,7 @@ public class SqlFormatter {
     public static String makeDiagonalByLineString(Location northEast, Location southWest) {
         return String.format(
                 LINESTRING_SQL,
-                northEast.getLongitude(), northEast.getLatitude(), southWest.getLongitude(), southWest.getLatitude()
+                northEast.getLatitude(),northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
         );
 
     }
