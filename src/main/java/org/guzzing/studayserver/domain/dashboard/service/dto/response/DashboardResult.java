@@ -7,7 +7,6 @@ import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 
 public record DashboardResult(
         Long dashboardId,
-        Long academyId,
         Long childId,
         Long lessonId,
         ScheduleInfos scheduleInfos,

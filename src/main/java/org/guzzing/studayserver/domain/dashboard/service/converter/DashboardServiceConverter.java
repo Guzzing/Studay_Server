@@ -9,6 +9,7 @@ import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResults;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -27,18 +28,25 @@ public class DashboardServiceConverter {
         );
     }
 
-    public DashboardResult from(final Long academyId, final Dashboard dashboard) {
+    public DashboardResult from(final Dashboard entity) {
         return new DashboardResult(
-                dashboard.getId(),
-                academyId,
-                dashboard.getChildId(),
-                dashboard.getLessonId(),
-                convertToScheduleInfos(dashboard.getDashboardSchedules()),
-                convertToPaymentInfo(dashboard.getFeeInfo()),
-                convertToSimpleMemoTypeMap(dashboard.getSimpleMemoTypes()),
-                dashboard.isActive(),
-                dashboard.isDeleted()
+                entity.getId(),
+                entity.getChildId(),
+                entity.getLessonId(),
+                convertToScheduleInfos(entity.getDashboardSchedules()),
+                convertToPaymentInfo(entity.getFeeInfo()),
+                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
+                entity.isActive(),
+                entity.isDeleted()
         );
+    }
+
+    public DashboardResults from(final List<Dashboard> entities) {
+        final List<DashboardResult> results = entities.stream()
+                .map(this::from)
+                .toList();
+
+        return new DashboardResults(results);
     }
 
     private List<DashboardSchedule> convertToDashboardSchedules(final ScheduleInfos scheduleInfos) {
