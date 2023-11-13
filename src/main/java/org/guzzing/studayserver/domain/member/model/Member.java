@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.Email;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;

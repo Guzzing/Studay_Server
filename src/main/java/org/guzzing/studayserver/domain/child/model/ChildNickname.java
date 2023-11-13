@@ -2,20 +2,19 @@ package org.guzzing.studayserver.domain.child.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NickName {
+public class ChildNickname {
 
     public static final int NAME_MAX_LENGTH = 200;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false)
     private String value;
 
-    public NickName(String value) {
+    public ChildNickname(String value) {
         validateName(value);
         this.value = value;
     }
@@ -31,23 +30,6 @@ public class NickName {
 
     public String getValue() {
         return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        NickName nickName1 = (NickName) o;
-        return Objects.equals(value, nickName1.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
     }
 
 }
