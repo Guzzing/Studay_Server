@@ -58,6 +58,13 @@ public class DashboardRestController {
                 .body(response);
     }
 
+    /**
+     * 학원 단건 조회
+     *
+     * @param dashboardId
+     * @param memberId
+     * @return
+     */
     @GetMapping(path = "/{dashboardId}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardGetResponse> getDashboard(
             @PathVariable final Long dashboardId,

@@ -37,10 +37,10 @@ public class DashboardSchedule {
     private DayOfWeek dayOfWeek;
 
     @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
+    private String startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
+    private String endTime;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "repeatance")
@@ -48,8 +48,8 @@ public class DashboardSchedule {
 
     public DashboardSchedule(
             final DayOfWeek dayOfWeek,
-            final LocalTime startTime,
-            final LocalTime endTime,
+            final String startTime,
+            final String endTime,
             final Repeatance repeatance
     ) {
         this.dayOfWeek = dayOfWeek;

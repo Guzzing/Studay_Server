@@ -11,8 +11,8 @@ import org.guzzing.studayserver.global.exception.DashboardException;
 
 public record ScheduleInfo(
         DayOfWeek dayOfWeek,
-        LocalTime startTime,
-        LocalTime endTime,
+        String startTime,
+        String endTime,
         Repeatance repeatance
 ) {
 

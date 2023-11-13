@@ -38,7 +38,7 @@ public class DashboardFixture {
     public static DashboardPostRequest makePostRequest() {
         return new DashboardPostRequest(
                 childId, academyId, lessonId,
-                List.of(new Schedule("SATURDAY", LocalTime.of(12, 30), LocalTime.of(21, 4), "BIWEEKLY")),
+                List.of(new Schedule("SATURDAY", "12:00", "21:04", "BIWEEKLY")),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 new SimpleMemo(true, false, false, true, false, true));
     }
@@ -47,8 +47,8 @@ public class DashboardFixture {
         return new DashboardPostParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
-                        new ScheduleInfo(NONE, LocalTime.of(14, 0), LocalTime.of(18, 0), DAILY),
-                        new ScheduleInfo(SATURDAY, LocalTime.of(12, 30), LocalTime.of(21, 4), BIWEEKLY))),
+                        new ScheduleInfo(NONE, "14:00", "18:00", DAILY),
+                        new ScheduleInfo(SATURDAY, "12:30", "12:04", BIWEEKLY))),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 Map.of(
                         SimpleMemoType.KINDNESS, true,
@@ -62,8 +62,8 @@ public class DashboardFixture {
     public static Dashboard makeEntity() {
         return new Dashboard(
                 1L, 1L, 1L,
-                List.of(new DashboardSchedule(MONDAY, LocalTime.of(14, 0), LocalTime.of(18, 0), WEEKLY),
-                        new DashboardSchedule(FRIDAY, LocalTime.of(13, 30), LocalTime.of(14, 50), BIWEEKLY)),
+                List.of(new DashboardSchedule(MONDAY, "14:00", "18:00", WEEKLY),
+                        new DashboardSchedule(FRIDAY, "13:30", "15:40", BIWEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
                 List.of(CHEAP_FEE, LOVELY_TEACHING),
                 true, true

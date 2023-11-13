@@ -1,12 +1,15 @@
 package org.guzzing.studayserver.domain.dashboard.controller.vo;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 import org.guzzing.studayserver.global.exception.DashboardException;
+import org.springframework.cglib.core.Local;
 
 public record Schedule(
         String dayOfWeek,
-        LocalTime startTime,
-        LocalTime endTime,
+        String startTime,
+        String endTime,
         String repeatance
 ) {
 
@@ -15,12 +18,23 @@ public record Schedule(
     }
 
     private void validateTimeSuitability(
-            final LocalTime startTime,
-            final LocalTime endTime
+            final String startTime,
+            final String endTime
     ) {
-        if (startTime.isAfter(endTime)) {
+        final LocalTime start = parseTime(startTime);
+        final LocalTime end = parseTime(endTime);
+
+        if (start.isAfter(end)) {
             throw new DashboardException("시작 시간이 종료 시간 보다 늦습니다.");
         }
+    }
+
+    private LocalTime parseTime(final String time) {
+        final List<Integer> timeData = Arrays.stream(time.split(":"))
+                .map(Integer::parseInt)
+                .toList();
+
+        return LocalTime.of(timeData.get(0), timeData.get(1));
     }
 
 }
