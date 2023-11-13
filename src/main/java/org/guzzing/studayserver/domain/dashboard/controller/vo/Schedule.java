@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import org.guzzing.studayserver.global.exception.DashboardException;
-import org.springframework.cglib.core.Local;
 
 public record Schedule(
         String dayOfWeek,

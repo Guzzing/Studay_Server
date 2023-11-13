@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
@@ -7,6 +8,7 @@ import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
@@ -59,10 +61,29 @@ public class DashboardService {
                 .orElseThrow(() -> new DashboardException("해당하는 대시보드가 없습니다."));
 
         final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
-        final AcademyInfo academyInfo = academyAccessService.findACademyInfo(dashboard.getAcademyId());
+        final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
         final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
 
         return serviceConverter.from(dashboard, childInfo, academyInfo, lessonInfo);
     }
 
+    public DashboardGetResults findDashboards(final long childId, final boolean activeOnly, final long memberId) {
+        memberAccessService.validateMember(memberId);
+
+        final List<Dashboard> dashboards = activeOnly
+                ? dashboardRepository.findActiveOnlyByChildId(childId)
+                : dashboardRepository.findAllByChildId(childId);
+
+        final List<DashboardGetResult> results = dashboards.stream()
+                .map(dashboard -> {
+                    final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
+                    final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
+                    final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
+
+                    return serviceConverter.from(dashboard, childInfo, academyInfo, lessonInfo);
+                })
+                .toList();
+
+        return serviceConverter.from(results);
+    }
 }

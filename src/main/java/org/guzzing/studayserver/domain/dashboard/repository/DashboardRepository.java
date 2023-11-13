@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface DashboardRepository extends DashboardJpaRepository {
 
-    @Query("select d from Dashboard d where d.childId = :childId and d.active = true ")
+    @Query("select d from Dashboard d where d.childId = :childId and d.active = true")
     List<Dashboard> findActiveOnlyByChildId(final Long childId);
 
     List<Dashboard> findAllByChildId(final Long childId);

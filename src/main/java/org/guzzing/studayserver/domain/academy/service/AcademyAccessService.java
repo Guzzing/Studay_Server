@@ -12,7 +12,7 @@ public interface AcademyAccessService {
 
     void validateLesson(final Long lessonId);
 
-    AcademyInfo findACademyInfo(final Long academyId);
+    AcademyInfo findAcademyInfo(final Long academyId);
 
     LessonInfo findLessonInfo(final Long lessonId);
 }

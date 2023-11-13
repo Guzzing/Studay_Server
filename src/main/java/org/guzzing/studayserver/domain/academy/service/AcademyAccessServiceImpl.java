@@ -52,7 +52,7 @@ public class AcademyAccessServiceImpl implements
     }
 
     @Override
-    public AcademyInfo findACademyInfo(final Long academyId) {
+    public AcademyInfo findAcademyInfo(final Long academyId) {
         final Academy academy = academyRepository.findAcademyById(academyId)
                 .orElseThrow(() -> new AcademyException("존재하지 않는 학원입니다."));
 

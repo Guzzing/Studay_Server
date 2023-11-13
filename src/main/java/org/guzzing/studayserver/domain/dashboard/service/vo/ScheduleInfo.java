@@ -4,7 +4,6 @@ import static org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek.NONE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 
-import java.time.LocalTime;
 import org.guzzing.studayserver.domain.dashboard.model.vo.DayOfWeek;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.global.exception.DashboardException;

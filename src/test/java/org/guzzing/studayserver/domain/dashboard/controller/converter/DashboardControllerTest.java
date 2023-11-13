@@ -23,6 +23,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,7 +35,6 @@ import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
@@ -58,6 +58,13 @@ class DashboardControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private DashboardFixture dashboardFixture;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private TestConfig testConfig;
+
     @MockBean
     private MemberAccessService memberAccessService;
     @MockBean
@@ -65,20 +72,12 @@ class DashboardControllerTest {
     @MockBean
     private ChildAccessService childAccessService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private TestConfig testConfig;
-
-    @Autowired
-    private DashboardRepository dashboardRepository;
-
     @Test
     @DisplayName("대시보드를 등록한다.")
     @WithMockCustomOAuth2LoginUser
     void registerDashboard_ReturnCreated() throws Exception {
         // Given
-        final DashboardPostRequest request = DashboardFixture.makePostRequest();
+        final DashboardPostRequest request = dashboardFixture.makePostRequest();
 
         // When
         final ResultActions perform = mockMvc.perform(post("/dashboards")
@@ -139,11 +138,11 @@ class DashboardControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getDashboard() throws Exception {
         // Given
-        given(childAccessService.findChildInfo(anyLong())).willReturn(DashboardFixture.makeChildInfo());
-        given(academyAccessService.findACademyInfo(anyLong())).willReturn(DashboardFixture.makeAcademyInfo());
-        given(academyAccessService.findLessonInfo(anyLong())).willReturn(DashboardFixture.makeLessonInfo());
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
 
-        final Dashboard dashboard = createDashboard();
+        final Dashboard dashboard = dashboardFixture.createActiveEntity();
 
         // When
         final ResultActions perform = mockMvc.perform(get("/dashboards/{dashboardId}", dashboard.getId())
@@ -163,7 +162,7 @@ class DashboardControllerTest {
                 .andExpect(jsonPath("$.paymentInfo.etcFee").isNumber())
                 .andExpect(jsonPath("$.simpleMemo").exists())
                 .andExpect(jsonPath("$.active").value(true))
-                .andDo(document("get-dashboards",
+                .andDo(document("get-dashboard",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -214,10 +213,96 @@ class DashboardControllerTest {
                 ));
     }
 
-    private Dashboard createDashboard() {
-        final Dashboard dashboard = DashboardFixture.makeEntity();
+    @Test
+    @DisplayName("활성화 여부에 따라 아이의 모든 대시보드를 조회한다.")
+    @WithMockCustomOAuth2LoginUser
+    void getDashboards_ByActiveOnlyBoolean_AllDashboardOfChild() throws Exception {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
 
-        return dashboardRepository.save(dashboard);
+        final Dashboard dashboard = dashboardFixture.createActiveEntity();
+
+        final boolean activeOnly = true;
+
+        // When
+        final ResultActions perform = mockMvc.perform(get("/dashboards")
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .param("childId", String.valueOf(DashboardFixture.childId))
+                .param("active-only", String.valueOf(activeOnly))
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.responses").isArray())
+                .andExpect(jsonPath("$.responses").isNotEmpty())
+                .andExpect(jsonPath("$.responses[0].dashboardId").value(dashboard.getId()))
+                .andExpect(jsonPath("$.responses[0].childInfo").exists())
+                .andExpect(jsonPath("$.responses[0].childInfo.childId").value(dashboard.getChildId()))
+                .andExpect(jsonPath("$.responses[0].academyInfo").exists())
+                .andExpect(jsonPath("$.responses[0].academyInfo.academyId").value(dashboard.getAcademyId()))
+                .andExpect(jsonPath("$.responses[0].lessonInfo.lessonId").value(dashboard.getLessonId()))
+                .andExpect(jsonPath("$.responses[0].schedules").isArray())
+                .andExpect(jsonPath("$.responses[0].schedules").isNotEmpty())
+                .andExpect(jsonPath("$.responses[0].paymentInfo.etcFee").isNumber())
+                .andExpect(jsonPath("$.responses[0].simpleMemo.kindness").isBoolean())
+                .andExpect(jsonPath("$.responses[0].active").value(true))
+                .andExpect(jsonPath("$.responses[0].deleted").value(false))
+                .andDo(document("get-dashboards",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                        ),
+                        queryParameters(
+                                parameterWithName("childId").description("아이 아이디"),
+                                parameterWithName("active-only").description("활성화 여부 조회 조건(default = false)")
+                        ),
+                        responseFields(
+                                fieldWithPath("responses").type(ARRAY).description("대시보드 조회 결과 목록"),
+                                fieldWithPath("responses[].dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                fieldWithPath("responses[].childInfo").type(OBJECT).description("아이 정보"),
+                                fieldWithPath("responses[].childInfo.childId").type(NUMBER).description("아이 아이디"),
+                                fieldWithPath("responses[].childInfo.childNickName").type(STRING).description("아이 별칭"),
+                                fieldWithPath("responses[].academyInfo").type(OBJECT).description("학원 정보"),
+                                fieldWithPath("responses[].academyInfo.academyId").type(NUMBER).description("학원 아이디"),
+                                fieldWithPath("responses[].academyInfo.academyName").type(STRING).description("학원 이름"),
+                                fieldWithPath("responses[].academyInfo.address").type(STRING).description("학원 주소"),
+                                fieldWithPath("responses[].lessonInfo").type(OBJECT).description("수업 정보"),
+                                fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
+                                fieldWithPath("responses[].lessonInfo.subject").type(STRING).description("수업 과목"),
+                                fieldWithPath("responses[].schedules").type(ARRAY).description("스케줄 메모 목록"),
+                                fieldWithPath("responses[].schedules[].dayOfWeek").type(STRING).description("요일"),
+                                fieldWithPath("responses[].schedules[].startTime").type(STRING).description("시작 시간"),
+                                fieldWithPath("responses[].schedules[].endTime").type(STRING).description("종료 시간"),
+                                fieldWithPath("responses[].schedules[].repeatance").type(STRING)
+                                        .description("반복 주기 종류"),
+                                fieldWithPath("responses[].paymentInfo").type(OBJECT).description("교육비 정보"),
+                                fieldWithPath("responses[].paymentInfo.educationFee").type(NUMBER).description("수강료"),
+                                fieldWithPath("responses[].paymentInfo.bookFee").type(NUMBER).description("교재비"),
+                                fieldWithPath("responses[].paymentInfo.shuttleFee").type(NUMBER).description("셔틀운행비"),
+                                fieldWithPath("responses[].paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                fieldWithPath("responses[].paymentInfo.paymentDay").type(STRING).description("납부일"),
+                                fieldWithPath("responses[].simpleMemo").type(OBJECT).description("간편 메모"),
+                                fieldWithPath("responses[].simpleMemo.kindness").type(BOOLEAN).description("친절함 여부 메모"),
+                                fieldWithPath("responses[].simpleMemo.goodFacility").type(BOOLEAN)
+                                        .description("좋은 시설 여부 메모"),
+                                fieldWithPath("responses[].simpleMemo.cheapFee").type(BOOLEAN)
+                                        .description("값싼 교육비 여부 메모"),
+                                fieldWithPath("responses[].simpleMemo.goodManagement").type(BOOLEAN)
+                                        .description("좋은 관리 여부 메모"),
+                                fieldWithPath("responses[].simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                        .description("사랑스런 교육 여부 메모"),
+                                fieldWithPath("responses[].simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                        .description("셔틀 운행 여부 메모"),
+                                fieldWithPath("responses[].active").type(BOOLEAN).description("활성화 여부"),
+                                fieldWithPath("responses[].deleted").type(BOOLEAN).description("삭제 여부")
+                        )
+                ));
     }
 
 }
