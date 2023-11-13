@@ -86,6 +86,19 @@ public class Dashboard {
         this.deleted = true;
     }
 
+    public Dashboard update(final Dashboard source) {
+        this.childId = source.getChildId();
+        this.academyId = source.getAcademyId();
+        this.lessonId = source.getLessonId();
+        this.dashboardSchedules = source.getDashboardSchedules();
+        this.feeInfo = source.getFeeInfo();
+        this.simpleMemoTypes = source.getSimpleMemoTypes();
+        this.active = source.isActive();
+        this.deleted = source.isDeleted();
+
+        return this;
+    }
+
     private void setScheduleWithDashboard(final List<DashboardSchedule> dashboardSchedules) {
         dashboardSchedules.forEach(dashboardSchedule -> dashboardSchedule.setDashboard(this));
     }

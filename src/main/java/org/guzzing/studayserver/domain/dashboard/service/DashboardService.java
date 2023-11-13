@@ -6,11 +6,11 @@ import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
@@ -44,7 +44,7 @@ public class DashboardService {
     }
 
     @Transactional
-    public DashboardPostResult createDashboard(final DashboardPostParam param, final Long memberId) {
+    public DashboardResult createDashboard(final DashboardParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(param.academyId());
         academyAccessService.validateLesson(param.lessonId());
@@ -53,6 +53,17 @@ public class DashboardService {
         final Dashboard savedDashboard = dashboardRepository.save(dashboard);
 
         return serviceConverter.from(savedDashboard);
+    }
+
+    @Transactional
+    public DashboardResult editDashboard(final long dashboardId, final DashboardParam param, final Long memberId) {
+        memberAccessService.validateMember(memberId);
+
+        final Dashboard source = serviceConverter.to(param);
+        final Dashboard dashboard = getDashboard(dashboardId)
+                .update(source);
+
+        return serviceConverter.from(dashboard);
     }
 
     public DashboardGetResult findDashboard(final long dashboardId, final long memberId) {
@@ -100,6 +111,7 @@ public class DashboardService {
         dashboard.delete();
     }
 
+    @Transactional
     public DashboardPatchResult toggleActiveOfDashboard(final long dashboardId, final long memberId) {
         memberAccessService.validateMember(memberId);
 

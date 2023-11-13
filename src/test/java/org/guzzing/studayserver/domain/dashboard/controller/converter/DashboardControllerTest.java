@@ -1,5 +1,8 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
+import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.academyId;
+import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.childId;
+import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.lessonId;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -11,6 +14,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -31,11 +35,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
+import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
+import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
+import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
@@ -94,6 +103,73 @@ class DashboardControllerTest {
                 .andExpect(jsonPath("$.dashboardId").isNumber())
                 .andExpect(jsonPath("$.childId").value(1L))
                 .andExpect(jsonPath("$.lessonId").value(1L))
+                .andDo(document("post-dashboard",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
+                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디"),
+                                fieldWithPath("schedules").type(ARRAY).description("일정 메모 목록"),
+                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
+                                fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
+                                fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
+                                fieldWithPath("schedules[].repeatance").type(STRING).description("반복 종류"),
+                                fieldWithPath("paymentInfo").type(OBJECT).description("학원비 정보"),
+                                fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강비"),
+                                fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
+                                fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀 버스 운행비"),
+                                fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
+                                fieldWithPath("simpleMemo").type(OBJECT).description("간단 메모 정보"),
+                                fieldWithPath("simpleMemo.kindness").type(BOOLEAN).description("[친절함] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
+                                        .description("[좋은 시설] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN).description("[싼 학원비] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
+                                        .description("[좋은 관리] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                        .description("[사랑스런 교육] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                        .description("[셔틀 운행 여부] 간단 메모 선택 여부")
+                        ),
+                        responseFields(
+                                fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
+                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("대시보드를 수정한다.")
+    @WithMockCustomOAuth2LoginUser
+    void updateDashboard_EditDashboard() throws Exception {
+        // Given
+        given(childAccessService.findChildInfo(anyLong())).willReturn(dashboardFixture.makeChildInfo());
+        given(academyAccessService.findAcademyInfo(anyLong())).willReturn(dashboardFixture.makeAcademyInfo());
+        given(academyAccessService.findLessonInfo(anyLong())).willReturn(dashboardFixture.makeLessonInfo());
+
+        final Dashboard dashboard = dashboardFixture.createActiveEntity();
+
+        final DashboardPostRequest request = makePostRequest();
+
+        // When
+        final ResultActions perform = mockMvc.perform(put("/dashboards/{dashboardId}", dashboard.getId())
+                .header(AUTHORIZATION_HEADER, TestConfig.BEARER + testConfig.getJwt())
+                .content(objectMapper.writeValueAsBytes(request))
+                .accept(APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.dashboardId").value(dashboard.getId()))
+                .andExpect(jsonPath("$.childId").value(request.childId()))
+                .andExpect(jsonPath("$.lessonId").value(request.lessonId()))
                 .andDo(document("post-dashboard",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -230,7 +306,7 @@ class DashboardControllerTest {
         // When
         final ResultActions perform = mockMvc.perform(get("/dashboards")
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
-                .param("childId", String.valueOf(DashboardFixture.childId))
+                .param("childId", String.valueOf(childId))
                 .param("active-only", String.valueOf(activeOnly))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -372,6 +448,14 @@ class DashboardControllerTest {
                                 fieldWithPath("active").type(BOOLEAN).description("대시보드 활성화 여부")
                         )
                 ));
+    }
+
+    private DashboardPostRequest makePostRequest() {
+        return new DashboardPostRequest(
+                childId, academyId, lessonId,
+                List.of(new Schedule(2, "12:00", "21:04", "WEEKLY")),
+                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
+                new SimpleMemo(true, false, false, true, false, true));
     }
 
 }

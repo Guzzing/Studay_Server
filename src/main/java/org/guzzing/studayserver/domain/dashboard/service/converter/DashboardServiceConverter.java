@@ -7,11 +7,11 @@ import org.guzzing.studayserver.domain.dashboard.model.DashboardSchedule;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardServiceConverter {
 
-    public Dashboard to(final DashboardPostParam param) {
+    public Dashboard to(final DashboardParam param) {
         return new Dashboard(
                 param.childId(),
                 param.academyId(),
@@ -34,8 +34,8 @@ public class DashboardServiceConverter {
         );
     }
 
-    public DashboardPostResult from(final Dashboard entity) {
-        return new DashboardPostResult(
+    public DashboardResult from(final Dashboard entity) {
+        return new DashboardResult(
                 entity.getId(),
                 entity.getChildId(),
                 entity.getAcademyId(),

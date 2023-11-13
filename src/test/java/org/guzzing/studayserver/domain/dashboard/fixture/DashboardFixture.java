@@ -21,7 +21,7 @@ import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
@@ -48,8 +48,8 @@ public class DashboardFixture {
                 new SimpleMemo(true, false, false, true, false, true));
     }
 
-    public DashboardPostParam makePostParam() {
-        return new DashboardPostParam(
+    public DashboardParam makePostParam() {
+        return new DashboardParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
                         new ScheduleInfo(null, "14:00", "18:00", DAILY),

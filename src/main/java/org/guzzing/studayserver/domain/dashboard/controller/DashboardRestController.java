@@ -11,19 +11,19 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.request.Dashboar
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardResponse;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,19 +49,41 @@ public class DashboardRestController {
      *
      * @param request
      * @param memberId
-     * @return DashboardPostResponse
+     * @return DashboardResponse
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardPostResponse> registerDashboard(
-            @Validated @RequestBody final DashboardPostRequest request,
+    public ResponseEntity<DashboardResponse> registerDashboard(
+            @RequestBody final DashboardPostRequest request,
             @MemberId final Long memberId
     ) {
-        final DashboardPostParam param = controllerConverter.to(request);
-        final DashboardPostResult result = dashboardService.createDashboard(param, memberId);
-        final DashboardPostResponse response = controllerConverter.from(result);
+        final DashboardParam param = controllerConverter.to(request);
+        final DashboardResult result = dashboardService.createDashboard(param, memberId);
+        final DashboardResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(CREATED)
+                .body(response);
+    }
+
+    /**
+     * 대시보드 수정
+     *
+     * @param request
+     * @param memberId
+     * @return DashboardResponse
+     */
+    @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DashboardResponse> updateDashboard(
+            @PathVariable final Long dashboardId,
+            @RequestBody final DashboardPostRequest request,
+            @MemberId final Long memberId
+    ) {
+        final DashboardParam param = controllerConverter.to(request);
+        final DashboardResult result = dashboardService.editDashboard(dashboardId, param, memberId);
+        final DashboardResponse response = controllerConverter.from(result);
+
+        return ResponseEntity
+                .status(OK)
                 .body(response);
     }
 
@@ -133,7 +155,7 @@ public class DashboardRestController {
      * @param memberId
      * @return DashboardPatchResponse
      */
-    @PatchMapping(path = "/{dashboardId}/toggle")
+    @PatchMapping(path = "/{dashboardId}/toggle", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPatchResponse> revertActiveOfDashboard(
             @PathVariable final Long dashboardId,
             @MemberId final Long memberId

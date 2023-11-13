@@ -15,16 +15,16 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.request.Dashboar
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -32,8 +32,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardControllerConverter {
 
-    public DashboardPostParam to(final DashboardPostRequest request) {
-        return new DashboardPostParam(
+    public DashboardParam to(final DashboardPostRequest request) {
+        return new DashboardParam(
                 request.childId(),
                 request.academyId(),
                 request.lessonId(),
@@ -42,8 +42,8 @@ public class DashboardControllerConverter {
                 convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
-    public DashboardPostResponse from(final DashboardPostResult result) {
-        return new DashboardPostResponse(
+    public DashboardResponse from(final DashboardResult result) {
+        return new DashboardResponse(
                 result.dashboardId(),
                 result.childId(),
                 result.academyId(),
