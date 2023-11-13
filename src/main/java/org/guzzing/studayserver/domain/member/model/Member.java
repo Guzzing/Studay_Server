@@ -89,10 +89,18 @@ public class Member {
     }
 
     public String getNickName() {
+        if (nickName == null) {
+            return null;
+        }
+
         return nickName.getValue();
     }
 
     public String getEmail() {
+        if (email == null) {
+            return null;
+        }
+
         return email.getValue();
     }
 
@@ -100,5 +108,13 @@ public class Member {
         return children.stream()
                 .filter(child -> child.getId().equals(childId))
                 .findFirst();
+    }
+
+    public List<Child> getChildren() {
+        return List.copyOf(children);
+    }
+
+    public String getNickname() {
+        return nickName.getValue();
     }
 }
