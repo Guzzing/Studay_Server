@@ -111,7 +111,7 @@ public class Member {
     }
 
     public List<Child> getChildren() {
-        return List.copyOf(children);
+        return new ArrayList<>(children);
     }
 
     public String getNickname() {
