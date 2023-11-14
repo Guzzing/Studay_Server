@@ -60,7 +60,7 @@ public class DashboardService {
         memberAccessService.validateMember(memberId);
 
         final Dashboard source = serviceConverter.to(param);
-        final Dashboard dashboard = getDashboard(dashboardId)
+        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId)
                 .update(source);
 
         return serviceConverter.from(dashboard);
@@ -69,7 +69,7 @@ public class DashboardService {
     public DashboardGetResult findDashboard(final long dashboardId, final long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard dashboard = getDashboard(dashboardId);
+        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId);
 
         final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
         final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
@@ -102,7 +102,7 @@ public class DashboardService {
     public void deleteDashboard(final Long dashboardId, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard dashboard = getDashboard(dashboardId);
+        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId);
 
         if (dashboard.isActive()) {
             throw new DashboardException("비활성화된 대시보드만 삭제가 가능합니다.");
@@ -115,15 +115,10 @@ public class DashboardService {
     public DashboardPatchResult toggleActiveOfDashboard(final long dashboardId, final long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard dashboard = getDashboard(dashboardId)
+        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId)
                 .toggleActive();
 
         return serviceConverter.fromPatch(dashboard);
-    }
-
-    private Dashboard getDashboard(final long dashboardId) {
-        return dashboardRepository.findById(dashboardId)
-                .orElseThrow(() -> new DashboardException("존재하지 않는 대시보드 입니다."));
     }
 
 }
