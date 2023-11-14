@@ -49,11 +49,11 @@ public class Dashboard {
     @Column(name = "simple_memos", nullable = false)
     private List<SimpleMemoType> simpleMemoTypes;
 
-    @Column(name = "active", nullable = false)
-    private boolean active;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
-    @Column(name = "deleted", nullable = false)
-    private boolean deleted;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
 
     public Dashboard(
             final Long childId,
@@ -62,8 +62,8 @@ public class Dashboard {
             final List<DashboardSchedule> dashboardSchedules,
             final FeeInfo feeInfo,
             final List<SimpleMemoType> simpleMemoTypes,
-            final boolean active,
-            final boolean deleted
+            final boolean isActive,
+            final boolean isDeleted
     ) {
         setScheduleWithDashboard(dashboardSchedules);
 
@@ -73,17 +73,17 @@ public class Dashboard {
         this.dashboardSchedules = dashboardSchedules;
         this.feeInfo = feeInfo;
         this.simpleMemoTypes = simpleMemoTypes;
-        this.active = active;
-        this.deleted = deleted;
+        this.isActive = isActive;
+        this.isDeleted = isDeleted;
     }
 
     public Dashboard toggleActive() {
-        this.active = !active;
+        this.isActive = !isActive;
         return this;
     }
 
     public void delete() {
-        this.deleted = true;
+        this.isDeleted = true;
     }
 
     public Dashboard update(final Dashboard source) {
@@ -93,8 +93,8 @@ public class Dashboard {
         this.dashboardSchedules = source.getDashboardSchedules();
         this.feeInfo = source.getFeeInfo();
         this.simpleMemoTypes = source.getSimpleMemoTypes();
-        this.active = source.isActive();
-        this.deleted = source.isDeleted();
+        this.isActive = source.isActive();
+        this.isDeleted = source.isDeleted();
 
         return this;
     }

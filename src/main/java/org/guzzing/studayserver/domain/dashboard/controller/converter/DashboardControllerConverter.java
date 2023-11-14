@@ -59,8 +59,8 @@ public class DashboardControllerConverter {
                 convertToSchedules(result.scheduleInfos()),
                 result.paymentInfo(),
                 convertToSimpleMemo(result.simpleMemoTypeMap()),
-                result.active(),
-                result.deleted());
+                result.isActive(),
+                result.isDeleted());
     }
 
     public DashboardGetResponses from(final DashboardGetResults getResults) {
@@ -73,7 +73,7 @@ public class DashboardControllerConverter {
     }
 
     public DashboardPatchResponse from(final DashboardPatchResult result) {
-        return new DashboardPatchResponse(result.dashboardId(), result.active());
+        return new DashboardPatchResponse(result.dashboardId(), result.isActive());
     }
 
     private List<Schedule> convertToSchedules(final ScheduleInfos scheduleInfos) {

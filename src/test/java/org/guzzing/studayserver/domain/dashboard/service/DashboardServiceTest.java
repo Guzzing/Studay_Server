@@ -136,7 +136,7 @@ class DashboardServiceTest {
         // Then
         assertThat(getResults.results()).satisfies(results -> {
             assertThat(results).hasSize(1);
-            assertThat(results.get(0).active()).isTrue();
+            assertThat(results.get(0).isActive()).isTrue();
             assertThat(results.get(0).childInfo().childId()).isEqualTo(activeDashboard.getChildId());
         });
     }
@@ -163,8 +163,8 @@ class DashboardServiceTest {
         assertThat(results.results()).satisfies(result -> {
             assertThat(result.get(0).childInfo().childId()).isEqualTo(activeDashboard.getChildId());
             assertThat(result.get(0).childInfo().childId()).isEqualTo(inActiveDashboard.getChildId());
-            assertThat(result.get(0).active()).isTrue();
-            assertThat(result.get(1).active()).isFalse();
+            assertThat(result.get(0).isActive()).isTrue();
+            assertThat(result.get(1).isActive()).isFalse();
         });
     }
 
@@ -219,7 +219,7 @@ class DashboardServiceTest {
         final DashboardPatchResult result = dashboardService.toggleActiveOfDashboard(activeEntity.getId(), memberId);
 
         // Then
-        assertThat(result.active()).isFalse();
+        assertThat(result.isActive()).isFalse();
     }
 
     private DashboardParam makePostParam() {

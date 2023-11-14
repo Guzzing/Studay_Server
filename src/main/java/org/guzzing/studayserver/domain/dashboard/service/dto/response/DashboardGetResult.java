@@ -16,8 +16,8 @@ public record DashboardGetResult(
         ScheduleInfos scheduleInfos,
         PaymentInfo paymentInfo,
         Map<SimpleMemoType, Boolean> simpleMemoTypeMap,
-        boolean active,
-        boolean deleted
+        boolean isActive,
+        boolean isDeleted
 ) {
 
 }

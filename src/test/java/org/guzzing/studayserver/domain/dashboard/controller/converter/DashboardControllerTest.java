@@ -238,7 +238,7 @@ class DashboardControllerTest {
                 .andExpect(jsonPath("$.schedules").isNotEmpty())
                 .andExpect(jsonPath("$.paymentInfo.etcFee").isNumber())
                 .andExpect(jsonPath("$.simpleMemo").exists())
-                .andExpect(jsonPath("$.active").value(true))
+                .andExpect(jsonPath("$.isActive").value(true))
                 .andDo(document("get-dashboard",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -292,8 +292,8 @@ class DashboardControllerTest {
                                         .description("사랑스런 교육 여부 메모"),
                                 fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
                                         .description("셔틀 운행 여부 메모"),
-                                fieldWithPath("active").type(BOOLEAN).description("활성화 여부"),
-                                fieldWithPath("deleted").type(BOOLEAN).description("삭제 여부")
+                                fieldWithPath("isActive").type(BOOLEAN).description("활성화 여부"),
+                                fieldWithPath("isDeleted").type(BOOLEAN).description("삭제 여부")
                         )
                 ));
     }
@@ -315,7 +315,7 @@ class DashboardControllerTest {
         final ResultActions perform = mockMvc.perform(get("/dashboards")
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .param("childId", String.valueOf(childId))
-                .param("active-only", String.valueOf(activeOnly))
+                .param("isActive-only", String.valueOf(activeOnly))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -335,8 +335,8 @@ class DashboardControllerTest {
                 .andExpect(jsonPath("$.responses[0].schedules").isNotEmpty())
                 .andExpect(jsonPath("$.responses[0].paymentInfo.etcFee").isNumber())
                 .andExpect(jsonPath("$.responses[0].simpleMemo.kindness").isBoolean())
-                .andExpect(jsonPath("$.responses[0].active").value(true))
-                .andExpect(jsonPath("$.responses[0].deleted").value(false))
+                .andExpect(jsonPath("$.responses[0].isActive").value(true))
+                .andExpect(jsonPath("$.responses[0].isDeleted").value(false))
                 .andDo(document("get-dashboards",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -345,7 +345,7 @@ class DashboardControllerTest {
                         ),
                         queryParameters(
                                 parameterWithName("childId").description("아이 아이디"),
-                                parameterWithName("active-only").description("활성화 여부 조회 조건(default = false)")
+                                parameterWithName("isActive-only").description("활성화 여부 조회 조건(default = false)")
                         ),
                         responseFields(
                                 fieldWithPath("responses").type(ARRAY).description("대시보드 조회 결과 목록"),
@@ -395,8 +395,8 @@ class DashboardControllerTest {
                                         .description("사랑스런 교육 여부 메모"),
                                 fieldWithPath("responses[].simpleMemo.shuttleAvailability").type(BOOLEAN)
                                         .description("셔틀 운행 여부 메모"),
-                                fieldWithPath("responses[].active").type(BOOLEAN).description("활성화 여부"),
-                                fieldWithPath("responses[].deleted").type(BOOLEAN).description("삭제 여부")
+                                fieldWithPath("responses[].isActive").type(BOOLEAN).description("활성화 여부"),
+                                fieldWithPath("responses[].isDeleted").type(BOOLEAN).description("삭제 여부")
                         )
                 ));
     }
@@ -452,7 +452,7 @@ class DashboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.dashboardId").value(dashboard.getId()))
-                .andExpect(jsonPath("$.active").value(false))
+                .andExpect(jsonPath("$.isActive").value(false))
                 .andDo(document("toggle-dashboard",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -464,7 +464,7 @@ class DashboardControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
-                                fieldWithPath("active").type(BOOLEAN).description("대시보드 활성화 여부")
+                                fieldWithPath("isActive").type(BOOLEAN).description("대시보드 활성화 여부")
                         )
                 ));
     }

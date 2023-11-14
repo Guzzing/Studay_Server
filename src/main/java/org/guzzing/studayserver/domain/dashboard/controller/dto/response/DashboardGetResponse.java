@@ -16,8 +16,8 @@ public record DashboardGetResponse(
         List<Schedule> schedules,
         PaymentInfo paymentInfo,
         SimpleMemo simpleMemo,
-        boolean active,
-        boolean deleted
+        boolean isActive,
+        boolean isDeleted
 ) {
 
 }
