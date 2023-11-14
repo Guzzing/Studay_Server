@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
+import org.guzzing.studayserver.global.exception.DashboardException;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -83,6 +84,10 @@ public class Dashboard {
     }
 
     public void delete() {
+        if (this.isActive()) {
+            throw new DashboardException("비활성화된 대시보드만 삭제가 가능합니다.");
+        }
+
         this.isDeleted = true;
     }
 

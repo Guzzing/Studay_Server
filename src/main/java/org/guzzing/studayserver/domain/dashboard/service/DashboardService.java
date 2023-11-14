@@ -102,13 +102,8 @@ public class DashboardService {
     public void deleteDashboard(final Long dashboardId, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId);
-
-        if (dashboard.isActive()) {
-            throw new DashboardException("비활성화된 대시보드만 삭제가 가능합니다.");
-        }
-
-        dashboard.delete();
+        dashboardRepository.findDashboardById(dashboardId)
+                .delete();
     }
 
     @Transactional
