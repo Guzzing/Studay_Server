@@ -8,16 +8,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -49,16 +53,16 @@ public class DashboardRestController {
      *
      * @param request
      * @param memberId
-     * @return DashboardResponse
+     * @return DashboardPostResponse
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardResponse> registerDashboard(
+    public ResponseEntity<DashboardPostResponse> registerDashboard(
             @RequestBody final DashboardPostRequest request,
             @MemberId final Long memberId
     ) {
-        final DashboardParam param = controllerConverter.to(request);
-        final DashboardResult result = dashboardService.createDashboard(param, memberId);
-        final DashboardResponse response = controllerConverter.from(result);
+        final DashboardPostParam param = controllerConverter.to(request);
+        final DashboardPostResult result = dashboardService.createDashboard(param, memberId);
+        final DashboardPostResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(CREATED)
@@ -70,17 +74,17 @@ public class DashboardRestController {
      *
      * @param request
      * @param memberId
-     * @return DashboardResponse
+     * @return DashboardPostResponse
      */
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardResponse> updateDashboard(
+    public ResponseEntity<DashboardPutResponse> ㅖupdateDashboard(
             @PathVariable final Long dashboardId,
-            @RequestBody final DashboardPostRequest request,
+            @RequestBody final DashboardPutRequest request,
             @MemberId final Long memberId
     ) {
-        final DashboardParam param = controllerConverter.to(request);
-        final DashboardResult result = dashboardService.editDashboard(dashboardId, param, memberId);
-        final DashboardResponse response = controllerConverter.from(result);
+        final DashboardPutParam param = controllerConverter.to(dashboardId, request);
+        final DashboardPutResult result = dashboardService.editDashboard(param, memberId);
+        final DashboardPutResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(OK)

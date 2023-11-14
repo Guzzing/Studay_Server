@@ -1,30 +1,22 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
-import static java.time.DayOfWeek.FRIDAY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.YEARLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.global.exception.DashboardException;
 import org.junit.jupiter.api.DisplayName;
@@ -56,10 +48,10 @@ class DashboardServiceTest {
     void createDashboard_ByDashboardParam_ReturnDashboardResult() {
         // Given
         final long memberId = 1L;
-        final DashboardParam param = dashboardFixture.makePostParam();
+        final DashboardPostParam param = dashboardFixture.makePostParam();
 
         // When
-        final DashboardResult result = dashboardService.createDashboard(param, memberId);
+        final DashboardPostResult result = dashboardService.createDashboard(param, memberId);
 
         // Then
         assertThat(result).satisfies(value -> {
@@ -79,13 +71,13 @@ class DashboardServiceTest {
         final long memberId = 1L;
         final Dashboard dashboard = dashboardFixture.createActiveEntity();
 
-        final DashboardParam param = makePostParam();
+        final DashboardPutParam param = dashboardFixture.makePutParam(dashboard.getId());
 
         // When
-        final DashboardResult dashboardResult = dashboardService.editDashboard(dashboard.getId(), param, memberId);
+        final DashboardPutResult dashboardPostResult = dashboardService.editDashboard(param, memberId);
 
         // Then
-        assertThat(dashboardResult).satisfies(result -> {
+        assertThat(dashboardPostResult).satisfies(result -> {
             assertThat(result.dashboardId()).isEqualTo(dashboard.getId());
             assertThat(result.academyId()).isEqualTo(param.academyId());
             assertThat(result.lessonId()).isEqualTo(param.lessonId());
@@ -220,22 +212,6 @@ class DashboardServiceTest {
 
         // Then
         assertThat(result.isActive()).isFalse();
-    }
-
-    private DashboardParam makePostParam() {
-        return new DashboardParam(
-                1L, 1L, 1L,
-                new ScheduleInfos(List.of(
-                        new ScheduleInfo(FRIDAY, "14:00", "18:00", WEEKLY),
-                        new ScheduleInfo(null, "12:30", "12:04", YEARLY))),
-                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
-                Map.of(
-                        SimpleMemoType.KINDNESS, false,
-                        SimpleMemoType.GOOD_FACILITY, true,
-                        SimpleMemoType.GOOD_MANAGEMENT, true,
-                        CHEAP_FEE, false,
-                        SimpleMemoType.LOVELY_TEACHING, true,
-                        SimpleMemoType.SHUTTLE_AVAILABILITY, true));
     }
 
 }

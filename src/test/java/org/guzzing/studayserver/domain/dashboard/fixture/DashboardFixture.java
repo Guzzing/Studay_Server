@@ -6,6 +6,7 @@ import static java.time.DayOfWeek.SUNDAY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.YEARLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
 
@@ -21,7 +22,8 @@ import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
@@ -48,8 +50,8 @@ public class DashboardFixture {
                 new SimpleMemo(true, false, false, true, false, true));
     }
 
-    public DashboardParam makePostParam() {
-        return new DashboardParam(
+    public DashboardPostParam makePostParam() {
+        return new DashboardPostParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
                         new ScheduleInfo(null, "14:00", "18:00", DAILY),
@@ -62,6 +64,23 @@ public class DashboardFixture {
                         CHEAP_FEE, true,
                         SimpleMemoType.LOVELY_TEACHING, false,
                         SimpleMemoType.SHUTTLE_AVAILABILITY, true));
+    }
+
+    public DashboardPutParam makePutParam(final long dashboardId) {
+        return new DashboardPutParam(
+                dashboardId, 1L, 1L, 1L,
+                new ScheduleInfos(List.of(
+                        new ScheduleInfo(FRIDAY, "14:00", "18:00", WEEKLY),
+                        new ScheduleInfo(null, "12:30", "12:04", YEARLY))),
+                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
+                Map.of(
+                        SimpleMemoType.KINDNESS, false,
+                        SimpleMemoType.GOOD_FACILITY, true,
+                        SimpleMemoType.GOOD_MANAGEMENT, true,
+                        CHEAP_FEE, false,
+                        SimpleMemoType.LOVELY_TEACHING, true,
+                        SimpleMemoType.SHUTTLE_AVAILABILITY, true),
+                true, false);
     }
 
     public Dashboard makeEntity() {

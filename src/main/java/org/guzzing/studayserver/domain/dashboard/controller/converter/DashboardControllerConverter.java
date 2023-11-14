@@ -12,19 +12,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponses;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -32,8 +36,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardControllerConverter {
 
-    public DashboardParam to(final DashboardPostRequest request) {
-        return new DashboardParam(
+    public DashboardPostParam to(final DashboardPostRequest request) {
+        return new DashboardPostParam(
                 request.childId(),
                 request.academyId(),
                 request.lessonId(),
@@ -42,12 +46,37 @@ public class DashboardControllerConverter {
                 convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
-    public DashboardResponse from(final DashboardResult result) {
-        return new DashboardResponse(
+    public DashboardPutParam to(final long dashboardId, final DashboardPutRequest request) {
+        return new DashboardPutParam(
+                dashboardId,
+                request.childId(),
+                request.academyId(),
+                request.lessonId(),
+                convertToScheduleInfos(request.schedules()),
+                request.paymentInfo(),
+                convertToSimpleMemoTypeMap(request.simpleMemo()),
+                request.isActive(),
+                request.isDeleted());
+    }
+
+    public DashboardPostResponse from(final DashboardPostResult result) {
+        return new DashboardPostResponse(
                 result.dashboardId(),
                 result.childId(),
                 result.academyId(),
                 result.lessonId());
+    }
+
+    public DashboardPutResponse from(final DashboardPutResult result) {
+        return new DashboardPutResponse(
+                result.dashboardId(),
+                result.childId(),
+                result.academyId(),
+                result.lessonId());
+    }
+
+    public DashboardPatchResponse from(final DashboardPatchResult result) {
+        return new DashboardPatchResponse(result.dashboardId(), result.isActive());
     }
 
     public DashboardGetResponse from(final DashboardGetResult result) {
@@ -70,10 +99,6 @@ public class DashboardControllerConverter {
                 .toList();
 
         return new DashboardGetResponses(responses);
-    }
-
-    public DashboardPatchResponse from(final DashboardPatchResult result) {
-        return new DashboardPatchResponse(result.dashboardId(), result.isActive());
     }
 
     private List<Schedule> convertToSchedules(final ScheduleInfos scheduleInfos) {

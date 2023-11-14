@@ -6,16 +6,17 @@ import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.global.exception.DashboardException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +45,7 @@ public class DashboardService {
     }
 
     @Transactional
-    public DashboardResult createDashboard(final DashboardParam param, final Long memberId) {
+    public DashboardPostResult createDashboard(final DashboardPostParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(param.academyId());
         academyAccessService.validateLesson(param.lessonId());
@@ -52,18 +53,18 @@ public class DashboardService {
         final Dashboard dashboard = serviceConverter.to(param);
         final Dashboard savedDashboard = dashboardRepository.save(dashboard);
 
-        return serviceConverter.from(savedDashboard);
+        return serviceConverter.postResultFrom(savedDashboard);
     }
 
     @Transactional
-    public DashboardResult editDashboard(final long dashboardId, final DashboardParam param, final Long memberId) {
+    public DashboardPutResult editDashboard(final DashboardPutParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
         final Dashboard source = serviceConverter.to(param);
-        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId)
+        final Dashboard dashboard = dashboardRepository.findDashboardById(param.dashboardId())
                 .update(source);
 
-        return serviceConverter.from(dashboard);
+        return serviceConverter.putResultFrom(dashboard);
     }
 
     public DashboardGetResult findDashboard(final long dashboardId, final long memberId) {
@@ -75,7 +76,7 @@ public class DashboardService {
         final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
         final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
 
-        return serviceConverter.from(dashboard, childInfo, academyInfo, lessonInfo);
+        return serviceConverter.postResultFrom(dashboard, childInfo, academyInfo, lessonInfo);
     }
 
     public DashboardGetResults findDashboards(final long childId, final boolean activeOnly, final long memberId) {
@@ -91,11 +92,11 @@ public class DashboardService {
                     final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
                     final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
 
-                    return serviceConverter.from(dashboard, childInfo, academyInfo, lessonInfo);
+                    return serviceConverter.postResultFrom(dashboard, childInfo, academyInfo, lessonInfo);
                 })
                 .toList();
 
-        return serviceConverter.from(results);
+        return serviceConverter.postResultFrom(results);
     }
 
     @Transactional
@@ -113,7 +114,7 @@ public class DashboardService {
         final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId)
                 .toggleActive();
 
-        return serviceConverter.fromPatch(dashboard);
+        return serviceConverter.patchResultFrom(dashboard);
     }
 
 }
