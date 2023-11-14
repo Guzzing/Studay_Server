@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
+import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;

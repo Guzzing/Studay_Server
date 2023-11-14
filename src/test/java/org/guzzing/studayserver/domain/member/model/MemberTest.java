@@ -8,7 +8,6 @@ import static org.mockito.Mockito.spy;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.junit.jupiter.api.BeforeEach;
