@@ -91,11 +91,26 @@ public class DashboardFixture {
     }
 
     public AcademyInfo makeAcademyInfo() {
-        return new AcademyInfo(academyId, "메가스터디", "서울특별시 동작구 노량진동 메가스터디타워");
+        return new AcademyInfo(
+                academyId,
+                "메가스터디",
+                "010-1234-4321",
+                "서울특별시 동작구 노량진동 메가스터디타워",
+                "AVAILABLE",
+                100_000,
+                LocalDate.now(),
+                "예능(대)"
+        );
     }
 
     public LessonInfo makeLessonInfo() {
-        return new LessonInfo(lessonId, "국어");
+        return new LessonInfo(
+                lessonId,
+                "국어",
+                20,
+                "1개월",
+                120_000
+        );
     }
 
     public Dashboard createActiveEntity() {
