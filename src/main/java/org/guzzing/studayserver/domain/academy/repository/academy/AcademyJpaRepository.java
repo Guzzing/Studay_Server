@@ -31,6 +31,6 @@ public interface AcademyJpaRepository extends JpaRepository<Academy, Long>, Acad
     AcademyFee findAcademyFeeInfo(@Param("academyId") Long academyId);
 
     @Query("SELECT CASE WHEN EXISTS (SELECT 1 FROM Academy a WHERE a.id = :academyId) THEN true ELSE false END")
-    boolean existsByAcademyId(@Param("academyId") Long academyId);
+    boolean existsById(@Param("academyId") Long academyId);
 
 }

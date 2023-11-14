@@ -78,7 +78,7 @@ public class Member {
 
     public void addChild(Child child) {
         if (CHILDREN_MAX_SIZE <= children.size()) {
-            throw new IllegalStateException(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", CHILDREN_MAX_SIZE));
+            throw new IllegalStateException(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", CHILDREN_MAX_SIZE));
         }
 
         children.add(child);
