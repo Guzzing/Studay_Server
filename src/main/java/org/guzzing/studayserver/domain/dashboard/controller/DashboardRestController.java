@@ -23,6 +23,7 @@ import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardP
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,7 +58,7 @@ public class DashboardRestController {
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPostResponse> registerDashboard(
-            @RequestBody final DashboardPostRequest request,
+            @Validated @RequestBody final DashboardPostRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
@@ -79,7 +80,7 @@ public class DashboardRestController {
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPutResponse> ㅖupdateDashboard(
             @PathVariable final Long dashboardId,
-            @RequestBody final DashboardPutRequest request,
+            @Validated @RequestBody final DashboardPutRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPutParam param = controllerConverter.to(dashboardId, request);
