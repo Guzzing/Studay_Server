@@ -90,7 +90,7 @@ public class Member {
 
     public String getNickName() {
         if (nickName == null) {
-            return null;
+            return "";
         }
 
         return nickName.getValue();
@@ -98,7 +98,7 @@ public class Member {
 
     public String getEmail() {
         if (email == null) {
-            return null;
+            return "";
         }
 
         return email.getValue();
