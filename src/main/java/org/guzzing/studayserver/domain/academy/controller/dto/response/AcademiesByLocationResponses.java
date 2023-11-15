@@ -4,7 +4,7 @@ import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 
 public record AcademiesByLocationResponses(
-        List<AcademiesByLocationResponse> academyGetResponses
+        List<AcademiesByLocationResponse> academiesByLocationResponse
 ) {
 
     public static AcademiesByLocationResponses from(AcademiesByLocationResults academiesByLocationResults) {
