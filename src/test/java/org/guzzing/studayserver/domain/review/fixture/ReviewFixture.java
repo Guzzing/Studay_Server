@@ -24,6 +24,18 @@ public class ReviewFixture {
         return ReviewPostRequest.to(1L, request);
     }
 
+    public static ReviewPostParam makeReviewPostParam(long academyId) {
+        return new ReviewPostParam(
+                1L,
+                academyId,
+                true,
+                true,
+                false,
+                false,
+                true,
+                false);
+    }
+
     public static ReviewPostRequest makeReviewPostRequest(boolean isValid) {
         Map<ReviewType, Boolean> reviewMap = isValid ? makeValidReviewMap() : makeInvalidReviewMap();
 
