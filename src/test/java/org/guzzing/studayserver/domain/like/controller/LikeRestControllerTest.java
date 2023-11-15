@@ -151,7 +151,7 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getAllLikes_MemberId() throws Exception {
         // Given
-        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
+        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100L));
 
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
