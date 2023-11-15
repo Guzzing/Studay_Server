@@ -1,12 +1,18 @@
 package org.guzzing.studayserver.domain.academy.util;
 
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 public class GeometryUtil {
 
+    private GeometryUtil() {
+        throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());
+    }
+
     private static final Double EARTH_RADIUS = 6371.01;
 
-    public static Location calculateLocationWithinRadiusInDirection(Double baseLatitude,
+    public static Location calculateLocationWithinRadiusInDirection(
+            Double baseLatitude,
             Double baseLongitude,
             Double bearing,
             Double distance) {

@@ -9,9 +9,7 @@ import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LikeException;
-import org.guzzing.studayserver.global.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +33,8 @@ public class LikeService {
 
     @Transactional
     public LikePostResult createLikeOfAcademy(final LikePostParam param) {
-        validateMember(param.memberId());
-        validateAcademy(param.academyId());
+        memberAccessService.validateMember(param.memberId());
+        academyAccessService.validateAcademy(param.academyId());
 
         long likeCount = likeRepository.countByMemberId(param.memberId());
 
@@ -51,12 +49,14 @@ public class LikeService {
     }
 
     public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
-        validateMember(memberId);
+        memberAccessService.validateMember(memberId);
 
         likeRepository.deleteById(likeId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {
+        memberAccessService.validateMember(memberId);
+
         List<Like> likes = likeRepository.findByMemberId(memberId);
 
         List<AcademyFeeInfo> academyFeeInfos = likes.stream()
@@ -70,19 +70,4 @@ public class LikeService {
         return LikeGetResult.of(academyFeeInfos, totalFee);
     }
 
-    private void validateMember(final Long memberId) {
-        boolean isExistMember = memberAccessService.existsMember(memberId);
-
-        if (!isExistMember) {
-            throw new MemberException("존재하지 않는 멤버입니다.");
-        }
-    }
-
-    private void validateAcademy(final Long academyId) {
-        boolean isExistAcademy = academyAccessService.existsAcademy(academyId);
-
-        if (!isExistAcademy) {
-            throw new AcademyException("존재하지 않는 학원입니다.");
-        }
-    }
 }

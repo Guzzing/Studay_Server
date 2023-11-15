@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.Email;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
@@ -79,7 +78,7 @@ public class Member {
 
     public void addChild(Child child) {
         if (CHILDREN_MAX_SIZE <= children.size()) {
-            throw new IllegalStateException(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", CHILDREN_MAX_SIZE));
+            throw new IllegalStateException(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", CHILDREN_MAX_SIZE));
         }
 
         children.add(child);
@@ -90,10 +89,18 @@ public class Member {
     }
 
     public String getNickName() {
+        if (nickName == null) {
+            return "";
+        }
+
         return nickName.getValue();
     }
 
     public String getEmail() {
+        if (email == null) {
+            return "";
+        }
+
         return email.getValue();
     }
 
@@ -101,5 +108,13 @@ public class Member {
         return children.stream()
                 .filter(child -> child.getId().equals(childId))
                 .findFirst();
+    }
+
+    public List<Child> getChildren() {
+        return new ArrayList<>(children);
+    }
+
+    public String getNickname() {
+        return nickName.getValue();
     }
 }

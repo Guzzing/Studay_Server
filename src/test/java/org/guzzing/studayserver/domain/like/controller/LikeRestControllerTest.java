@@ -87,9 +87,6 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void createLike_MemberIdAndAcademyId_RegisterLike() throws Exception {
         // Given
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
-
         LikePostRequest request = new LikePostRequest(academyId);
         String jsonBody = objectMapper.writeValueAsString(request);
 
@@ -129,9 +126,6 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
-
         LikePostResult likePostResult = likeService.createLikeOfAcademy(param);
 
         // When
@@ -157,8 +151,6 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getAllLikes_MemberId() throws Exception {
         // Given
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
         given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
 
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);

@@ -50,11 +50,7 @@ class LikeServiceTest {
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
     @WithMockCustomOAuth2LoginUser
     void createLikeOfAcademy_WithMemberId() {
-        // Given
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
-
-        // When
+        // Given & When
         LikePostResult result = likeService.createLikeOfAcademy(param);
 
         // Then
@@ -67,9 +63,6 @@ class LikeServiceTest {
     @WithMockCustomOAuth2LoginUser
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
-
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
@@ -87,8 +80,6 @@ class LikeServiceTest {
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
         given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100));
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-        given(memberAccessService.existsMember(any())).willReturn(true);
 
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 

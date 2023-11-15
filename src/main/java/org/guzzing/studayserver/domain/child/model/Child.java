@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.model.NickName;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "children")
@@ -27,7 +28,7 @@ public class Child {
 
     @Embedded
     @Column(nullable = false, name = "nick_name")
-    private NickName nickName;
+    private ChildNickname nickName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -38,7 +39,7 @@ public class Child {
     private Member member;
 
     public Child(String nickName, String grade) {
-        this.nickName = new NickName(nickName);
+        this.nickName = new ChildNickname(nickName);
         this.grade = Grade.fromDescription(grade);
     }
 
@@ -68,7 +69,7 @@ public class Child {
     }
 
     public void update(String nickname, String grade) {
-        this.nickName = new NickName(nickname);
+        this.nickName = new ChildNickname(nickname);
         this.grade = Grade.fromDescription(grade);
     }
 }

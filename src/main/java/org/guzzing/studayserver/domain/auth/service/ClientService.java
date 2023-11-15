@@ -1,12 +1,11 @@
 package org.guzzing.studayserver.domain.auth.service;
 
 import java.util.Optional;
-
 import org.guzzing.studayserver.domain.auth.client.ClientProxy;
 import org.guzzing.studayserver.domain.auth.client.ClientStrategy;
-import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
+import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class ClientService {
     private final AuthService authService;
 
     public ClientService(ClientStrategy clientStrategy, AuthTokenProvider authTokenProvider,
-                         MemberRepository memberJpaRepository, AuthService authService) {
+            MemberRepository memberJpaRepository, AuthService authService) {
         this.clientStrategy = clientStrategy;
         this.authTokenProvider = authTokenProvider;
         this.memberJpaRepository = memberJpaRepository;

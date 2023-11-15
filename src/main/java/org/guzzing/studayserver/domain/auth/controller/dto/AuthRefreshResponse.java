@@ -6,6 +6,7 @@ public record AuthRefreshResponse(
         String appToken,
         Long userId
 ) {
+
     public static AuthRefreshResponse from(AuthRefreshResult authRefreshResult) {
         return new AuthRefreshResponse(
                 authRefreshResult.appToken(),
