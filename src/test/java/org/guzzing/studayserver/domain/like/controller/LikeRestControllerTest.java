@@ -124,23 +124,27 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        likeService.createLikeOfAcademy(param);
+        LikePostResult postResult = likeService.createLikeOfAcademy(param);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes")
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
-                .param("academyId", String.valueOf(academyId))
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE));
+        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", postResult.likeId())
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt()));
 
         // Then
         perform.andDo(print())
                 .andExpect(status().isNoContent())
                 .andDo(document("delete-like",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("좋아요 제거")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                                )
+                                .pathParameters(
+                                        parameterWithName("likeId").description("좋아요 아이디")
+                                )
+                                .build()
                         )
                 ));
     }

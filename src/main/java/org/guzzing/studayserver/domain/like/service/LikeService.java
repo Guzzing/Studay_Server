@@ -49,11 +49,10 @@ public class LikeService {
     }
 
     @Transactional
-    public void removeLikeOfAcademy(final Long academyId, final Long memberId) {
-        academyAccessService.validateAcademy(academyId);
+    public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
-        likeRepository.deleteByAcademyId(academyId);
+        likeRepository.deleteById(likeId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {

@@ -66,7 +66,7 @@ class LikeServiceTest {
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
-        likeService.removeLikeOfAcademy(savedLike.academyId(), memberId);
+        likeService.removeLikeOfAcademy(savedLike.likeId(), memberId);
 
         // Then
         boolean result = likeRepository.existsById(savedLike.likeId());
