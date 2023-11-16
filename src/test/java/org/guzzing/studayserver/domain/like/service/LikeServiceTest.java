@@ -79,7 +79,8 @@ class LikeServiceTest {
     @WithMockCustomOAuth2LoginUser
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
-        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo("학원명", 100L));
+        given(academyAccessService.findAcademyFeeInfo(any()))
+                .willReturn(new AcademyFeeInfo(1L, "학원명", 100L));
 
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
