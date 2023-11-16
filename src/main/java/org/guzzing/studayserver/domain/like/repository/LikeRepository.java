@@ -7,7 +7,7 @@ public interface LikeRepository {
 
     Like save(final Like like);
 
-    void deleteById(final Long id);
+    void deleteByAcademyId(final Long academyId);
 
     boolean existsById(final Long id);
 
@@ -15,6 +15,6 @@ public interface LikeRepository {
 
     long countByMemberId(final Long memberId);
 
-    boolean existsByMemberIdAndAcademyId(final Long memberId, final Long AcademyId);
+    boolean existsByMemberIdAndAcademyId(final Long memberId, final Long academyId);
 
 }
