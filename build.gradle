@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        restdocsApiSpecVersion = '0.16.2'
+        restdocsApiSpecVersion = '0.17.1'
     }
 }
 
@@ -8,7 +8,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
-
+    id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
 }
 
 group = 'org.guzzing'
@@ -16,6 +16,26 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+openapi3 {
+    servers = [
+            { url = "http://localhost:8080" },
+            { url = "https://studay.store" },
+            { url = "http://studay.store" }
+    ]
+    title = "스터데이 API 명세"
+    description = "스터데이 Swagger + RestDocs 문서"
+    version = "v1"
+    format = "json"
+    outputDirectory = "src/main/resources/static"
+    outputFileNamePrefix = "swagger"
 }
 
 repositories {
@@ -48,21 +68,24 @@ dependencies {
     // RestDocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
-    //spring rest docs
-    testImplementation "com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}"
+    // Spring Rest Api Spec
+    testImplementation "com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}"
 
-    //redis
+    // Swagger UI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    //webflux
+    // Webflux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-    // Spring Security 추가
+    // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     testImplementation "org.springframework.security:spring-security-test"
 
-    //JWT 토큰 생성
+    // JWT 토큰 생성
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'

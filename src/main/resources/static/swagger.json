@@ -1,0 +1,169 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "스터데이 API 명세",
+    "description" : "스터데이 Swagger + RestDocs 문서",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080"
+  }, {
+    "url" : "https://studay.store"
+  }, {
+    "url" : "http://studay.store"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/reviews" : {
+      "post" : {
+        "tags" : [ "reviews" ],
+        "operationId" : "post-review",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "JWT 토큰 (Bearer)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Bearer null"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/reviews390170193"
+              },
+              "examples" : {
+                "post-review" : {
+                  "value" : "{\n  \"academyId\" : 1,\n  \"kindness\" : true,\n  \"cheapFee\" : true,\n  \"goodFacility\" : false,\n  \"goodManagement\" : false,\n  \"lovelyTeaching\" : true,\n  \"shuttleAvailability\" : false\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "201",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/reviews2089715236"
+                },
+                "examples" : {
+                  "post-review" : {
+                    "value" : "{\n  \"reviewId\" : 1,\n  \"academyId\" : 1\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/reviewable" : {
+      "get" : {
+        "tags" : [ "reviews" ],
+        "operationId" : "get-reviewable",
+        "parameters" : [ {
+          "name" : "academyId",
+          "in" : "query",
+          "description" : "학원 아이디",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "JWT 토큰 (Bearer)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Bearer null"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/reviews-reviewable1148730325"
+                },
+                "examples" : {
+                  "get-reviewable" : {
+                    "value" : "{\n  \"academyId\" : 1,\n  \"reviewable\" : true\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "reviews390170193" : {
+        "type" : "object",
+        "properties" : {
+          "goodManagement" : {
+            "type" : "boolean",
+            "description" : "관리가 좋아요 리뷰 선택 여부"
+          },
+          "academyId" : {
+            "type" : "number",
+            "description" : "학원 아이디"
+          },
+          "shuttleAvailability" : {
+            "type" : "boolean",
+            "description" : "셔틀을 운행해요 리뷰 선택 여부"
+          },
+          "cheapFee" : {
+            "type" : "boolean",
+            "description" : "수강료가 싸요 리뷰 선택 여부"
+          },
+          "kindness" : {
+            "type" : "boolean",
+            "description" : "친절해요 리뷰 선택 여부"
+          },
+          "lovelyTeaching" : {
+            "type" : "boolean",
+            "description" : "가르침이 사랑스러워요 리뷰 선택 여부"
+          },
+          "goodFacility" : {
+            "type" : "boolean",
+            "description" : "시설이 좋아요 리뷰 선택 여부"
+          }
+        }
+      },
+      "reviews2089715236" : {
+        "type" : "object",
+        "properties" : {
+          "academyId" : {
+            "type" : "number",
+            "description" : "학원 아이디"
+          },
+          "reviewId" : {
+            "type" : "number",
+            "description" : "리뷰 아이디"
+          }
+        }
+      },
+      "reviews-reviewable1148730325" : {
+        "type" : "object",
+        "properties" : {
+          "academyId" : {
+            "type" : "number",
+            "description" : "학원 아이디"
+          },
+          "reviewable" : {
+            "type" : "boolean",
+            "description" : "리뷰 등록 가능 여부"
+          }
+        }
+      }
+    }
+  }
+}
