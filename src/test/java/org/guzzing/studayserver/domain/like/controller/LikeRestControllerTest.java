@@ -149,9 +149,6 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("좋아요 제거")
-                                .pathParameters(
-                                        parameterWithName("likeId").description("좋아요 아이디")
-                                )
                                 .build()
                         )
                 ));
