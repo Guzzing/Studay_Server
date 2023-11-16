@@ -48,10 +48,12 @@ public class LikeService {
         return LikePostResult.from(savedLike);
     }
 
-    public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
+    @Transactional
+    public void removeLikeOfAcademy(final Long academyId, final Long memberId) {
+        academyAccessService.validateAcademy(academyId);
         memberAccessService.validateMember(memberId);
 
-        likeRepository.deleteById(likeId);
+        likeRepository.deleteByAcademyId(academyId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {

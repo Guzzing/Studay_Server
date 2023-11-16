@@ -20,8 +20,6 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -126,11 +124,12 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        LikePostResult likePostResult = likeService.createLikeOfAcademy(param);
+        likeService.createLikeOfAcademy(param);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", likePostResult.likeId())
+        ResultActions perform = mockMvc.perform(delete("/likes")
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .param("academyId", String.valueOf(academyId))
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));
 
@@ -140,8 +139,8 @@ class LikeRestControllerTest {
                 .andDo(document("delete-like",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("likeId").description("좋아요 아이디")
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
                         )
                 ));
     }
