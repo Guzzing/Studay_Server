@@ -46,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @SpringBootTest
-@Transactional
 class ReviewRestControllerTest {
 
     @Autowired
@@ -116,6 +115,7 @@ class ReviewRestControllerTest {
     @Test
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
     @WithMockCustomOAuth2LoginUser
+    @Transactional
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
         final Long academyId = 1L;

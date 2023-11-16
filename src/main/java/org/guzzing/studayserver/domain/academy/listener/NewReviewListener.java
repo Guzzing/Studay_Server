@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.listener;
 
-import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+import static org.springframework.transaction.event.TransactionPhase.BEFORE_COMMIT;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class NewReviewListener {
         this.reviewCountRepository = reviewCountRepository;
     }
 
-    @TransactionalEventListener(phase = AFTER_COMMIT)
+    @TransactionalEventListener(phase = BEFORE_COMMIT)
     public void updateReviewCount(final NewReviewEvent event) {
         final long academyId = event.getAcademyId();
         final List<String> reviews = event.getReviews();
