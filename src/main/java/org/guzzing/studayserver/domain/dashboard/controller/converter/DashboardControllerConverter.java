@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.controller;
+package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
