@@ -131,11 +131,12 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        LikePostResult likePostResult = likeService.createLikeOfAcademy(param);
+        likeService.createLikeOfAcademy(param);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", likePostResult.likeId())
+        ResultActions perform = mockMvc.perform(delete("/likes")
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .param("academyId", String.valueOf(academyId))
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));
 
