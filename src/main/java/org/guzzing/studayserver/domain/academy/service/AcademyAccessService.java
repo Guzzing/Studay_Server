@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.academy.service;
 
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
-import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 
 public interface AcademyAccessService {
 
