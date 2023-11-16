@@ -20,6 +20,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -135,16 +137,11 @@ class LikeRestControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(document("delete-like",
                         preprocessRequest(prettyPrint()),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag(TAG)
-                                .summary("좋아요 제거")
-                                .requestHeaders(
-                                        headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
-                                )
-                                .pathParameters(
-                                        parameterWithName("likeId").description("좋아요 아이디")
-                                )
-                                .build()
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("likeId").description("좋아요 아이디")
                         )
                 ));
     }
@@ -174,19 +171,14 @@ class LikeRestControllerTest {
                 .andDo(document("get-like",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag(TAG)
-                                .summary("나의 좋아요 조회")
-                                .responseFields(
-                                        fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
-                                        fieldWithPath("likeAcademyInfos[].likeId").type(NUMBER).description("좋아요 아이디"),
-                                        fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER)
-                                                .description("좋아요한 학원 아이디"),
-                                        fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
-                                        fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
-                                        fieldWithPath("totalFee").type(NUMBER).description("총 비용")
-                                )
-                                .build()
+                        responseFields(
+                                fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
+                                fieldWithPath("likeAcademyInfos[].likeId").type(NUMBER).description("좋아요 아이디"),
+                                fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER)
+                                        .description("좋아요한 학원 아이디"),
+                                fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
+                                fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
+                                fieldWithPath("totalFee").type(NUMBER).description("총 비용")
                         )
                 ));
     }
