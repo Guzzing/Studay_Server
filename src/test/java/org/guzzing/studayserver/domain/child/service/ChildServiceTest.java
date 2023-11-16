@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
+import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -104,7 +104,7 @@ class ChildServiceTest {
             // When & Then
             assertThatThrownBy(() -> childService.create(param))
                     .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
+                    .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
         }
 
     }

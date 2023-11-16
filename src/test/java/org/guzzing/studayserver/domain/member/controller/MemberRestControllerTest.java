@@ -1,8 +1,11 @@
 package org.guzzing.studayserver.domain.member.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +14,7 @@ import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest.MemberAdditionalChildRequest;
 import org.guzzing.studayserver.domain.member.service.MemberService;
+import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -104,6 +108,47 @@ class MemberRestControllerTest {
                             new MemberAdditionalChildRequest("Child1", "")
                     )))
             );
+        }
+    }
+
+    @Nested
+    class getInformation {
+
+        @Test
+        @WithMockCustomOAuth2LoginUser(memberId = 999L)
+        @DisplayName("멤버가 존재하지 않는다면 예외를 발생시킨다.")
+        void whenMemberIdDoesNotExist_shouldThrowException() throws Exception {
+            // Given
+            Long nonExistentMemberId = 999L;
+            given(memberService.getById(nonExistentMemberId)).willThrow(new IllegalArgumentException());
+
+            // When & Then
+            mockMvc.perform(get("/members")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .param("memberId", nonExistentMemberId.toString()))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @WithMockCustomOAuth2LoginUser(memberId = 1L)
+        @DisplayName("멤버가 존재한다면 상세 정보를 반환한다.")
+        void whenMemberIdExists_shouldReturnMemberInformation() throws Exception {
+            // Given
+            String memberNickname = "테스트 닉네임";
+            String memberEmail = "test@example.com";
+            Long existingMemberId = 1L;
+            MemberInformationResult mockResult = new MemberInformationResult(memberNickname, memberEmail, List.of());
+            given(memberService.getById(existingMemberId)).willReturn(mockResult);
+
+            // When & Then
+            mockMvc.perform(get("/members")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .param("memberId", existingMemberId.toString()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.nickname").value(memberNickname))
+                    .andExpect(jsonPath("$.email").value(memberEmail));
         }
     }
 }

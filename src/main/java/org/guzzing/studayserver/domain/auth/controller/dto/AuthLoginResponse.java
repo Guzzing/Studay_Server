@@ -8,6 +8,7 @@ public record AuthLoginResponse(
         Long userId,
         String name
 ) {
+
     public static AuthLoginResponse from(AuthLoginResult authLoginResult) {
         return new AuthLoginResponse(
                 authLoginResult.appToken(),

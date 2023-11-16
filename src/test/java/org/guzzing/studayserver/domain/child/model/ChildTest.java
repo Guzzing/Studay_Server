@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.junit.jupiter.api.BeforeEach;

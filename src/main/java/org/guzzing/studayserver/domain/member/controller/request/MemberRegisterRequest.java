@@ -19,7 +19,7 @@ public record MemberRegisterRequest(
         String email,
 
         @NotNull
-        @Size(min = 1, max = 5, message = "아이는 최소 1명에서 최대 5명까지만 등록이 가능합니다.")
+        @Size(min = 1, max = 5, message = "아이는 최소 1명에서 최대 5명까지 등록이 가능합니다.")
         @Valid
         List<MemberAdditionalChildRequest> children
 ) {
