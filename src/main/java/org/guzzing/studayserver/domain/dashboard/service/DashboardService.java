@@ -4,6 +4,8 @@ import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
+import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
@@ -60,9 +62,13 @@ public class DashboardService {
     public DashboardPutResult editDashboard(final DashboardPutParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard source = serviceConverter.to(param);
+        final FeeInfo feeInfo = serviceConverter.convertToFeeInfo(param.paymentInfo());
+        final List<SimpleMemoType> simpleMemoTypes = serviceConverter.convertToSelectedSimpleMemoTypes(
+                param.simpleMemoTypeMap());
+
         final Dashboard dashboard = dashboardRepository.findDashboardById(param.dashboardId())
-                .update(source);
+                .updateFeeInfo(feeInfo)
+                .updateSimpleMemo(simpleMemoTypes);
 
         return serviceConverter.putResultFrom(dashboard);
     }

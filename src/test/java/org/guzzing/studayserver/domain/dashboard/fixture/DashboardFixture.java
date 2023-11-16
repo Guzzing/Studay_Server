@@ -6,7 +6,6 @@ import static java.time.DayOfWeek.SUNDAY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.YEARLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
 
@@ -14,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
@@ -66,12 +66,16 @@ public class DashboardFixture {
                         SimpleMemoType.SHUTTLE_AVAILABILITY, true));
     }
 
+    public DashboardPutRequest makePutRequest() {
+        return new DashboardPutRequest(
+                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
+                new SimpleMemo(true, false, false, true, false, true)
+        );
+    }
+
     public DashboardPutParam makePutParam(final long dashboardId) {
         return new DashboardPutParam(
-                dashboardId, 1L, 1L, 1L,
-                new ScheduleInfos(List.of(
-                        new ScheduleInfo(FRIDAY, "14:00", "18:00", WEEKLY),
-                        new ScheduleInfo(null, "12:30", "12:04", YEARLY))),
+                dashboardId,
                 new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
                 Map.of(
                         SimpleMemoType.KINDNESS, false,
@@ -79,8 +83,8 @@ public class DashboardFixture {
                         SimpleMemoType.GOOD_MANAGEMENT, true,
                         CHEAP_FEE, false,
                         SimpleMemoType.LOVELY_TEACHING, true,
-                        SimpleMemoType.SHUTTLE_AVAILABILITY, true),
-                true, false);
+                        SimpleMemoType.SHUTTLE_AVAILABILITY, true)
+        );
     }
 
     public Dashboard makeEntity() {

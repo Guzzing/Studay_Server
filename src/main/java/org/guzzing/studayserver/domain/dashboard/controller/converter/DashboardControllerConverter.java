@@ -49,14 +49,8 @@ public class DashboardControllerConverter {
     public DashboardPutParam to(final long dashboardId, final DashboardPutRequest request) {
         return new DashboardPutParam(
                 dashboardId,
-                request.childId(),
-                request.academyId(),
-                request.lessonId(),
-                convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
-                convertToSimpleMemoTypeMap(request.simpleMemo()),
-                request.isActive(),
-                request.isDeleted());
+                convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
     public DashboardPostResponse from(final DashboardPostResult result) {
@@ -70,9 +64,8 @@ public class DashboardControllerConverter {
     public DashboardPutResponse from(final DashboardPutResult result) {
         return new DashboardPutResponse(
                 result.dashboardId(),
-                result.childId(),
-                result.academyId(),
-                result.lessonId());
+                result.paymentInfo(),
+                convertToSimpleMemo(result.simpleMemoTypeMap()));
     }
 
     public DashboardPatchResponse from(final DashboardPatchResult result) {

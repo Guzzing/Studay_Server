@@ -1,8 +1,6 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
-import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.academyId;
 import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.childId;
-import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.lessonId;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,16 +33,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
+import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
@@ -154,7 +148,7 @@ class DashboardControllerTest {
 
         final Dashboard dashboard = dashboardFixture.createActiveEntity();
 
-        final DashboardPostRequest request = makePostRequest();
+        final DashboardPutRequest request = dashboardFixture.makePutRequest();
 
         // When
         final ResultActions perform = mockMvc.perform(put("/dashboards/{dashboardId}", dashboard.getId())
@@ -168,21 +162,15 @@ class DashboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.dashboardId").value(dashboard.getId()))
-                .andExpect(jsonPath("$.childId").value(request.childId()))
-                .andExpect(jsonPath("$.lessonId").value(request.lessonId()))
+                .andExpect(jsonPath("$.paymentInfo").isNotEmpty())
+                .andExpect(jsonPath("$.simpleMemo").isNotEmpty())
                 .andDo(document("post-dashboard",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("dashboardId").description("대시보드 아이디")
+                        ),
                         requestFields(
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디"),
-                                fieldWithPath("schedules").type(ARRAY).description("일정 메모 목록"),
-                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
-                                fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
-                                fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
-                                fieldWithPath("schedules[].repeatance").type(STRING).description("반복 종류"),
                                 fieldWithPath("paymentInfo").type(OBJECT).description("학원비 정보"),
                                 fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강비"),
                                 fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
@@ -203,9 +191,23 @@ class DashboardControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
-                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디")
+                                fieldWithPath("paymentInfo").type(OBJECT).description("학원비 정보"),
+                                fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강비"),
+                                fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
+                                fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀 버스 운행비"),
+                                fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
+                                fieldWithPath("simpleMemo").type(OBJECT).description("간단 메모 정보"),
+                                fieldWithPath("simpleMemo.kindness").type(BOOLEAN).description("[친절함] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
+                                        .description("[좋은 시설] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN).description("[싼 학원비] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
+                                        .description("[좋은 관리] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                        .description("[사랑스런 교육] 간단 메모 선택 여부"),
+                                fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                        .description("[셔틀 운행 여부] 간단 메모 선택 여부")
                         )
                 ));
     }
@@ -467,14 +469,6 @@ class DashboardControllerTest {
                                 fieldWithPath("isActive").type(BOOLEAN).description("대시보드 활성화 여부")
                         )
                 ));
-    }
-
-    private DashboardPostRequest makePostRequest() {
-        return new DashboardPostRequest(
-                childId, academyId, lessonId,
-                List.of(new Schedule(2, "12:00", "21:04", "WEEKLY")),
-                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
-                new SimpleMemo(true, false, false, true, false, true));
     }
 
 }
