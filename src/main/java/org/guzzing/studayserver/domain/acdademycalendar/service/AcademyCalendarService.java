@@ -4,8 +4,10 @@ import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academyschedule.AcademyScheduleRepository;
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
+import org.guzzing.studayserver.domain.acdademycalendar.repository.dto.AcademyTimeTemplateDateInfo;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarLoadToUpdateParam;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarCreateResults;
@@ -39,8 +41,10 @@ public class AcademyCalendarService {
 
     @Transactional
     public AcademyCalendarCreateResults createSchedules(AcademyCalendarCreateParam param) {
-        List<Long> academyTimeTemplateIds = new ArrayList<>();
+        List<AcademyTimeTemplateDateInfo> academyTimeTemplateDateInfos = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
+        DateTimeOverlapChecker.checkOverlap(academyTimeTemplateDateInfos,param.startDateOfAttendance(),param.startDateOfAttendance());
 
+        List<Long> academyTimeTemplateIds = new ArrayList<>();
         param.lessonScheduleParams().forEach(dashboardSchedule -> {
             AcademyTimeTemplate savedAcademyTimeTemplate = saveAcademyTimeTemplate(param, dashboardSchedule);
             academyTimeTemplateIds.add(savedAcademyTimeTemplate.getId());
@@ -88,10 +92,6 @@ public class AcademyCalendarService {
         DashboardScheduleAccessResult dashboardScheduleAccessResult = dashboardAccessService.getDashboardSchedule(academyTimeTemplate.getDashboardId());
 
         return AcademyCalendarLoadToUpdateResult.of(academyTimeTemplate, dashboardScheduleAccessResult);
-    }
-
-    public void updateTimeTemplate() {
-
     }
 
 }
