@@ -45,6 +45,19 @@ public class AcademyCalenderFixture {
         );
     }
 
+    public static AcademyTimeTemplate overlapAcademyTimeTemplate() {
+        return AcademyTimeTemplate.of(
+                mondayDashboardScheduleParam().dayOfWeek(),
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
+                false,
+                1L,
+                1L,
+                1L,
+                "매월 20일마다 상담 진행"
+        );
+    }
+
     public static RepeatPeriod fridayRepeatPeriod() {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,

@@ -1,5 +1,8 @@
 package org.guzzing.studayserver.domain.acdademycalendar.service;
 
+import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
+import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
+import org.guzzing.studayserver.domain.acdademycalendar.exception.DateOverlapException;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academyschedule.AcademyScheduleRepository;
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
@@ -68,6 +72,19 @@ class AcademyCalendarServiceTest {
                 .forEach(academySchedule -> {
                     assertThat(schedules).contains(academySchedule.getScheduleDate());
                 });
+    }
+
+    @Test
+    void createOverlapSchedules() {
+        //Given
+        academyTimeTemplateRepository.save(AcademyCalenderFixture.overlapAcademyTimeTemplate());
+
+        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
+
+        //When & Then
+        assertThatThrownBy(
+                () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
+        ).isInstanceOf(DateOverlapException.class);
     }
 
     @Test
