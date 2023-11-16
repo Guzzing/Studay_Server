@@ -285,23 +285,12 @@
             }
           }
         }
-      }
-    },
-    "/likes/{likeId}" : {
+      },
       "delete" : {
         "tags" : [ "좋아요 API" ],
         "summary" : "좋아요 제거",
         "description" : "좋아요 제거",
         "operationId" : "delete-like",
-        "parameters" : [ {
-          "name" : "likeId",
-          "in" : "path",
-          "description" : "좋아요 아이디",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
         "responses" : {
           "204" : {
             "description" : "204"
