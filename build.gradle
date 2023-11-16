@@ -27,11 +27,10 @@ configurations {
 openapi3 {
     servers = [
             { url = "http://localhost:8080" },
-            { url = "https://studay.store" },
-            { url = "http://studay.store" }
+            { url = "https://studay.store" }
     ]
-    title = "스터데이 API 명세"
-    description = "스터데이 Swagger + RestDocs 문서"
+    title = "스터데이"
+    description = "스터데이 API 문서"
     version = "v1"
     format = "json"
     outputDirectory = "src/main/resources/static"
