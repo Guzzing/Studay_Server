@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.testutil.fixture.academycalender;
 
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleCreateRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleUpdateRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
@@ -8,6 +7,7 @@ import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplat
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
@@ -25,6 +25,7 @@ public class AcademyCalenderFixture {
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR = LocalDate.of(2025, 11, 15);
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
+    private static final Long DASHBOARD_ID = 1L;
 
     public static LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
         return new LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
@@ -59,23 +60,28 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY
 
         );
     }
 
-    public static AcademyCalendarCreateRequest academyCalenderCreateRequest() {
-        return new AcademyCalendarCreateRequest(
-                List.of(mondayLessonScheduleCreateRequest(), fridayLessonScheduleCreateRequest()),
-                START_DATE_OF_ATTENDANCE,
-                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
+    public static AcademyCalendarDeleteParam isAfterAcademyCalendarDeleteParam(Long academyScheduleId) {
+        return new AcademyCalendarDeleteParam(
+                DASHBOARD_ID,
+                academyScheduleId,
+                true,
+                START_DATE_OF_ATTENDANCE.plusDays(30L)
+        );
+    }
+
+    public static AcademyCalendarDeleteParam isOnlyThatAcademyCalendarDeleteParam(Long academyScheduleId) {
+        return new AcademyCalendarDeleteParam(
+                DASHBOARD_ID,
+                academyScheduleId,
                 false,
-                WEEKLY_PERIODICITY.toString(),
-                1L,
-                1L,
-                "매월 20일마다 상담 진행"
+                START_DATE_OF_ATTENDANCE.plusDays(30L)
         );
     }
 
@@ -87,7 +93,7 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -119,7 +125,7 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -132,7 +138,7 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -184,7 +190,7 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY,
                 true
@@ -199,7 +205,7 @@ public class AcademyCalenderFixture {
                 false,
                 1L,
                 1L,
-                1L,
+                DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY,
                 false

@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.acdademycalendar.repository.academyschedu
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
@@ -173,7 +174,6 @@ class AcademyCalendarServiceTest {
     void updateTimeTemplate_afterUpdated() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
-
         academyCalendarService.createSchedules(academyCalendarCreateParam);
         AcademyCalendarUpdateParam academyCalendarUpdateParam =
                 AcademyCalenderFixture.isNotAllUpdatedAcademyCalendarUpdateParam(academyCalendarCreateParam.dashboardId());
@@ -198,4 +198,48 @@ class AcademyCalendarServiceTest {
         //Then
         assertThat(allAcademySchedules.size()).isEqualTo(afterUpdatedSchedules.size() + existedSchedules.size());
     }
+
+    @Test
+    void deletedSchedule_isOnlyThatSchedule() {
+        //Given
+        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
+
+        List<AcademySchedule> academySchedules = academyScheduleRepository.findByAcademyTimeTemplateId(timeTemplateId);
+        Long scheduleId = academySchedules.get(0).getId();
+        AcademyCalendarDeleteParam academyCalendarDeleteParam =
+                AcademyCalenderFixture.isOnlyThatAcademyCalendarDeleteParam(scheduleId);
+        List<AcademySchedule> allAcademySchedules = academyScheduleRepository.findAll();
+
+        //When
+        academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
+        List<AcademySchedule> isOnlyDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
+
+        //Then
+        assertThat(isOnlyDeletedScheduleAcademySchedules.size()).isEqualTo(allAcademySchedules.size()-1);
+    }
+
+    @Test
+    void deletedSchedule_isAfterSchedule() {
+        //Given
+        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
+
+        List<AcademySchedule> academySchedules = academyScheduleRepository.findByAcademyTimeTemplateId(timeTemplateId);
+        Long scheduleId = academySchedules.get(0).getId();
+        AcademyCalendarDeleteParam academyCalendarDeleteParam =
+                AcademyCalenderFixture.isAfterAcademyCalendarDeleteParam(scheduleId);
+
+        //When
+        academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
+        List<AcademySchedule> isOnlyDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
+
+        //Then
+        isOnlyDeletedScheduleAcademySchedules.forEach(
+                schedule-> assertThat(schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
+        );
+    }
+
 }
