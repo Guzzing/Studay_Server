@@ -5,6 +5,7 @@ import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplat
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
@@ -18,6 +19,7 @@ public class AcademyCalenderFixture {
 
     private static final LocalDate START_DATE_OF_ATTENDANCE = LocalDate.of(2023, 11, 15);
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR = LocalDate.of(2024, 11, 15);
+    private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR = LocalDate.of(2025, 11, 15);
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
 
@@ -38,7 +40,6 @@ public class AcademyCalenderFixture {
                 1L,
                 1L,
                 1L,
-                false,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY
 
@@ -142,5 +143,92 @@ public class AcademyCalenderFixture {
         );
     }
 
-}
+    public static AcademyCalendarUpdateParam isAllUpdatedAcademyCalendarUpdateParam(Long academyScheduleId) {
+        return new AcademyCalendarUpdateParam(
+                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                false,
+                1L,
+                1L,
+                1L,
+                "매월 20일마다 상담 진행",
+                WEEKLY_PERIODICITY,
+                true
+        );
+    }
 
+    public static AcademyCalendarUpdateParam isNotAllUpdatedAcademyCalendarUpdateParam(Long academyScheduleId) {
+        return new AcademyCalendarUpdateParam(
+                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+                LocalDate.of(2023, 12, 14),
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                false,
+                1L,
+                1L,
+                1L,
+                "매월 20일마다 상담 진행",
+                WEEKLY_PERIODICITY,
+                false
+        );
+    }
+
+    public static RepeatPeriod isAllUpdatedFridayRepeatPeriod() {
+        return RepeatPeriod.of(
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                fridayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+
+    public static RepeatPeriod isAllUpdatedMondayRepeatPeriod() {
+        return RepeatPeriod.of(
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                mondayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+    public static RepeatPeriod isExistedFridayRepeatPeriod() {
+        return RepeatPeriod.of(
+                START_DATE_OF_ATTENDANCE,
+                LocalDate.of(2023, 12, 13),
+                fridayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+
+    public static RepeatPeriod isExisteddMondayRepeatPeriod() {
+        return RepeatPeriod.of(
+                START_DATE_OF_ATTENDANCE,
+                LocalDate.of(2023, 12, 13),
+                mondayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+
+    public static RepeatPeriod isNotAllUpdatedFridayRepeatPeriod() {
+        return RepeatPeriod.of(
+                LocalDate.of(2023, 12, 14),
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                fridayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+
+    public static RepeatPeriod isNotAllUpdatedMondayRepeatPeriod() {
+        return RepeatPeriod.of(
+                LocalDate.of(2023, 12, 14),
+                END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
+                mondayDashboardScheduleParam().dayOfWeek(),
+                WEEKLY_PERIODICITY
+        );
+    }
+
+}
