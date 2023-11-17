@@ -6,7 +6,7 @@ import org.guzzing.studayserver.domain.academy.repository.academy.AcademyReposit
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
-import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LessonException;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AcademyAccessServiceImpl implements
 
     @Override
     public AcademyFeeInfo findAcademyFeeInfo(Long academyId) {
-        return AcademyFeeInfo.to(academyRepository.findAcademyFeeInfo(academyId));
+        return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
     @Override
