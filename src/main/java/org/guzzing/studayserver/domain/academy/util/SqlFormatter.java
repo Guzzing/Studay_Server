@@ -5,7 +5,6 @@ import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 public class SqlFormatter {
-
     private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)',4326)";
 
     private SqlFormatter() {
@@ -29,7 +28,7 @@ public class SqlFormatter {
     public static String makeDiagonalByLineString(Location northEast, Location southWest) {
         return String.format(
                 LINESTRING_SQL,
-                northEast.getLatitude(), northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
+                northEast.getLatitude(),northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
         );
 
     }

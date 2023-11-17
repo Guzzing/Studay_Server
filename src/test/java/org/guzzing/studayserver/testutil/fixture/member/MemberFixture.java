@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.testutil.fixture.member;
 
-import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.NickName;
+import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 

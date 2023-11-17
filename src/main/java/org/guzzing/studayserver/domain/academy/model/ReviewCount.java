@@ -1,11 +1,5 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.CHEAP_FEE;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_FACILITY;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_MANAGEMENT;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.KINDNESS;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.LOVELY_TEACHING;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,9 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.Map;
 import lombok.Getter;
-import org.guzzing.studayserver.domain.academy.listener.NewReviewType;
 
 @Getter
 @Entity
@@ -79,12 +71,4 @@ public class ReviewCount {
         return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, academy);
     }
 
-    public void updateSelectedReviewCount(final Map<NewReviewType, Integer> newReview) {
-        this.kindnessCount += newReview.get(KINDNESS);
-        this.goodFacilityCount += newReview.get(GOOD_FACILITY);
-        this.cheapFeeCount += newReview.get(CHEAP_FEE);
-        this.goodManagementCount += newReview.get(GOOD_MANAGEMENT);
-        this.lovelyTeachingCount += newReview.get(LOVELY_TEACHING);
-//        this.shuttleAvailability += newReview.get(SHUTTLE_AVAILABILITY);
-    }
 }

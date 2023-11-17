@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
@@ -66,7 +66,7 @@ class LikeServiceTest {
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
-        likeService.removeLikeOfAcademy(savedLike.likeId(), memberId);
+        likeService.removeLikeOfAcademy(savedLike.academyId(), memberId);
 
         // Then
         boolean result = likeRepository.existsById(savedLike.likeId());
@@ -80,7 +80,7 @@ class LikeServiceTest {
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
         given(academyAccessService.findAcademyFeeInfo(any()))
-                .willReturn(new AcademyFeeInfo("학원명", 100L));
+                .willReturn(new AcademyFeeInfo(1L, "학원명", 100L));
 
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 

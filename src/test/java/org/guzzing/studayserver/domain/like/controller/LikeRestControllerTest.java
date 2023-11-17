@@ -1,13 +1,13 @@
 package org.guzzing.studayserver.domain.like.controller;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -18,21 +18,19 @@ import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
+import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -54,6 +52,8 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class LikeRestControllerTest {
+
+    private static final String TAG = "좋아요 API";
 
     @Autowired
     private MockMvc mockMvc;
@@ -107,16 +107,21 @@ class LikeRestControllerTest {
                 .andDo(document("post-like",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                        ),
-                        requestFields(
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
-                        ),
-                        responseFields(
-                                fieldWithPath("likeId").type(NUMBER).description("좋아요 아이디"),
-                                fieldWithPath("memberId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("좋아요 등록")
+                                .requestHeaders(
+                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                                )
+                                .requestFields(
+                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                                )
+                                .responseFields(
+                                        fieldWithPath("likeId").type(NUMBER).description("좋아요 아이디"),
+                                        fieldWithPath("memberId").type(NUMBER).description("학원 아이디"),
+                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                                )
+                                .build()
                         )
                 ));
     }
@@ -126,11 +131,14 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+        likeService.createLikeOfAcademy(param);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", postResult.likeId())
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt()));
+        ResultActions perform = mockMvc.perform(delete("/likes")
+                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .param("academyId", String.valueOf(academyId))
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE));
 
         // Then
         perform.andDo(print())
@@ -151,10 +159,9 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getAllLikes_MemberId() throws Exception {
         // Given
-        given(academyAccessService.findAcademyFeeInfo(any()))
-                .willReturn(new AcademyFeeInfo("학원명", 100L));
+        given(academyAccessService.findAcademyFeeInfo(any())).willReturn(new AcademyFeeInfo(1L, "학원명", 100L));
 
-        likeService.createLikeOfAcademy(param);
+        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
         ResultActions perform = mockMvc.perform(get("/likes")
@@ -171,14 +178,18 @@ class LikeRestControllerTest {
                 .andDo(document("get-like",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        responseFields(
-                                fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
-                                fieldWithPath("likeAcademyInfos[].likeId").type(NUMBER).description("좋아요 아이디"),
-                                fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER)
-                                        .description("좋아요한 학원 아이디"),
-                                fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
-                                fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
-                                fieldWithPath("totalFee").type(NUMBER).description("총 비용")
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("나의 좋아요 조회")
+                                .responseFields(
+                                        fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
+                                        fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER)
+                                                .description("좋아요한 학원 아이디"),
+                                        fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
+                                        fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
+                                        fieldWithPath("totalFee").type(NUMBER).description("총 비용")
+                                )
+                                .build()
                         )
                 ));
     }

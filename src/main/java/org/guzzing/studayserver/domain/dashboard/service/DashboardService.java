@@ -4,8 +4,6 @@ import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
@@ -50,7 +48,7 @@ public class DashboardService {
     public DashboardPostResult createDashboard(final DashboardPostParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(param.academyId());
-        academyAccessService.validateLesson(param.academyId(), param.lessonId());
+        academyAccessService.validateLesson(param.lessonId());
 
         final Dashboard dashboard = serviceConverter.to(param);
         final Dashboard savedDashboard = dashboardRepository.save(dashboard);
@@ -62,13 +60,9 @@ public class DashboardService {
     public DashboardPutResult editDashboard(final DashboardPutParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final FeeInfo feeInfo = serviceConverter.convertToFeeInfo(param.paymentInfo());
-        final List<SimpleMemoType> simpleMemoTypes = serviceConverter.convertToSelectedSimpleMemoTypes(
-                param.simpleMemoTypeMap());
-
+        final Dashboard source = serviceConverter.to(param);
         final Dashboard dashboard = dashboardRepository.findDashboardById(param.dashboardId())
-                .updateFeeInfo(feeInfo)
-                .updateSimpleMemo(simpleMemoTypes);
+                .update(source);
 
         return serviceConverter.putResultFrom(dashboard);
     }
@@ -87,7 +81,6 @@ public class DashboardService {
 
     public DashboardGetResults findDashboards(final long childId, final boolean activeOnly, final long memberId) {
         memberAccessService.validateMember(memberId);
-        memberAccessService.validateChild(memberId, childId);
 
         final List<Dashboard> dashboards = activeOnly
                 ? dashboardRepository.findActiveOnlyByChildId(childId)

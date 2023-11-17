@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
-import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
@@ -78,7 +77,7 @@ public class DashboardRestController {
      * @return DashboardPostResponse
      */
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardPutResponse> updateDashboard(
+    public ResponseEntity<DashboardPutResponse> ㅖupdateDashboard(
             @PathVariable final Long dashboardId,
             @Validated @RequestBody final DashboardPutRequest request,
             @MemberId final Long memberId
