@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.model;
 
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
@@ -12,6 +13,7 @@ class AcademyTimeTemplateTest {
     private static final int MAX_DIFFERENCE_YEAR = 3;
 
     @Test
+    @DisplayName("등원 일정의 간격이 설정한 최대 년수를 넘어가면 예외를 던진다.")
     void changeEndDateOfAttendance_afterMaxDifferenceYear_throwException() {
         //Given
         AcademyTimeTemplate academyTimeTemplate = AcademyCalenderFixture.fridayAcademyTimeTemplate();
@@ -24,6 +26,7 @@ class AcademyTimeTemplateTest {
     }
 
     @Test
+    @DisplayName("수정하려고 하는 마지막 등원일자가 등원 시작일보다 이전일 경우 예외를 던진다.")
     void changeEndDateOfAttendance_beforeStartDate_throwException() {
         //Given
         AcademyTimeTemplate academyTimeTemplate = AcademyCalenderFixture.fridayAcademyTimeTemplate();

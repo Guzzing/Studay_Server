@@ -5,5 +5,5 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 public interface AcademyCalendarAccessService {
 
     void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam);
-    
+
 }

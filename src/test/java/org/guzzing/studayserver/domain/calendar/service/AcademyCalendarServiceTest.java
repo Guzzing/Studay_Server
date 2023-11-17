@@ -14,11 +14,11 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.dashboard.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
@@ -33,7 +33,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
-@ActiveProfiles({"dev", "oauth"})
 class AcademyCalendarServiceTest {
 
     @Autowired
@@ -52,7 +51,8 @@ class AcademyCalendarServiceTest {
     private DashboardAccessService dashboardAccessService;
 
     @Test
-    void createSchedules() {
+    @DisplayName("대시보드를 통해 가져온 학원 일정 정보를 바탕으로 학원 스케줄을 생성하고 그 범위 이내에 올바르게 생성되는지 확인한다.")
+    void createSchedules_success() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
         RepeatPeriod fridayRepeatPeriod = AcademyCalenderFixture.fridayRepeatPeriod();
@@ -77,7 +77,8 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
-    void createOverlapSchedules() {
+    @DisplayName("기존에 존재하는 학원 스케줄 일정과 중복된 일정을 생성하려고 하는 경우 예외를 던진다.")
+    void createOverlapSchedules_throwException() {
         //Given
         academyTimeTemplateRepository.save(AcademyCalenderFixture.overlapAcademyTimeTemplate());
 
@@ -90,6 +91,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
+    @DisplayName("하나의 학원 스케줄을 수정하려고 할 때 기존의 정보를 올바르게 불러오는지 대시보드 데이터와 비교한다.")
     void loadTimeTemplateToUpdate() {
         //Given
         AcademyTimeTemplate savedMondayAcademyTimeTemplate =
@@ -144,6 +146,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
+    @DisplayName("모든 일정에 대해서 일괄 수정을 진행한 결과가 의도한 일정 범위 내에 잘 만들어졌는지 확인한다.")
     void updateTimeTemplate_isAllUpdated() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
@@ -171,6 +174,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
+    @DisplayName("해당 일 이후 수정된 스케줄 개수와 수정되지 않고 남은 스케줄의 개수가 전체 스케줄의 개수와 일치하는지 확인한다.")
     void updateTimeTemplate_afterUpdated() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
@@ -200,6 +204,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
+    @DisplayName("해당 일자의 스케줄만 삭제하였을 때 기존에 남은 스케줄 개수에서 하나만 줄어들었는지 확인한다.")
     void deletedSchedule_isOnlyThatSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
@@ -221,6 +226,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
+    @DisplayName("해당 일만 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
     void deletedSchedule_isAfterSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
