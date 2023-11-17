@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.acdademycalendar.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Getter;
 
 import java.time.DayOfWeek;
@@ -10,6 +11,8 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "academy_time_templates")
 public class AcademyTimeTemplate {
+
+    private static final int MAX_DIFFERENCE_YEAR = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +35,6 @@ public class AcademyTimeTemplate {
     @Column(name = "isAlarmed",
             nullable = false)
     private boolean isAlarmed;
-
 
     @Column(name="member_id",
             nullable = false)
@@ -95,7 +97,22 @@ public class AcademyTimeTemplate {
         );
     }
 
+    public void changeEndDateOfAttendance(LocalDate endDateOfAttendance) {
+        if(isValidPeriod(endDateOfAttendance)){
+            this.endDateOfAttendance = endDateOfAttendance;
+        }
+    }
 
+    private boolean isValidPeriod(LocalDate endDate) {
+        if(endDate.isAfter(startDateOfAttendance.plusYears(MAX_DIFFERENCE_YEAR))){
+            throw new IllegalArgumentException(String.format("스케줄 일정은 %d년을 넘을 수 없습니다.", MAX_DIFFERENCE_YEAR));
+        }
 
+        if(endDate.isBefore(startDateOfAttendance)) {
+            throw new IllegalArgumentException("마지막 등원일이 시작 등원일보다 이전일 수는 없습니다.");
+        }
+
+        return true;
+    }
 
 }
