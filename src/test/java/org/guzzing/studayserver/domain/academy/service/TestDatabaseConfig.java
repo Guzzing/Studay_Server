@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class TestDatabaseConfig {
 
     @Bean
-    public DatabaseInitializer databaseInitializer( JdbcTemplate jdbcTemplate) {
+    public DatabaseInitializer databaseInitializer(JdbcTemplate jdbcTemplate) {
         return new DatabaseInitializer(jdbcTemplate);
     }
 }
