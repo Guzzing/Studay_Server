@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.acdademycalendar.service;
 
+import org.guzzing.studayserver.domain.acdademycalendar.exception.NotGeneratedScheduleException;
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.scheduler.*;
@@ -9,6 +10,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.guzzing.studayserver.global.error.response.ErrorCode.NOT_GENERATED_SCHEDULED;
 
 @Component
 public class PeriodicStrategy {
@@ -27,8 +30,14 @@ public class PeriodicStrategy {
     }
 
     public List<LocalDate> createSchedules(RepeatPeriod repeatPeriod) {
-        return periodicStrategies.get(repeatPeriod.periodicity())
+        List<LocalDate> generatedSchedules = periodicStrategies.get(repeatPeriod.periodicity())
                 .generateSchedules(repeatPeriod);
+
+        if(generatedSchedules.size() == 0 || generatedSchedules == null) {
+            throw new NotGeneratedScheduleException(NOT_GENERATED_SCHEDULED);
+        }
+
+        return generatedSchedules;
     }
 
 }
