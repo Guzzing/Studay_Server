@@ -1,15 +1,15 @@
 package org.guzzing.studayserver.testutil.fixture.academycalender;
 
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleCreateRequest;
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleUpdateRequest;
-import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
-import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplate;
-import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarDeleteParam;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleCreateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleUpdateRequest;
+import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
+import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
+import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
 

@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.dashboard;
 
-import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 
 import java.util.List;
 
