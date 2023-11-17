@@ -227,11 +227,11 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/likes-1333994062"
+                  "$ref" : "#/components/schemas/likes-1606013874"
                 },
                 "examples" : {
                   "get-like" : {
-                    "value" : "{\n  \"likeAcademyInfos\" : [ {\n    \"academyId\" : 1,\n    \"academyName\" : \"학원명\",\n    \"expectedFee\" : 100\n  } ],\n  \"totalFee\" : 100\n}"
+                    "value" : "{\n  \"likeAcademyInfos\" : [ {\n    \"likeId\" : 3,\n    \"academyId\" : 1,\n    \"academyName\" : \"학원명\",\n    \"expectedFee\" : 100\n  } ],\n  \"totalFee\" : 100\n}"
                   }
                 }
               }
@@ -758,6 +758,40 @@
           }
         }
       },
+      "likes-1606013874" : {
+        "type" : "object",
+        "properties" : {
+          "totalFee" : {
+            "type" : "number",
+            "description" : "총 비용"
+          },
+          "likeAcademyInfos" : {
+            "type" : "array",
+            "description" : "좋아요한 학원 비용 목록",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "academyId" : {
+                  "type" : "number",
+                  "description" : "좋아요한 학원 아이디"
+                },
+                "academyName" : {
+                  "type" : "string",
+                  "description" : "학원명"
+                },
+                "likeId" : {
+                  "type" : "number",
+                  "description" : "좋아요 아이디"
+                },
+                "expectedFee" : {
+                  "type" : "number",
+                  "description" : "예상 교육비"
+                }
+              }
+            }
+          }
+        }
+      },
       "likes2121425487" : {
         "type" : "object",
         "properties" : {
@@ -967,36 +1001,6 @@
                     }
                   },
                   "description" : "교육비 정보"
-                }
-              }
-            }
-          }
-        }
-      },
-      "likes-1333994062" : {
-        "type" : "object",
-        "properties" : {
-          "totalFee" : {
-            "type" : "number",
-            "description" : "총 비용"
-          },
-          "likeAcademyInfos" : {
-            "type" : "array",
-            "description" : "좋아요한 학원 비용 목록",
-            "items" : {
-              "type" : "object",
-              "properties" : {
-                "academyId" : {
-                  "type" : "number",
-                  "description" : "좋아요한 학원 아이디"
-                },
-                "academyName" : {
-                  "type" : "string",
-                  "description" : "학원명"
-                },
-                "expectedFee" : {
-                  "type" : "number",
-                  "description" : "예상 교육비"
                 }
               }
             }

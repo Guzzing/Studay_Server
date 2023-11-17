@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "children")
