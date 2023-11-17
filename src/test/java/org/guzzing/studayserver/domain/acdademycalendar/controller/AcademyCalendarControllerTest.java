@@ -2,10 +2,9 @@ package org.guzzing.studayserver.domain.acdademycalendar.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarCreateRequest;
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarUpdateRequest;
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleCreateRequest;
-import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleUpdateRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.*;
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
 import org.guzzing.studayserver.domain.acdademycalendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -28,6 +27,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,6 +68,18 @@ class AcademyCalendarControllerTest {
             mvc.perform(put("/academy-schedules")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(academyCalendarUpdateRequest))
+                            .with(csrf()))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @DisplayName("스케줄 삭제할 때 요청값에 대해 검증한다.")
+        @WithMockCustomOAuth2LoginUser
+        @ParameterizedTest
+        @MethodSource("provideInvalidDeleteRequests")
+        void deleteSchedule(AcademyCalendarDeleteRequest academyCalendarDeleteRequest) throws Exception {
+            mvc.perform(delete("/academy-schedules")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(academyCalendarDeleteRequest))
                             .with(csrf()))
                     .andExpect(status().isBadRequest());
         }
@@ -285,6 +297,30 @@ class AcademyCalendarControllerTest {
                             Periodicity.WEEKLY.toString(),
                             null
                     )
+            );
+        }
+
+        private static Stream<AcademyCalendarDeleteRequest> provideInvalidDeleteRequests() {
+           return Stream.of(
+                    new AcademyCalendarDeleteRequest(
+                            null,
+                            1L,
+                            true,
+                            LocalDate.of(2024,5,11)
+                    ),
+                    new AcademyCalendarDeleteRequest(
+                            1L,
+                            null,
+                            true,
+                            LocalDate.of(2024,5,11)
+                    ),
+                    new AcademyCalendarDeleteRequest(
+                            1L,
+                            1L,
+                            null,
+                            LocalDate.of(2024,5,11)
+                    )
+
             );
         }
 
