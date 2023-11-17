@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.controller.converter;
+package org.guzzing.studayserver.domain.dashboard.controller;
 
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
@@ -49,8 +49,14 @@ public class DashboardControllerConverter {
     public DashboardPutParam to(final long dashboardId, final DashboardPutRequest request) {
         return new DashboardPutParam(
                 dashboardId,
+                request.childId(),
+                request.academyId(),
+                request.lessonId(),
+                convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
-                convertToSimpleMemoTypeMap(request.simpleMemo()));
+                convertToSimpleMemoTypeMap(request.simpleMemo()),
+                request.isActive(),
+                request.isDeleted());
     }
 
     public DashboardPostResponse from(final DashboardPostResult result) {
@@ -64,8 +70,9 @@ public class DashboardControllerConverter {
     public DashboardPutResponse from(final DashboardPutResult result) {
         return new DashboardPutResponse(
                 result.dashboardId(),
-                result.paymentInfo(),
-                convertToSimpleMemo(result.simpleMemoTypeMap()));
+                result.childId(),
+                result.academyId(),
+                result.lessonId());
     }
 
     public DashboardPatchResponse from(final DashboardPatchResult result) {

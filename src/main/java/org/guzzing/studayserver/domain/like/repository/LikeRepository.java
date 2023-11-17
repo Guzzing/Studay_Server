@@ -7,7 +7,7 @@ public interface LikeRepository {
 
     Like save(final Like like);
 
-    void deleteById(final Long likeId);
+    void deleteByAcademyId(final Long academyId);
 
     boolean existsById(final Long id);
 

@@ -5,26 +5,15 @@ import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.NONE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.YEARLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_MANAGEMENT;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.KINDNESS;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.SHUTTLE_AVAILABILITY;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
-import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
@@ -40,8 +29,6 @@ import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
-import org.guzzing.studayserver.domain.review.model.Review;
-import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,33 +58,29 @@ public class DashboardFixture {
                         new ScheduleInfo(SUNDAY, "12:30", "12:04", BIWEEKLY))),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 Map.of(
-                        KINDNESS, true,
-                        GOOD_FACILITY, false,
-                        GOOD_MANAGEMENT, true,
+                        SimpleMemoType.KINDNESS, true,
+                        SimpleMemoType.GOOD_FACILITY, false,
+                        SimpleMemoType.GOOD_MANAGEMENT, true,
                         CHEAP_FEE, true,
-                        LOVELY_TEACHING, false,
-                        SHUTTLE_AVAILABILITY, true));
-    }
-
-    public DashboardPutRequest makePutRequest() {
-        return new DashboardPutRequest(
-                new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
-                new SimpleMemo(true, false, false, true, false, true)
-        );
+                        SimpleMemoType.LOVELY_TEACHING, false,
+                        SimpleMemoType.SHUTTLE_AVAILABILITY, true));
     }
 
     public DashboardPutParam makePutParam(final long dashboardId) {
         return new DashboardPutParam(
-                dashboardId,
+                dashboardId, 1L, 1L, 1L,
+                new ScheduleInfos(List.of(
+                        new ScheduleInfo(FRIDAY, "14:00", "18:00", WEEKLY),
+                        new ScheduleInfo(null, "12:30", "12:04", YEARLY))),
                 new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
                 Map.of(
-                        KINDNESS, false,
-                        GOOD_FACILITY, true,
-                        GOOD_MANAGEMENT, true,
+                        SimpleMemoType.KINDNESS, false,
+                        SimpleMemoType.GOOD_FACILITY, true,
+                        SimpleMemoType.GOOD_MANAGEMENT, true,
                         CHEAP_FEE, false,
-                        LOVELY_TEACHING, true,
-                        SHUTTLE_AVAILABILITY, true)
-        );
+                        SimpleMemoType.LOVELY_TEACHING, true,
+                        SimpleMemoType.SHUTTLE_AVAILABILITY, true),
+                true, false);
     }
 
     public Dashboard makeEntity() {

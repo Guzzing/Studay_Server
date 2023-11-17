@@ -17,7 +17,7 @@ public enum ErrorCode {
     REQUEST_PARAM_MISSING_ERROR("G005", "RequestParam에 데이터가 전달되지 않았습니다."),
     INVALID_TYPE_VALUE_ERROR("G006", "타입이 유효하지 않습니다."),
     NOT_FOUND_ENTITY("G007", "엔티티를 찾을 수 없습니다."),
-    UTIL_NOT_CONSTRUCTOR("G008", "유틸클래스는 생성자를 호출할 수 없습니다."),
+    UTIL_NOT_CONSTRUCTOR("G008","유틸클래스는 생성자를 호출할 수 없습니다."),
 
 
     //login

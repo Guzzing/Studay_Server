@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.review.service;
 
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.domain.review.event.NewReviewEvent;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
@@ -10,7 +9,6 @@ import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostPara
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
 import org.guzzing.studayserver.global.exception.ReviewException;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private final ApplicationEventPublisher eventPublisher;
     private final ReviewRepository reviewRepository;
     private final AcademyAccessService academyAccessService;
     private final MemberAccessService memberAccessService;
 
     public ReviewService(
-            final ApplicationEventPublisher eventPublisher,
             final ReviewRepository reviewRepository,
             final AcademyAccessService academyAccessService,
             final MemberAccessService memberAccessService
     ) {
-        this.eventPublisher = eventPublisher;
         this.reviewRepository = reviewRepository;
         this.academyAccessService = academyAccessService;
         this.memberAccessService = memberAccessService;
@@ -40,7 +35,7 @@ public class ReviewService {
         memberAccessService.validateMember(param.memberId());
         academyAccessService.validateAcademy(param.academyId());
 
-        final ReviewableResult reviewableResult = getReviewableToAcademy(
+        ReviewableResult reviewableResult = getReviewableToAcademy(
                 param.memberId(),
                 param.academyId());
 
@@ -53,9 +48,7 @@ public class ReviewService {
                 param.memberId(),
                 ReviewType.getSelectedReviewMap(param));
 
-        final Review savedReview = reviewRepository.save(review);
-
-        eventPublisher.publishEvent(NewReviewEvent.of(savedReview));
+        Review savedReview = reviewRepository.save(review);
 
         return ReviewPostResult.from(savedReview);
     }
@@ -64,7 +57,7 @@ public class ReviewService {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(academyId);
 
-        final boolean existsReview = reviewRepository.existsByMemberIdAndAcademyId(memberId, academyId);
+        boolean existsReview = reviewRepository.existsByMemberIdAndAcademyId(memberId, academyId);
 
         return ReviewableResult.of(memberId, academyId, !existsReview);
     }
