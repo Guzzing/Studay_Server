@@ -2,10 +2,10 @@ package org.guzzing.studayserver.domain.like.service;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikedAcademyFeeInfo;

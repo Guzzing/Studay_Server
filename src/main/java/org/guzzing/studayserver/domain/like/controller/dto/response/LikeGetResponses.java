@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.like.controller.dto.response;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikedAcademyFeeInfo;
 
