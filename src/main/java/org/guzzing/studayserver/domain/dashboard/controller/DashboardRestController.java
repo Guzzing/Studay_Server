@@ -73,9 +73,10 @@ public class DashboardRestController {
     /**
      * 대시보드 수정
      *
+     * @param dashboardId
      * @param request
      * @param memberId
-     * @return DashboardPostResponse
+     * @return DashboardPutResponse
      */
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPutResponse> updateDashboard(
