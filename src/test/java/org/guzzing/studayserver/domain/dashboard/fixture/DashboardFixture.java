@@ -3,8 +3,6 @@ package org.guzzing.studayserver.domain.dashboard.fixture;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;

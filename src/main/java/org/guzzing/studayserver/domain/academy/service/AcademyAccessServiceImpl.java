@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import java.util.Objects;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
