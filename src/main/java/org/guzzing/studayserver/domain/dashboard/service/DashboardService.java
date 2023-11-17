@@ -50,7 +50,7 @@ public class DashboardService {
     public DashboardPostResult createDashboard(final DashboardPostParam param, final Long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(param.academyId());
-        academyAccessService.validateLesson(param.lessonId());
+        academyAccessService.validateLesson(param.academyId(), param.lessonId());
 
         final Dashboard dashboard = serviceConverter.to(param);
         final Dashboard savedDashboard = dashboardRepository.save(dashboard);

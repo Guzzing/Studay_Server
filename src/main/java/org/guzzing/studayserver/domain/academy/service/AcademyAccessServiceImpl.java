@@ -43,11 +43,14 @@ public class AcademyAccessServiceImpl implements
     }
 
     @Override
-    public void validateLesson(Long lessonId) {
-        final boolean existsLesson = lessonRepository.existsById(lessonId);
+    public void validateLesson(final Long academyId, final Long lessonId) {
+        final Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new LessonException("존재하지 않는 수업입니다."));
 
-        if (!existsLesson) {
-            throw new LessonException("존재하지 않는 수업입니다.");
+        final Long id = lesson.getAcademy().getId();
+
+        if (id != academyId) {
+            throw new LessonException("해당 학원의 수업이 아닙니다.");
         }
     }
 
