@@ -6,12 +6,12 @@ import org.guzzing.studayserver.domain.acdademycalendar.repository.academyschedu
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.acdademycalendar.repository.dto.AcademyTimeTemplateDateInfo;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
-import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarLoadToUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.result.AcademyCalendarUpdateResults;
 import org.guzzing.studayserver.domain.dashboard.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,8 @@ public class AcademyCalendarService {
     public AcademyCalendarService(
             AcademyScheduleRepository academyScheduleRepository,
             AcademyTimeTemplateRepository academyTimeTemplateRepository,
-            PeriodicStrategy periodicStrategy, DashboardAccessService dashboardAccessService) {
+            PeriodicStrategy periodicStrategy,
+            DashboardAccessService dashboardAccessService) {
         this.academyScheduleRepository = academyScheduleRepository;
         this.academyTimeTemplateRepository = academyTimeTemplateRepository;
         this.periodicStrategy = periodicStrategy;
@@ -41,8 +42,13 @@ public class AcademyCalendarService {
 
     @Transactional
     public AcademyCalendarCreateResults createSchedules(AcademyCalendarCreateParam param) {
-        List<AcademyTimeTemplateDateInfo> academyTimeTemplateDateInfos = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
-        DateTimeOverlapChecker.checkOverlap(academyTimeTemplateDateInfos,param.startDateOfAttendance(),param.startDateOfAttendance());
+        List<AcademyTimeTemplateDateInfo> academyTimeTemplateDateInfos =
+                academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
+        DateTimeOverlapChecker.checkOverlap(
+                academyTimeTemplateDateInfos,
+                param.startDateOfAttendance(),
+                param.startDateOfAttendance()
+        );
 
         List<Long> academyTimeTemplateIds = new ArrayList<>();
         param.lessonScheduleParams().forEach(dashboardSchedule -> {
@@ -88,10 +94,64 @@ public class AcademyCalendarService {
 
     @Transactional(readOnly = true)
     public AcademyCalendarLoadToUpdateResult loadTimeTemplateToUpdate(Long academyScheduleId) {
-        AcademyTimeTemplate academyTimeTemplate = academyScheduleRepository.findAcademyTimeTemplateById(academyScheduleId);
-        DashboardScheduleAccessResult dashboardScheduleAccessResult = dashboardAccessService.getDashboardSchedule(academyTimeTemplate.getDashboardId());
+        AcademyTimeTemplate academyTimeTemplate = academyScheduleRepository.findDistinctAcademyTimeTemplate(academyScheduleId);
+        DashboardScheduleAccessResult dashboardScheduleAccessResult =
+                dashboardAccessService.getDashboardSchedule(academyTimeTemplate.getDashboardId());
 
         return AcademyCalendarLoadToUpdateResult.of(academyTimeTemplate, dashboardScheduleAccessResult);
+    }
+
+    @Transactional
+    public AcademyCalendarUpdateResults updateTimeTemplate(
+            AcademyCalendarUpdateParam academyCalendarUpdateParam
+    ) {
+        List<AcademyTimeTemplateDateInfo> academyTimeTemplates = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(
+                academyCalendarUpdateParam.dashboardId());
+
+        if (academyCalendarUpdateParam.isAllUpdated()) {
+            deleteAcademyTimeTemplates(academyTimeTemplates);
+            return AcademyCalendarUpdateResults.to(
+                    createSchedules(AcademyCalendarCreateParam.from(academyCalendarUpdateParam)));
+        }
+
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, academyCalendarUpdateParam.startDateOfAttendance());
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, academyCalendarUpdateParam.startDateOfAttendance());
+        return AcademyCalendarUpdateResults.to(
+                createSchedules(AcademyCalendarCreateParam.from(academyCalendarUpdateParam)));
+    }
+
+    private void deleteAcademyTimeTemplates(
+            List<AcademyTimeTemplateDateInfo> academyTimeTemplates
+    ) {
+        academyTimeTemplates.forEach(academyTimeTemplate -> {
+            academyScheduleRepository.deleteAllByAcademyTimeTemplateId(academyTimeTemplate.getId());
+            academyTimeTemplateRepository.deleteById(academyTimeTemplate.getId());
+        });
+    }
+
+    private void deleteAcademySchedulesAfterStartDate(
+            List<AcademyTimeTemplateDateInfo> academyTimeTemplates,
+            LocalDate startDateOfAttendance
+    ) {
+        academyTimeTemplates.forEach(academyTimeTemplate -> {
+            academyScheduleRepository.deleteAfterUpdatedStartDate(academyTimeTemplate.getId(), startDateOfAttendance);
+        });
+    }
+
+    private void changeBeforeTimeTemplateOfEndDate(
+            List<AcademyTimeTemplateDateInfo> academyTimeTemplates,
+            LocalDate startDateOfAttendance
+    ) {
+        LocalDate endDateOfAttendance = startDateOfAttendance.minusDays(1);
+
+        academyTimeTemplates.forEach(
+                academyTimeTemplateDateInfo -> {
+                    AcademyTimeTemplate academyTimeTemplate =
+                            academyTimeTemplateRepository.getById(academyTimeTemplateDateInfo.getId());
+                    academyTimeTemplate.changeEndDateOfAttendance(endDateOfAttendance);
+                }
+        );
+
     }
 
 }
