@@ -1,42 +1,53 @@
 package org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.validation.ValidEnum;
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
-import org.guzzing.studayserver.global.validation.EnumValue;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public record AcademyCalendarCreateRequest(
+        @Valid
+        @Size(min = 1, message = "최소한 하나 이상의 레슨 스케줄이 필요합니다.")
         List<LessonScheduleCreateRequest> lessonScheduleParams,
-        //todo : String으로 받아서 포매팅할 것
+
+        @NotNull
         LocalDate startDateOfAttendance,
+
+        @NotNull
         LocalDate endDateOfAttendance,
 
-        @NotBlank
-        boolean isAlarmed,
+        @NotNull
+        Boolean isAlarmed,
 
-        @EnumValue(enumClass = Periodicity.class, message = "올바른 반복 여부 값이 아닙니다.")
-        Periodicity periodicity,
+        @NotBlank
+        @ValidEnum(enumClass = Periodicity.class)
+        String periodicity,
 
         @NotNull
         Long childId,
 
         @NotNull
         Long dashboardId,
-
-        @NotBlank
         String memo
 ) {
 
     private static final int MAX_DIFFERENCE_YEAR = 3;
 
     @AssertTrue(message = "등원 시작일과 등원 마지막일의 차이가 " + MAX_DIFFERENCE_YEAR + "년을 넘을 수 없습니다.")
-    private boolean isValidPeriod() {
+    private  boolean isExceedMaxDifferenceYear() {
         return !endDateOfAttendance.isAfter(startDateOfAttendance.plusYears(MAX_DIFFERENCE_YEAR));
+    }
+
+    @AssertTrue(message = "마지막 등원일이 등원 시작일보다 이전일 수 없습니다.")
+    private  boolean isBeforeStartDate() {
+        return !endDateOfAttendance.isBefore(startDateOfAttendance);
     }
 
     public static AcademyCalendarCreateParam to(AcademyCalendarCreateRequest request, Long memberId) {
@@ -52,8 +63,7 @@ public record AcademyCalendarCreateRequest(
                 request.childId,
                 request.dashboardId,
                 request.memo,
-                request.periodicity
-
+                Periodicity.valueOf(request.periodicity)
         );
     }
 

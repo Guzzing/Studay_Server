@@ -1,5 +1,8 @@
 package org.guzzing.studayserver.testutil.fixture.academycalender;
 
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarCreateRequest;
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleCreateRequest;
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.LessonScheduleUpdateRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.acdademycalendar.model.Periodicity;
@@ -23,6 +26,23 @@ public class AcademyCalenderFixture {
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
 
+    public static LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
+        return new LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+    }
+
+    public static LessonScheduleCreateRequest fridayLessonScheduleCreateRequest() {
+        return new LessonScheduleCreateRequest(DayOfWeek.FRIDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+    }
+
+    public static LessonScheduleUpdateRequest mondayLessonScheduleUpdateRequest() {
+        return new LessonScheduleUpdateRequest(DayOfWeek.MONDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+    }
+
+    public static LessonScheduleUpdateRequest fridayLessonScheduleUpdateRequest() {
+        return new LessonScheduleUpdateRequest(DayOfWeek.FRIDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+    }
+
+
     public static LessonScheduleParam mondayDashboardScheduleParam() {
         return new LessonScheduleParam(DayOfWeek.MONDAY, LocalTime.of(18, 0), LocalTime.of(20, 0));
     }
@@ -43,6 +63,19 @@ public class AcademyCalenderFixture {
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY
 
+        );
+    }
+
+    public static AcademyCalendarCreateRequest academyCalenderCreateRequest() {
+        return new AcademyCalendarCreateRequest(
+                List.of(mondayLessonScheduleCreateRequest(), fridayLessonScheduleCreateRequest()),
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
+                false,
+                WEEKLY_PERIODICITY.toString(),
+                1L,
+                1L,
+                "매월 20일마다 상담 진행"
         );
     }
 
