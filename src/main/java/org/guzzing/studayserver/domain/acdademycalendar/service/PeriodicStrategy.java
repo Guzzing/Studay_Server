@@ -15,6 +15,10 @@ public class PeriodicStrategy {
 
     private Map<Periodicity, AcademyScheduleMaker> periodicStrategies = new HashMap<>();
 
+    private PeriodicStrategy(Map<Periodicity, AcademyScheduleMaker> periodicStrategies) {
+        this.periodicStrategies = periodicStrategies;
+    }
+
     public PeriodicStrategy() {
         periodicStrategies.put(Periodicity.DAILY,new ScheduleDailyMaker());
         periodicStrategies.put(Periodicity.MONTHLY,new ScheduleMonthMaker());

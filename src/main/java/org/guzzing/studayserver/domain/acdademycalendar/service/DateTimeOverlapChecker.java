@@ -9,6 +9,10 @@ import java.util.List;
 
 public class DateTimeOverlapChecker {
 
+    private DateTimeOverlapChecker() {
+        throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());
+    }
+
     public static void checkOverlap(List<AcademyTimeTemplateDateInfo> academyTimeTemplateDateInfos,
                                     LocalDate startDateToUpdate,
                                     LocalDate endDateToUpdate) throws DateOverlapException {
