@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,6 +34,9 @@ class AcademyCalendarControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private AcademyCalendarService academyCalendarService;
 
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
@@ -82,8 +84,8 @@ class AcademyCalendarControllerTest {
                     //잘못된 수업 정보
                     new AcademyCalendarCreateRequest(
                             List.of(),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -91,11 +93,12 @@ class AcademyCalendarControllerTest {
                             "화요일마다 저녁 제공"
                     ),
 
+
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2023, 12, 13),
+                            new AttendanceDate("2023-12-15",
+                                    "2023-12-13"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -104,8 +107,30 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2030, 12, 13),
+                            new AttendanceDate("2023-12-15",
+                                    "2030-12-15"),
+                            true,
+                            Periodicity.WEEKLY.toString(),
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공"
+                    ),
+
+                    //잘못된 날짜 형식
+                    new AcademyCalendarCreateRequest(
+                            List.of(),
+                            new AttendanceDate("20231215",
+                                    "2024-12-15"),
+                            true,
+                            Periodicity.WEEKLY.toString(),
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공"
+                    ),
+                    new AcademyCalendarCreateRequest(
+                            List.of(),
+                            new AttendanceDate("2023-13-15",
+                                    "2024-12-15"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -116,8 +141,8 @@ class AcademyCalendarControllerTest {
                     //잘못된 Enum
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2023, 12, 18),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             "SEMI_MONTH",
                             1L,
@@ -132,8 +157,8 @@ class AcademyCalendarControllerTest {
                                             LocalTime.of(14, 0)
                                     )
                             ),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -144,8 +169,8 @@ class AcademyCalendarControllerTest {
                     // null관련
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             null,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -154,8 +179,8 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             null,
@@ -164,8 +189,8 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleCreateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             Periodicity.WEEKLY.toString(),
                             1L,
@@ -180,8 +205,8 @@ class AcademyCalendarControllerTest {
                     //잘못된 수업 정보
                     new AcademyCalendarUpdateRequest(
                             List.of(),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             1L,
@@ -190,12 +215,11 @@ class AcademyCalendarControllerTest {
                             true
 
                     ),
-
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2023, 12, 13),
+                            new AttendanceDate("2023-12-15",
+                                    "2023-12-13"),
                             true,
                             1L,
                             1L,
@@ -205,8 +229,31 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2030, 12, 13),
+                            new AttendanceDate("2023-12-15",
+                                    "2050-12-15"),
+                            true,
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공",
+                            Periodicity.WEEKLY.toString(),
+                            true
+                    ),
+                    // 잘뭇된 날짜 형식
+                    new AcademyCalendarUpdateRequest(
+                            List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
+                            new AttendanceDate("20231215",
+                                    "2024-12-13"),
+                            true,
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공",
+                            Periodicity.WEEKLY.toString(),
+                            true
+                    ),
+                    new AcademyCalendarUpdateRequest(
+                            List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
+                            new AttendanceDate("2023-13-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             1L,
@@ -218,8 +265,8 @@ class AcademyCalendarControllerTest {
                     //잘못된 Enum
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2023, 12, 18),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             1L,
@@ -235,8 +282,8 @@ class AcademyCalendarControllerTest {
                                             LocalTime.of(14, 0)
                                     )
                             ),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             1L,
@@ -248,8 +295,8 @@ class AcademyCalendarControllerTest {
                     // null관련
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             null,
                             1L,
                             1L,
@@ -259,8 +306,8 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             null,
                             1L,
@@ -270,8 +317,8 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2024, 12, 15),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             null,
@@ -281,8 +328,8 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
-                            LocalDate.of(2023, 12, 15),
-                            LocalDate.of(2023, 12, 18),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
                             true,
                             1L,
                             1L,
@@ -294,24 +341,30 @@ class AcademyCalendarControllerTest {
         }
 
         private static Stream<AcademyCalendarDeleteRequest> provideInvalidDeleteRequests() {
-           return Stream.of(
+            return Stream.of(
                     new AcademyCalendarDeleteRequest(
                             null,
                             1L,
                             true,
-                            LocalDate.of(2024,5,11)
+                            "2024-5-15"
                     ),
                     new AcademyCalendarDeleteRequest(
                             1L,
                             null,
                             true,
-                            LocalDate.of(2024,5,11)
+                            "2024-5-15"
                     ),
                     new AcademyCalendarDeleteRequest(
                             1L,
                             1L,
                             null,
-                            LocalDate.of(2024,5,11)
+                            "2024-5-15"
+                    ),
+                    new AcademyCalendarDeleteRequest(
+                            1L,
+                            1L,
+                            null,
+                            "2024515"
                     )
 
             );
