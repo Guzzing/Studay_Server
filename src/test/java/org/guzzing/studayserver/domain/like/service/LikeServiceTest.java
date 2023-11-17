@@ -5,10 +5,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;

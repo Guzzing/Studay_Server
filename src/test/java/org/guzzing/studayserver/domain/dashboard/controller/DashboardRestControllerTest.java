@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.dashboard.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.academyId;
 import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.childId;
-import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.lessonId;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -32,17 +30,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;

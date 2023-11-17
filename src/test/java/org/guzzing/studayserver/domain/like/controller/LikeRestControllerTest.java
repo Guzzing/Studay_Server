@@ -18,10 +18,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -188,7 +185,8 @@ class LikeRestControllerTest {
                                 .responseFields(
                                         fieldWithPath("likeAcademyInfos").type(ARRAY).description("좋아요한 학원 비용 목록"),
                                         fieldWithPath("likeAcademyInfos[].likeId").type(NUMBER).description("좋아요 아이디"),
-                                        fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER).description("좋아요한 학원 아이디"),
+                                        fieldWithPath("likeAcademyInfos[].academyId").type(NUMBER)
+                                                .description("좋아요한 학원 아이디"),
                                         fieldWithPath("likeAcademyInfos[].academyName").type(STRING).description("학원명"),
                                         fieldWithPath("likeAcademyInfos[].expectedFee").description("예상 교육비"),
                                         fieldWithPath("totalFee").type(NUMBER).description("총 비용")
