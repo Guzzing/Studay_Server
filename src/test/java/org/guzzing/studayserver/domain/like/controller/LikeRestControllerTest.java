@@ -137,11 +137,11 @@ class LikeRestControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(document("delete-like",
                         preprocessRequest(prettyPrint()),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
-                        ),
-                        pathParameters(
-                                parameterWithName("likeId").description("좋아요 아이디")
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("좋아요 제거")
+                                .build()
                         )
                 ));
     }
