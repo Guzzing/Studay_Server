@@ -91,16 +91,13 @@ public class Dashboard {
         this.isDeleted = true;
     }
 
-    public Dashboard update(final Dashboard source) {
-        this.childId = source.getChildId();
-        this.academyId = source.getAcademyId();
-        this.lessonId = source.getLessonId();
-        this.dashboardSchedules = source.getDashboardSchedules();
-        this.feeInfo = source.getFeeInfo();
-        this.simpleMemoTypes = source.getSimpleMemoTypes();
-        this.isActive = source.isActive();
-        this.isDeleted = source.isDeleted();
+    public Dashboard updateFeeInfo(final FeeInfo feeInfo) {
+        this.feeInfo = feeInfo;
+        return this;
+    }
 
+    public Dashboard updateSimpleMemo(final List<SimpleMemoType> simpleMemoTypes) {
+        this.simpleMemoTypes = simpleMemoTypes;
         return this;
     }
 

@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
                 .addFilterBefore(jwtTokenValidationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(logoutAuthenticationFilter, JwtAuthenticationFilter.class)
                 .addFilterBefore(securityExceptionHandlerFilter, LogoutAuthenticationFilter.class);
