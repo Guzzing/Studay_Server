@@ -124,7 +124,10 @@ public class DashboardRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardGetResponses> getDashboards(
             @RequestParam final Long childId,
-            @RequestParam(name = "active-only", defaultValue = "false") final Boolean activeOnly,
+            @RequestParam(
+                    name = "active-only",
+                    required = false,
+                    defaultValue = "false") final Boolean activeOnly,
             @MemberId final Long memberId
     ) {
         final DashboardGetResults results = dashboardService.findDashboards(childId, activeOnly, memberId);

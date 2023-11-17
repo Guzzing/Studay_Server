@@ -100,45 +100,45 @@ class DashboardRestControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         resource(ResourceSnippetParameters.builder()
-                                .tag(TAG)
-                                .summary("대시보드 등록")
-                                .requestFields(
-                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                        fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
-                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                        fieldWithPath("lessonId").type(NUMBER).description("수업 아이디"),
-                                        fieldWithPath("schedules").type(ARRAY).description("일정 메모 목록"),
-                                        fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
-                                        fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
-                                        fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
-                                        fieldWithPath("schedules[].repeatance").type(STRING).description("반복 종류"),
-                                        fieldWithPath("paymentInfo").type(OBJECT).description("학원비 정보"),
-                                        fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강비"),
-                                        fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
-                                        fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀 버스 운행비"),
-                                        fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
-                                        fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
-                                        fieldWithPath("simpleMemo").type(OBJECT).description("간단 메모 정보"),
-                                        fieldWithPath("simpleMemo.kindness").type(BOOLEAN)
-                                                .description("[친절함] 간단 메모 선택 여부"),
-                                        fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
-                                                .description("[좋은 시설] 간단 메모 선택 여부"),
-                                        fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN)
-                                                .description("[싼 학원비] 간단 메모 선택 여부"),
-                                        fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
-                                                .description("[좋은 관리] 간단 메모 선택 여부"),
-                                        fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
-                                                .description("[사랑스런 교육] 간단 메모 선택 여부"),
-                                        fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
-                                                .description("[셔틀 운행 여부] 간단 메모 선택 여부")
-                                )
-                                .responseFields(
-                                        fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
-                                        fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
-                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                        fieldWithPath("lessonId").type(NUMBER).description("수업 아이디")
-                                )
-                                .build()
+                                        .tag(TAG)
+                                        .summary("대시보드 등록")
+                                        .requestFields(
+                                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
+                                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디"),
+                                                fieldWithPath("schedules").type(ARRAY).description("일정 메모 목록"),
+                                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
+                                                fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
+                                                fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
+//                                        fieldWithPath("schedules[].repeatance").type(STRING).description("반복 종류"),
+                                                fieldWithPath("paymentInfo").type(OBJECT).description("학원비 정보"),
+                                                fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강비"),
+                                                fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
+                                                fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀 버스 운행비"),
+                                                fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                                fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
+                                                fieldWithPath("simpleMemo").type(OBJECT).description("간단 메모 정보"),
+                                                fieldWithPath("simpleMemo.kindness").type(BOOLEAN)
+                                                        .description("[친절함] 간단 메모 선택 여부"),
+                                                fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
+                                                        .description("[좋은 시설] 간단 메모 선택 여부"),
+                                                fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN)
+                                                        .description("[싼 학원비] 간단 메모 선택 여부"),
+                                                fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
+                                                        .description("[좋은 관리] 간단 메모 선택 여부"),
+                                                fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                                        .description("[사랑스런 교육] 간단 메모 선택 여부"),
+                                                fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                                        .description("[셔틀 운행 여부] 간단 메모 선택 여부")
+                                        )
+                                        .responseFields(
+                                                fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                                fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
+                                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                                fieldWithPath("lessonId").type(NUMBER).description("수업 아이디")
+                                        )
+                                        .build()
                         )
                 ));
     }
@@ -260,64 +260,63 @@ class DashboardRestControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         resource(ResourceSnippetParameters.builder()
-                                .tag(TAG)
-                                .summary("대시보드 단건 조회")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
-                                .pathParameters(
-                                        parameterWithName("dashboardId").description("대시보드 아이디")
-                                )
-                                .responseFields(
-                                        fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
-                                        fieldWithPath("childInfo").type(OBJECT).description("아이 정보"),
-                                        fieldWithPath("childInfo.childId").type(NUMBER).description("아이 아이디"),
-                                        fieldWithPath("childInfo.childNickName").type(STRING).description("아이 별칭"),
-                                        fieldWithPath("academyInfo").type(OBJECT).description("학원 정보"),
-                                        fieldWithPath("academyInfo.academyId").type(NUMBER).description("학원 아이디"),
-                                        fieldWithPath("academyInfo.academyName").type(STRING).description("학원 이름"),
-                                        fieldWithPath("academyInfo.contact").type(STRING).description("학원 연락처"),
-                                        fieldWithPath("academyInfo.fullAddress").type(STRING).description("학원 주소"),
-                                        fieldWithPath("academyInfo.shuttleAvailability").type(STRING)
-                                                .description("셔틀 운행 여부"),
-                                        fieldWithPath("academyInfo.expectedFee").type(NUMBER).description("예상 교육비"),
-                                        fieldWithPath("academyInfo.updatedDate").type(STRING).description("업데이트 날짜"),
-                                        fieldWithPath("academyInfo.areaOfExpertise").type(STRING)
-                                                .description("강의 분야 구분"),
-                                        fieldWithPath("lessonInfo").type(OBJECT).description("수업 정보"),
-                                        fieldWithPath("lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
-                                        fieldWithPath("lessonInfo.subject").type(STRING).description("수업 과목"),
-                                        fieldWithPath("lessonInfo.capacity").type(NUMBER).description("수업 정원"),
-                                        fieldWithPath("lessonInfo.duration").type(STRING).description("강의 기간"),
-                                        fieldWithPath("lessonInfo.totalFee").type(NUMBER).description("총 수강료"),
-                                        fieldWithPath("schedules").type(ARRAY).description("스케줄 메모 목록"),
-                                        fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
-                                        fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
-                                        fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
-                                        fieldWithPath("schedules[].repeatance").type(STRING)
-                                                .description("반복 주기 종류"),
-                                        fieldWithPath("paymentInfo").type(OBJECT).description("교육비 정보"),
-                                        fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강료"),
-                                        fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
-                                        fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀운행비"),
-                                        fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
-                                        fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
-                                        fieldWithPath("simpleMemo").type(OBJECT).description("간편 메모"),
-                                        fieldWithPath("simpleMemo.kindness").type(BOOLEAN).description("친절함 여부 메모"),
-                                        fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
-                                                .description("좋은 시설 여부 메모"),
-                                        fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN)
-                                                .description("값싼 교육비 여부 메모"),
-                                        fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
-                                                .description("좋은 관리 여부 메모"),
-                                        fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
-                                                .description("사랑스런 교육 여부 메모"),
-                                        fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
-                                                .description("셔틀 운행 여부 메모"),
-                                        fieldWithPath("isActive").type(BOOLEAN).description("활성화 여부"),
-                                        fieldWithPath("isDeleted").type(BOOLEAN).description("삭제 여부")
-                                )
-                                .build()
+                                        .tag(TAG)
+                                        .summary("대시보드 단건 조회")
+                                        .requestHeaders(
+                                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                                        )
+                                        .pathParameters(
+                                                parameterWithName("dashboardId").description("대시보드 아이디")
+                                        )
+                                        .responseFields(
+                                                fieldWithPath("dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                                fieldWithPath("childInfo").type(OBJECT).description("아이 정보"),
+                                                fieldWithPath("childInfo.childId").type(NUMBER).description("아이 아이디"),
+                                                fieldWithPath("childInfo.childNickName").type(STRING).description("아이 별칭"),
+                                                fieldWithPath("academyInfo").type(OBJECT).description("학원 정보"),
+                                                fieldWithPath("academyInfo.academyId").type(NUMBER).description("학원 아이디"),
+                                                fieldWithPath("academyInfo.academyName").type(STRING).description("학원 이름"),
+                                                fieldWithPath("academyInfo.contact").type(STRING).description("학원 연락처"),
+                                                fieldWithPath("academyInfo.fullAddress").type(STRING).description("학원 주소"),
+                                                fieldWithPath("academyInfo.shuttleAvailability").type(STRING)
+                                                        .description("셔틀 운행 여부"),
+                                                fieldWithPath("academyInfo.expectedFee").type(NUMBER).description("예상 교육비"),
+                                                fieldWithPath("academyInfo.updatedDate").type(STRING).description("업데이트 날짜"),
+                                                fieldWithPath("academyInfo.areaOfExpertise").type(STRING)
+                                                        .description("강의 분야 구분"),
+                                                fieldWithPath("lessonInfo").type(OBJECT).description("수업 정보"),
+                                                fieldWithPath("lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
+                                                fieldWithPath("lessonInfo.subject").type(STRING).description("수업 과목"),
+                                                fieldWithPath("lessonInfo.capacity").type(NUMBER).description("수업 정원"),
+                                                fieldWithPath("lessonInfo.duration").type(STRING).description("강의 기간"),
+                                                fieldWithPath("lessonInfo.totalFee").type(NUMBER).description("총 수강료"),
+                                                fieldWithPath("schedules").type(ARRAY).description("스케줄 메모 목록"),
+                                                fieldWithPath("schedules[].dayOfWeek").type(NUMBER).description("요일"),
+                                                fieldWithPath("schedules[].startTime").type(STRING).description("시작 시간"),
+                                                fieldWithPath("schedules[].endTime").type(STRING).description("종료 시간"),
+//                                        fieldWithPath("schedules[].repeatance").type(STRING).description("반복 주기 종류"),
+                                                fieldWithPath("paymentInfo").type(OBJECT).description("교육비 정보"),
+                                                fieldWithPath("paymentInfo.educationFee").type(NUMBER).description("수강료"),
+                                                fieldWithPath("paymentInfo.bookFee").type(NUMBER).description("교재비"),
+                                                fieldWithPath("paymentInfo.shuttleFee").type(NUMBER).description("셔틀운행비"),
+                                                fieldWithPath("paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                                fieldWithPath("paymentInfo.paymentDay").type(STRING).description("납부일"),
+                                                fieldWithPath("simpleMemo").type(OBJECT).description("간편 메모"),
+                                                fieldWithPath("simpleMemo.kindness").type(BOOLEAN).description("친절함 여부 메모"),
+                                                fieldWithPath("simpleMemo.goodFacility").type(BOOLEAN)
+                                                        .description("좋은 시설 여부 메모"),
+                                                fieldWithPath("simpleMemo.cheapFee").type(BOOLEAN)
+                                                        .description("값싼 교육비 여부 메모"),
+                                                fieldWithPath("simpleMemo.goodManagement").type(BOOLEAN)
+                                                        .description("좋은 관리 여부 메모"),
+                                                fieldWithPath("simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                                        .description("사랑스런 교육 여부 메모"),
+                                                fieldWithPath("simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                                        .description("셔틀 운행 여부 메모"),
+                                                fieldWithPath("isActive").type(BOOLEAN).description("활성화 여부"),
+                                                fieldWithPath("isDeleted").type(BOOLEAN).description("삭제 여부")
+                                        )
+                                        .build()
                         )
                 ));
     }
@@ -339,7 +338,7 @@ class DashboardRestControllerTest {
         final ResultActions perform = mockMvc.perform(get("/dashboards")
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .param("childId", String.valueOf(childId))
-                .param("isActive-only", String.valueOf(activeOnly))
+                .param("active-only", String.valueOf(activeOnly))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -365,87 +364,87 @@ class DashboardRestControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         resource(ResourceSnippetParameters.builder()
-                                .tag(TAG)
-                                .summary("아이 대시보드 전체 조회")
-                                .requestHeaders(
-                                        headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
-                                )
-                                .queryParameters(
-                                        parameterWithName("childId").description("아이 아이디"),
-                                        parameterWithName("isActive-only").description("활성화 여부 조회 조건(default = false)")
-                                )
-                                .responseFields(
-                                        fieldWithPath("responses").type(ARRAY).description("대시보드 조회 결과 목록"),
-                                        fieldWithPath("responses[].dashboardId").type(NUMBER).description("대시보드 아이디"),
-                                        fieldWithPath("responses[].childInfo").type(OBJECT).description("아이 정보"),
-                                        fieldWithPath("responses[].childInfo.childId").type(NUMBER)
-                                                .description("아이 아이디"),
-                                        fieldWithPath("responses[].childInfo.childNickName").type(STRING)
-                                                .description("아이 별칭"),
-                                        fieldWithPath("responses[].academyInfo").type(OBJECT).description("학원 정보"),
-                                        fieldWithPath("responses[].academyInfo.academyId").type(NUMBER)
-                                                .description("학원 아이디"),
-                                        fieldWithPath("responses[].academyInfo.academyName").type(STRING)
-                                                .description("학원 이름"),
-                                        fieldWithPath("responses[].academyInfo.contact").type(STRING)
-                                                .description("학원 연락처"),
-                                        fieldWithPath("responses[].academyInfo.fullAddress").type(STRING)
-                                                .description("학원 주소"),
-                                        fieldWithPath("responses[].academyInfo.shuttleAvailability").type(STRING)
-                                                .description("셔틀 운행 여부"),
-                                        fieldWithPath("responses[].academyInfo.expectedFee").type(NUMBER)
-                                                .description("예상 교육비"),
-                                        fieldWithPath("responses[].academyInfo.updatedDate").type(STRING)
-                                                .description("업데이트 날짜"),
-                                        fieldWithPath("responses[].academyInfo.areaOfExpertise").type(STRING)
-                                                .description("강의 분야 구분"),
-                                        fieldWithPath("responses[].lessonInfo").type(OBJECT).description("수업 정보"),
-                                        fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER)
-                                                .description("수업 아이디"),
-                                        fieldWithPath("responses[].lessonInfo.subject").type(STRING)
-                                                .description("수업 과목"),
-                                        fieldWithPath("responses[].lessonInfo.capacity").type(NUMBER)
-                                                .description("수업 정원"),
-                                        fieldWithPath("responses[].lessonInfo.duration").type(STRING)
-                                                .description("강의 기간"),
-                                        fieldWithPath("responses[].lessonInfo.totalFee").type(NUMBER)
-                                                .description("총 수강료"),
-                                        fieldWithPath("responses[].schedules").type(ARRAY).description("스케줄 메모 목록"),
-                                        fieldWithPath("responses[].schedules[].dayOfWeek").type(NUMBER)
-                                                .description("요일"),
-                                        fieldWithPath("responses[].schedules[].startTime").type(STRING)
-                                                .description("시작 시간"),
-                                        fieldWithPath("responses[].schedules[].endTime").type(STRING)
-                                                .description("종료 시간"),
-                                        fieldWithPath("responses[].schedules[].repeatance").type(STRING)
-                                                .description("반복 주기 종류"),
-                                        fieldWithPath("responses[].paymentInfo").type(OBJECT).description("교육비 정보"),
-                                        fieldWithPath("responses[].paymentInfo.educationFee").type(NUMBER)
-                                                .description("수강료"),
-                                        fieldWithPath("responses[].paymentInfo.bookFee").type(NUMBER)
-                                                .description("교재비"),
-                                        fieldWithPath("responses[].paymentInfo.shuttleFee").type(NUMBER)
-                                                .description("셔틀운행비"),
-                                        fieldWithPath("responses[].paymentInfo.etcFee").type(NUMBER).description("기타비"),
-                                        fieldWithPath("responses[].paymentInfo.paymentDay").type(STRING)
-                                                .description("납부일"),
-                                        fieldWithPath("responses[].simpleMemo").type(OBJECT).description("간편 메모"),
-                                        fieldWithPath("responses[].simpleMemo.kindness").type(BOOLEAN)
-                                                .description("친절함 여부 메모"),
-                                        fieldWithPath("responses[].simpleMemo.goodFacility").type(BOOLEAN)
-                                                .description("좋은 시설 여부 메모"),
-                                        fieldWithPath("responses[].simpleMemo.cheapFee").type(BOOLEAN)
-                                                .description("값싼 교육비 여부 메모"),
-                                        fieldWithPath("responses[].simpleMemo.goodManagement").type(BOOLEAN)
-                                                .description("좋은 관리 여부 메모"),
-                                        fieldWithPath("responses[].simpleMemo.lovelyTeaching").type(BOOLEAN)
-                                                .description("사랑스런 교육 여부 메모"),
-                                        fieldWithPath("responses[].simpleMemo.shuttleAvailability").type(BOOLEAN)
-                                                .description("셔틀 운행 여부 메모"),
-                                        fieldWithPath("responses[].isActive").type(BOOLEAN).description("활성화 여부"),
-                                        fieldWithPath("responses[].isDeleted").type(BOOLEAN).description("삭제 여부")
-                                )
-                                .build()
+                                        .tag(TAG)
+                                        .summary("아이 대시보드 전체 조회")
+                                        .requestHeaders(
+                                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                                        )
+                                        .queryParameters(
+                                                parameterWithName("childId").description("아이 아이디"),
+                                                parameterWithName("active-only").description("활성화 여부 조회 조건(default = false)")
+                                                        .optional()
+                                        )
+                                        .responseFields(
+                                                fieldWithPath("responses").type(ARRAY).description("대시보드 조회 결과 목록"),
+                                                fieldWithPath("responses[].dashboardId").type(NUMBER).description("대시보드 아이디"),
+                                                fieldWithPath("responses[].childInfo").type(OBJECT).description("아이 정보"),
+                                                fieldWithPath("responses[].childInfo.childId").type(NUMBER)
+                                                        .description("아이 아이디"),
+                                                fieldWithPath("responses[].childInfo.childNickName").type(STRING)
+                                                        .description("아이 별칭"),
+                                                fieldWithPath("responses[].academyInfo").type(OBJECT).description("학원 정보"),
+                                                fieldWithPath("responses[].academyInfo.academyId").type(NUMBER)
+                                                        .description("학원 아이디"),
+                                                fieldWithPath("responses[].academyInfo.academyName").type(STRING)
+                                                        .description("학원 이름"),
+                                                fieldWithPath("responses[].academyInfo.contact").type(STRING)
+                                                        .description("학원 연락처"),
+                                                fieldWithPath("responses[].academyInfo.fullAddress").type(STRING)
+                                                        .description("학원 주소"),
+                                                fieldWithPath("responses[].academyInfo.shuttleAvailability").type(STRING)
+                                                        .description("셔틀 운행 여부"),
+                                                fieldWithPath("responses[].academyInfo.expectedFee").type(NUMBER)
+                                                        .description("예상 교육비"),
+                                                fieldWithPath("responses[].academyInfo.updatedDate").type(STRING)
+                                                        .description("업데이트 날짜"),
+                                                fieldWithPath("responses[].academyInfo.areaOfExpertise").type(STRING)
+                                                        .description("강의 분야 구분"),
+                                                fieldWithPath("responses[].lessonInfo").type(OBJECT).description("수업 정보"),
+                                                fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER)
+                                                        .description("수업 아이디"),
+                                                fieldWithPath("responses[].lessonInfo.subject").type(STRING)
+                                                        .description("수업 과목"),
+                                                fieldWithPath("responses[].lessonInfo.capacity").type(NUMBER)
+                                                        .description("수업 정원"),
+                                                fieldWithPath("responses[].lessonInfo.duration").type(STRING)
+                                                        .description("강의 기간"),
+                                                fieldWithPath("responses[].lessonInfo.totalFee").type(NUMBER)
+                                                        .description("총 수강료"),
+                                                fieldWithPath("responses[].schedules").type(ARRAY).description("스케줄 메모 목록"),
+                                                fieldWithPath("responses[].schedules[].dayOfWeek").type(NUMBER)
+                                                        .description("요일"),
+                                                fieldWithPath("responses[].schedules[].startTime").type(STRING)
+                                                        .description("시작 시간"),
+                                                fieldWithPath("responses[].schedules[].endTime").type(STRING)
+                                                        .description("종료 시간"),
+//                                        fieldWithPath("responses[].schedules[].repeatance").type(STRING).description("반복 주기 종류"),
+                                                fieldWithPath("responses[].paymentInfo").type(OBJECT).description("교육비 정보"),
+                                                fieldWithPath("responses[].paymentInfo.educationFee").type(NUMBER)
+                                                        .description("수강료"),
+                                                fieldWithPath("responses[].paymentInfo.bookFee").type(NUMBER)
+                                                        .description("교재비"),
+                                                fieldWithPath("responses[].paymentInfo.shuttleFee").type(NUMBER)
+                                                        .description("셔틀운행비"),
+                                                fieldWithPath("responses[].paymentInfo.etcFee").type(NUMBER).description("기타비"),
+                                                fieldWithPath("responses[].paymentInfo.paymentDay").type(STRING)
+                                                        .description("납부일"),
+                                                fieldWithPath("responses[].simpleMemo").type(OBJECT).description("간편 메모"),
+                                                fieldWithPath("responses[].simpleMemo.kindness").type(BOOLEAN)
+                                                        .description("친절함 여부 메모"),
+                                                fieldWithPath("responses[].simpleMemo.goodFacility").type(BOOLEAN)
+                                                        .description("좋은 시설 여부 메모"),
+                                                fieldWithPath("responses[].simpleMemo.cheapFee").type(BOOLEAN)
+                                                        .description("값싼 교육비 여부 메모"),
+                                                fieldWithPath("responses[].simpleMemo.goodManagement").type(BOOLEAN)
+                                                        .description("좋은 관리 여부 메모"),
+                                                fieldWithPath("responses[].simpleMemo.lovelyTeaching").type(BOOLEAN)
+                                                        .description("사랑스런 교육 여부 메모"),
+                                                fieldWithPath("responses[].simpleMemo.shuttleAvailability").type(BOOLEAN)
+                                                        .description("셔틀 운행 여부 메모"),
+                                                fieldWithPath("responses[].isActive").type(BOOLEAN).description("활성화 여부"),
+                                                fieldWithPath("responses[].isDeleted").type(BOOLEAN).description("삭제 여부")
+                                        )
+                                        .build()
                         )
                 ));
     }
