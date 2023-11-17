@@ -12,4 +12,9 @@ public interface AcademyTimeTemplateJpaRepository extends JpaRepository<AcademyT
     AcademyTimeTemplate save(AcademyTimeTemplate academyTimeTemplate);
 
     List<AcademyTimeTemplateDateInfo> findAcademyTimeTemplateByDashboardId(Long dashboardId);
+
+    void deleteById(Long academyTimeTemplateId);
+
+    AcademyTimeTemplate getById(Long academyTimeTemplateId);
+
 }

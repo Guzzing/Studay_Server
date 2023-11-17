@@ -10,4 +10,8 @@ public interface AcademyTimeTemplateRepository {
 
     List<AcademyTimeTemplateDateInfo> findAcademyTimeTemplateByDashboardId(Long dashboardId);
 
+    void deleteById(Long academyTimeTemplateId);
+
+    AcademyTimeTemplate getById(Long academyTimeTemplateId);
+
 }

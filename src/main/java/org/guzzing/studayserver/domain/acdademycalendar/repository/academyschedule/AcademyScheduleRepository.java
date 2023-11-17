@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.acdademycalendar.repository.academysched
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.acdademycalendar.model.AcademyTimeTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AcademyScheduleRepository {
@@ -11,6 +12,12 @@ public interface AcademyScheduleRepository {
 
     List<AcademySchedule> findAll();
 
-    AcademyTimeTemplate findAcademyTimeTemplateById(Long academyScheduleId);
+    AcademyTimeTemplate findDistinctAcademyTimeTemplate(Long academyScheduleId);
+
+    void deleteAllByAcademyTimeTemplateId(Long academyTimeTemplateId);
+
+    void deleteAfterUpdatedStartDate(Long academyTimeTemplateId, LocalDate startDateOfAttendanceToUpdate);
+
+    List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
 }
