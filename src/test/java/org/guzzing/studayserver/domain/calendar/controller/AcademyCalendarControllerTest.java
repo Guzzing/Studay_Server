@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalTime;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -93,6 +93,53 @@ class AcademyCalendarControllerTest {
                             "화요일마다 저녁 제공"
                     ),
 
+                    //잘못된 시간 형식
+                    new AcademyCalendarCreateRequest(
+                            List.of(
+                                    new LessonScheduleCreateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("1300", "14:00")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            Periodicity.WEEKLY.toString(),
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공"
+                    ),
+                    new AcademyCalendarCreateRequest(
+                            List.of(
+                                    new LessonScheduleCreateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("-13:00", "14:00")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            Periodicity.WEEKLY.toString(),
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공"
+                    ),
+                    new AcademyCalendarCreateRequest(
+                            List.of(
+                                    new LessonScheduleCreateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("13:00", "50:00")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            Periodicity.WEEKLY.toString(),
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공"
+                    ),
+
 
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarCreateRequest(
@@ -153,8 +200,7 @@ class AcademyCalendarControllerTest {
                             List.of(
                                     new LessonScheduleCreateRequest(
                                             "MMONDAY",
-                                            LocalTime.of(13, 0),
-                                            LocalTime.of(14, 0)
+                                            new LessonTime("13:00", "14:00")
                                     )
                             ),
                             new AttendanceDate("2023-12-15",
@@ -215,6 +261,59 @@ class AcademyCalendarControllerTest {
                             true
 
                     ),
+
+                    //잘못된 시간 형식
+                    new AcademyCalendarUpdateRequest(
+                            List.of(
+                                    new LessonScheduleUpdateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("1300", "14:00")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공",
+                            Periodicity.WEEKLY.toString(),
+                            true
+                    ),
+
+                    new AcademyCalendarUpdateRequest(
+                            List.of(
+                                    new LessonScheduleUpdateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("13:00", "-14:00")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공",
+                            Periodicity.WEEKLY.toString(),
+                            true
+                    ),
+                    new AcademyCalendarUpdateRequest(
+                            List.of(
+                                    new LessonScheduleUpdateRequest(
+                                            DayOfWeek.FRIDAY.toString(),
+                                            new LessonTime("13:00", "14:1100")
+                                    )
+                            ),
+                            new AttendanceDate("2023-12-15",
+                                    "2024-12-15"),
+                            true,
+                            1L,
+                            1L,
+                            "화요일마다 저녁 제공",
+                            Periodicity.WEEKLY.toString(),
+                            true
+                    ),
+
+
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarUpdateRequest(
                             List.of(AcademyCalenderFixture.mondayLessonScheduleUpdateRequest()),
@@ -278,8 +377,7 @@ class AcademyCalendarControllerTest {
                             List.of(
                                     new LessonScheduleUpdateRequest(
                                             "MMONDAY",
-                                            LocalTime.of(13, 0),
-                                            LocalTime.of(14, 0)
+                                            new LessonTime("13:00", "14:00")
                                     )
                             ),
                             new AttendanceDate("2023-12-15",

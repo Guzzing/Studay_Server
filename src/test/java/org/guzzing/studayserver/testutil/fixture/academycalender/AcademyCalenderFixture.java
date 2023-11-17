@@ -2,6 +2,7 @@ package org.guzzing.studayserver.testutil.fixture.academycalender;
 
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleUpdateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
@@ -26,21 +27,22 @@ public class AcademyCalenderFixture {
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
     private static final Long DASHBOARD_ID = 1L;
+    private static final LessonTime LESSON_TIME = new LessonTime("18:00", "20:00");
 
     public static LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
-        return new LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+        return new LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
     }
 
     public static LessonScheduleCreateRequest fridayLessonScheduleCreateRequest() {
-        return new LessonScheduleCreateRequest(DayOfWeek.FRIDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+        return new LessonScheduleCreateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
     }
 
     public static LessonScheduleUpdateRequest mondayLessonScheduleUpdateRequest() {
-        return new LessonScheduleUpdateRequest(DayOfWeek.MONDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+        return new LessonScheduleUpdateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
     }
 
     public static LessonScheduleUpdateRequest fridayLessonScheduleUpdateRequest() {
-        return new LessonScheduleUpdateRequest(DayOfWeek.FRIDAY.toString(), LocalTime.of(18, 0), LocalTime.of(20, 0));
+        return new LessonScheduleUpdateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
     }
 
 
