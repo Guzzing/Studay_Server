@@ -31,7 +31,8 @@ public class DashboardServiceConverter {
                 convertToDashboardSchedules(param.scheduleInfos()),
                 convertToFeeInfo(param.paymentInfo()),
                 convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap()),
-                true, false);
+                false,
+                false);
     }
 
     public DashboardPostResult postResultFrom(final Dashboard entity) {
