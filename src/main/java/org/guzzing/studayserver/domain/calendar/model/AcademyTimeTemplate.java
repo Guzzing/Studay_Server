@@ -19,6 +19,7 @@ public class AcademyTimeTemplate {
 
     @Column(name = "day_of_week",
             nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
     @Column(name = "start_datetime_of_attendance",
@@ -31,7 +32,7 @@ public class AcademyTimeTemplate {
             nullable = false)
     private LocalDate endDateOfAttendance;
 
-    @Column(name = "isAlarmed",
+    @Column(name = "is_alarmed",
             nullable = false)
     private boolean isAlarmed;
 
