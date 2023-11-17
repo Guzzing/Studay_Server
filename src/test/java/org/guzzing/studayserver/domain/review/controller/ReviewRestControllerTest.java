@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.guzzing.studayserver.domain.academy.listener.NewReviewListener;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
@@ -46,7 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @SpringBootTest
-@Transactional
 class ReviewRestControllerTest {
 
     @Autowired
@@ -61,6 +61,8 @@ class ReviewRestControllerTest {
     private MemberAccessService memberAccessService;
     @MockBean
     private AcademyAccessService academyAccessService;
+    @MockBean
+    private NewReviewListener newReviewListener;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -116,6 +118,7 @@ class ReviewRestControllerTest {
     @Test
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
     @WithMockCustomOAuth2LoginUser
+    @Transactional
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
         final Long academyId = 1L;
