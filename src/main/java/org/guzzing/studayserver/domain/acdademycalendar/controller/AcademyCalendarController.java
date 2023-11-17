@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.acdademycalendar.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarCreateRequest;
+import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.response.AcademyCalendarCreateResponse;
 import org.guzzing.studayserver.domain.acdademycalendar.controller.dto.response.AcademyCalendarLoadToUpdateResponse;
@@ -71,6 +72,19 @@ public class AcademyCalendarController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(AcademyCalendarUpdateResponse.from(academyCalendarUpdateResults));
+    }
+
+    @DeleteMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Void> deleteSchedule(
+            @RequestBody @Valid AcademyCalendarDeleteRequest academyCalendarDeleteRequest
+    ) {
+        academyCalendarService.deleteSchedule(AcademyCalendarDeleteRequest.to(academyCalendarDeleteRequest));
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
 }
