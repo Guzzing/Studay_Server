@@ -7,7 +7,7 @@ import org.guzzing.studayserver.global.validation.EnumValue;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-public record LessonScheduleRequest(
+public record LessonScheduleUpdateRequest(
         @EnumValue(enumClass = DayOfWeek.class, message = "올바른 요일 표기가 아닙니다." )
         DayOfWeek dayOfWeek,
 
@@ -17,7 +17,7 @@ public record LessonScheduleRequest(
         @NotNull
         LocalTime lessonEndTime
 ) {
-    public static LessonScheduleParam to(LessonScheduleRequest request) {
+    public static LessonScheduleParam to(LessonScheduleUpdateRequest request) {
         return new LessonScheduleParam(
                 request.dayOfWeek,
                 request.lessonStartTime,
