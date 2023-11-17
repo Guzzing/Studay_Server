@@ -87,6 +87,7 @@ public class DashboardService {
 
     public DashboardGetResults findDashboards(final long childId, final boolean activeOnly, final long memberId) {
         memberAccessService.validateMember(memberId);
+        memberAccessService.validateChild(memberId, childId);
 
         final List<Dashboard> dashboards = activeOnly
                 ? dashboardRepository.findActiveOnlyByChildId(childId)
