@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.ValidEnum;
@@ -13,17 +14,14 @@ public record LessonScheduleUpdateRequest(
         @ValidEnum(enumClass = DayOfWeek.class, message = "올바른 요일 표기가 아닙니다.")
         String dayOfWeek,
 
-        @NotNull
-        LocalTime lessonStartTime,
-
-        @NotNull
-        LocalTime lessonEndTime
+        @Valid
+        LessonTime lessonTime
 ) {
     public static LessonScheduleParam to(LessonScheduleUpdateRequest request) {
         return new LessonScheduleParam(
                 DayOfWeek.valueOf(request.dayOfWeek),
-                request.lessonStartTime,
-                request.lessonEndTime
+                LocalTime.parse(request.lessonTime().getLessonStartTime()),
+                LocalTime.parse(request.lessonTime().getLessonEndTime())
         );
     }
 }
