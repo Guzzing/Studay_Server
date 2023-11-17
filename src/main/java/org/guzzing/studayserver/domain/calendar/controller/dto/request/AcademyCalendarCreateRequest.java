@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.ValidAttendanceDate;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.ValidDateString;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.ValidEnum;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
@@ -17,11 +16,8 @@ public record AcademyCalendarCreateRequest(
         @Size(min = 1, message = "최소한 하나 이상의 레슨 스케줄이 필요합니다.")
         List<LessonScheduleCreateRequest> lessonScheduleParams,
 
-        @NotNull
-        LocalDate startDateOfAttendance,
-
-        @NotNull
-        LocalDate endDateOfAttendance,
+        @Valid
+        AttendanceDate attendanceDate,
 
         @NotNull
         Boolean isAlarmed,
@@ -30,25 +26,15 @@ public record AcademyCalendarCreateRequest(
         @ValidEnum(enumClass = Periodicity.class)
         String periodicity,
 
+        @Positive
         @NotNull
         Long childId,
 
+        @Positive
         @NotNull
         Long dashboardId,
         String memo
 ) {
-
-    private static final int MAX_DIFFERENCE_YEAR = 3;
-
-    @AssertTrue(message = "등원 시작일과 등원 마지막일의 차이가 " + MAX_DIFFERENCE_YEAR + "년을 넘을 수 없습니다.")
-    private boolean isExceedMaxDifferenceYear() {
-        return !endDateOfAttendance.isAfter(startDateOfAttendance.plusYears(MAX_DIFFERENCE_YEAR));
-    }
-
-    @AssertTrue(message = "마지막 등원일이 등원 시작일보다 이전일 수 없습니다.")
-    private boolean isBeforeStartDate() {
-        return !endDateOfAttendance.isBefore(startDateOfAttendance);
-    }
 
     public static AcademyCalendarCreateParam to(AcademyCalendarCreateRequest request, Long memberId) {
         return new AcademyCalendarCreateParam(
@@ -56,8 +42,8 @@ public record AcademyCalendarCreateRequest(
                         .stream()
                         .map(lesson -> LessonScheduleCreateRequest.to(lesson))
                         .toList(),
-                request.startDateOfAttendance,
-                request.endDateOfAttendance,
+                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
                 request.isAlarmed,
                 memberId,
                 request.childId,

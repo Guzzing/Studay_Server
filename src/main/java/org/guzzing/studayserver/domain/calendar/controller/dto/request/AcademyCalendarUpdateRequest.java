@@ -14,18 +14,17 @@ public record AcademyCalendarUpdateRequest(
         @Size(min = 1, message = "최소한 하나 이상의 레슨 스케줄이 필요합니다.")
         List<LessonScheduleUpdateRequest> lessonScheduleUpdateRequests,
 
-        @NotNull
-        LocalDate startDateOfAttendance,
-
-        @NotNull
-        LocalDate endDateOfAttendance,
+        @Valid
+        AttendanceDate attendanceDate,
 
         @NotNull
         Boolean isAlarmed,
 
+        @Positive
         @NotNull
         Long childId,
 
+        @Positive
         @NotNull
         Long dashboardId,
         String memo,
@@ -37,19 +36,6 @@ public record AcademyCalendarUpdateRequest(
         @NotNull
         Boolean isAllUpdated
 ) {
-    private static final int MAX_DIFFERENCE_YEAR = 3;
-
-    @AssertTrue(message = "등원 시작일과 등원 마지막일의 차이가 " + MAX_DIFFERENCE_YEAR + "년을 넘을 수 없습니다.")
-    private boolean isExceedMaxDifferenceYear(
-    ) {
-        return !endDateOfAttendance.isAfter(startDateOfAttendance.plusYears(MAX_DIFFERENCE_YEAR));
-    }
-
-    @AssertTrue(message = "마지막 등원일이 등원 시작일보다 이전일 수 없습니다.")
-    private boolean isBeforeStartDate(
-    ) {
-        return !endDateOfAttendance.isBefore(startDateOfAttendance);
-    }
 
     public static AcademyCalendarUpdateParam to(AcademyCalendarUpdateRequest request, Long memberId) {
         return new AcademyCalendarUpdateParam(
@@ -57,8 +43,8 @@ public record AcademyCalendarUpdateRequest(
                         .stream()
                         .map(lesson -> LessonScheduleUpdateRequest.to(lesson))
                         .toList(),
-                request.startDateOfAttendance,
-                request.endDateOfAttendance,
+                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
                 request.isAlarmed,
                 memberId,
                 request.childId,
