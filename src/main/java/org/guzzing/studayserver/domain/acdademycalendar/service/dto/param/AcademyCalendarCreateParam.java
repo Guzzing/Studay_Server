@@ -15,7 +15,6 @@ public record AcademyCalendarCreateParam(
         Long memberId,
         Long childId,
         Long dashboardId,
-        boolean isAllDay,
         String memo,
         Periodicity periodicity
 ){
@@ -30,6 +29,21 @@ public record AcademyCalendarCreateParam(
                 param.dashboardId,
                 param.memo
         );
+    }
+
+    public static AcademyCalendarCreateParam from(AcademyCalendarUpdateParam param){
+        return new AcademyCalendarCreateParam(
+                param.lessonScheduleParams(),
+                param.startDateOfAttendance(),
+                param.endDateOfAttendance(),
+                param.isAlarmed(),
+                param.memberId(),
+                param.childId(),
+                param.dashboardId(),
+                param.memo(),
+                param.periodicity()
+        );
+
     }
 
 }

@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record AcademyCalendarCreateRequest(
-        List<LessonScheduleRequest> lessonScheduleParams,
+        List<LessonScheduleCreateRequest> lessonScheduleParams,
+        //todo : String으로 받아서 포매팅할 것
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
 
@@ -27,9 +28,6 @@ public record AcademyCalendarCreateRequest(
         @NotNull
         Long dashboardId,
 
-        @NotNull
-        boolean isAllDay,
-
         @NotBlank
         String memo
 ) {
@@ -40,12 +38,12 @@ public record AcademyCalendarCreateRequest(
     private boolean isValidPeriod() {
         return !endDateOfAttendance.isAfter(startDateOfAttendance.plusYears(MAX_DIFFERENCE_YEAR));
     }
-
+git
     public static AcademyCalendarCreateParam to(AcademyCalendarCreateRequest request, Long memberId) {
         return new AcademyCalendarCreateParam(
                 request.lessonScheduleParams
                         .stream()
-                        .map(lesson -> LessonScheduleRequest.to(lesson))
+                        .map(lesson -> LessonScheduleCreateRequest.to(lesson))
                         .toList(),
                 request.startDateOfAttendance,
                 request.endDateOfAttendance,
@@ -53,7 +51,6 @@ public record AcademyCalendarCreateRequest(
                 memberId,
                 request.childId,
                 request.dashboardId,
-                request.isAllDay,
                 request.memo,
                 request.periodicity
 
