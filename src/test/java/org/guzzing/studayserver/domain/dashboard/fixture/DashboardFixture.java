@@ -3,8 +3,6 @@ package org.guzzing.studayserver.domain.dashboard.fixture;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.DAILY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
@@ -48,7 +46,8 @@ public class DashboardFixture {
     public DashboardPostRequest makePostRequest() {
         return new DashboardPostRequest(
                 childId, academyId, lessonId,
-                List.of(new Schedule(6, "12:00", "21:04", "BIWEEKLY")),
+//                List.of(new Schedule(6, "12:00", "21:04", "WEAKLY")),
+                List.of(new Schedule(6, "12:00", "21:04")),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 new SimpleMemo(true, false, false, true, false, true));
     }
@@ -57,8 +56,10 @@ public class DashboardFixture {
         return new DashboardPostParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
-                        new ScheduleInfo(null, "14:00", "18:00", DAILY),
-                        new ScheduleInfo(SUNDAY, "12:30", "12:04", BIWEEKLY))),
+//                        new ScheduleInfo(null, "14:00", "18:00", DAILY),
+//                        new ScheduleInfo(SUNDAY, "12:30", "12:04", BIWEEKLY))),
+                        new ScheduleInfo(MONDAY, "14:00", "18:00", WEEKLY),
+                        new ScheduleInfo(SUNDAY, "12:30", "12:04", WEEKLY))),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 Map.of(
                         KINDNESS, true,
@@ -94,7 +95,7 @@ public class DashboardFixture {
         return new Dashboard(
                 1L, 1L, 1L,
                 List.of(new DashboardSchedule(MONDAY, "14:00", "18:00", WEEKLY),
-                        new DashboardSchedule(FRIDAY, "13:30", "15:40", BIWEEKLY)),
+                        new DashboardSchedule(FRIDAY, "13:30", "15:40", WEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
                 List.of(CHEAP_FEE, LOVELY_TEACHING),
                 true, false
@@ -105,7 +106,7 @@ public class DashboardFixture {
         return new Dashboard(
                 1L, 1L, 1L,
                 List.of(new DashboardSchedule(MONDAY, "14:00", "18:00", WEEKLY),
-                        new DashboardSchedule(FRIDAY, "13:30", "15:40", BIWEEKLY)),
+                        new DashboardSchedule(FRIDAY, "13:30", "15:40", WEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
                 List.of(CHEAP_FEE, LOVELY_TEACHING),
                 false, false

@@ -47,9 +47,9 @@ public class AcademyAccessServiceImpl implements
         final Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new LessonException("존재하지 않는 수업입니다."));
 
-        final Long id = lesson.getAcademy().getId();
+        final long lessonAcademyId = lesson.getAcademy().getId();
 
-        if (id != academyId) {
+        if (lessonAcademyId != academyId) {
             throw new LessonException("해당 학원의 수업이 아닙니다.");
         }
     }

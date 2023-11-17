@@ -8,8 +8,9 @@ import org.guzzing.studayserver.global.exception.DashboardException;
 public record Schedule(
         Integer dayOfWeek,
         String startTime,
-        String endTime,
-        String repeatance
+        String endTime
+//        반복 주기 매주로 고정
+//        , String repeatance
 ) {
 
     public Schedule {

@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
+import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_MANAGEMENT;
@@ -20,7 +21,6 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
@@ -99,8 +99,9 @@ public class DashboardControllerConverter {
                 .map(scheduleInfo -> new Schedule(
                         scheduleInfo.dayOfWeek().getValue(),
                         scheduleInfo.startTime(),
-                        scheduleInfo.endTime(),
-                        scheduleInfo.repeatance().name()))
+                        scheduleInfo.endTime()
+//                        , scheduleInfo.repeatance().name()
+                ))
                 .toList();
     }
 
@@ -119,7 +120,9 @@ public class DashboardControllerConverter {
                 .map(schedule -> new ScheduleInfo(
                         DayOfWeek.of(schedule.dayOfWeek()),
                         schedule.startTime(), schedule.endTime(),
-                        Repeatance.of(schedule.repeatance())))
+                        WEEKLY
+//                        Repeatance.of(schedule.repeatance())
+                ))
                 .toList();
 
         return new ScheduleInfos(infos);
