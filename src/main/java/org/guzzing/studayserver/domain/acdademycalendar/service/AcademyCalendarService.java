@@ -6,6 +6,7 @@ import org.guzzing.studayserver.domain.acdademycalendar.repository.academyschedu
 import org.guzzing.studayserver.domain.acdademycalendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.acdademycalendar.repository.dto.AcademyTimeTemplateDateInfo;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.acdademycalendar.service.dto.RepeatPeriod;
@@ -152,6 +153,18 @@ public class AcademyCalendarService {
                 }
         );
 
+    }
+
+    public void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam) {
+        if(!academyCalendarDeleteParam.isAllDeleted()) {
+            academyScheduleRepository.deleteAcademyScheduleById(academyCalendarDeleteParam.academyScheduleId());
+            return;
+        }
+
+        List<AcademyTimeTemplateDateInfo> academyTimeTemplates = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(
+                academyCalendarDeleteParam.dashboardId());
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
     }
 
 }
