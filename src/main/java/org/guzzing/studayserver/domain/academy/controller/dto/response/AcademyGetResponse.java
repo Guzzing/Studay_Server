@@ -5,7 +5,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResu
 public record AcademyGetResponse(
         String academyName,
         String contact,
-        String fullAddress,
+        String address,
         String shuttleAvailability,
         Long expectedFee,
         String updatedDate,
