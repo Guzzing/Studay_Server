@@ -31,37 +31,45 @@ public class LessonTimeValidator implements ConstraintValidator<ValidLessonTime,
             LocalTime startTime = LocalTime.parse(lessonTime.getLessonStartTime(), TIME_FORMATTER);
             LocalTime endTime = LocalTime.parse(lessonTime.getLessonEndTime(), TIME_FORMATTER);
 
-            int startHour = startTime.getHour();
-            int startMinute = startTime.getMinute();
-            int endHour = endTime.getHour();
-            int endMinute = endTime.getMinute();
-
-            if (startHour > MAX_HOUR || startMinute > MAX_MINUTE || endHour > MAX_HOUR || endMinute > MAX_MINUTE
-                    || startHour < MIN_TIME || startMinute < MIN_TIME || endHour < MIN_TIME || endMinute < MIN_TIME) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(
-                        String.format(
-                                "시는 %d를 넘어갈 수 없으며 분은 %d를 넘어갈 수 없습니다. 또한 모두 0이거나 양수여야 합니다.",MAX_HOUR,MAX_MINUTE)
-                        ).addConstraintViolation();
-                return false;
-            }
-
-            if (endTime.isBefore(startTime)) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate("수업 시작 시간은 수업 끝난시간보다 이전일 수 없습니다."
-                ).addConstraintViolation();
+            if (!isValidTimeRange(startTime, endTime, context) || !isStartTimeBeforeEndTime(startTime, endTime, context)) {
                 return false;
             }
 
             return true;
         } catch (DateTimeParseException e) {
+            handleInvalidTimeFormat(context);
+            return false;
+        }
+    }
 
+    private boolean isValidTimeRange(LocalTime startTime, LocalTime endTime, ConstraintValidatorContext context) {
+        if (isTimeOutOfRange(startTime) || isTimeOutOfRange(endTime)) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("HH:MM 형태를 가지고 있지 않습니다.")
+            context.buildConstraintViolationWithTemplate(
+                    String.format("시는 %d를 넘어갈 수 없으며 분은 %d를 넘어갈 수 없습니다. 또한 모두 0이거나 양수여야 합니다.", MAX_HOUR, MAX_MINUTE)
+            ).addConstraintViolation();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isTimeOutOfRange(LocalTime time) {
+        return time.getHour() > MAX_HOUR || time.getMinute() > MAX_MINUTE || time.getHour() < MIN_TIME || time.getMinute() < MIN_TIME;
+    }
+
+    private boolean isStartTimeBeforeEndTime(LocalTime startTime, LocalTime endTime, ConstraintValidatorContext context) {
+        if (endTime.isBefore(startTime)) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("수업 시작 시간은 수업 끝난시간보다 이전일 수 없습니다.")
                     .addConstraintViolation();
             return false;
         }
-
+        return true;
     }
 
+    private void handleInvalidTimeFormat(ConstraintValidatorContext context) {
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate("HH:MM 형태를 가지고 있지 않습니다.")
+                .addConstraintViolation();
+    }
 }
