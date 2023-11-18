@@ -42,6 +42,7 @@ public class GlobalExceptionRestHandler {
                 .body(response);
     }
 
+
     /**
      * [Exception] 클라이언트에서 request의 '파라미터로' 데이터가 넘어오지 않았을 경우
      */
@@ -124,7 +125,6 @@ public class GlobalExceptionRestHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(response);
     }
-
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleAllException(IllegalArgumentException e) {
