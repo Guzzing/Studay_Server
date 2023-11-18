@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import java.util.List;
 import java.util.Random;
@@ -24,13 +25,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Import(TestDatabaseConfig.class)
-@SpringBootTest
-@ActiveProfiles({"dev","oauth"})
+@SpringBootTest(webEnvironment = NONE)
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
@@ -197,22 +196,16 @@ class AcademyServiceTest {
     @Test
     @DisplayName("학원 ID로 학원을 검색했을 때 진행하는 수업의 과목과 ID를 올바르게 반환한다.")
     void getLessonInfosAboutAcademy() {
-        //Given
-        Academy academy = AcademyFixture.academySungnam();
-        Academy savedAcademy = academyRepository.save(academy);
-        Lesson saveLesson = lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
-        reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
-
         //When
         LessonInfoToCreateDashboardResults lessonsInfoAboutAcademy
-                = academyService.getLessonsInfoAboutAcademy(savedAcademy.getId());
+                = academyService.getLessonsInfoAboutAcademy(savedAcademyAboutSungnam.getId());
 
         //Then
         lessonsInfoAboutAcademy.lessonInfoToCreateDashboardResults()
                 .forEach(
                         lessonInfoToCreateDashboardResult -> {
-                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(saveLesson.getId());
-                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(saveLesson.getSubject());
+                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(savedALessonAboutSungnam.getId());
+                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(savedALessonAboutSungnam.getSubject());
                         }
                 );
     }
