@@ -3,7 +3,7 @@ package org.guzzing.studayserver.domain.calendarInfo.controller.response;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CalendarMonthMarkResponse(
+public record CalendarYearMonthMarkResponse(
         DateRange dateRange,
         List<Holiday> holidays,
         List<Integer> existenceDays

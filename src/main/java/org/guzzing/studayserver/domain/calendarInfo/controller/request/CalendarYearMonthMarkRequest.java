@@ -3,7 +3,7 @@ package org.guzzing.studayserver.domain.calendarInfo.controller.request;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
-public record CalendarMonthMarkRequest(
+public record CalendarYearMonthMarkRequest(
         @Range(min = 2000, max = 2100)
         @NotNull
         Integer year,

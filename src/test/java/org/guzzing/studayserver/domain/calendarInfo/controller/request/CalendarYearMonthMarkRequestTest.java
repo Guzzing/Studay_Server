@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class CalendarMonthMarkRequestTest {
+class CalendarYearMonthMarkRequestTest {
 
     private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -19,7 +19,7 @@ class CalendarMonthMarkRequestTest {
     @MethodSource("validInputs")
     void givenValidInput_thenNoConstraintViolations(Integer year, Integer month) {
         // When
-        CalendarMonthMarkRequest request = new CalendarMonthMarkRequest(year, month);
+        CalendarYearMonthMarkRequest request = new CalendarYearMonthMarkRequest(year, month);
 
         // Then
         assertThat(validator.validate(request)).isEmpty();
@@ -29,8 +29,8 @@ class CalendarMonthMarkRequestTest {
     @MethodSource("invalidInputs")
     void givenInvalidInput_thenConstraintViolationIsThrown(Integer year, Integer month) {
         // When
-        CalendarMonthMarkRequest request = new CalendarMonthMarkRequest(year, month);
-        Set<ConstraintViolation<CalendarMonthMarkRequest>> violations = validator.validate(request);
+        CalendarYearMonthMarkRequest request = new CalendarYearMonthMarkRequest(year, month);
+        Set<ConstraintViolation<CalendarYearMonthMarkRequest>> violations = validator.validate(request);
 
         assertThat(violations).isNotEmpty();
     }

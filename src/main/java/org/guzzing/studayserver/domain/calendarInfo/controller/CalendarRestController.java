@@ -3,9 +3,10 @@ package org.guzzing.studayserver.domain.calendarInfo.controller;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
-import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarMonthMarkRequest;
-import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarMonthMarkResponse;
-import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarMonthMarkResponse.DateRange;
+import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarYearMonthMarkRequest;
+import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse;
+import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse.DateRange;
+import org.guzzing.studayserver.domain.calendarInfo.service.CalendarFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/calendar")
 public class CalendarRestController {
 
+    private CalendarFacade calendarFacade;
+
+    public CalendarRestController(CalendarFacade calendarFacade) {
+        this.calendarFacade = calendarFacade;
+    }
+
     @GetMapping(
             path = "/mark",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<CalendarMonthMarkResponse> getMonthMark(
+    public ResponseEntity<CalendarYearMonthMarkResponse> getYearMonthMark(
             @MemberId Long memberId,
-            @RequestParam @Valid CalendarMonthMarkRequest calendarMonthMarkRequest
+            @RequestParam @Valid CalendarYearMonthMarkRequest request
     ) {
 
+        CalendarMonthMarkResult result = calendarFacade.getYearMonthMark(request.toParam(memberId));
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new CalendarMonthMarkResponse(
+                .body(new CalendarYearMonthMarkResponse(
                         new DateRange(1, 31),
                         new ArrayList<>(),
                         new ArrayList<>()
