@@ -13,14 +13,7 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
@@ -31,11 +24,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Import(TestDatabaseConfig.class)
 @SpringBootTest
+@ActiveProfiles({"dev","oauth"})
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
@@ -197,6 +192,29 @@ class AcademyServiceTest {
         }
         Random random = new Random();
         return min + random.nextInt((int) (max - min + 1));
+    }
+
+    @Test
+    @DisplayName("학원 ID로 학원을 검색했을 때 진행하는 수업의 과목과 ID를 올바르게 반환한다.")
+    void getLessonInfosAboutAcademy() {
+        //Given
+        Academy academy = AcademyFixture.academySungnam();
+        Academy savedAcademy = academyRepository.save(academy);
+        Lesson saveLesson = lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+        reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+
+        //When
+        LessonInfoToCreateDashboardResults lessonsInfoAboutAcademy
+                = academyService.getLessonsInfoAboutAcademy(savedAcademy.getId());
+
+        //Then
+        lessonsInfoAboutAcademy.lessonInfoToCreateDashboardResults()
+                .forEach(
+                        lessonInfoToCreateDashboardResult -> {
+                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(saveLesson.getId());
+                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(saveLesson.getSubject());
+                        }
+                );
     }
 
 }
