@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarY
 import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse;
 import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse.DateRange;
 import org.guzzing.studayserver.domain.calendarInfo.service.CalendarFacade;
+import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CalendarRestController {
             @RequestParam @Valid CalendarYearMonthMarkRequest request
     ) {
 
-        CalendarMonthMarkResult result = calendarFacade.getYearMonthMark(request.toParam(memberId));
+        CalendarYearMonthMarkResult result = calendarFacade.getYearMonthMark(request.toParam(memberId));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new CalendarYearMonthMarkResponse(

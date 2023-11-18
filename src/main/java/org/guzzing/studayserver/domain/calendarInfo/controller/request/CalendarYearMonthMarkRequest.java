@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.calendarInfo.controller.request;
 
 import jakarta.validation.constraints.NotNull;
+import org.guzzing.studayserver.domain.calendarInfo.service.param.CalendarYearMonthMarkParam;
 import org.hibernate.validator.constraints.Range;
 
 public record CalendarYearMonthMarkRequest(
@@ -14,4 +15,11 @@ public record CalendarYearMonthMarkRequest(
 ) {
 
 
+    public CalendarYearMonthMarkParam toParam(Long memberId) {
+        return new CalendarYearMonthMarkParam(
+                memberId,
+                year,
+                month
+        );
+    }
 }
