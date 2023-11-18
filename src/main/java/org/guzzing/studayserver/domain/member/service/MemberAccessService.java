@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.member.service;
 
 public interface MemberAccessService {
 
-    boolean existsMember(final Long memberId);
+    void validateMember(final Long memberId);
 
+    void validateChild(final Long memberId, final Long childId);
 }

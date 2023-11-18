@@ -2,16 +2,15 @@ package org.guzzing.studayserver.domain.like.service;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
-import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.domain.like.service.dto.response.LikedAcademyFeeInfo;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LikeException;
-import org.guzzing.studayserver.global.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,54 +34,50 @@ public class LikeService {
 
     @Transactional
     public LikePostResult createLikeOfAcademy(final LikePostParam param) {
-        validateMember(param.memberId());
-        validateAcademy(param.academyId());
+        memberAccessService.validateMember(param.memberId());
+        academyAccessService.validateAcademy(param.academyId());
 
-        long likeCount = likeRepository.countByMemberId(param.memberId());
+        final long likeCount = likeRepository.countByMemberId(param.memberId());
 
         if (likeCount >= 10) {
             throw new LikeException("좋아요 개수는 10개를 넘을 수 없습니다.");
         }
 
-        Like savedLike = likeRepository.save(
+        final Like savedLike = likeRepository.save(
                 Like.of(param.memberId(), param.academyId()));
 
         return LikePostResult.from(savedLike);
     }
 
+    @Transactional
     public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
-        validateMember(memberId);
+        memberAccessService.validateMember(memberId);
 
         likeRepository.deleteById(likeId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {
-        List<Like> likes = likeRepository.findByMemberId(memberId);
+        memberAccessService.validateMember(memberId);
 
-        List<AcademyFeeInfo> academyFeeInfos = likes.stream()
-                .map(like -> academyAccessService.findAcademyFeeInfo(like.getAcademyId()))
+        final List<Like> likes = likeRepository.findByMemberId(memberId);
+
+        final List<LikedAcademyFeeInfo> likeAcademyFeeInfos = likes.stream()
+                .map(like -> {
+                    AcademyFeeInfo academyFeeInfo = academyAccessService.findAcademyFeeInfo(like.getAcademyId());
+
+                    return new LikedAcademyFeeInfo(
+                            like.getId(),
+                            like.getAcademyId(),
+                            academyFeeInfo.academyName(),
+                            academyFeeInfo.expectedFee());
+                })
                 .toList();
 
-        long totalFee = academyFeeInfos.stream()
-                .mapToLong(AcademyFeeInfo::expectedFee)
+        final long totalFee = likeAcademyFeeInfos.stream()
+                .mapToLong(LikedAcademyFeeInfo::expectedFee)
                 .sum();
 
-        return LikeGetResult.of(academyFeeInfos, totalFee);
+        return LikeGetResult.of(likeAcademyFeeInfos, totalFee);
     }
 
-    private void validateMember(final Long memberId) {
-        boolean isExistMember = memberAccessService.existsMember(memberId);
-
-        if (!isExistMember) {
-            throw new MemberException("존재하지 않는 멤버입니다.");
-        }
-    }
-
-    private void validateAcademy(final Long academyId) {
-        boolean isExistAcademy = academyAccessService.existsAcademy(academyId);
-
-        if (!isExistAcademy) {
-            throw new AcademyException("존재하지 않는 학원입니다.");
-        }
-    }
 }

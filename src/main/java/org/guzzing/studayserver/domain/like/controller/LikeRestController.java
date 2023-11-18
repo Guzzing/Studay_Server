@@ -31,22 +31,22 @@ public class LikeRestController {
         this.likeService = likeService;
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LikePostResponse> createLike(
-            @Validated @RequestBody LikePostRequest request,
-            @MemberId Long memberId
+            @Validated @RequestBody final LikePostRequest request,
+            @MemberId final Long memberId
     ) {
-        LikePostResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
+        final LikePostResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
 
         return ResponseEntity
                 .status(CREATED)
                 .body(LikePostResponse.from(result));
     }
 
-    @DeleteMapping("/{likeId}")
+    @DeleteMapping(path = "/{likeId}")
     public ResponseEntity<Void> removeLike(
-            @PathVariable Long likeId,
-            @MemberId Long memberId
+            @PathVariable final Long likeId,
+            @MemberId final Long memberId
     ) {
         likeService.removeLikeOfAcademy(likeId, memberId);
 
@@ -55,13 +55,13 @@ public class LikeRestController {
                 .build();
     }
 
-    @GetMapping
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LikeGetResponses> getAllLikes(
-            @MemberId Long memberId
+            @MemberId final Long memberId
     ) {
-        LikeGetResult allLikedAcademyInfo = likeService.findAllLikesOfMember(memberId);
+        final LikeGetResult allLikedAcademyInfo = likeService.findAllLikesOfMember(memberId);
 
-        LikeGetResponses response = LikeGetResponses.from(allLikedAcademyInfo);
+        final LikeGetResponses response = LikeGetResponses.from(allLikedAcademyInfo);
 
         return ResponseEntity
                 .status(OK)

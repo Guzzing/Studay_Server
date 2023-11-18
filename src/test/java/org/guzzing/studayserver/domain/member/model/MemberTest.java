@@ -8,7 +8,6 @@ import static org.mockito.Mockito.spy;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +67,7 @@ class MemberTest {
         // When & Then
         assertThatThrownBy(() -> exceededChild.assignToNewMemberOnly(member))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지만 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
+                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
     }
 
     @Nested

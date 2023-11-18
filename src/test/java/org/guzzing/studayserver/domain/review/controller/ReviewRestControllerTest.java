@@ -1,13 +1,11 @@
 package org.guzzing.studayserver.domain.review.controller;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
 import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -16,16 +14,15 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.guzzing.studayserver.domain.academy.listener.NewReviewListener;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
@@ -48,8 +45,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @SpringBootTest
-@Transactional
 class ReviewRestControllerTest {
+
+    private static final String TAG = "리뷰 API";
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,6 +61,8 @@ class ReviewRestControllerTest {
     private MemberAccessService memberAccessService;
     @MockBean
     private AcademyAccessService academyAccessService;
+    @MockBean
+    private NewReviewListener newReviewListener;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -77,9 +77,6 @@ class ReviewRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void registerReview_Success() throws Exception {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
-
         ReviewPostRequest request = ReviewFixture.makeReviewPostRequest(true);
         String jsonBody = objectMapper.writeValueAsString(request);
 
@@ -99,21 +96,28 @@ class ReviewRestControllerTest {
                 .andDo(document("post-review",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                        ),
-                        requestFields(
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("kindness").type(BOOLEAN).description("친절해요 리뷰 선택 여부"),
-                                fieldWithPath("cheapFee").type(BOOLEAN).description("수강료가 싸요 리뷰 선택 여부"),
-                                fieldWithPath("goodFacility").type(BOOLEAN).description("시설이 좋아요 리뷰 선택 여부"),
-                                fieldWithPath("goodManagement").type(BOOLEAN).description("관리가 좋아요 리뷰 선택 여부"),
-                                fieldWithPath("lovelyTeaching").type(BOOLEAN).description("가르침이 사랑스러워요 리뷰 선택 여부"),
-                                fieldWithPath("shuttleAvailability").type(BOOLEAN).description("셔틀을 운행해요 리뷰 선택 여부")
-                        ),
-                        responseFields(
-                                fieldWithPath("reviewId").type(NUMBER).description("리뷰 아이디"),
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("리뷰 등록")
+                                .requestHeaders(
+                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                                )
+                                .requestFields(
+                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                        fieldWithPath("kindness").type(BOOLEAN).description("친절해요 리뷰 선택 여부"),
+                                        fieldWithPath("cheapFee").type(BOOLEAN).description("수강료가 싸요 리뷰 선택 여부"),
+                                        fieldWithPath("goodFacility").type(BOOLEAN).description("시설이 좋아요 리뷰 선택 여부"),
+                                        fieldWithPath("goodManagement").type(BOOLEAN).description("관리가 좋아요 리뷰 선택 여부"),
+                                        fieldWithPath("lovelyTeaching").type(BOOLEAN)
+                                                .description("가르침이 사랑스러워요 리뷰 선택 여부"),
+                                        fieldWithPath("shuttleAvailability").type(BOOLEAN)
+                                                .description("셔틀을 운행해요 리뷰 선택 여부")
+                                )
+                                .responseFields(
+                                        fieldWithPath("reviewId").type(NUMBER).description("리뷰 아이디"),
+                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
+                                )
+                                .build()
                         )
                 ));
     }
@@ -121,14 +125,14 @@ class ReviewRestControllerTest {
     @Test
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
     @WithMockCustomOAuth2LoginUser
+    @Transactional
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
         // Given
-        given(memberAccessService.existsMember(any())).willReturn(true);
-        given(academyAccessService.existsAcademy(any())).willReturn(true);
+        final Long academyId = 1L;
 
         // When
         ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
-                .param("academyId", String.valueOf(1L))
+                .param("academyId", String.valueOf(academyId))
                 .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -142,15 +146,20 @@ class ReviewRestControllerTest {
                 .andDo(document("get-reviewable",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                        ),
-                        queryParameters(
-                                parameterWithName("academyId").description("학원 아이디")
-                        ),
-                        responseFields(
-                                fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
-                                fieldWithPath("reviewable").type(BOOLEAN).description("리뷰 등록 가능 여부")
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("리뷰 가능 여부 확인")
+                                .requestHeaders(
+                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                                )
+                                .queryParameters(
+                                        parameterWithName("academyId").description("학원 아이디")
+                                )
+                                .responseFields(
+                                        fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
+                                        fieldWithPath("reviewable").type(BOOLEAN).description("리뷰 등록 가능 여부")
+                                )
+                                .build()
                         )
                 ));
     }

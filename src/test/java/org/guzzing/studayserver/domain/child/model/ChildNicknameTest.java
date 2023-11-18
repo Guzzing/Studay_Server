@@ -4,12 +4,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.stream.Stream;
+import org.guzzing.studayserver.domain.member.model.NickName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class NickNameTest {
+class ChildNicknameTest {
 
     @DisplayName("정상 값이라면 객체를 생성한다.")
     @ParameterizedTest
@@ -20,7 +21,7 @@ class NickNameTest {
     })
     void create_success(String nickname) {
         // Then
-        assertThatCode(() -> new NickName(nickname))
+        assertThatCode(() -> new ChildNickname(nickname))
                 .doesNotThrowAnyException();
     }
 
@@ -29,7 +30,7 @@ class NickNameTest {
     @MethodSource("provideInvalidNicknames")
     void create_failure_throwException(String invalidNickname) {
         // Then
-        assertThatThrownBy(() -> new NickName(invalidNickname))
+        assertThatThrownBy(() -> new ChildNickname(invalidNickname))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
