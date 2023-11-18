@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 
 public record AcademiesByLocationResults(
         List<AcademiesByLocationResult> academiesByLocationResults

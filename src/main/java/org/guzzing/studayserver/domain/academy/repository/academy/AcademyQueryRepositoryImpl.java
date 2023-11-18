@@ -3,9 +3,9 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
-import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 

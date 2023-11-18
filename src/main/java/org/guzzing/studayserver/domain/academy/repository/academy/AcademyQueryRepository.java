@@ -1,9 +1,9 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
-import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 
 public interface AcademyQueryRepository {
 
