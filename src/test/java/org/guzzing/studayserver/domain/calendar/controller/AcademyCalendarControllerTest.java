@@ -96,7 +96,7 @@ class AcademyCalendarControllerTest {
                     //잘못된 시간 형식
                     new AcademyCalendarCreateRequest(
                             List.of(
-                                    new LessonScheduleCreateRequest(
+                                    new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("1300", "14:00")
                                     )
@@ -111,7 +111,7 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(
-                                    new LessonScheduleCreateRequest(
+                                    new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("-13:00", "14:00")
                                     )
@@ -126,7 +126,7 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(
-                                    new LessonScheduleCreateRequest(
+                                    new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("13:00", "50:00")
                                     )
@@ -198,7 +198,7 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarCreateRequest(
                             List.of(
-                                    new LessonScheduleCreateRequest(
+                                    new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(
                                             "MMONDAY",
                                             new LessonTime("13:00", "14:00")
                                     )
@@ -265,7 +265,7 @@ class AcademyCalendarControllerTest {
                     //잘못된 시간 형식
                     new AcademyCalendarUpdateRequest(
                             List.of(
-                                    new LessonScheduleUpdateRequest(
+                                    new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("1300", "14:00")
                                     )
@@ -282,7 +282,7 @@ class AcademyCalendarControllerTest {
 
                     new AcademyCalendarUpdateRequest(
                             List.of(
-                                    new LessonScheduleUpdateRequest(
+                                    new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("13:00", "-14:00")
                                     )
@@ -298,7 +298,7 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(
-                                    new LessonScheduleUpdateRequest(
+                                    new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(
                                             DayOfWeek.FRIDAY.toString(),
                                             new LessonTime("13:00", "14:1100")
                                     )
@@ -375,7 +375,7 @@ class AcademyCalendarControllerTest {
                     ),
                     new AcademyCalendarUpdateRequest(
                             List.of(
-                                    new LessonScheduleUpdateRequest(
+                                    new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(
                                             "MMONDAY",
                                             new LessonTime("13:00", "14:00")
                                     )

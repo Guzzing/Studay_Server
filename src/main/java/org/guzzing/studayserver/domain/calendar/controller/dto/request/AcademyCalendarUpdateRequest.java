@@ -5,8 +5,11 @@ import jakarta.validation.constraints.*;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.ValidEnum;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public record AcademyCalendarUpdateRequest(
@@ -53,5 +56,22 @@ public record AcademyCalendarUpdateRequest(
                 Periodicity.valueOf(request.periodicity),
                 request.isAllUpdated
         );
+    }
+
+    public record LessonScheduleUpdateRequest(
+            @NotBlank
+            @ValidEnum(enumClass = DayOfWeek.class, message = "올바른 요일 표기가 아닙니다.")
+            String dayOfWeek,
+
+            @Valid
+            LessonTime lessonTime
+    ) {
+        public static LessonScheduleParam to(LessonScheduleUpdateRequest request) {
+            return new LessonScheduleParam(
+                    DayOfWeek.valueOf(request.dayOfWeek()),
+                    LocalTime.parse(request.lessonTime().getLessonStartTime()),
+                    LocalTime.parse(request.lessonTime().getLessonEndTime())
+            );
+        }
     }
 }

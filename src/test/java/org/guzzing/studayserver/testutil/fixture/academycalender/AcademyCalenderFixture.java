@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.testutil.fixture.academycalender;
 
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleCreateRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonScheduleUpdateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
@@ -29,20 +29,20 @@ public class AcademyCalenderFixture {
     private static final Long DASHBOARD_ID = 1L;
     private static final LessonTime LESSON_TIME = new LessonTime("18:00", "20:00");
 
-    public static LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
-        return new LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
+    public static AcademyCalendarCreateRequest.LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
+        return new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
     }
 
-    public static LessonScheduleCreateRequest fridayLessonScheduleCreateRequest() {
-        return new LessonScheduleCreateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
+    public static AcademyCalendarCreateRequest.LessonScheduleCreateRequest fridayLessonScheduleCreateRequest() {
+        return new AcademyCalendarCreateRequest.LessonScheduleCreateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
     }
 
-    public static LessonScheduleUpdateRequest mondayLessonScheduleUpdateRequest() {
-        return new LessonScheduleUpdateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
+    public static AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest mondayLessonScheduleUpdateRequest() {
+        return new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(DayOfWeek.MONDAY.toString(), LESSON_TIME);
     }
 
-    public static LessonScheduleUpdateRequest fridayLessonScheduleUpdateRequest() {
-        return new LessonScheduleUpdateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
+    public static AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest fridayLessonScheduleUpdateRequest() {
+        return new AcademyCalendarUpdateRequest.LessonScheduleUpdateRequest(DayOfWeek.FRIDAY.toString(), LESSON_TIME);
     }
 
 
