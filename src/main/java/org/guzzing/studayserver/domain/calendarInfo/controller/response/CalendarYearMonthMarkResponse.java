@@ -5,7 +5,7 @@ import java.util.List;
 
 public record CalendarYearMonthMarkResponse(
         DateRange dateRange,
-        List<Holiday> holidays,
+        List<HolidayResponse> holidayResponses,
         List<Integer> existenceDays
 ) {
 
@@ -16,12 +16,12 @@ public record CalendarYearMonthMarkResponse(
 
     }
 
-    public record Holiday(
+    public record HolidayResponse(
             LocalDate date,
             List<String> names
     ) {
 
-        public Holiday {
+        public HolidayResponse {
             validateNames(names);
         }
 
