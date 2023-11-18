@@ -3,11 +3,11 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 import java.util.List;
 import java.util.Optional;
 import org.guzzing.studayserver.domain.academy.model.Academy;
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByName;
-import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
-import org.guzzing.studayserver.domain.academy.repository.AcademyFee;
-import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

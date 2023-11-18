@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.param;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
 
 public record AcademyFilterParam(

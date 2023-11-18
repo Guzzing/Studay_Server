@@ -1,6 +1,6 @@
-package org.guzzing.studayserver.domain.academy.repository;
+package org.guzzing.studayserver.domain.academy.repository.dto;
 
-public record AcademyByFiltering(
+public record AcademiesByLocation(
         Long academyId,
         String academyName,
         String fullAddress,

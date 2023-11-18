@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.repository;
+package org.guzzing.studayserver.domain.academy.repository.dto;
 
 public interface AcademyFee {
 

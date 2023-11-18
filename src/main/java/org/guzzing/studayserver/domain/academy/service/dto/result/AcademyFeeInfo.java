@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.AcademyFee;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
 
 public record AcademyFeeInfo(
         String academyName,
