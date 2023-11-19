@@ -1,19 +1,33 @@
 package org.guzzing.studayserver.domain.calendarInfo.controller.response;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
+import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult.HolidayResult;
 
 public record CalendarYearMonthMarkResponse(
-        DateRange dateRange,
-        List<HolidayResponse> holidayResponses,
+        int lastDay,
+        List<HolidayResponse> holidays,
         List<Integer> existenceDays
 ) {
 
-    public record DateRange(
-            int firstDay,
-            int lastDay
-    ) {
+    public static CalendarYearMonthMarkResponse from(CalendarYearMonthMarkResult result) {
+        List<HolidayResponse> holidayResponses = result.holidayResults().stream()
+                .sorted(Comparator.comparing(HolidayResult::date))
+                .map(r -> new HolidayResponse(r.date(), r.names()))
+                .toList();
 
+        List<Integer> existenceDays = result.existenceDays().stream()
+                .sorted()
+                .map(LocalDate::getDayOfMonth)
+                .toList();
+
+        return new CalendarYearMonthMarkResponse(
+                result.lastDayOfMonth(),
+                holidayResponses,
+                existenceDays
+        );
     }
 
     public record HolidayResponse(

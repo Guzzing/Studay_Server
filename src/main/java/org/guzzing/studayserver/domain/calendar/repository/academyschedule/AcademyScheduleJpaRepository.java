@@ -34,4 +34,14 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     void deleteAcademyScheduleById(Long academyScheduleId);
 
+
+    @Query("SELECT ash FROM AcademySchedule ash "
+            + "JOIN FETCH ash.academyTimeTemplate att "
+            + "WHERE att.childId IN :childIds "
+            + "AND YEAR(ash.scheduleDate) = :year "
+            + "AND MONTH(ash.scheduleDate) = :month")
+    List<AcademySchedule> findByYearMonth(
+            @Param("childIds") List<Long> childIds,
+            @Param("year") int year,
+            @Param("month") int month);
 }

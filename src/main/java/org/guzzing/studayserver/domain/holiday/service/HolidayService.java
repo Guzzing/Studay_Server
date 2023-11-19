@@ -9,6 +9,7 @@ import org.guzzing.studayserver.domain.holiday.model.Holiday;
 import org.guzzing.studayserver.domain.holiday.repository.HolidayRepository;
 import org.guzzing.studayserver.domain.holiday.service.result.HolidayFindByYearMonthResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HolidayService {
@@ -19,6 +20,7 @@ public class HolidayService {
         this.holidayRepository = holidayRepository;
     }
 
+    @Transactional(readOnly = true)
     public HolidayFindByYearMonthResult findByYearMonth(int year, int month) {
         List<Holiday> holidays = holidayRepository.findByYearMonth(year, month);
 
