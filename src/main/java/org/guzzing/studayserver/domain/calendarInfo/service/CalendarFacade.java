@@ -32,7 +32,7 @@ public class CalendarFacade {
     }
 
     @Transactional(readOnly = true)
-    public CalendarYearMonthMarkResult getYearMonthMark(CalendarYearMonthMarkParam calendarMonthMarkParam) {
+    public CalendarYearMonthMarkResult findYearMonthMark(CalendarYearMonthMarkParam calendarMonthMarkParam) {
         int lastDayOfMonth = DateUtility.getLastDayOfMonth(
                 calendarMonthMarkParam.year(), calendarMonthMarkParam.month());
 

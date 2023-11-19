@@ -38,7 +38,7 @@ class CalendarFacadeTest {
 
     @DisplayName("달력 마크에 필요한 정보를 가져온다.")
     @Test
-    void getYearMonthMark_ShouldReturnCorrectResult() {
+    void findYearMonthMark_ShouldReturnCorrectResult() {
         // Given
         int year = 2023;
         int month = 5;
@@ -71,7 +71,7 @@ class CalendarFacadeTest {
                 .willReturn(academyScheduleYearMonthResults);
 
         // When
-        CalendarYearMonthMarkResult result = calendarFacade.getYearMonthMark(calendarYearMonthMarkParam);
+        CalendarYearMonthMarkResult result = calendarFacade.findYearMonthMark(calendarYearMonthMarkParam);
 
         // Assert
         assertThat(result.lastDayOfMonth()).isEqualTo(31);

@@ -28,12 +28,12 @@ public class CalendarRestController {
             path = "/mark",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<CalendarYearMonthMarkResponse> getYearMonthMark(
+    public ResponseEntity<CalendarYearMonthMarkResponse> findYearMonthMark(
             @MemberId Long memberId,
             @RequestParam @Valid CalendarYearMonthMarkRequest request
     ) {
 
-        CalendarYearMonthMarkResult result = calendarFacade.getYearMonthMark(request.toParam(memberId));
+        CalendarYearMonthMarkResult result = calendarFacade.findYearMonthMark(request.toParam(memberId));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CalendarYearMonthMarkResponse.from(result));
