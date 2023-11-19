@@ -52,6 +52,8 @@ jobs:
           echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
           echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+          echo "${{ secrets.APPLICATION_S3_YML_CONTENT }}" > src/main/resources/application-s3.yml
+          echo "${{ secrets.APPLICATION_SWAGGER_YML_CONTENT }}" > src/main/resources/application-swagger.yml
 
           echo "${{ secrets.TEST_APPLICATION_YML_CONTENT }}" > src/test/resources/application.yml
           echo "${{ secrets.TEST_APPLICATION_TEST_YML_CONTENT }}" > src/test/resources/application-test.yml
@@ -59,6 +61,9 @@ jobs:
 
       - name: Build with gradle
         run: ./gradlew build
+
+      - name: Openapi3 Documentation
+        run: ./gradlew openapi3
 
       - name: Make Zip File
         run: zip -qq -r ./$GITHUB_SHA.zip .
