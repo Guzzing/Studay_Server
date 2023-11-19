@@ -1,11 +1,16 @@
 package org.guzzing.studayserver.domain.calendarInfo.controller;
 
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarYearMonthMarkRequest;
+import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarFindSchedulesByDateResponses;
 import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse;
 import org.guzzing.studayserver.domain.calendarInfo.service.CalendarFacade;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +42,22 @@ public class CalendarRestController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CalendarYearMonthMarkResponse.from(result));
+    }
+
+    @GetMapping(
+            path = "/date",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<CalendarFindSchedulesByDateResponses> findSchedulesByDate(
+            @MemberId Long memberId,
+            @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new CalendarFindSchedulesByDateResponses(
+                        date,
+                        new ArrayList<>()
+                ));
     }
 }
