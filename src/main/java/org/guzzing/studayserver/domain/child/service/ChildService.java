@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.child.service;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -19,10 +20,13 @@ public class ChildService {
 
     private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
+    private final ProfileImageProvider profileImageProvider;
 
-    public ChildService(MemberRepository memberRepository, ChildRepository childRepository) {
+    public ChildService(MemberRepository memberRepository, ChildRepository childRepository,
+            ProfileImageProvider profileImageProvider) {
         this.memberRepository = memberRepository;
         this.childRepository = childRepository;
+        this.profileImageProvider = profileImageProvider;
     }
 
     @Transactional
@@ -31,6 +35,7 @@ public class ChildService {
 
         Child child = new Child(param.nickname(), param.grade());
         child.assignToNewMemberOnly(member);
+        setDefaultProfileImageToChild(child, member);
 
         Child savedChild = childRepository.save(child);
         return savedChild.getId();
@@ -67,4 +72,16 @@ public class ChildService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
     }
+
+    private void setDefaultProfileImageToChild(final Child child, final Member member) {
+        final List<String> uris = member.getChildren()
+                .stream()
+                .map(Child::getProfileImageURIPath)
+                .toList();
+
+        final String defaultProfileImageURI = profileImageProvider.provideDefaultProfileImageURI(uris);
+
+        child.updateProfileImageUri(defaultProfileImageURI);
+    }
+
 }
