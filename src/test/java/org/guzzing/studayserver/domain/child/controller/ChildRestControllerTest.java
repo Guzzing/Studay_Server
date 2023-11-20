@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
@@ -99,9 +100,11 @@ class ChildRestControllerTest {
     @Test
     void findChildren_success() throws Exception {
         // Given
+        final String profileImageUrl1 = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/icon_0_0.png";
+        final String profileImageUrl2 = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/icon_2_1.png";
         ChildrenFindResult result = new ChildrenFindResult(List.of(
-                new ChildFindResult(1L, "Nickname1", "초등학교 1학년", "휴식 중!"),
-                new ChildFindResult(2L, "Nickname2", "초등학교 2학년", "휴식 중!")
+                new ChildFindResult(1L, profileImageUrl1, "Nickname1", "초등학교 1학년", "휴식 중!"),
+                new ChildFindResult(2L, profileImageUrl2, "Nickname2", "초등학교 2학년", "휴식 중!")
         ));
 
         given(childService.findByMemberId(1L)).willReturn(result);

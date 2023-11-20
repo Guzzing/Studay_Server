@@ -46,7 +46,12 @@ public class ChildService {
         List<Child> children = member.getChildren();
 
         return new ChildrenFindResult(children.stream()
-                .map(child -> new ChildFindResult(child.getId(), child.getNickName(), child.getGrade(), "휴식 중!"))
+                .map(child -> new ChildFindResult(
+                        child.getId(),
+                        child.getProfileImageURLPath(),
+                        child.getNickName(),
+                        child.getGrade(),
+                        "휴식 중!"))
                 .toList());
     }
 

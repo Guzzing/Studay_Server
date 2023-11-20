@@ -121,7 +121,9 @@ class ChildServiceTest {
             Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
 
             Child child1 = new Child("아이 닉네임1", "초등학교 1학년");
+            child1.updateProfileImageUri("icon_1_1.png");
             Child child2 = new Child("아이 닉네임2", "초등학교 2학년");
+            child2.updateProfileImageUri("icon_2_0.png");
 
             Child spyChild1 = spy(child1);
             spyChild1.assignToNewMemberOnly(member);
@@ -136,8 +138,8 @@ class ChildServiceTest {
             given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 
             ChildrenFindResult expectedResult = new ChildrenFindResult(List.of(
-                    new ChildFindResult(spyChild1Id, spyChild1.getNickName(), spyChild1.getGrade(), "휴식 중!"),
-                    new ChildFindResult(spyChild2Id, spyChild2.getNickName(), spyChild2.getGrade(), "휴식 중!")
+                    new ChildFindResult(spyChild1Id, spyChild1.getProfileImageURLPath(), spyChild1.getNickName(), spyChild1.getGrade(), "휴식 중!"),
+                    new ChildFindResult(spyChild2Id, spyChild2.getProfileImageURLPath(), spyChild2.getNickName(), spyChild2.getGrade(), "휴식 중!")
             ));
 
             // When
