@@ -1,8 +1,12 @@
 package org.guzzing.studayserver.domain.calendarInfo.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.guzzing.studayserver.domain.calendar.service.AcademySchedulesReadService;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleFindByDateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleYearMonthResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendarInfo.service.param.CalendarYearMonthMarkParam;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.util.DateUtility;
@@ -52,5 +56,19 @@ public class CalendarFacade {
                 holidayFindByYearMonthResult,
                 academyScheduleYearMonthResults
         );
+    }
+
+    @Transactional(readOnly = true)
+    public CalendarFindSchedulesByDateResults findSchedulesByDate(Long memberId, LocalDate date) {
+        MemberInformationResult memberInformationResult = memberService.getById(memberId);
+
+        List<Long> childIds = memberInformationResult.memberChildInformationResults().stream()
+                .map(MemberChildInformationResult::childId)
+                .toList();
+        AcademyScheduleFindByDateResults academyScheduleFindByDateResults = academySchedulesReadService.findByDate(
+                childIds, date);
+
+
+        return new CalendarFindSchedulesByDateResults(new ArrayList<>());
     }
 }

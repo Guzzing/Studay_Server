@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
+import java.time.LocalDate;
+import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,9 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long>, AcademyScheduleRepository {
 
@@ -44,4 +43,10 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             @Param("childIds") List<Long> childIds,
             @Param("year") int year,
             @Param("month") int month);
+
+    @Query("SELECT ash FROM AcademySchedule ash "
+            + "JOIN FETCH ash.academyTimeTemplate att "
+            + "WHERE att.childId IN :childIds "
+            + "AND ash.scheduleDate = :date")
+    List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 }

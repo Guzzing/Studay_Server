@@ -23,4 +23,6 @@ public interface AcademyScheduleRepository {
     void deleteAcademyScheduleById(Long academyScheduleId);
 
     List<AcademySchedule> findByYearMonth(List<Long> childIds, int year, int month);
+
+    List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 }

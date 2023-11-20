@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarYearMonthMarkRequest;
 import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarFindSchedulesByDateResponses;
 import org.guzzing.studayserver.domain.calendarInfo.controller.response.CalendarYearMonthMarkResponse;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/calendar")
 public class CalendarRestController {
 
-    private CalendarFacade calendarFacade;
+    private final CalendarFacade calendarFacade;
 
     public CalendarRestController(CalendarFacade calendarFacade) {
         this.calendarFacade = calendarFacade;
@@ -52,6 +53,7 @@ public class CalendarRestController {
             @MemberId Long memberId,
             @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date
     ) {
+        CalendarFindSchedulesByDateResults results = calendarFacade.findSchedulesByDate(memberId, date);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
