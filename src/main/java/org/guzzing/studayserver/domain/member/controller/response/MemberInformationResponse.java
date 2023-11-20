@@ -18,7 +18,7 @@ public record MemberInformationResponse(
     }
 
     public static MemberInformationResponse from(MemberInformationResult result) {
-        List<MemberChildInformationResponse> childInformationResponses = result.memberChildInformationResults().stream()
+        List<MemberChildInformationResponse> childInformationResponses = result.childResults().stream()
                 .map(MemberChildInformationResponse::from)
                 .toList();
 

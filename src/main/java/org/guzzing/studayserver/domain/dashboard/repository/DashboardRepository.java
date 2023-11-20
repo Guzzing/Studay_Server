@@ -22,4 +22,5 @@ public interface DashboardRepository {
 
     List<Dashboard> findAll();
 
+    List<Dashboard> findByIds(List<Long> dashboardIds);
 }

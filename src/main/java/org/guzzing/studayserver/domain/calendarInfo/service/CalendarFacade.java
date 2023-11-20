@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.guzzing.studayserver.domain.calendar.service.AcademySchedulesReadService;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleFindByDateResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleFindByDateResults.AcademyScheduleFindByDateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleYearMonthResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendarInfo.service.param.CalendarYearMonthMarkParam;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.util.DateUtility;
+import org.guzzing.studayserver.domain.dashboard.service.DashboardReadService;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashBoardFindByIdsResults;
 import org.guzzing.studayserver.domain.holiday.service.HolidayService;
 import org.guzzing.studayserver.domain.holiday.service.result.HolidayFindByYearMonthResult;
 import org.guzzing.studayserver.domain.member.service.MemberService;
@@ -23,15 +26,14 @@ public class CalendarFacade {
 
     private final MemberService memberService;
     private final HolidayService holidayService;
+    private final DashboardReadService dashboardReadService;
     private final AcademySchedulesReadService academySchedulesReadService;
 
-    public CalendarFacade(
-            MemberService memberService,
-            HolidayService holidayService,
-            AcademySchedulesReadService academySchedulesReadService
-    ) {
+    public CalendarFacade(MemberService memberService, HolidayService holidayService,
+            DashboardReadService dashboardReadService, AcademySchedulesReadService academySchedulesReadService) {
         this.memberService = memberService;
         this.holidayService = holidayService;
+        this.dashboardReadService = dashboardReadService;
         this.academySchedulesReadService = academySchedulesReadService;
     }
 
@@ -44,7 +46,7 @@ public class CalendarFacade {
                 calendarMonthMarkParam.year(), calendarMonthMarkParam.month());
 
         MemberInformationResult memberInformationResult = memberService.getById(calendarMonthMarkParam.memberId());
-        List<Long> childIds = memberInformationResult.memberChildInformationResults().stream()
+        List<Long> childIds = memberInformationResult.childResults().stream()
                 .map(MemberChildInformationResult::childId)
                 .toList();
 
@@ -62,12 +64,16 @@ public class CalendarFacade {
     public CalendarFindSchedulesByDateResults findSchedulesByDate(Long memberId, LocalDate date) {
         MemberInformationResult memberInformationResult = memberService.getById(memberId);
 
-        List<Long> childIds = memberInformationResult.memberChildInformationResults().stream()
+        List<Long> childIds = memberInformationResult.childResults().stream()
                 .map(MemberChildInformationResult::childId)
                 .toList();
         AcademyScheduleFindByDateResults academyScheduleFindByDateResults = academySchedulesReadService.findByDate(
                 childIds, date);
 
+        List<Long> dashboardIds = academyScheduleFindByDateResults.academySchedules().stream()
+                .map(AcademyScheduleFindByDateResult::dashboardId)
+                .toList();
+        DashBoardFindByIdsResults dashBoardFindByIdsResults = dashboardReadService.findByIds(dashboardIds);
 
         return new CalendarFindSchedulesByDateResults(new ArrayList<>());
     }
