@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard;
+package org.guzzing.studayserver.domain.dashboard.service.access.dto;
 
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 

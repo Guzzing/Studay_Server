@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.calendar.service.dto.result;
 
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
-import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
-import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 
 import java.time.LocalDate;
 import java.util.List;

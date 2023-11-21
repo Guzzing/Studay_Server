@@ -76,13 +76,7 @@ public class DashboardService {
     public DashboardGetResult findDashboard(final long dashboardId, final long memberId) {
         memberAccessService.validateMember(memberId);
 
-        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId);
-
-        final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
-        final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
-        final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
-
-        return serviceConverter.postResultFrom(dashboard, childInfo, academyInfo, lessonInfo);
+        return findDashboardInfo(dashboardId);
     }
 
     public DashboardGetResults findDashboards(final long childId, final boolean activeOnly, final long memberId) {
@@ -122,6 +116,16 @@ public class DashboardService {
                 .toggleActive();
 
         return serviceConverter.patchResultFrom(dashboard);
+    }
+
+    public DashboardGetResult findDashboardInfo(final Long dashboardId) {
+        final Dashboard dashboard = dashboardRepository.findDashboardById(dashboardId);
+
+        final ChildInfo childInfo = childAccessService.findChildInfo(dashboard.getChildId());
+        final AcademyInfo academyInfo = academyAccessService.findAcademyInfo(dashboard.getAcademyId());
+        final LessonInfo lessonInfo = academyAccessService.findLessonInfo(dashboard.getLessonId());
+
+        return serviceConverter.postResultFrom(dashboard, childInfo, academyInfo, lessonInfo);
     }
 
 }

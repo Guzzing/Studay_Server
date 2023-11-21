@@ -11,8 +11,8 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
-import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
-import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
