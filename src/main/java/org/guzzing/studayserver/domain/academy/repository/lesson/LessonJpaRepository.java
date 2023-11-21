@@ -14,4 +14,9 @@ public interface LessonJpaRepository extends JpaRepository<Lesson, Long>, Lesson
 
     List<LessonInfoToCreateDashboard> findAllLessonInfoByAcademyId (Long academyId);
 
+
+    @Query("SELECT ls FROM Lesson AS ls "
+            + "JOIN FETCH ls.academy aca "
+            + "WHERE ls.id IN :lessonIds")
+    List<Lesson> findByIds(List<Long> lessonIds);
 }

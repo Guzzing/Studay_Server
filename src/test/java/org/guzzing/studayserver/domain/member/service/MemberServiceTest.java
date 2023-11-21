@@ -72,7 +72,7 @@ class MemberServiceTest {
         assertThat(result.nickname()).isEqualTo("TestUser");
         assertThat(result.email()).isEmpty();
 
-        assertThat(result.memberChildInformationResults()).isNotNull();
-        assertThat(result.memberChildInformationResults()).isEmpty();
+        assertThat(result.childResults()).isNotNull();
+        assertThat(result.childResults()).isEmpty();
     }
 }
