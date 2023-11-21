@@ -33,7 +33,6 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     void deleteAcademyScheduleById(Long academyScheduleId);
 
-
     @Query("SELECT ash FROM AcademySchedule ash "
             + "JOIN FETCH ash.academyTimeTemplate att "
             + "WHERE att.childId IN :childIds "

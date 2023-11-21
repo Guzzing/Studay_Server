@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.calendar.service;
 
-import java.util.List;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteByDashboardParam;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +12,7 @@ public class AcademyCalendarAccessServiceImpl {
         this.academyCalendarService = academyCalendarService;
     }
 
-    public void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam) {
-        academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
+    public void deleteSchedule(AcademyCalendarDeleteByDashboardParam param) {
+        academyCalendarService.deleteSchedulesByDashboard(param);
     }
 }
