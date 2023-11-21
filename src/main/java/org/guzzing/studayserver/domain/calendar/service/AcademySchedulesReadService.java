@@ -45,7 +45,8 @@ public class AcademySchedulesReadService {
                         ash.getId(),
                         ash.getLessonStartTime(),
                         ash.getLessonEndTime(),
-                        ash.getAcademyTimeTemplate().getDashboardId()
+                        ash.getAcademyTimeTemplate().getDashboardId(),
+                        ash.getAcademyTimeTemplate().getChildId()
                 )).toList();
 
         return new AcademyScheduleFindByDateResults(academyScheduleResults);

@@ -13,7 +13,8 @@ public record AcademyScheduleFindByDateResults(
             long academyScheduleId,
             LocalTime startTime,
             LocalTime endTime,
-            long dashboardId
+            long dashboardId,
+            Long childId
     ) {
 
     }

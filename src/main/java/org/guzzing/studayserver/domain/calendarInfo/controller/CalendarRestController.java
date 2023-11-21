@@ -57,9 +57,9 @@ public class CalendarRestController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new CalendarFindSchedulesByDateResponses(
+                .body(CalendarFindSchedulesByDateResponses.from(
                         date,
-                        new ArrayList<>()
+                        results
                 ));
     }
 }

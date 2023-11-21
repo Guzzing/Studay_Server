@@ -89,6 +89,18 @@ public class CalendarFacade {
                 .toList();
         LessonFindByIdsResults lessonFindByIdsResults = lessonReadService.findByIds(lessonIds);
 
-        return new CalendarFindSchedulesByDateResults(new ArrayList<>());
+        List<CalendarFindSchedulesByDateIncompleteResult> combinedResults = academyScheduleFindByDateResults.academySchedules().stream()
+                .flatMap(schedule -> dashBoardFindByIdsResults.dashBoards().stream()
+                        .filter(dashboard -> dashboard.dashboardId().equals(schedule.dashboardId()))
+                        .map(dashboard -> CalendarFindSchedulesByDateIncompleteResult.of(schedule, dashboard)))
+                .toList();
+
+        List<CalendarFindSchedulesByDateResult> finalResults = combinedResults.stream()
+                .flatMap(incompleteResult -> lessonFindByIdsResults.lessons().stream()
+                        .filter(lesson -> lesson.lessonId().equals(incompleteResult.lessonId()))
+                        .map(lesson -> CalendarFindSchedulesByDateResult.of(incompleteResult, lesson)))
+                .toList();
+
+        return new CalendarFindSchedulesByDateResults(finalResults);
     }
 }
