@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.service.vo;
+package org.guzzing.studayserver.domain.dashboard.facade.vo;
 
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 

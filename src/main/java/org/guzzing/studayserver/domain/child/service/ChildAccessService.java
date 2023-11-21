@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.child.service;
 
-import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
+import org.guzzing.studayserver.domain.dashboard.facade.vo.ChildInfo;
 
 public interface ChildAccessService {
 

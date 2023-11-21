@@ -14,14 +14,14 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPatchResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
-import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
+import org.guzzing.studayserver.domain.dashboard.facade.DashboardFacade;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,14 +39,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardRestController {
 
     private final DashboardControllerConverter controllerConverter;
-    private final DashboardService dashboardService;
+    private final DashboardFacade dashboardFacade;
 
     public DashboardRestController(
             final DashboardControllerConverter controllerConverter,
-            final DashboardService dashboardService
+            final DashboardFacade dashboardFacade
     ) {
         this.controllerConverter = controllerConverter;
-        this.dashboardService = dashboardService;
+        this.dashboardFacade = dashboardFacade;
     }
 
     /**
@@ -62,12 +62,31 @@ public class DashboardRestController {
             @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
-        final DashboardPostResult result = dashboardService.createDashboard(param, memberId);
+        final DashboardPostResult result = dashboardFacade.createDashboard(param, memberId);
         final DashboardPostResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(CREATED)
                 .body(response);
+    }
+
+    /**
+     * 비활성화된 대시보드 제거
+     *
+     * @param dashboardId
+     * @param memberId
+     * @return Void
+     */
+    @PatchMapping(path = "/{dashboardId}")
+    public ResponseEntity<Void> removeDashboard(
+            @PathVariable final Long dashboardId,
+            @MemberId final Long memberId
+    ) {
+        dashboardFacade.removeDashboard(dashboardId, memberId);
+
+        return ResponseEntity
+                .status(NO_CONTENT)
+                .build();
     }
 
     /**
@@ -85,8 +104,28 @@ public class DashboardRestController {
             @MemberId final Long memberId
     ) {
         final DashboardPutParam param = controllerConverter.to(dashboardId, request);
-        final DashboardPutResult result = dashboardService.editDashboard(param, memberId);
+        final DashboardPutResult result = dashboardFacade.modifyDashboard(param, memberId);
         final DashboardPutResponse response = controllerConverter.from(result);
+
+        return ResponseEntity
+                .status(OK)
+                .body(response);
+    }
+
+    /**
+     * 대시보드 활성화 여부 반전
+     *
+     * @param dashboardId
+     * @param memberId
+     * @return DashboardPatchResponse
+     */
+    @PatchMapping(path = "/{dashboardId}/toggle", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DashboardPatchResponse> revertActiveOfDashboard(
+            @PathVariable final Long dashboardId,
+            @MemberId final Long memberId
+    ) {
+        final DashboardPatchResult result = dashboardFacade.revertDashboardActiveness(dashboardId, memberId);
+        final DashboardPatchResponse response = controllerConverter.from(result);
 
         return ResponseEntity
                 .status(OK)
@@ -105,7 +144,7 @@ public class DashboardRestController {
             @PathVariable final Long dashboardId,
             @MemberId final Long memberId
     ) {
-        final DashboardGetResult result = dashboardService.findDashboard(dashboardId, memberId);
+        final DashboardGetResult result = dashboardFacade.getDashboard(dashboardId, memberId);
         final DashboardGetResponse response = controllerConverter.from(result);
 
         return ResponseEntity
@@ -130,51 +169,12 @@ public class DashboardRestController {
                     defaultValue = "false") final Boolean activeOnly,
             @MemberId final Long memberId
     ) {
-        final DashboardGetResults results = dashboardService.findDashboards(childId, activeOnly, memberId);
+        final DashboardGetResults results = dashboardFacade.getDashboards(childId, activeOnly, memberId);
         final DashboardGetResponses responses = controllerConverter.from(results);
 
         return ResponseEntity
                 .status(OK)
                 .body(responses);
-    }
-
-    /**
-     * 비활성화된 대시보드 제거
-     *
-     * @param dashboardId
-     * @param memberId
-     * @return Void
-     */
-    @PatchMapping(path = "/{dashboardId}")
-    public ResponseEntity<Void> removeDashboard(
-            @PathVariable final Long dashboardId,
-            @MemberId final Long memberId
-    ) {
-        dashboardService.deleteDashboard(dashboardId, memberId);
-
-        return ResponseEntity
-                .status(NO_CONTENT)
-                .build();
-    }
-
-    /**
-     * 대시보드 활성화 여부 반전
-     *
-     * @param dashboardId
-     * @param memberId
-     * @return DashboardPatchResponse
-     */
-    @PatchMapping(path = "/{dashboardId}/toggle", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DashboardPatchResponse> revertActiveOfDashboard(
-            @PathVariable final Long dashboardId,
-            @MemberId final Long memberId
-    ) {
-        final DashboardPatchResult result = dashboardService.toggleActiveOfDashboard(dashboardId, memberId);
-        final DashboardPatchResponse response = controllerConverter.from(result);
-
-        return ResponseEntity
-                .status(OK)
-                .body(response);
     }
 
 }

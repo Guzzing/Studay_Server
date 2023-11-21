@@ -5,4 +5,5 @@ import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardSch
 public interface DashboardAccessService {
 
     DashboardScheduleAccessResult getDashboardSchedule(Long dashboardId);
+
 }
