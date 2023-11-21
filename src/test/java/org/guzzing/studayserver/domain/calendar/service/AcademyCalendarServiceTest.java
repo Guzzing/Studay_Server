@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.calendar.repository.academyschedule.Acade
 import org.guzzing.studayserver.domain.calendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteByDashboardParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
@@ -226,7 +228,7 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
-    @DisplayName("해당 일만 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
+    @DisplayName("해당 일 이후 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
     void deletedSchedule_isAfterSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
@@ -240,11 +242,31 @@ class AcademyCalendarServiceTest {
 
         //When
         academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
-        List<AcademySchedule> isOnlyDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
+        List<AcademySchedule> isAfterDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
-        isOnlyDeletedScheduleAcademySchedules.forEach(
+        isAfterDeletedScheduleAcademySchedules.forEach(
                 schedule-> assertThat(schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("해당 일 이후 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
+    void deletedScheduleByDashboard_isAfterSchedule() {
+        //Given
+        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
+
+        AcademyCalendarDeleteByDashboardParam param = AcademyCalenderFixture.academyCalendarDeleteByDashboardParam();
+
+        //When
+        academyCalendarService.deleteSchedulesByDashboard(param);
+        List<AcademySchedule> isAfterDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
+
+        //Then
+        isAfterDeletedScheduleAcademySchedules.forEach(
+                schedule-> assertThat(schedule.getScheduleDate().isBefore(param.requestedDate())).isTrue()
         );
     }
 
