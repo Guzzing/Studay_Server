@@ -7,12 +7,9 @@ import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.*;
+import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -52,6 +49,10 @@ public class AcademyCalenderFixture {
 
     public static LessonScheduleParam fridayDashboardScheduleParam() {
         return new LessonScheduleParam(DayOfWeek.FRIDAY, LocalTime.of(18, 0), LocalTime.of(20, 0));
+    }
+
+    public static AcademyCalendarDeleteByDashboardParam academyCalendarDeleteByDashboardParam() {
+        return new AcademyCalendarDeleteByDashboardParam(DASHBOARD_ID, LocalDate.of(2023, 11, 20));
     }
 
     public static AcademyCalendarCreateParam academyCalenderCreateParam() {

@@ -34,4 +34,6 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     void deleteAcademyScheduleById(Long academyScheduleId);
 
+
+
 }
