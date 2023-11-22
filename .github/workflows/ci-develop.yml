@@ -67,5 +67,12 @@ jobs:
       - name: Build with gradle
         run: ./gradlew build
 
+      - name: Upload Test Report
+        if: failure()  # 이 단계는 테스트 실패시에만 실행됩니다.
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: build/reports/tests/test
+
       - name: Openapi3 Documentation
         run: ./gradlew openapi3
