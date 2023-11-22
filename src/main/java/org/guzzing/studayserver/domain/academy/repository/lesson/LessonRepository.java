@@ -19,4 +19,5 @@ public interface LessonRepository {
 
     Optional<Lesson> findById(final Long lessonId);
 
+    List<Lesson> findByIds(List<Long> lessonIds);
 }

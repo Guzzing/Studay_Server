@@ -15,5 +15,4 @@ public class AcademyCalendarAccessServiceImpl implements AcademyCalendarAccessSe
     public void deleteSchedule(AcademyCalendarDeleteByDashboardParam param) {
         academyCalendarService.deleteSchedulesByDashboard(param);
     }
-
 }
