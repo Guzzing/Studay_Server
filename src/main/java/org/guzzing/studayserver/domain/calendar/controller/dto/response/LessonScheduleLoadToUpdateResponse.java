@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
-import org.guzzing.studayserver.domain.dashboard.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

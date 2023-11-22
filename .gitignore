@@ -9,7 +9,6 @@ build/
 studay_server.iml
 src/main/resources/*.yml
 src/test/resources/*.yml
-src/main/resources/
 
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

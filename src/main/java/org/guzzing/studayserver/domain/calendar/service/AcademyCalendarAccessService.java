@@ -1,9 +1,9 @@
 package org.guzzing.studayserver.domain.calendar.service;
 
-import java.util.List;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteByDashboardParam;
 
 public interface AcademyCalendarAccessService {
 
-    void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam);
+    void deleteSchedule(AcademyCalendarDeleteByDashboardParam param);
+
 }

@@ -4,7 +4,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.springframework.stereotype.Service;
 
 @Service
-public class AcademyCalendarAccessServiceImpl {
+public class AcademyCalendarAccessServiceImpl implements AcademyCalendarAccessService {
 
     private final AcademyCalendarService academyCalendarService;
 

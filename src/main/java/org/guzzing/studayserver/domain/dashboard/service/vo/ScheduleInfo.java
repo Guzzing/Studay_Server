@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.dashboard.service.vo;
 
-import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.BIWEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.NONE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 
@@ -29,7 +28,7 @@ public record ScheduleInfo(
     }
 
     private boolean isWeeklyRepeatance(Repeatance repeatance) {
-        return repeatance == WEEKLY || repeatance == BIWEEKLY || repeatance == NONE;
+        return repeatance == WEEKLY || repeatance == NONE;
     }
 
 }

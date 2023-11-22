@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard;
+package org.guzzing.studayserver.domain.dashboard.service.access.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

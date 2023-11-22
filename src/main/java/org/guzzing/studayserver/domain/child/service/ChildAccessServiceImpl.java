@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.child.service;
 
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
+import org.guzzing.studayserver.domain.dashboard.facade.vo.ChildInfo;
 import org.guzzing.studayserver.global.exception.ChildException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

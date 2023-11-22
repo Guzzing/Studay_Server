@@ -10,8 +10,8 @@ import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
-import org.guzzing.studayserver.domain.dashboard.DashboardAccessService;
-import org.guzzing.studayserver.domain.dashboard.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

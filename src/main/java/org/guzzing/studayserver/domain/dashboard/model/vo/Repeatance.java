@@ -6,9 +6,7 @@ import org.guzzing.studayserver.global.exception.DashboardException;
 
 public enum Repeatance {
     NONE,
-    DAILY,
     WEEKLY,
-    BIWEEKLY,
     MONTHLY,
     YEARLY;
 

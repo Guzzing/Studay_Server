@@ -8,14 +8,7 @@ import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
-import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -35,8 +28,8 @@ public class DashboardServiceConverter {
                 false);
     }
 
-    public DashboardPostResult postResultFrom(final Dashboard entity) {
-        return new DashboardPostResult(
+    public DashboardResult from(final Dashboard entity) {
+        return new DashboardResult(
                 entity.getId(),
                 entity.getChildId(),
                 entity.getAcademyId(),
@@ -46,39 +39,6 @@ public class DashboardServiceConverter {
                 convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
                 entity.isActive(),
                 entity.isDeleted());
-    }
-
-    public DashboardPutResult putResultFrom(final Dashboard entity) {
-        return new DashboardPutResult(
-                entity.getId(),
-                convertToPaymentInfo(entity.getFeeInfo()),
-                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()));
-    }
-
-    public DashboardPatchResult patchResultFrom(final Dashboard entity) {
-        return new DashboardPatchResult(entity.getId(), entity.isActive());
-    }
-
-    public DashboardGetResult postResultFrom(
-            final Dashboard entity,
-            final ChildInfo childInfo,
-            final AcademyInfo academyInfo,
-            final LessonInfo lessonInfo
-    ) {
-        return new DashboardGetResult(
-                entity.getId(),
-                childInfo,
-                academyInfo,
-                lessonInfo,
-                convertToScheduleInfos(entity.getDashboardSchedules()),
-                convertToPaymentInfo(entity.getFeeInfo()),
-                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
-                entity.isActive(),
-                entity.isDeleted());
-    }
-
-    public DashboardGetResults postResultFrom(final List<DashboardGetResult> results) {
-        return new DashboardGetResults(results);
     }
 
     public FeeInfo convertToFeeInfo(final PaymentInfo paymentInfo) {

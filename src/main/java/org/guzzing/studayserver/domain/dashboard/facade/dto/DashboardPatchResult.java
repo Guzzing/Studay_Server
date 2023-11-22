@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.service.dto.response;
+package org.guzzing.studayserver.domain.dashboard.facade.dto;
 
 public record DashboardPatchResult(
         long dashboardId,
