@@ -2,13 +2,13 @@ package org.guzzing.studayserver.domain.child.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
+import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -72,7 +72,6 @@ public class ChildService {
         Child child = member.findChild(param.childId())
                 .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 아이입니다: " + param.childId()));
         child.update(param.nickname(), param.grade());
-
 
         return child.getId();
     }

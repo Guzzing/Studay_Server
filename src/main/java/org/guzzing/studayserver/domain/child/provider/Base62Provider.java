@@ -29,7 +29,7 @@ public class Base62Provider {
         long originValue = 0;
         long factor = 1;
 
-        for (int i = 0; i < value.length(); i ++) {
+        for (int i = 0; i < value.length(); i++) {
             final char character = value.charAt(i);
             final int index = BASE_62_CHARS.indexOf(character);
 
