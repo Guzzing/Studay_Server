@@ -61,6 +61,9 @@ jobs:
           echo "${{ secrets.TEST_APPLICATION_TEST_YML_CONTENT }}" > src/test/resources/application-test.yml
           echo "${{ secrets.TEST_APPLICATION_OAUTH_YML_CONTENT }}" > src/test/resources/application-oauth.yml
 
+      - name: Clean with gradle
+        run: ./gradlew clean
+
       - name: Build with gradle
         run: ./gradlew build
 
