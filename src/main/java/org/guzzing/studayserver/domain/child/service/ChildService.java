@@ -1,6 +1,8 @@
 package org.guzzing.studayserver.domain.child.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
@@ -13,6 +15,7 @@ import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Transactional(readOnly = true)
 @Service
@@ -70,12 +73,20 @@ public class ChildService {
                 .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 아이입니다: " + param.childId()));
         child.update(param.nickname(), param.grade());
 
+
         return child.getId();
     }
 
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
+    @Transactional
+    public ChildProfileImagePatchResult modifyProfileImage(final Long childId, final MultipartFile file) {
+        final Child child = childRepository.findById(childId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
+
+        final String profileImageUri = profileImageProvider.uploadProfileImage(childId, file);
+
+        child.updateProfileImageUri(profileImageUri);
+
+        return new ChildProfileImagePatchResult(childId, profileImageUri);
     }
 
     private void setDefaultProfileImageToChild(final Child child, final Member member) {
@@ -87,6 +98,11 @@ public class ChildService {
         final String defaultProfileImageURI = profileImageProvider.provideDefaultProfileImageURI(uris);
 
         child.updateProfileImageUri(defaultProfileImageURI);
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
     }
 
 }

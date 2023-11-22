@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProfileImageUri {
 
     @Transient
-    private static final String urlPath = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/";
+    private static final String urlPath = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/";
 
     @Column(name = "image_uri", nullable = false)
     private String imageUri;

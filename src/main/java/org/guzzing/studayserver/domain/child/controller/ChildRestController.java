@@ -1,12 +1,17 @@
 package org.guzzing.studayserver.domain.child.controller;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
+import org.guzzing.studayserver.domain.child.controller.response.ChildProfileImagePatchResponse;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
+import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/children")
@@ -31,8 +39,8 @@ public class ChildRestController {
     }
 
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Long> create(@MemberId Long memberId, @RequestBody @Valid ChildCreateRequest request) {
         Long createdChildId = childService.create(request.toParam(memberId));
@@ -43,7 +51,7 @@ public class ChildRestController {
     }
 
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<ChildrenFindResponse> findChildren(@MemberId Long memberId) {
         ChildrenFindResult result = childService.findByMemberId(memberId);
@@ -63,8 +71,8 @@ public class ChildRestController {
     }
 
     @PatchMapping(path = "/{childId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Long> modify(
             @MemberId Long memberId,
@@ -76,4 +84,18 @@ public class ChildRestController {
                 .status(HttpStatus.OK)
                 .body(modifiedChildId);
     }
+
+    @PostMapping(path = "/{childId}/profile", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ChildProfileImagePatchResponse> modifyProfileImage(
+            @PathVariable final Long childId,
+            @RequestPart final MultipartFile file
+    ) {
+        final ChildProfileImagePatchResult result = childService.modifyProfileImage(childId, file);
+        final ChildProfileImagePatchResponse response = ChildProfileImagePatchResponse.from(result);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
 }
