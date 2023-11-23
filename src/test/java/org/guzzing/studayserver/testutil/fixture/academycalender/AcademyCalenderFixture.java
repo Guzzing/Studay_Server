@@ -23,7 +23,10 @@ public class AcademyCalenderFixture {
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR = LocalDate.of(2025, 11, 15);
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
-    private static final Long DASHBOARD_ID = 1L;
+    private static final Long FIRST_CHILD_DASHBOARD_ID = 1L;
+    private static final Long SECOND_CHILD_DASHBOARD_ID = 2L;
+    private static final Long FIRST_CHILD_ID = 1L;
+    private static final Long SECOND_CHILD_ID = 2L;
     private static final LessonTime LESSON_TIME = new LessonTime("18:00", "20:00");
 
     public static AcademyCalendarCreateRequest.LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {
@@ -52,19 +55,34 @@ public class AcademyCalenderFixture {
     }
 
     public static AcademyCalendarDeleteByDashboardParam academyCalendarDeleteByDashboardParam() {
-        return new AcademyCalendarDeleteByDashboardParam(DASHBOARD_ID, LocalDate.of(2023, 11, 20));
+        return new AcademyCalendarDeleteByDashboardParam(FIRST_CHILD_DASHBOARD_ID, LocalDate.of(2023, 11, 20));
     }
 
-    public static AcademyCalendarCreateParam academyCalenderCreateParam() {
+    public static AcademyCalendarCreateParam firstChildAcademyCalenderCreateParam() {
         return new AcademyCalendarCreateParam(
                 List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
+                WEEKLY_PERIODICITY
+
+        );
+    }
+
+    public static AcademyCalendarCreateParam secondChildAcademyCalenderCreateParam() {
+        return new AcademyCalendarCreateParam(
+                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
+                false,
+                1L,
+                SECOND_CHILD_ID,
+                SECOND_CHILD_DASHBOARD_ID,
+                "슬리퍼 챙기는 날",
                 WEEKLY_PERIODICITY
 
         );
@@ -72,7 +90,7 @@ public class AcademyCalenderFixture {
 
     public static AcademyCalendarDeleteParam isAfterAcademyCalendarDeleteParam(Long academyScheduleId) {
         return new AcademyCalendarDeleteParam(
-                DASHBOARD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 academyScheduleId,
                 true,
                 START_DATE_OF_ATTENDANCE.plusDays(30L)
@@ -81,7 +99,7 @@ public class AcademyCalenderFixture {
 
     public static AcademyCalendarDeleteParam isOnlyThatAcademyCalendarDeleteParam(Long academyScheduleId) {
         return new AcademyCalendarDeleteParam(
-                DASHBOARD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 academyScheduleId,
                 false,
                 START_DATE_OF_ATTENDANCE.plusDays(30L)
@@ -95,8 +113,8 @@ public class AcademyCalenderFixture {
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -127,8 +145,8 @@ public class AcademyCalenderFixture {
                 END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -140,8 +158,8 @@ public class AcademyCalenderFixture {
                 END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
         );
     }
@@ -192,8 +210,8 @@ public class AcademyCalenderFixture {
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY,
                 true
@@ -207,8 +225,8 @@ public class AcademyCalenderFixture {
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
                 false,
                 1L,
-                1L,
-                DASHBOARD_ID,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY,
                 false
