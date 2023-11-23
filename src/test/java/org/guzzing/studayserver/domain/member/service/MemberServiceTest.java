@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 import java.util.Optional;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;

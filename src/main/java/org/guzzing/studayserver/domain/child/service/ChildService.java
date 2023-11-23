@@ -37,8 +37,8 @@ public class ChildService {
         Member member = getMember(param.memberId());
 
         Child child = new Child(param.nickname(), param.grade());
-        child.assignToNewMemberOnly(member);
         setDefaultProfileImageToChild(child, member);
+        child.assignToNewMemberOnly(member);
 
         Child savedChild = childRepository.save(child);
         return savedChild.getId();
@@ -91,6 +91,7 @@ public class ChildService {
     private void setDefaultProfileImageToChild(final Child child, final Member member) {
         final List<String> uris = member.getChildren()
                 .stream()
+
                 .map(Child::getProfileImageURIPath)
                 .toList();
 
