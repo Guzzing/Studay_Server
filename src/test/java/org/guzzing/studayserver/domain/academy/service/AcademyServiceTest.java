@@ -203,7 +203,7 @@ class AcademyServiceTest {
         //Then
         assertThat(academyAndLessonDetail.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
         assertThat(academyAndLessonDetail.address()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
-        assertThat(academyAndLessonDetail.lessonName()).isEqualTo(savedALessonAboutSungnam.getSubject());
+        assertThat(academyAndLessonDetail.lessonName()).isEqualTo(savedALessonAboutSungnam.getCurriculum());
         assertThat(academyAndLessonDetail.capacity()).isEqualTo(savedALessonAboutSungnam.getCapacity());
         assertThat(academyAndLessonDetail.totalFee()).isEqualTo(savedALessonAboutSungnam.getTotalFee());
     }

@@ -13,7 +13,7 @@ public record AcademyAndLessonDetailResult(
         return new AcademyAndLessonDetailResult(
                 lesson.getAcademy().getAcademyName(),
                 lesson.getAcademy().getFullAddress(),
-                lesson.getSubject(),
+                lesson.getCurriculum(),
                 lesson.getCapacity(),
                 lesson.getTotalFee()
         );
