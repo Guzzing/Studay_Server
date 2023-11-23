@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
+import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -36,6 +37,9 @@ class AcademyCalendarControllerTest {
 
     @MockBean
     private AcademyCalendarService academyCalendarService;
+
+    @MockBean
+    private AcademyCalendarFacade academyCalendarFacade;
 
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
