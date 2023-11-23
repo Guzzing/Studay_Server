@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.calendar.service.dto.result;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonFindByIdsResults.LessonFindByIdsResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarFindSchedulesByDateIncompleteResult;
 
@@ -20,6 +19,7 @@ public record CalendarFindSchedulesByDateResults(
 
     public record CalendarFindSchedulesByDateResult(
             Long childId,
+            String childImageUrl,
             Long academyScheduleId,
             LocalTime startTime,
             LocalTime endTime,
@@ -32,6 +32,7 @@ public record CalendarFindSchedulesByDateResults(
                 CalendarFindSchedulesByDateIncompleteResult incompleteResult, LessonFindByIdsResult lesson) {
             return new CalendarFindSchedulesByDateResult(
                     incompleteResult.childId(),
+                    incompleteResult.childImageUrl(),
                     incompleteResult.academyScheduleId(),
                     incompleteResult.startTime(),
                     incompleteResult.endTime(),

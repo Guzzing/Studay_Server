@@ -49,9 +49,12 @@ class CalendarFacadeTest {
         List<Long> childIds = List.of(1L, 2L);
         MemberInformationResult memberInformationResult = new MemberInformationResult("nickname", "email@example.com",
                 List.of(
-                        new MemberInformationResult.MemberChildInformationResult(childIds.get(0), "Child1",
+                        new MemberInformationResult.MemberChildInformationResult(childIds.get(0),
+                                "Child1",
+                                "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/childImage1.png",
                                 "Schedule1"),
                         new MemberInformationResult.MemberChildInformationResult(childIds.get(1), "Child2",
+                                "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/childImage2.png",
                                 "Schedule2")));
         given(memberService.getById(memberId)).willReturn(memberInformationResult);
 

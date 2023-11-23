@@ -1,11 +1,11 @@
 package org.guzzing.studayserver.domain.calendarInfo.service.result;
 
 import java.time.LocalTime;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleFindByDateResults.AcademyScheduleFindByDateResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashBoardFindByIdsResults.DashBoardFindByIdsResult;
 
 public record CalendarFindSchedulesByDateIncompleteResult(
         Long childId,
+        String childImageUrl,
         Long academyScheduleId,
         LocalTime startTime,
         LocalTime endTime,
@@ -13,9 +13,10 @@ public record CalendarFindSchedulesByDateIncompleteResult(
 ) {
 
     public static CalendarFindSchedulesByDateIncompleteResult of(
-            AcademyScheduleFindByDateResult schedule, DashBoardFindByIdsResult dashboard) {
+            ChildAcademyScheduleCombineResult schedule, DashBoardFindByIdsResult dashboard) {
         return new CalendarFindSchedulesByDateIncompleteResult(
                 schedule.childId(),
+                schedule.childImageUrl(),
                 schedule.academyScheduleId(),
                 schedule.startTime(),
                 schedule.endTime(),

@@ -39,7 +39,10 @@ public class MemberService {
         Member member = getMember(memberId);
 
         List<MemberChildInformationResult> childInformationResults = member.getChildren().stream()
-                .map(child -> new MemberChildInformationResult(child.getId(), child.getNickName(), "휴식중!!"))
+                .map(child -> new MemberChildInformationResult(child.getId(),
+                        child.getNickName(),
+                        child.getProfileImageURLPath(),
+                        "휴식중!!"))
                 .toList();
 
         return new MemberInformationResult(member.getNickName(), member.getEmail(), childInformationResults);

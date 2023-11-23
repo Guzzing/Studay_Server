@@ -22,6 +22,7 @@ class CalendarFindSchedulesByDateResponsesTest {
         LocalDate testDate = LocalDate.of(2023, 1, 1);
         CalendarFindSchedulesByDateResult schedule1 = new CalendarFindSchedulesByDateResult(
                 1L,
+                "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/childImage1.png",
                 101L,
                 LocalTime.of(9, 0),
                 LocalTime.of(10, 0),
@@ -30,6 +31,7 @@ class CalendarFindSchedulesByDateResponsesTest {
                 "Math");
         CalendarFindSchedulesByDateResult schedule2 = new CalendarFindSchedulesByDateResult(
                 2L,
+                "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/childImage2.png",
                 102L,
                 LocalTime.of(9, 0),
                 LocalTime.of(10, 30),

@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.calendarInfo.controller.response;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,6 +43,8 @@ public record CalendarFindSchedulesByDateResponses(
                 List<OverlappingScheduleResponse> overlappingResponses = new ArrayList<>();
                 for (CalendarFindSchedulesByDateResult result : entry.getValue()) {
                     overlappingResponses.add(new OverlappingScheduleResponse(
+                            result.childId(),
+                            result.childImageUrl(),
                             result.academyScheduleId(),
                             true
                     ));
@@ -58,6 +61,7 @@ public record CalendarFindSchedulesByDateResponses(
             dateResponses.add(new CalendarFindSchedulesByDateResponse(startTime, sameStartTimeSchedules));
         }
 
+        dateResponses.sort(Comparator.comparing(r -> r.startTime));
         return new CalendarFindSchedulesByDateResponses(
                 date,
                 dateResponses
@@ -82,6 +86,8 @@ public record CalendarFindSchedulesByDateResponses(
     }
 
     public record OverlappingScheduleResponse(
+            Long childId,
+            String childImageUrl,
             long scheduleId,
             boolean isRepeatable
     ) {
