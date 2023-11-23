@@ -26,6 +26,9 @@ public class Child {
     private Long id;
 
     @Embedded
+    private ProfileImageUri profileImageUri;
+
+    @Embedded
     @Column(nullable = false, name = "nick_name")
     private ChildNickname nickName;
 
@@ -55,6 +58,14 @@ public class Child {
         return id;
     }
 
+    public String getProfileImageURLPath() {
+        return profileImageUri.getImageURLPath();
+    }
+
+    public String getProfileImageURIPath() {
+        return profileImageUri.getImageUri();
+    }
+
     public String getNickName() {
         return nickName.getValue();
     }
@@ -71,4 +82,9 @@ public class Child {
         this.nickName = new ChildNickname(nickname);
         this.grade = Grade.fromDescription(grade);
     }
+
+    public void updateProfileImageUri(final String imageUri) {
+        this.profileImageUri = new ProfileImageUri(imageUri);
+    }
+
 }

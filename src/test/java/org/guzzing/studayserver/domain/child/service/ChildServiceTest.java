@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.child.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -12,10 +13,13 @@ import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
+import org.guzzing.studayserver.domain.child.model.Grade;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
+import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -29,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -40,9 +45,10 @@ class ChildServiceTest {
 
     @MockBean
     private ChildRepository childRepository;
-
     @MockBean
     private MemberRepository memberRepository;
+    @MockBean
+    private ProfileImageProvider profileImageProvider;
 
     @Nested
     class Create {
@@ -121,7 +127,9 @@ class ChildServiceTest {
             Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
 
             Child child1 = new Child("아이 닉네임1", "초등학교 1학년");
+            child1.updateProfileImageUri("icon_1_1.png");
             Child child2 = new Child("아이 닉네임2", "초등학교 2학년");
+            child2.updateProfileImageUri("icon_2_0.png");
 
             Child spyChild1 = spy(child1);
             spyChild1.assignToNewMemberOnly(member);
@@ -136,8 +144,10 @@ class ChildServiceTest {
             given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 
             ChildrenFindResult expectedResult = new ChildrenFindResult(List.of(
-                    new ChildFindResult(spyChild1Id, spyChild1.getNickName(), spyChild1.getGrade(), "휴식 중!"),
-                    new ChildFindResult(spyChild2Id, spyChild2.getNickName(), spyChild2.getGrade(), "휴식 중!")
+                    new ChildFindResult(spyChild1Id, spyChild1.getProfileImageURLPath(), spyChild1.getNickName(),
+                            spyChild1.getGrade(), "휴식 중!"),
+                    new ChildFindResult(spyChild2Id, spyChild2.getProfileImageURLPath(), spyChild2.getNickName(),
+                            spyChild2.getGrade(), "휴식 중!")
             ));
 
             // When
@@ -288,6 +298,27 @@ class ChildServiceTest {
             assertThatThrownBy(() -> childService.modify(param))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("찾을 수 없는 아이입니다");
+        }
+
+        @Test
+        @DisplayName("아이의 프로필 이미지를 변경한다.")
+        void modifyProfileImage_ChildIdAndMultipartFile_ChangeProfileImageUri() {
+            // Given
+            long childId = 24L;
+            Child mockChild = new Child("원우주니어", Grade.MIDDLE_SCHOOL_3.getDescription());
+
+            given(childRepository.findById(anyLong())).willReturn(Optional.of(mockChild));
+            given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
+
+            final String fileName = "file.png";
+            final byte[] content = "file-content".getBytes();
+            final MockMultipartFile multipartFile = new MockMultipartFile(fileName, content);
+
+            // When
+            ChildProfileImagePatchResult result = childService.modifyProfileImage(childId, multipartFile);
+
+            // Then
+            assertThat(result.childId()).isEqualTo(childId);
         }
     }
 }

@@ -37,6 +37,9 @@ jobs:
       - name: Build with gradle
         run: ./gradlew build
 
+      - name: Openapi3 Documentation
+        run: ./gradlew openapi3
+
       - name: Make Zip File
         run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
