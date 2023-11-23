@@ -1,10 +1,12 @@
 package org.guzzing.studayserver.domain.academy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -13,14 +15,7 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
@@ -31,11 +26,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Import(TestDatabaseConfig.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = NONE)
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
@@ -197,6 +193,20 @@ class AcademyServiceTest {
         }
         Random random = new Random();
         return min + random.nextInt((int) (max - min + 1));
+    }
+
+    @Test
+    @DisplayName("스케줄 상세보기 때 필요한 학원 정보를 올바르게 불러오는지 확인한다.")
+    void getAcademyAndLessonDetail_success() {
+        //When
+        AcademyAndLessonDetailResult academyAndLessonDetail = academyService.getAcademyAndLessonDetail(savedALessonAboutSungnam.getId());
+
+        //Then
+        assertThat(academyAndLessonDetail.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
+        assertThat(academyAndLessonDetail.address()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
+        assertThat(academyAndLessonDetail.lessonName()).isEqualTo(savedALessonAboutSungnam.getSubject());
+        assertThat(academyAndLessonDetail.capacity()).isEqualTo(savedALessonAboutSungnam.getCapacity());
+        assertThat(academyAndLessonDetail.totalFee()).isEqualTo(savedALessonAboutSungnam.getTotalFee());
     }
 
 }
