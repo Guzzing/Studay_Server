@@ -43,6 +43,8 @@ public record CalendarFindSchedulesByDateResponses(
                 List<OverlappingScheduleResponse> overlappingResponses = new ArrayList<>();
                 for (CalendarFindSchedulesByDateResult result : entry.getValue()) {
                     overlappingResponses.add(new OverlappingScheduleResponse(
+                            result.childId(),
+                            result.childImageUrl(),
                             result.academyScheduleId(),
                             true
                     ));
@@ -84,6 +86,8 @@ public record CalendarFindSchedulesByDateResponses(
     }
 
     public record OverlappingScheduleResponse(
+            Long childId,
+            String childImageUrl,
             long scheduleId,
             boolean isRepeatable
     ) {

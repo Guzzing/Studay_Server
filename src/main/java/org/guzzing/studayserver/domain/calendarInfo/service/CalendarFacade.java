@@ -15,6 +15,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindS
 import org.guzzing.studayserver.domain.calendarInfo.service.param.CalendarYearMonthMarkParam;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarFindSchedulesByDateIncompleteResult;
+import org.guzzing.studayserver.domain.calendarInfo.service.result.ChildAcademyScheduleCombineResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.util.DateUtility;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardReadService;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashBoardFindByIdsResults;
@@ -89,7 +90,14 @@ public class CalendarFacade {
                 .toList();
         LessonFindByIdsResults lessonFindByIdsResults = lessonReadService.findByIds(lessonIds);
 
-        List<CalendarFindSchedulesByDateIncompleteResult> combinedResults = academyScheduleFindByDateResults.academySchedules().stream()
+        List<ChildAcademyScheduleCombineResult> childAcademyScheduleCombineResults = memberInformationResult.childResults()
+                .stream()
+                .flatMap(child -> academyScheduleFindByDateResults.academySchedules().stream()
+                        .filter(academySchedule -> academySchedule.childId().equals(child.childId()))
+                        .map(academySchedule -> ChildAcademyScheduleCombineResult.of(child, academySchedule)))
+                .toList();
+
+        List<CalendarFindSchedulesByDateIncompleteResult> combinedResults = childAcademyScheduleCombineResults.stream()
                 .flatMap(schedule -> dashBoardFindByIdsResults.dashBoards().stream()
                         .filter(dashboard -> dashboard.dashboardId().equals(schedule.dashboardId()))
                         .map(dashboard -> CalendarFindSchedulesByDateIncompleteResult.of(schedule, dashboard)))

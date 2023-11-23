@@ -18,6 +18,7 @@ public record MemberInformationResult(
     public record MemberChildInformationResult(
             Long childId,
             String childName,
+            String profileImageUrlPath,
             String schedule
     ) {
 
