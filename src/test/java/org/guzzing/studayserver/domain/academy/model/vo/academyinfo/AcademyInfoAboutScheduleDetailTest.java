@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-class AcademyInfoTest {
+class AcademyInfoAboutScheduleDetailTest {
 
     @Test
     void makeInvalidNameAcademyInfo_throwException() {

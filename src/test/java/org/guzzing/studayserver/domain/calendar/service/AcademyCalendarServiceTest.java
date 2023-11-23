@@ -33,7 +33,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
-@ActiveProfiles({"dev", "oauth"})
 class AcademyCalendarServiceTest {
 
     @Autowired
