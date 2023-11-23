@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 
 public record AcademyFilterResult(
         Long academyId,

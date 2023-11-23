@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.testutil.fixture.academy;
 
 import org.guzzing.studayserver.global.error.response.ErrorCode;
-import org.guzzing.studayserver.global.error.response.ErrorResponse;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;

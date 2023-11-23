@@ -35,27 +35,39 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3.13.0
         with:
           java-version: '17'
           distribution: 'corretto'
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
-          mkdir -p src/test/resources
           
           echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
-          echo "${{ secrets.APPLICATION_OAUTH_YML_CONTENT }}" > src/main/resources/application-oauth.yml
+          echo "${{ secrets.APPLICATION_AUTH_YML_CONTENT }}" > src/main/resources/application-auth.yml
+          echo "${{ secrets.APPLICATION_S3_YML_CONTENT }}" > src/main/resources/application-s3.yml
+          echo "${{ secrets.APPLICATION_SWAGGER_YML_CONTENT }}" > src/main/resources/application-swagger.yml
 
-          echo "${{ secrets.TEST_APPLICATION_YML_CONTENT }}" > src/test/resources/application.yml
-          echo "${{ secrets.TEST_APPLICATION_TEST_YML_CONTENT }}" > src/test/resources/application-test.yml
-          echo "${{ secrets.TEST_APPLICATION_OAUTH_YML_CONTENT }}" > src/test/resources/application-oauth.yml
+      - name: Clean with gradle
+        run: ./gradlew clean
 
       - name: Build with gradle
         run: ./gradlew build
+
+      - name: Upload Test Report
+        if: failure()  # 이 단계는 테스트 실패시에만 실행됩니다.
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: build/reports/tests/test
+
+      - name: Openapi3 Documentation
+        run: ./gradlew openapi3

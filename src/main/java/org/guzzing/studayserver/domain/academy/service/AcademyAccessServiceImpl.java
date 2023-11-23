@@ -4,10 +4,12 @@ import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
+
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
-import org.guzzing.studayserver.domain.like.service.dto.response.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
+import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
+import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
+
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LessonException;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class AcademyAccessServiceImpl implements
 
     @Override
     public AcademyFeeInfo findAcademyFeeInfo(Long academyId) {
-        return AcademyFeeInfo.to(academyRepository.findAcademyFeeInfo(academyId));
+        return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
     @Override
@@ -46,11 +48,14 @@ public class AcademyAccessServiceImpl implements
     }
 
     @Override
-    public void validateLesson(Long lessonId) {
-        final boolean existsLesson = lessonRepository.existsById(lessonId);
+    public void validateLesson(final Long academyId, final Long lessonId) {
+        final Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new LessonException("존재하지 않는 수업입니다."));
 
-        if (!existsLesson) {
-            throw new LessonException("존재하지 않는 수업입니다.");
+        final long lessonAcademyId = lesson.getAcademy().getId();
+
+        if (lessonAcademyId != academyId) {
+            throw new LessonException("해당 학원의 수업이 아닙니다.");
         }
     }
 

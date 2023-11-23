@@ -1,17 +1,21 @@
 package org.guzzing.studayserver.domain.child.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
+import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Transactional(readOnly = true)
 @Service
@@ -19,10 +23,13 @@ public class ChildService {
 
     private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
+    private final ProfileImageProvider profileImageProvider;
 
-    public ChildService(MemberRepository memberRepository, ChildRepository childRepository) {
+    public ChildService(MemberRepository memberRepository, ChildRepository childRepository,
+            ProfileImageProvider profileImageProvider) {
         this.memberRepository = memberRepository;
         this.childRepository = childRepository;
+        this.profileImageProvider = profileImageProvider;
     }
 
     @Transactional
@@ -30,6 +37,7 @@ public class ChildService {
         Member member = getMember(param.memberId());
 
         Child child = new Child(param.nickname(), param.grade());
+        setDefaultProfileImageToChild(child, member);
         child.assignToNewMemberOnly(member);
 
         Child savedChild = childRepository.save(child);
@@ -41,7 +49,12 @@ public class ChildService {
         List<Child> children = member.getChildren();
 
         return new ChildrenFindResult(children.stream()
-                .map(child -> new ChildFindResult(child.getId(), child.getNickName(), child.getGrade(), "휴식 중!"))
+                .map(child -> new ChildFindResult(
+                        child.getId(),
+                        child.getProfileImageURLPath(),
+                        child.getNickName(),
+                        child.getGrade(),
+                        "휴식 중!"))
                 .toList());
     }
 
@@ -63,8 +76,33 @@ public class ChildService {
         return child.getId();
     }
 
+    @Transactional
+    public ChildProfileImagePatchResult modifyProfileImage(final Long childId, final MultipartFile file) {
+        final Child child = childRepository.findById(childId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
+
+        final String profileImageUri = profileImageProvider.uploadProfileImage(childId, file);
+
+        child.updateProfileImageUri(profileImageUri);
+
+        return new ChildProfileImagePatchResult(childId, profileImageUri);
+    }
+
+    private void setDefaultProfileImageToChild(final Child child, final Member member) {
+        final List<String> uris = member.getChildren()
+                .stream()
+
+                .map(Child::getProfileImageURIPath)
+                .toList();
+
+        final String defaultProfileImageURI = profileImageProvider.provideDefaultProfileImageURI(uris);
+
+        child.updateProfileImageUri(defaultProfileImageURI);
+    }
+
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
     }
+
 }

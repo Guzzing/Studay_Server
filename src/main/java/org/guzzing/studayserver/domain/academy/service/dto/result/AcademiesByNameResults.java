@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.AcademiesByName;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
 import org.springframework.data.domain.Slice;
 
 public record AcademiesByNameResults(

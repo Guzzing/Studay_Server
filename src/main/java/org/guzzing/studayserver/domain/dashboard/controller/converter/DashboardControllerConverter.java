@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
+import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_MANAGEMENT;
@@ -20,15 +21,14 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
+import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -49,14 +49,8 @@ public class DashboardControllerConverter {
     public DashboardPutParam to(final long dashboardId, final DashboardPutRequest request) {
         return new DashboardPutParam(
                 dashboardId,
-                request.childId(),
-                request.academyId(),
-                request.lessonId(),
-                convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
-                convertToSimpleMemoTypeMap(request.simpleMemo()),
-                request.isActive(),
-                request.isDeleted());
+                convertToSimpleMemoTypeMap(request.simpleMemo()));
     }
 
     public DashboardPostResponse from(final DashboardPostResult result) {
@@ -70,9 +64,8 @@ public class DashboardControllerConverter {
     public DashboardPutResponse from(final DashboardPutResult result) {
         return new DashboardPutResponse(
                 result.dashboardId(),
-                result.childId(),
-                result.academyId(),
-                result.lessonId());
+                result.paymentInfo(),
+                convertToSimpleMemo(result.simpleMemoTypeMap()));
     }
 
     public DashboardPatchResponse from(final DashboardPatchResult result) {
@@ -106,8 +99,9 @@ public class DashboardControllerConverter {
                 .map(scheduleInfo -> new Schedule(
                         scheduleInfo.dayOfWeek().getValue(),
                         scheduleInfo.startTime(),
-                        scheduleInfo.endTime(),
-                        scheduleInfo.repeatance().name()))
+                        scheduleInfo.endTime()
+//                        , scheduleInfo.repeatance().name()
+                ))
                 .toList();
     }
 
@@ -126,7 +120,9 @@ public class DashboardControllerConverter {
                 .map(schedule -> new ScheduleInfo(
                         DayOfWeek.of(schedule.dayOfWeek()),
                         schedule.startTime(), schedule.endTime(),
-                        Repeatance.of(schedule.repeatance())))
+                        WEEKLY
+//                        Repeatance.of(schedule.repeatance())
+                ))
                 .toList();
 
         return new ScheduleInfos(infos);

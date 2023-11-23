@@ -7,7 +7,8 @@ public record ReviewPercentGetResponse(
         int goodFacilityPercent,
         int cheapFeePercent,
         int goodManagementPercent,
-        int lovelyTeachingPercent
+        int lovelyTeachingPercent,
+        int shuttleAvailabilityCount
 ) {
 
     public static ReviewPercentGetResponse from(ReviewPercentGetResult response) {
@@ -16,7 +17,8 @@ public record ReviewPercentGetResponse(
                 response.goodFacilityPercent(),
                 response.cheapFeePercent(),
                 response.goodManagementPercent(),
-                response.lovelyTeachingPercent()
+                response.lovelyTeachingPercent(),
+                response.shuttleAvailabilityCount()
         );
     }
 }

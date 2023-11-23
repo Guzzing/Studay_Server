@@ -8,15 +8,7 @@ import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardGetResults;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPatchResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPostResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardPutResult;
-import org.guzzing.studayserver.domain.dashboard.service.vo.AcademyInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.LessonInfo;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;
@@ -32,23 +24,12 @@ public class DashboardServiceConverter {
                 convertToDashboardSchedules(param.scheduleInfos()),
                 convertToFeeInfo(param.paymentInfo()),
                 convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap()),
-                true, false);
+                false,
+                false);
     }
 
-    public Dashboard to(final DashboardPutParam param) {
-        return new Dashboard(
-                param.childId(),
-                param.academyId(),
-                param.lessonId(),
-                convertToDashboardSchedules(param.scheduleInfos()),
-                convertToFeeInfo(param.paymentInfo()),
-                convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap()),
-                param.isActive(),
-                param.isDeleted());
-    }
-
-    public DashboardPostResult postResultFrom(final Dashboard entity) {
-        return new DashboardPostResult(
+    public DashboardResult from(final Dashboard entity) {
+        return new DashboardResult(
                 entity.getId(),
                 entity.getChildId(),
                 entity.getAcademyId(),
@@ -60,43 +41,17 @@ public class DashboardServiceConverter {
                 entity.isDeleted());
     }
 
-    public DashboardPutResult putResultFrom(final Dashboard entity) {
-        return new DashboardPutResult(
-                entity.getId(),
-                entity.getChildId(),
-                entity.getAcademyId(),
-                entity.getLessonId(),
-                convertToScheduleInfos(entity.getDashboardSchedules()),
-                convertToPaymentInfo(entity.getFeeInfo()),
-                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
-                entity.isActive(),
-                entity.isDeleted());
+    public FeeInfo convertToFeeInfo(final PaymentInfo paymentInfo) {
+        return new FeeInfo(
+                paymentInfo.educationFee(),
+                paymentInfo.bookFee(),
+                paymentInfo.shuttleFee(),
+                paymentInfo.etcFee(),
+                paymentInfo.paymentDay());
     }
 
-    public DashboardPatchResult patchResultFrom(final Dashboard entity) {
-        return new DashboardPatchResult(entity.getId(), entity.isActive());
-    }
-
-    public DashboardGetResult postResultFrom(
-            final Dashboard entity,
-            final ChildInfo childInfo,
-            final AcademyInfo academyInfo,
-            final LessonInfo lessonInfo
-    ) {
-        return new DashboardGetResult(
-                entity.getId(),
-                childInfo,
-                academyInfo,
-                lessonInfo,
-                convertToScheduleInfos(entity.getDashboardSchedules()),
-                convertToPaymentInfo(entity.getFeeInfo()),
-                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
-                entity.isActive(),
-                entity.isDeleted());
-    }
-
-    public DashboardGetResults postResultFrom(final List<DashboardGetResult> results) {
-        return new DashboardGetResults(results);
+    public List<SimpleMemoType> convertToSelectedSimpleMemoTypes(final Map<SimpleMemoType, Boolean> map) {
+        return SimpleMemoType.getSelectedSimpleMemos(map);
     }
 
     private List<DashboardSchedule> convertToDashboardSchedules(final ScheduleInfos scheduleInfos) {
@@ -109,19 +64,6 @@ public class DashboardServiceConverter {
                         scheduleInfo.repeatance()
                 ))
                 .toList();
-    }
-
-    private FeeInfo convertToFeeInfo(final PaymentInfo paymentInfo) {
-        return new FeeInfo(
-                paymentInfo.educationFee(),
-                paymentInfo.bookFee(),
-                paymentInfo.shuttleFee(),
-                paymentInfo.etcFee(),
-                paymentInfo.paymentDay());
-    }
-
-    private List<SimpleMemoType> convertToSelectedSimpleMemoTypes(final Map<SimpleMemoType, Boolean> map) {
-        return SimpleMemoType.getSelectedSimpleMemos(map);
     }
 
     private ScheduleInfos convertToScheduleInfos(

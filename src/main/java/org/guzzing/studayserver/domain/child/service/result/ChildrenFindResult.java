@@ -12,6 +12,7 @@ public record ChildrenFindResult(
 
     public record ChildFindResult(
             Long childId,
+            String profileImageUrl,
             String nickname,
             String grade,
             String schedule

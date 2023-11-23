@@ -5,7 +5,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterR
 public record AcademyFilterResponse(
         Long academyId,
         String academyName,
-        String fullAddress,
+        String address,
         String contact,
         String areaOfExpertise,
         Double latitude,

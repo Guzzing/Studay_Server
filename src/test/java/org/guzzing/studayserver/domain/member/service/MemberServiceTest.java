@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 import java.util.Optional;
+import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
@@ -72,7 +73,7 @@ class MemberServiceTest {
         assertThat(result.nickname()).isEqualTo("TestUser");
         assertThat(result.email()).isEmpty();
 
-        assertThat(result.memberChildInformationResults()).isNotNull();
-        assertThat(result.memberChildInformationResults()).isEmpty();
+        assertThat(result.childResults()).isNotNull();
+        assertThat(result.childResults()).isEmpty();
     }
 }

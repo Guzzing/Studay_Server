@@ -7,7 +7,8 @@ public record ReviewPercentGetResult(
         int goodFacilityPercent,
         int cheapFeePercent,
         int goodManagementPercent,
-        int lovelyTeachingPercent
+        int lovelyTeachingPercent,
+        int shuttleAvailabilityCount
 ) {
 
     public static ReviewPercentGetResult from(ReviewCount reviewCount) {
@@ -16,7 +17,8 @@ public record ReviewPercentGetResult(
                 reviewCount.makePercent(reviewCount.getGoodFacilityCount()),
                 reviewCount.makePercent(reviewCount.getCheapFeeCount()),
                 reviewCount.makePercent(reviewCount.getGoodManagementCount()),
-                reviewCount.makePercent(reviewCount.getLovelyTeachingCount())
+                reviewCount.makePercent(reviewCount.getLovelyTeachingCount()),
+                reviewCount.makePercent(reviewCount.getShuttleAvailabilityCount())
         );
     }
 

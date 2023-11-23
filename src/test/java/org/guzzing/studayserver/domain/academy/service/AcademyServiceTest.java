@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -206,6 +207,24 @@ class AcademyServiceTest {
         assertThat(academyAndLessonDetail.lessonName()).isEqualTo(savedALessonAboutSungnam.getSubject());
         assertThat(academyAndLessonDetail.capacity()).isEqualTo(savedALessonAboutSungnam.getCapacity());
         assertThat(academyAndLessonDetail.totalFee()).isEqualTo(savedALessonAboutSungnam.getTotalFee());
+    }
+
+    @Test
+    @DisplayName("학원 ID로 학원을 검색했을 때 진행하는 수업의 과목과 ID를 올바르게 반환한다.")
+    void getLessonInfosAboutAcademy() {
+        //When
+        LessonInfoToCreateDashboardResults lessonsInfoAboutAcademy
+                = academyService.getLessonsInfoAboutAcademy(savedAcademyAboutSungnam.getId());
+
+        //Then
+        lessonsInfoAboutAcademy.lessonInfoToCreateDashboardResults()
+                .forEach(
+                        lessonInfoToCreateDashboardResult -> {
+                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(savedALessonAboutSungnam.getId());
+                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(savedALessonAboutSungnam.getSubject());
+                        }
+                );
+
     }
 
 }

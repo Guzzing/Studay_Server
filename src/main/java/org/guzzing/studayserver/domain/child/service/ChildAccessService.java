@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.child.service;
 
 import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
-import org.guzzing.studayserver.domain.dashboard.service.vo.ChildInfo;
-
+import org.guzzing.studayserver.domain.dashboard.facade.vo.ChildInfo;
 import java.util.List;
 
 public interface ChildAccessService {

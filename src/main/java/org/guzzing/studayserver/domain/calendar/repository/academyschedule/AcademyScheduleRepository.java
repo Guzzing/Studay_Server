@@ -3,8 +3,6 @@ package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
-import org.springframework.data.repository.query.Param;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,5 +23,9 @@ public interface AcademyScheduleRepository {
     void deleteAcademyScheduleById(Long academyScheduleId);
 
     AcademyCalenderDetailInfo findTimeTemplateByChildIdAndScheduleId(Long scheduleId, Long childId);
+
+    List<AcademySchedule> findByYearMonth(List<Long> childIds, int year, int month);
+
+    List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 
 }

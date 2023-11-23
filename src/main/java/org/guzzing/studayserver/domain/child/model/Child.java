@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "children")
@@ -25,6 +24,9 @@ public class Child {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "child_id")
     private Long id;
+
+    @Embedded
+    private ProfileImageUri profileImageUri;
 
     @Embedded
     @Column(nullable = false, name = "nick_name")
@@ -56,6 +58,14 @@ public class Child {
         return id;
     }
 
+    public String getProfileImageURLPath() {
+        return profileImageUri.getImageURLPath();
+    }
+
+    public String getProfileImageURIPath() {
+        return profileImageUri.getImageUri();
+    }
+
     public String getNickName() {
         return nickName.getValue();
     }
@@ -72,4 +82,9 @@ public class Child {
         this.nickName = new ChildNickname(nickname);
         this.grade = Grade.fromDescription(grade);
     }
+
+    public void updateProfileImageUri(final String imageUri) {
+        this.profileImageUri = new ProfileImageUri(imageUri);
+    }
+
 }

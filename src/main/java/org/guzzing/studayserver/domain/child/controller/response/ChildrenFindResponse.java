@@ -13,8 +13,12 @@ public record ChildrenFindResponse(
 
     public static ChildrenFindResponse from(ChildrenFindResult result) {
         List<ChildFindResponse> children = result.children().stream()
-                .map(child ->
-                        new ChildFindResponse(child.childId(), child.nickname(), child.grade(), child.schedule()))
+                .map(child -> new ChildFindResponse(
+                        child.childId(),
+                        child.profileImageUrl(),
+                        child.nickname(),
+                        child.grade(),
+                        child.schedule()))
                 .toList();
 
         return new ChildrenFindResponse(children);
@@ -22,6 +26,7 @@ public record ChildrenFindResponse(
 
     public record ChildFindResponse(
             Long childId,
+            String profileImageUrl,
             String nickname,
             String grade,
             String schedule

@@ -1,5 +1,11 @@
 package org.guzzing.studayserver.domain.academy.model;
 
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.CHEAP_FEE;
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_FACILITY;
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_MANAGEMENT;
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.KINDNESS;
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.LOVELY_TEACHING;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +14,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Map;
 import lombok.Getter;
+import org.guzzing.studayserver.domain.academy.listener.NewReviewType;
 
 @Getter
 @Entity
@@ -34,8 +42,10 @@ public class ReviewCount {
     private int goodManagementCount;
 
     @Column(nullable = false, name = "lovely_teaching_count")
-
     private int lovelyTeachingCount;
+
+    @Column(nullable = false, name = "shuttle_availability_count")
+    private int shuttleAvailabilityCount;
 
     @Column(nullable = false, name = "reviewers_count")
     private int reviewersCount;
@@ -55,9 +65,8 @@ public class ReviewCount {
     protected ReviewCount() {
 
     }
-
     protected ReviewCount(int kindnessCount, int goodFacilityCount, int cheapFeeCount, int goodManagementCount,
-            int lovelyTeachingCount, int reviewersCount, Academy academy) {
+            int lovelyTeachingCount, int reviewersCount, int shuttleAvailabilityCount,  Academy academy) {
         this.kindnessCount = kindnessCount;
         this.goodFacilityCount = goodFacilityCount;
         this.cheapFeeCount = cheapFeeCount;
@@ -65,10 +74,19 @@ public class ReviewCount {
         this.lovelyTeachingCount = lovelyTeachingCount;
         this.reviewersCount = reviewersCount;
         this.academy = academy;
+        this.shuttleAvailabilityCount = shuttleAvailabilityCount;
     }
 
     public static ReviewCount makeDefaultReviewCount(Academy academy) {
-        return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, academy);
+        return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, academy);
     }
 
+    public void updateSelectedReviewCount(final Map<NewReviewType, Integer> newReview) {
+        this.kindnessCount += newReview.get(KINDNESS);
+        this.goodFacilityCount += newReview.get(GOOD_FACILITY);
+        this.cheapFeeCount += newReview.get(CHEAP_FEE);
+        this.goodManagementCount += newReview.get(GOOD_MANAGEMENT);
+        this.lovelyTeachingCount += newReview.get(LOVELY_TEACHING);
+//        this.shuttleAvailability += newReview.get(SHUTTLE_AVAILABILITY);
+    }
 }

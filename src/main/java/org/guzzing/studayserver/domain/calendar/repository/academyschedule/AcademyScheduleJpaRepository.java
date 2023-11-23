@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
+import java.time.LocalDate;
+import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
@@ -9,9 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long>, AcademyScheduleRepository {
 
@@ -36,6 +35,15 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     void deleteAcademyScheduleById(Long academyScheduleId);
 
+    @Query("SELECT ash FROM AcademySchedule ash "
+            + "JOIN FETCH ash.academyTimeTemplate att "
+            + "WHERE att.childId IN :childIds "
+            + "AND YEAR(ash.scheduleDate) = :year "
+            + "AND MONTH(ash.scheduleDate) = :month")
+    List<AcademySchedule> findByYearMonth(
+            @Param("childIds") List<Long> childIds,
+            @Param("year") int year,
+            @Param("month") int month);
 
     @Query("""
                 select distinct new org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo (
@@ -53,5 +61,12 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             @Param(value = "scheduleId") Long scheduleId,
             @Param(value = "childId") Long childId
     );
+
+
+    @Query("SELECT ash FROM AcademySchedule ash "
+            + "JOIN FETCH ash.academyTimeTemplate att "
+            + "WHERE att.childId IN :childIds "
+            + "AND ash.scheduleDate = :date")
+    List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 
 }
