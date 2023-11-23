@@ -7,10 +7,7 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
 import org.guzzing.studayserver.domain.academy.util.model.Direction;
@@ -111,6 +108,12 @@ public class AcademyService {
 
     private boolean isLiked(Long academyId, Long memberId) {
         return likeAccessService.isLiked(academyId, memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyAndLessonDetailResult getAcademyAndLessonDetail(Long lessonId) {
+
+        return AcademyAndLessonDetailResult.from(lessonRepository.getLessonById(lessonId));
     }
 
 }
