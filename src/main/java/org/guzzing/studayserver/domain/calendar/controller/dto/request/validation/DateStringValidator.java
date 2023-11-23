@@ -40,4 +40,26 @@ public class DateStringValidator implements ConstraintValidator<ValidDateString,
         return true;
     }
 
+    public static void isValidDate(String value) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException("날짜는 null이거나 빈 값일 수 없습니다.");
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+            LocalDate parsedDate = LocalDate.parse(value, formatter);
+
+            int year = parsedDate.getYear();
+            int month = parsedDate.getMonthValue();
+            int day = parsedDate.getDayOfMonth();
+
+            if (year < MIN_YEAR || year >= MAX_YEAR || month > MAX_MONTH || day > MAX_DAYS) {
+                throw new IllegalArgumentException("날짜 범위에서 벗어납니다.");
+            }
+
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("날짜 형식에 맞지 않습니다.");
+        }
+    }
+
 }
