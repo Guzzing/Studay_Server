@@ -29,7 +29,7 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             AND ash.scheduleDate >= :startDateOfAttendanceToUpdate
             """)
     void deleteAfterUpdatedStartDate(@Param(value = "academyTimeTemplateId") Long academyTimeTemplateId,
-                                     @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
+            @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
 
     List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 

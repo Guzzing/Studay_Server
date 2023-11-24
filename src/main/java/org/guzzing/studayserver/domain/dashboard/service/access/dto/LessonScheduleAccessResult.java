@@ -8,4 +8,5 @@ public record LessonScheduleAccessResult(
         LocalTime lessonStartTime,
         LocalTime lessonEndTime
 ) {
+
 }

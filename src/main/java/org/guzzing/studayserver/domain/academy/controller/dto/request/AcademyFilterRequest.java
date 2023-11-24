@@ -1,9 +1,11 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.request;
 
-import jakarta.validation.constraints.*;
-
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidAreaOfExpertise;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 
@@ -28,6 +30,7 @@ public record AcademyFilterRequest(
         @PositiveOrZero
         Long desiredMaxAmount
 ) {
+
     @AssertTrue(message = "최소 희망 금액이 최대 희망 금액보다 클 수 없습니다.")
     private boolean isValidDesiredAmount() {
         return desiredMaxAmount >= desiredMinAmount;

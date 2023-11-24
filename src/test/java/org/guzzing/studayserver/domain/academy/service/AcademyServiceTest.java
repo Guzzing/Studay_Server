@@ -15,7 +15,16 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
@@ -219,8 +228,10 @@ class AcademyServiceTest {
         lessonsInfoAboutAcademy.lessonInfoToCreateDashboardResults()
                 .forEach(
                         lessonInfoToCreateDashboardResult -> {
-                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(savedALessonAboutSungnam.getId());
-                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(savedALessonAboutSungnam.getSubject());
+                            assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(
+                                    savedALessonAboutSungnam.getId());
+                            assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(
+                                    savedALessonAboutSungnam.getSubject());
                         }
                 );
 

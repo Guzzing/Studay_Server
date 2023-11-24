@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
-import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest.MemberAdditionalChildRequest;
 import org.guzzing.studayserver.domain.member.service.MemberService;

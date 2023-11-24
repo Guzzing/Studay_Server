@@ -25,8 +25,8 @@ public enum ErrorCode {
     IS_LOGOUT_TOKEN("L005", "이미 로그아웃한 토큰입니다."),
 
     //academy-schedules
-    DATE_TIME_OVERLAP_ERROR("S001","중복된 일정은 등록될 수 없습니다."),
-    NOT_GENERATED_SCHEDULED("S002","제안된 등원일 사이에는 스케줄이 생성되지 않습니다.");
+    DATE_TIME_OVERLAP_ERROR("S001", "중복된 일정은 등록될 수 없습니다."),
+    NOT_GENERATED_SCHEDULED("S002", "제안된 등원일 사이에는 스케줄이 생성되지 않습니다.");
 
     private final String code;
     private final String message;

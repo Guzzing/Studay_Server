@@ -1,5 +1,11 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
@@ -130,7 +136,6 @@ class AcademyCalendarControllerTest {
                             1L,
                             "화요일마다 저녁 제공"
                     ),
-
 
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarCreateRequest(
@@ -303,7 +308,6 @@ class AcademyCalendarControllerTest {
                             Periodicity.WEEKLY.toString(),
                             true
                     ),
-
 
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarUpdateRequest(

@@ -1,16 +1,18 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.dto.LessonInfoToCreateDashboard;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.repository.dto.LessonInfoToCreateDashboard;
 
 public record LessonInfoToCreateDashboardResults(
         List<LessonInfoToCreateDashboardResult> lessonInfoToCreateDashboardResults
 ) {
-    public static LessonInfoToCreateDashboardResults from(List<LessonInfoToCreateDashboard> lessonInfoToCreateDashboards) {
+
+    public static LessonInfoToCreateDashboardResults from(
+            List<LessonInfoToCreateDashboard> lessonInfoToCreateDashboards) {
         return new LessonInfoToCreateDashboardResults(
                 lessonInfoToCreateDashboards.stream()
-                        .map(lessonInfoToCreateDashboard -> LessonInfoToCreateDashboardResult.from(lessonInfoToCreateDashboard))
+                        .map(lessonInfoToCreateDashboard -> LessonInfoToCreateDashboardResult.from(
+                                lessonInfoToCreateDashboard))
                         .toList()
         );
     }
@@ -19,6 +21,7 @@ public record LessonInfoToCreateDashboardResults(
             Long lessonId,
             String subject
     ) {
+
         public static LessonInfoToCreateDashboardResult from(LessonInfoToCreateDashboard lessonInfoToCreateDashboard) {
             return new LessonInfoToCreateDashboardResult(
                     lessonInfoToCreateDashboard.getId(),

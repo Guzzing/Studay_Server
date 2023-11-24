@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
 public class QuerydslTestConfig {
+
     @Bean
     public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
         return new JPAQueryFactory(entityManager);

@@ -27,7 +27,7 @@ public class HolidayService {
         Map<LocalDate, List<String>> holidayMap = new HashMap<>();
 
         holidays.forEach(h ->
-            holidayMap.computeIfAbsent(h.getDate(), k -> new ArrayList<>()).add(h.getDateName())
+                holidayMap.computeIfAbsent(h.getDate(), k -> new ArrayList<>()).add(h.getDateName())
         );
 
         return HolidayFindByYearMonthResult.from(holidayMap);
