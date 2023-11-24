@@ -11,10 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
+import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest.MemberAdditionalChildRequest;
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
+import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult.MemberChildInformationResult;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -138,7 +140,9 @@ class MemberRestControllerTest {
             String memberNickname = "테스트 닉네임";
             String memberEmail = "test@example.com";
             Long existingMemberId = 1L;
-            MemberInformationResult mockResult = new MemberInformationResult(memberNickname, memberEmail, List.of());
+            String file = "test.png";
+            List<MemberChildInformationResult> list = List.of(new MemberChildInformationResult(1L, "박명수", file, null));
+            MemberInformationResult mockResult = new MemberInformationResult(memberNickname, memberEmail, list);
             given(memberService.getById(existingMemberId)).willReturn(mockResult);
 
             // When & Then
@@ -148,7 +152,10 @@ class MemberRestControllerTest {
                             .param("memberId", existingMemberId.toString()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.nickname").value(memberNickname))
-                    .andExpect(jsonPath("$.email").value(memberEmail));
+                    .andExpect(jsonPath("$.email").value(memberEmail))
+                    .andExpect(jsonPath("$.childInformationResponses").isNotEmpty())
+                    .andExpect(jsonPath("$.childInformationResponses[0]").exists())
+                    .andExpect(jsonPath("$.childInformationResponses[0].childProfileImageUrl").value(file));
         }
     }
 }

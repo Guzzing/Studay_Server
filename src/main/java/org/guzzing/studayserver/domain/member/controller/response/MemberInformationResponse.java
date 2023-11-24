@@ -27,12 +27,17 @@ public record MemberInformationResponse(
 
     public record MemberChildInformationResponse(
             Long childId,
+            String childProfileImageUrl,
             String childName,
             String schedule
     ) {
 
         static MemberChildInformationResponse from(MemberChildInformationResult result) {
-            return new MemberChildInformationResponse(result.childId(), result.childName(), result.schedule());
+            return new MemberChildInformationResponse(
+                    result.childId(),
+                    result.profileImageUrlPath(),
+                    result.childName(),
+                    result.schedule());
         }
     }
 }
