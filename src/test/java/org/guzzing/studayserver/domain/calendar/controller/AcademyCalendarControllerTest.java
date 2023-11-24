@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
+import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -22,8 +23,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AcademyCalendarController.class)
@@ -38,9 +38,12 @@ class AcademyCalendarControllerTest {
     @MockBean
     private AcademyCalendarService academyCalendarService;
 
+    @MockBean
+    private AcademyCalendarFacade academyCalendarFacade;
+
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
-    class throwException {
+    class ThrowException {
 
         @DisplayName("스케줄 생성할 때 요청값에 대해 검증한다.")
         @WithMockCustomOAuth2LoginUser
@@ -63,18 +66,6 @@ class AcademyCalendarControllerTest {
             mvc.perform(put("/academy-schedules")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(academyCalendarUpdateRequest))
-                            .with(csrf()))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @DisplayName("스케줄 삭제할 때 요청값에 대해 검증한다.")
-        @WithMockCustomOAuth2LoginUser
-        @ParameterizedTest
-        @MethodSource("provideInvalidDeleteRequests")
-        void deleteSchedule(AcademyCalendarDeleteRequest academyCalendarDeleteRequest) throws Exception {
-            mvc.perform(delete("/academy-schedules")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(academyCalendarDeleteRequest))
                             .with(csrf()))
                     .andExpect(status().isBadRequest());
         }

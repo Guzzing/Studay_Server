@@ -1,10 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import org.guzzing.studayserver.domain.academy.model.Academy;
-import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
-import org.guzzing.studayserver.domain.academy.repository.dto.LessonInfoToCreateDashboard;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
@@ -18,8 +15,6 @@ import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class AcademyService {
@@ -37,7 +32,7 @@ public class AcademyService {
     private final LikeAccessService likeAccessService;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
+                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
@@ -120,6 +115,12 @@ public class AcademyService {
         academyRepository.getById(academyId);
 
         return LessonInfoToCreateDashboardResults.from(lessonRepository.findAllLessonInfoByAcademyId(academyId));
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyAndLessonDetailResult getAcademyAndLessonDetail(Long lessonId) {
+
+        return AcademyAndLessonDetailResult.from(lessonRepository.getLessonById(lessonId));
     }
 
 }
