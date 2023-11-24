@@ -100,7 +100,6 @@ public class AcademyCalendarController {
     public ResponseEntity<AcademyCalendarDetailResponse> getDetailSchedule(
             @ModelAttribute AcademyCalendarDetailRequest academyCalendarDetailRequest
     ) {
-        System.out.println("Received request: " + academyCalendarDetailRequest);
         AcademyCalendarDetailFacadeResult calendarDetailInfo
                 = academyCalendarFacade.getCalendarDetailInfo(AcademyCalendarDetailRequest.to(academyCalendarDetailRequest));
 
