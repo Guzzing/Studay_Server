@@ -5,6 +5,7 @@ import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOO
 import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_MANAGEMENT;
 import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.KINDNESS;
 import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.LOVELY_TEACHING;
+import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.SHUTTLE_AVAILABILITY;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -87,6 +88,6 @@ public class ReviewCount {
         this.cheapFeeCount += newReview.get(CHEAP_FEE);
         this.goodManagementCount += newReview.get(GOOD_MANAGEMENT);
         this.lovelyTeachingCount += newReview.get(LOVELY_TEACHING);
-//        this.shuttleAvailability += newReview.get(SHUTTLE_AVAILABILITY);
+        this.shuttleAvailabilityCount += newReview.get(SHUTTLE_AVAILABILITY);
     }
 }
