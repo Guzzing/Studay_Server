@@ -21,14 +21,14 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
+import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.springframework.stereotype.Component;

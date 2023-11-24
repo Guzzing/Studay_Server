@@ -1,9 +1,7 @@
 package org.guzzing.studayserver.domain.calendarInfo.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.guzzing.studayserver.domain.academy.service.LessonReadService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonFindByIdsResults;
 import org.guzzing.studayserver.domain.calendar.service.AcademySchedulesReadService;
@@ -13,8 +11,8 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademySchedu
 import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults.CalendarFindSchedulesByDateResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.param.CalendarYearMonthMarkParam;
-import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarFindSchedulesByDateIncompleteResult;
+import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.ChildAcademyScheduleCombineResult;
 import org.guzzing.studayserver.domain.calendarInfo.service.util.DateUtility;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardReadService;

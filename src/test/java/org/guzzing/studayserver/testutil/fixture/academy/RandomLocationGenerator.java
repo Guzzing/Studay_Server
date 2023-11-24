@@ -3,7 +3,6 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 

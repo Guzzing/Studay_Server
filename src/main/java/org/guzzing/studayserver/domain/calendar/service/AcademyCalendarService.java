@@ -1,12 +1,19 @@
 package org.guzzing.studayserver.domain.calendar.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
 import org.guzzing.studayserver.domain.calendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyTimeTemplateDateInfo;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.*;
 import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteByDashboardParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
+import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
@@ -14,10 +21,6 @@ import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessS
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AcademyCalendarService {
@@ -92,7 +95,8 @@ public class AcademyCalendarService {
 
     @Transactional(readOnly = true)
     public AcademyCalendarLoadToUpdateResult loadTimeTemplateToUpdate(Long academyScheduleId) {
-        AcademyTimeTemplate academyTimeTemplate = academyScheduleRepository.findDistinctAcademyTimeTemplate(academyScheduleId);
+        AcademyTimeTemplate academyTimeTemplate = academyScheduleRepository.findDistinctAcademyTimeTemplate(
+                academyScheduleId);
         DashboardScheduleAccessResult dashboardScheduleAccessResult =
                 dashboardAccessService.getDashboardSchedule(academyTimeTemplate.getDashboardId());
 

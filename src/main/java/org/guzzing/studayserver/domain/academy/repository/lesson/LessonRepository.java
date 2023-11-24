@@ -9,7 +9,7 @@ public interface LessonRepository {
 
     List<Lesson> findAllByAcademyId(Long academyId);
 
-    List<LessonInfoToCreateDashboard> findAllLessonInfoByAcademyId (Long academyId);
+    List<LessonInfoToCreateDashboard> findAllLessonInfoByAcademyId(Long academyId);
 
     Lesson save(Lesson lesson);
 

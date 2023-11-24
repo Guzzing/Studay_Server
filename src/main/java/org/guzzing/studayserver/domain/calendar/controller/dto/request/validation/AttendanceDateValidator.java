@@ -2,10 +2,9 @@ package org.guzzing.studayserver.domain.calendar.controller.dto.request.validati
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
 
 public class AttendanceDateValidator implements ConstraintValidator<ValidAttendanceDate, AttendanceDate> {
 

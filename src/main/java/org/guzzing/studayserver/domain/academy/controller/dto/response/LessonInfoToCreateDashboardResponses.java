@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 
 public record LessonInfoToCreateDashboardResponses(
         List<LessonInfoToCreateDashboardResponse> lessonInfos
@@ -13,18 +12,19 @@ public record LessonInfoToCreateDashboardResponses(
                 results.lessonInfoToCreateDashboardResults()
                         .stream()
                         .map(lessonInfoToCreateDashboardResult ->
-                                        LessonInfoToCreateDashboardResponse.from(lessonInfoToCreateDashboardResult))
+                                LessonInfoToCreateDashboardResponse.from(lessonInfoToCreateDashboardResult))
                         .toList()
         );
     }
 
 
     public record LessonInfoToCreateDashboardResponse(
-        Long lessonId,
-        String subject
-    ){
+            Long lessonId,
+            String subject
+    ) {
+
         public static LessonInfoToCreateDashboardResponse from(LessonInfoToCreateDashboardResults.
-                                                                       LessonInfoToCreateDashboardResult result) {
+                LessonInfoToCreateDashboardResult result) {
             return new LessonInfoToCreateDashboardResponse(
                     result.lessonId(),
                     result.subject()

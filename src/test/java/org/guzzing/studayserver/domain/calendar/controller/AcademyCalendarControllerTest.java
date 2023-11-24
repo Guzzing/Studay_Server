@@ -1,7 +1,20 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
+import java.time.DayOfWeek;
+import java.util.List;
+import java.util.stream.Stream;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -15,16 +28,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.DayOfWeek;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AcademyCalendarController.class)
 class AcademyCalendarControllerTest {
@@ -139,7 +142,6 @@ class AcademyCalendarControllerTest {
                             1L,
                             "화요일마다 저녁 제공"
                     ),
-
 
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarCreateRequest(
@@ -312,7 +314,6 @@ class AcademyCalendarControllerTest {
                             Periodicity.WEEKLY.toString(),
                             true
                     ),
-
 
                     // 잘뭇된 날짜 데이터
                     new AcademyCalendarUpdateRequest(

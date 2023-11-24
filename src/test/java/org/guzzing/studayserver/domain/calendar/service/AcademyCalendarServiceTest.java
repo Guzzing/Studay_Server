@@ -1,5 +1,14 @@
 package org.guzzing.studayserver.domain.calendar.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
@@ -20,18 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
@@ -71,7 +69,8 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> academySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(academyCalendarCreateResults.academyTimeTemplateIds().size()).isEqualTo(academyCalendarCreateParam.lessonScheduleParams().size());
+        assertThat(academyCalendarCreateResults.academyTimeTemplateIds().size()).isEqualTo(
+                academyCalendarCreateParam.lessonScheduleParams().size());
         assertThat(academySchedules.size()).isEqualTo(schedules.size());
         academySchedules.forEach(academySchedule -> {
             assertThat(schedules).contains(academySchedule.getScheduleDate());
@@ -116,18 +115,26 @@ class AcademyCalendarServiceTest {
         Long academyScheduleId = savedFridayAcademySchedule.getId();
         DashboardScheduleAccessResult mockDashboardScheduleAccessResult = AcademyCalenderFixture.dashboardScheduleAccessResult();
 
-        given(dashboardAccessService.getDashboardSchedule(savedFridayAcademyTimeTemplate.getDashboardId())).willReturn(mockDashboardScheduleAccessResult);
+        given(dashboardAccessService.getDashboardSchedule(savedFridayAcademyTimeTemplate.getDashboardId())).willReturn(
+                mockDashboardScheduleAccessResult);
 
         //When
-        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(academyScheduleId);
+        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
+                academyScheduleId);
 
         //Then
-        assertThat(academyCalendarLoadToUpdateResult.academyName()).isEqualTo(mockDashboardScheduleAccessResult.academyName());
-        assertThat(academyCalendarLoadToUpdateResult.lessonName()).isEqualTo(mockDashboardScheduleAccessResult.lessonName());
-        assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(savedFridayAcademyTimeTemplate.getStartDateOfAttendance());
-        assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(savedMondayAcademyTimeTemplate.getStartDateOfAttendance());
-        assertThat(academyCalendarLoadToUpdateResult.endDateOfAttendance()).isEqualTo(savedFridayAcademyTimeTemplate.getEndDateOfAttendance());
-        assertThat(academyCalendarLoadToUpdateResult.endDateOfAttendance()).isEqualTo(savedMondayAcademyTimeTemplate.getEndDateOfAttendance());
+        assertThat(academyCalendarLoadToUpdateResult.academyName()).isEqualTo(
+                mockDashboardScheduleAccessResult.academyName());
+        assertThat(academyCalendarLoadToUpdateResult.lessonName()).isEqualTo(
+                mockDashboardScheduleAccessResult.lessonName());
+        assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
+                savedFridayAcademyTimeTemplate.getStartDateOfAttendance());
+        assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
+                savedMondayAcademyTimeTemplate.getStartDateOfAttendance());
+        assertThat(academyCalendarLoadToUpdateResult.endDateOfAttendance()).isEqualTo(
+                savedFridayAcademyTimeTemplate.getEndDateOfAttendance());
+        assertThat(academyCalendarLoadToUpdateResult.endDateOfAttendance()).isEqualTo(
+                savedMondayAcademyTimeTemplate.getEndDateOfAttendance());
         assertThat(academyCalendarLoadToUpdateResult.memo()).isEqualTo(savedFridayAcademyTimeTemplate.getMemo());
         assertThat(academyCalendarLoadToUpdateResult.memo()).isEqualTo(savedMondayAcademyTimeTemplate.getMemo());
         assertThat(academyCalendarLoadToUpdateResult.isAlarmed()).isEqualTo(savedFridayAcademyTimeTemplate.isAlarmed());
@@ -136,13 +143,17 @@ class AcademyCalendarServiceTest {
         academyCalendarLoadToUpdateResult.lessonScheduleAccessResults()
                 .forEach(lessonScheduleAccessResult -> {
                     if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.MONDAY) {
-                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(savedMondayAcademySchedule.getLessonEndTime());
-                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(savedMondayAcademySchedule.getLessonStartTime());
+                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
+                                savedMondayAcademySchedule.getLessonEndTime());
+                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
+                                savedMondayAcademySchedule.getLessonStartTime());
                     }
 
                     if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.FRIDAY) {
-                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(savedFridayAcademySchedule.getLessonEndTime());
-                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(savedFridayAcademySchedule.getLessonStartTime());
+                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
+                                savedFridayAcademySchedule.getLessonEndTime());
+                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
+                                savedFridayAcademySchedule.getLessonStartTime());
                     }
                 });
     }
@@ -182,7 +193,8 @@ class AcademyCalendarServiceTest {
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
         academyCalendarService.createSchedules(academyCalendarCreateParam);
         AcademyCalendarUpdateParam academyCalendarUpdateParam =
-                AcademyCalenderFixture.isNotAllUpdatedAcademyCalendarUpdateParam(academyCalendarCreateParam.dashboardId());
+                AcademyCalenderFixture.isNotAllUpdatedAcademyCalendarUpdateParam(
+                        academyCalendarCreateParam.dashboardId());
 
         //When
         academyCalendarService.updateTimeTemplate(academyCalendarUpdateParam);
@@ -210,7 +222,8 @@ class AcademyCalendarServiceTest {
     void deletedSchedule_isOnlyThatSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
-        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(
+                academyCalendarCreateParam);
         Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
 
         List<AcademySchedule> academySchedules = academyScheduleRepository.findByAcademyTimeTemplateId(timeTemplateId);
@@ -224,7 +237,7 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> isOnlyDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(isOnlyDeletedScheduleAcademySchedules.size()).isEqualTo(allAcademySchedules.size()-1);
+        assertThat(isOnlyDeletedScheduleAcademySchedules.size()).isEqualTo(allAcademySchedules.size() - 1);
     }
 
     @Test
@@ -232,7 +245,8 @@ class AcademyCalendarServiceTest {
     void deletedSchedule_isAfterSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
-        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(
+                academyCalendarCreateParam);
         Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
 
         List<AcademySchedule> academySchedules = academyScheduleRepository.findByAcademyTimeTemplateId(timeTemplateId);
@@ -246,7 +260,8 @@ class AcademyCalendarServiceTest {
 
         //Then
         isAfterDeletedScheduleAcademySchedules.forEach(
-                schedule-> assertThat(schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
+                schedule -> assertThat(
+                        schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
         );
     }
 
@@ -255,7 +270,8 @@ class AcademyCalendarServiceTest {
     void deletedScheduleByDashboard_isAfterSchedule() {
         //Given
         AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.academyCalenderCreateParam();
-        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(
+                academyCalendarCreateParam);
         Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
 
         AcademyCalendarDeleteByDashboardParam param = AcademyCalenderFixture.academyCalendarDeleteByDashboardParam();
@@ -266,7 +282,7 @@ class AcademyCalendarServiceTest {
 
         //Then
         isAfterDeletedScheduleAcademySchedules.forEach(
-                schedule-> assertThat(schedule.getScheduleDate().isBefore(param.requestedDate())).isTrue()
+                schedule -> assertThat(schedule.getScheduleDate().isBefore(param.requestedDate())).isTrue()
         );
     }
 

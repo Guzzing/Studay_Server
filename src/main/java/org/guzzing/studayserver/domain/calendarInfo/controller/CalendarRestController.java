@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendarInfo.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarYearMonthMarkRequest;

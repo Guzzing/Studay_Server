@@ -2,7 +2,6 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;

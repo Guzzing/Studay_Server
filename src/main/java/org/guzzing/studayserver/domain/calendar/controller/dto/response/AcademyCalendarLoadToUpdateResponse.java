@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
-
 import java.time.LocalDate;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 
 public record AcademyCalendarLoadToUpdateResponse(
         String childName,
@@ -15,6 +14,7 @@ public record AcademyCalendarLoadToUpdateResponse(
         boolean isAlarmed,
         String memo
 ) {
+
     public static AcademyCalendarLoadToUpdateResponse from(AcademyCalendarLoadToUpdateResult result) {
         return new AcademyCalendarLoadToUpdateResponse(
                 result.childName(),

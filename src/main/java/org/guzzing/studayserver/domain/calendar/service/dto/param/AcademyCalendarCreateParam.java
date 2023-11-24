@@ -1,11 +1,10 @@
 package org.guzzing.studayserver.domain.calendar.service.dto.param;
 
-import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
-import org.guzzing.studayserver.domain.calendar.model.Periodicity;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 
 public record AcademyCalendarCreateParam(
         List<LessonScheduleParam> lessonScheduleParams,
@@ -18,6 +17,7 @@ public record AcademyCalendarCreateParam(
         String memo,
         Periodicity periodicity
 ) {
+
     public static AcademyTimeTemplate to(AcademyCalendarCreateParam param, DayOfWeek dayOfWeek) {
         return AcademyTimeTemplate.of(
                 dayOfWeek,

@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
-import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
-import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
-
 import java.time.LocalDate;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
+import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 
 public interface AcademyScheduleRepository {
 

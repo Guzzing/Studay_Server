@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.calendarInfo.controller.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,7 +37,8 @@ class CalendarFindSchedulesByDateResponsesTest {
                 202L,
                 "Academy A",
                 "Science");
-        CalendarFindSchedulesByDateResults results = new CalendarFindSchedulesByDateResults(List.of(schedule1, schedule2));
+        CalendarFindSchedulesByDateResults results = new CalendarFindSchedulesByDateResults(
+                List.of(schedule1, schedule2));
 
         // When
         CalendarFindSchedulesByDateResponses response = CalendarFindSchedulesByDateResponses.from(testDate, results);

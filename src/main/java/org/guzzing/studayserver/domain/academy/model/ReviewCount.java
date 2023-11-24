@@ -66,8 +66,9 @@ public class ReviewCount {
     protected ReviewCount() {
 
     }
+
     protected ReviewCount(int kindnessCount, int goodFacilityCount, int cheapFeeCount, int goodManagementCount,
-            int lovelyTeachingCount, int reviewersCount, int shuttleAvailabilityCount,  Academy academy) {
+            int lovelyTeachingCount, int reviewersCount, int shuttleAvailabilityCount, Academy academy) {
         this.kindnessCount = kindnessCount;
         this.goodFacilityCount = goodFacilityCount;
         this.cheapFeeCount = cheapFeeCount;
@@ -79,7 +80,8 @@ public class ReviewCount {
     }
 
     public static ReviewCount makeDefaultReviewCount(Academy academy) {
-        return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, academy);
+        return new ReviewCount(INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE,
+                academy);
     }
 
     public void updateSelectedReviewCount(final Map<NewReviewType, Integer> newReview) {

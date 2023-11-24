@@ -1,13 +1,11 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.request.validation;
 
 import jakarta.validation.ConstraintValidator;
-
 import jakarta.validation.ConstraintValidatorContext;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
 
 public class LessonTimeValidator implements ConstraintValidator<ValidLessonTime, LessonTime> {
 
@@ -31,7 +29,8 @@ public class LessonTimeValidator implements ConstraintValidator<ValidLessonTime,
             LocalTime startTime = LocalTime.parse(lessonTime.getLessonStartTime(), TIME_FORMATTER);
             LocalTime endTime = LocalTime.parse(lessonTime.getLessonEndTime(), TIME_FORMATTER);
 
-            if (!isValidTimeRange(startTime, endTime, context) || !isStartTimeBeforeEndTime(startTime, endTime, context)) {
+            if (!isValidTimeRange(startTime, endTime, context) || !isStartTimeBeforeEndTime(startTime, endTime,
+                    context)) {
                 return false;
             }
 
@@ -54,10 +53,12 @@ public class LessonTimeValidator implements ConstraintValidator<ValidLessonTime,
     }
 
     private boolean isTimeOutOfRange(LocalTime time) {
-        return time.getHour() > MAX_HOUR || time.getMinute() > MAX_MINUTE || time.getHour() < MIN_TIME || time.getMinute() < MIN_TIME;
+        return time.getHour() > MAX_HOUR || time.getMinute() > MAX_MINUTE || time.getHour() < MIN_TIME
+                || time.getMinute() < MIN_TIME;
     }
 
-    private boolean isStartTimeBeforeEndTime(LocalTime startTime, LocalTime endTime, ConstraintValidatorContext context) {
+    private boolean isStartTimeBeforeEndTime(LocalTime startTime, LocalTime endTime,
+            ConstraintValidatorContext context) {
         if (endTime.isBefore(startTime)) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("수업 시작 시간은 수업 끝난시간보다 이전일 수 없습니다.")
