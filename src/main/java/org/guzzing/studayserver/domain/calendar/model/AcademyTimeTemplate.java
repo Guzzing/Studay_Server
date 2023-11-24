@@ -42,10 +42,6 @@ public class AcademyTimeTemplate {
             nullable = false)
     private boolean isAlarmed;
 
-    @Column(name = "member_id",
-            nullable = false)
-    private Long memberId;
-
     @Column(name = "child_id",
             nullable = false)
     private Long childId;
@@ -67,7 +63,6 @@ public class AcademyTimeTemplate {
             LocalDate startDateOfAttendance,
             LocalDate endDateOfAttendance,
             boolean isAlarmed,
-            Long memberId,
             Long childId,
             Long dashboardId,
             String memo) {
@@ -77,7 +72,6 @@ public class AcademyTimeTemplate {
         this.isAlarmed = isAlarmed;
         this.childId = childId;
         this.dashboardId = dashboardId;
-        this.memberId = memberId;
         this.memo = memo;
     }
 
@@ -86,7 +80,6 @@ public class AcademyTimeTemplate {
             LocalDate startDateOfAttendance,
             LocalDate endDateOfAttendance,
             boolean isAlarmed,
-            Long memberId,
             Long childId,
             Long dashboardId,
             String memo) {
@@ -95,7 +88,6 @@ public class AcademyTimeTemplate {
                 startDateOfAttendance,
                 endDateOfAttendance,
                 isAlarmed,
-                memberId,
                 childId,
                 dashboardId,
                 memo

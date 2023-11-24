@@ -67,7 +67,6 @@ public class AcademyCalenderFixture {
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
-                1L,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행",
@@ -82,7 +81,6 @@ public class AcademyCalenderFixture {
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
-                1L,
                 SECOND_CHILD_ID,
                 SECOND_CHILD_DASHBOARD_ID,
                 "슬리퍼 챙기는 날",
@@ -115,7 +113,6 @@ public class AcademyCalenderFixture {
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
-                1L,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
@@ -147,7 +144,6 @@ public class AcademyCalenderFixture {
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS,
                 false,
-                1L,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
@@ -160,7 +156,6 @@ public class AcademyCalenderFixture {
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS,
                 false,
-                1L,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASHBOARD_ID,
                 "매월 20일마다 상담 진행"
