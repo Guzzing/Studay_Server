@@ -9,8 +9,6 @@ import org.guzzing.studayserver.global.exception.ChildException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 public class ChildAccessServiceImpl implements
@@ -41,14 +39,6 @@ public class ChildAccessServiceImpl implements
     private Child getById(Long childId) {
         return childRepository.findById(childId)
                 .orElseThrow(() -> new ChildException("해당하는 아이가 없습니다."));
-    }
-
-        return ChildInfo.from(child);
-    }
-
-    @Override
-    public List<AcademyCalendarDetailChildInfo> getChildImages(List<Long> childrenIds) {
-        return null;
     }
 
 }

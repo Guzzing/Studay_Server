@@ -18,6 +18,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterPa
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
