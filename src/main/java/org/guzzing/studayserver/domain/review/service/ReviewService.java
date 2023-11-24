@@ -49,8 +49,8 @@ public class ReviewService {
         }
 
         final Review review = Review.of(
-                param.academyId(),
                 param.memberId(),
+                param.academyId(),
                 ReviewType.getSelectedReviewMap(param));
 
         final Review savedReview = reviewRepository.save(review);

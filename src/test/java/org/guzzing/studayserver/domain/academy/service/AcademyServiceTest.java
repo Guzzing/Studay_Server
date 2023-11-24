@@ -43,8 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
-    private double LATITUDE = 37.4449168;
-    private double LONGITUDE = 127.1388684;
+    private static final   double LATITUDE = 37.4449168;
+    private static final double LONGITUDE = 127.1388684;
 
     @Autowired
     private AcademyService academyService;
