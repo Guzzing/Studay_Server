@@ -4,9 +4,12 @@ import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
+
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
+
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LessonException;
 import org.springframework.stereotype.Service;
@@ -19,13 +22,15 @@ public class AcademyAccessServiceImpl implements
 
     private final AcademyRepository academyRepository;
     private final LessonRepository lessonRepository;
+    private final AcademyService academyService;
 
     public AcademyAccessServiceImpl(
             final AcademyRepository academyRepository,
-            final LessonRepository lessonRepository
-    ) {
+            final LessonRepository lessonRepository,
+            AcademyService academyService) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
+        this.academyService = academyService;
     }
 
     @Override
@@ -68,6 +73,11 @@ public class AcademyAccessServiceImpl implements
                 .orElseThrow(() -> new LessonException("존재하지 않는 수업입니다."));
 
         return LessonInfo.from(lesson);
+    }
+
+    @Override
+    public AcademyAndLessonDetailResult getAcademyAndLessonDetail(Long lessonId) {
+        return academyService.getAcademyAndLessonDetail(lessonId);
     }
 
 }

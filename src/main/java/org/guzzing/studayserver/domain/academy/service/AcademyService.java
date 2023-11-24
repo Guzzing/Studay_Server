@@ -36,7 +36,7 @@ public class AcademyService {
     private final LikeAccessService likeAccessService;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
+                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
@@ -119,6 +119,12 @@ public class AcademyService {
         academyRepository.getById(academyId);
 
         return LessonInfoToCreateDashboardResults.from(lessonRepository.findAllLessonInfoByAcademyId(academyId));
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyAndLessonDetailResult getAcademyAndLessonDetail(Long lessonId) {
+
+        return AcademyAndLessonDetailResult.from(lessonRepository.getLessonById(lessonId));
     }
 
 }

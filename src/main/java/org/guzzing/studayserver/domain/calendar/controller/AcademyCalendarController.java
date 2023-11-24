@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDetailRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarCreateResponse;
+import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarDetailResponse;
 import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarLoadToUpdateResponse;
 import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarUpdateResponse;
+import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
+import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
@@ -30,9 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AcademyCalendarController {
 
     private final AcademyCalendarService academyCalendarService;
+    private final AcademyCalendarFacade academyCalendarFacade;
 
-    public AcademyCalendarController(AcademyCalendarService academyCalendarService) {
+    public AcademyCalendarController(AcademyCalendarService academyCalendarService, AcademyCalendarFacade academyCalendarFacade) {
         this.academyCalendarService = academyCalendarService;
+        this.academyCalendarFacade = academyCalendarFacade;
     }
 
     @PostMapping(
@@ -93,6 +99,22 @@ public class AcademyCalendarController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping(
+            path = "/detail",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<AcademyCalendarDetailResponse> getDetailSchedule(
+            @ModelAttribute AcademyCalendarDetailRequest academyCalendarDetailRequest
+    ) {
+        System.out.println("Received request: " + academyCalendarDetailRequest);
+        AcademyCalendarDetailFacadeResult calendarDetailInfo
+                = academyCalendarFacade.getCalendarDetailInfo(AcademyCalendarDetailRequest.to(academyCalendarDetailRequest));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(AcademyCalendarDetailResponse.from(calendarDetailInfo));
     }
 
 }

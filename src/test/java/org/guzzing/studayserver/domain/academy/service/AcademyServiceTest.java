@@ -6,6 +6,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -202,6 +203,20 @@ class AcademyServiceTest {
     }
 
     @Test
+    @DisplayName("스케줄 상세보기 때 필요한 학원 정보를 올바르게 불러오는지 확인한다.")
+    void getAcademyAndLessonDetail_success() {
+        //When
+        AcademyAndLessonDetailResult academyAndLessonDetail = academyService.getAcademyAndLessonDetail(savedALessonAboutSungnam.getId());
+
+        //Then
+        assertThat(academyAndLessonDetail.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
+        assertThat(academyAndLessonDetail.address()).isEqualTo(savedAcademyAboutSungnam.getFullAddress());
+        assertThat(academyAndLessonDetail.lessonName()).isEqualTo(savedALessonAboutSungnam.getCurriculum());
+        assertThat(academyAndLessonDetail.capacity()).isEqualTo(savedALessonAboutSungnam.getCapacity());
+        assertThat(academyAndLessonDetail.totalFee()).isEqualTo(savedALessonAboutSungnam.getTotalFee());
+    }
+
+    @Test
     @DisplayName("학원 ID로 학원을 검색했을 때 진행하는 수업의 과목과 ID를 올바르게 반환한다.")
     void getLessonInfosAboutAcademy() {
         //When
@@ -218,6 +233,7 @@ class AcademyServiceTest {
                                     savedALessonAboutSungnam.getSubject());
                         }
                 );
+
     }
 
 }

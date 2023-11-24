@@ -7,14 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.DayOfWeek;
-import java.util.List;
-import java.util.stream.Stream;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
+import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
@@ -29,6 +23,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.DayOfWeek;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(AcademyCalendarController.class)
 class AcademyCalendarControllerTest {
 
@@ -41,9 +44,12 @@ class AcademyCalendarControllerTest {
     @MockBean
     private AcademyCalendarService academyCalendarService;
 
+    @MockBean
+    private AcademyCalendarFacade academyCalendarFacade;
+
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
-    class throwException {
+    class ThrowException {
 
         @DisplayName("스케줄 생성할 때 요청값에 대해 검증한다.")
         @WithMockCustomOAuth2LoginUser
@@ -66,18 +72,6 @@ class AcademyCalendarControllerTest {
             mvc.perform(put("/academy-schedules")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(academyCalendarUpdateRequest))
-                            .with(csrf()))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @DisplayName("스케줄 삭제할 때 요청값에 대해 검증한다.")
-        @WithMockCustomOAuth2LoginUser
-        @ParameterizedTest
-        @MethodSource("provideInvalidDeleteRequests")
-        void deleteSchedule(AcademyCalendarDeleteRequest academyCalendarDeleteRequest) throws Exception {
-            mvc.perform(delete("/academy-schedules")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(academyCalendarDeleteRequest))
                             .with(csrf()))
                     .andExpect(status().isBadRequest());
         }

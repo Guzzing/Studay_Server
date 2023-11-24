@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
 import org.guzzing.studayserver.domain.calendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
+import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyTimeTemplateDateInfo;
 import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
@@ -15,12 +16,18 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AcademyCalendarService {
@@ -176,6 +183,21 @@ public class AcademyCalendarService {
 
         deleteAcademySchedulesAfterStartDate(academyTimeTemplates, Param.requestedDate());
         changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, Param.requestedDate());
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyCalendarDetailResults detailSchedules(AcademyCalendarDetailParam param) {
+        List<AcademyCalenderDetailInfo> academyCalenderDetailInfos =
+                param.childrenInfos()
+                        .stream()
+                        .map(
+                                childrenSchedule -> academyScheduleRepository.findTimeTemplateByChildIdAndScheduleId(
+                                        childrenSchedule.scheduleId(),
+                                        childrenSchedule.childId())
+                        )
+                        .toList();
+
+        return AcademyCalendarDetailResults.from(academyCalenderDetailInfos);
     }
 
 }
