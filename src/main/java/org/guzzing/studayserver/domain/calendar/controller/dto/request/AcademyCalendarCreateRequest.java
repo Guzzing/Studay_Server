@@ -37,7 +37,7 @@ public record AcademyCalendarCreateRequest(
         String memo
 ) {
 
-    public static AcademyCalendarCreateParam to(AcademyCalendarCreateRequest request, Long memberId) {
+    public static AcademyCalendarCreateParam to(AcademyCalendarCreateRequest request) {
         return new AcademyCalendarCreateParam(
                 request.lessonScheduleCreateRequests
                         .stream()
@@ -46,7 +46,6 @@ public record AcademyCalendarCreateRequest(
                 LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
                 LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
                 request.isAlarmed,
-                memberId,
                 request.childId,
                 request.dashboardId,
                 request.memo,

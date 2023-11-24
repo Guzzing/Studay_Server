@@ -12,7 +12,6 @@ public record AcademyCalendarCreateParam(
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
         boolean isAlarmed,
-        Long memberId,
         Long childId,
         Long dashboardId,
         String memo,
@@ -24,7 +23,6 @@ public record AcademyCalendarCreateParam(
                 param.startDateOfAttendance,
                 param.endDateOfAttendance,
                 param.isAlarmed,
-                param.memberId,
                 param.childId,
                 param.dashboardId,
                 param.memo
@@ -37,7 +35,6 @@ public record AcademyCalendarCreateParam(
                 param.startDateOfAttendance(),
                 param.endDateOfAttendance(),
                 param.isAlarmed(),
-                param.memberId(),
                 param.childId(),
                 param.dashboardId(),
                 param.memo(),

@@ -38,12 +38,11 @@ public class AcademyCalendarController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademyCalendarCreateResponse> createAcademyCalendar(
-            @RequestBody @Valid AcademyCalendarCreateRequest request,
-            @MemberId Long memberId
+            @RequestBody @Valid AcademyCalendarCreateRequest request
     ) {
 
         AcademyCalendarCreateResults schedules = academyCalendarService.createSchedules(
-                AcademyCalendarCreateRequest.to(request, memberId)
+                AcademyCalendarCreateRequest.to(request)
         );
 
         return ResponseEntity
