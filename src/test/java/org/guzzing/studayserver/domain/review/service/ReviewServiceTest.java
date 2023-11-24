@@ -69,9 +69,9 @@ class ReviewServiceTest {
         Map<ReviewType, Boolean> validReviewMap = ReviewFixture.makeValidReviewMap();
 
         // When
-        int beforeKindnessCount = reviewCountRepository.getByAcademyId(param.academyId()).getKindnessCount();
+        int beforeKindnessCount = reviewCountRepository.findByAcademyId(param.academyId()).getKindnessCount();
         ReviewPostResult result = reviewService.createReviewOfAcademy(param);
-        int afterKindnessCount = reviewCountRepository.getByAcademyId(param.academyId()).getKindnessCount();
+        int afterKindnessCount = reviewCountRepository.findByAcademyId(param.academyId()).getKindnessCount();
 
         // Then
         assertThat(afterKindnessCount).isEqualTo(beforeKindnessCount + 1);
