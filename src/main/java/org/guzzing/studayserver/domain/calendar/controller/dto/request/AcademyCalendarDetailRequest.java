@@ -4,18 +4,19 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.request.validatio
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public record AcademyCalendarDetailRequest(
         String requestedDate,
         Long lessonId,
-        List<ChildrenScheduleDetailRequest> childrenInfos
+        Long childId,
+        Long scheduleId
 ) {
 
     public AcademyCalendarDetailRequest {
         DateStringValidator.isValidDate(requestedDate);
-        isValidLessonId(lessonId);
-        isValidChildrenInfos(childrenInfos);
+        isValidId(lessonId);
+        isValidId(childId);
+        isValidId(scheduleId);
     }
 
     public static AcademyCalendarDetailFacadeParam to(
@@ -24,39 +25,19 @@ public record AcademyCalendarDetailRequest(
         return new AcademyCalendarDetailFacadeParam(
                 LocalDate.parse(academyCalendarDetailRequest.requestedDate()),
                 academyCalendarDetailRequest.lessonId(),
-                academyCalendarDetailRequest.childrenInfos.stream()
-                        .map(childrenScheduleDetailRequest
-                                -> ChildrenScheduleDetailRequest.to(childrenScheduleDetailRequest))
-                        .toList()
+                new AcademyCalendarDetailFacadeParam.FacadeChildrenSchedule(
+                        academyCalendarDetailRequest.childId(),
+                        academyCalendarDetailRequest.scheduleId()
+                )
         );
     }
 
-    public record ChildrenScheduleDetailRequest(
-            Long childId,
-            Long scheduleId
-    ) {
-        public static AcademyCalendarDetailFacadeParam.FacadeChildrenSchedule to(
-                ChildrenScheduleDetailRequest childrenScheduleDetailRequest
-        ) {
-            return new AcademyCalendarDetailFacadeParam.FacadeChildrenSchedule(
-                    childrenScheduleDetailRequest.childId(),
-                    childrenScheduleDetailRequest.scheduleId()
-            );
-        }
-    }
-
-    private static void isValidLessonId(Long lessonId) {
-        if (lessonId == null) {
+    private static void isValidId(Long lessonId) {
+        if (lessonId == null ) {
             throw new IllegalArgumentException("id는 null일 수 없습니다.");
         }
         if (lessonId < 0) {
             throw new IllegalArgumentException("id는 음수일 수 없습니다.");
-        }
-    }
-
-    private static void isValidChildrenInfos(List<ChildrenScheduleDetailRequest> childrenInfos) {
-        if (childrenInfos == null || childrenInfos.isEmpty()) {
-            throw new IllegalArgumentException("아이에 대한 정보는 빈 값일 수 없습니다.");
         }
     }
 
