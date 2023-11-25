@@ -22,7 +22,8 @@ class AcademyCalendarDetailRequestTest {
                 () -> new AcademyCalendarDetailRequest(
                         requestedDate,
                         1L,
-                        new ArrayList<>()
+                        1L,
+                        1L
                 )
         ).isInstanceOf(IllegalArgumentException.class);
     }
@@ -35,7 +36,8 @@ class AcademyCalendarDetailRequestTest {
                 () -> new AcademyCalendarDetailRequest(
                         requestedDate,
                         1L,
-                        new ArrayList<>()
+                        1L,
+                        1L
                 )
         ).isInstanceOf(IllegalArgumentException.class);
     }
@@ -47,25 +49,33 @@ class AcademyCalendarDetailRequestTest {
                 () -> new AcademyCalendarDetailRequest(
                         "2022-12-01",
                         -1L,
-                        List.of(
-                                new AcademyCalendarDetailRequest.ChildrenScheduleDetailRequest(
-                                        1L,
-                                        1L
-                                )
-                        ))
+                        1L,
+                        1L)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @ParameterizedTest
-    @NullAndEmptySource
-    @DisplayName("아이 정보가 들어오지 않는 경우 예외를 던진다.")
-    void construct_invalidChildrenInfo_throwException(
-            List<AcademyCalendarDetailRequest.ChildrenScheduleDetailRequest> childrenInfos) {
+    @Test
+    @DisplayName("아이 아이디가 음수 경우 예외를 던진다.")
+    void construct_invalidChildrenID_throwException() {
         assertThatThrownBy(
                 () -> new AcademyCalendarDetailRequest(
                         "2022-12-01",
                         1L,
-                        childrenInfos
+                        -1L,
+                        1L
+                )
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("스케줄 아이디가 음수 경우 예외를 던진다.")
+    void construct_invalidScheduleId_throwException() {
+        assertThatThrownBy(
+                () -> new AcademyCalendarDetailRequest(
+                        "2022-12-01",
+                        1L,
+                        1L,
+                        -1L
                 )
         ).isInstanceOf(IllegalArgumentException.class);
     }

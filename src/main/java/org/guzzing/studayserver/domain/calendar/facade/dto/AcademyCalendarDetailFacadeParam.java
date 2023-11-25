@@ -8,15 +8,13 @@ import java.util.List;
 public record AcademyCalendarDetailFacadeParam(
         LocalDate requestedDate,
         Long lessonId,
-        List<FacadeChildrenSchedule> childrenInfos
+        FacadeChildrenSchedule childrenInfos
 ) {
 
     public static AcademyCalendarDetailParam to(AcademyCalendarDetailFacadeParam param) {
         return new AcademyCalendarDetailParam(
-                param.childrenInfos()
-                        .stream()
-                        .map(childrenInfo -> FacadeChildrenSchedule.to(childrenInfo))
-                        .toList()
+                List.of(new AcademyCalendarDetailParam.ChildrenSchedule(param.childrenInfos.childId
+                        ,param.childrenInfos.scheduleId))
         );
     }
 
@@ -32,13 +30,10 @@ public record AcademyCalendarDetailFacadeParam(
                     facadeChildrenSchedule.scheduleId()
             );
         }
-
     }
 
     public List<Long> getChildrenIds() {
-        return childrenInfos.stream()
-                .map(childrenSchedules -> childrenSchedules.childId)
-                .toList();
+        return List.of(childrenInfos.childId);
     }
 
 }
