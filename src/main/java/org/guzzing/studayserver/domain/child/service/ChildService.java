@@ -91,7 +91,6 @@ public class ChildService {
     private void setDefaultProfileImageToChild(final Child child, final Member member) {
         final List<String> uris = member.getChildren()
                 .stream()
-
                 .map(Child::getProfileImageURIPath)
                 .toList();
 
