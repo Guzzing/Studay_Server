@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Random;
 import org.guzzing.studayserver.global.config.S3Config;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,12 +35,16 @@ public class ProfileImageProvider {
     }
 
     public String provideDefaultProfileImageURI(final List<String> existsImageUris) {
-        final String uri = DEFAULT_IMAGE_URIS.stream()
-                .filter(imageUri -> !existsImageUris.contains(imageUri))
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("사용 가능한 이미지 URI가 업습니다."));
+        while (true) {
+            Random random = new Random();
+            int index = random.nextInt(DEFAULT_IMAGE_URIS.size());
 
-        return makeProfileImageURI(s3Config.getDefaultUrl(), uri);
+            String imageResource = makeProfileImageURI(s3Config.getDefaultUrl(), DEFAULT_IMAGE_URIS.get(index));
+
+            if (!existsImageUris.contains(imageResource)) {
+                return imageResource;
+            }
+        }
     }
 
     public String uploadProfileImage(final Long childId, final MultipartFile multipartFile) {
