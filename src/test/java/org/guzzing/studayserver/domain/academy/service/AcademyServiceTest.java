@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
+import org.guzzing.studayserver.domain.academy.repository.academy.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
@@ -35,11 +36,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Import(TestDatabaseConfig.class)
 @SpringBootTest(webEnvironment = NONE)
+@ActiveProfiles({"dev","oauth"})
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
@@ -60,6 +63,9 @@ class AcademyServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private AcademyCategoryRepository academyCategoryRepository;
 
     private Member savedMember;
 
@@ -162,9 +168,7 @@ class AcademyServiceTest {
     @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다.")
     void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise() {
         //Given
-        lessonRepository.deleteAll();
-        reviewCountRepository.deleteAll();
-        academyRepository.deleteAll();
+        Academy savedAcademyWithTwoCategories = academySetUpForFilter();
 
         List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
         Long minFee = 10000L;
@@ -181,7 +185,7 @@ class AcademyServiceTest {
 
         //When
         AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam,
-                savedMember.getId());
+                savedAcademyWithTwoCategories.getId());
 
         //Then
         for (AcademyFilterResult academyFilterResult : academyFilterResults.academyFilterResults()) {
@@ -190,8 +194,10 @@ class AcademyServiceTest {
             assertThat(filtedAcademy.getMaxEducationFee()).
                     isGreaterThanOrEqualTo(minFee)
                     .isLessThanOrEqualTo(maxFee);
-            assertThat(academyFilterParam.areaOfExpertises()).containsExactlyInAnyOrder(
-                    academyFilterResult.areaOfExpertise());
+            academyFilterResult.categories()
+                            .forEach(
+                                    result -> assertThat(academyFilterParam.categories()).containsExactlyInAnyOrder(result)
+                            );
         }
     }
 
@@ -235,6 +241,28 @@ class AcademyServiceTest {
                         }
                 );
 
+    }
+
+    private Academy academySetUpForFilter() {
+        lessonRepository.deleteAll();
+        reviewCountRepository.deleteAll();
+        academyRepository.deleteAll();
+
+        Academy academyWithTwoCategories = AcademyFixture.twoCategoriesAcademy();
+        Academy savedAcademyWithTwoCategories = academyRepository.save(academyWithTwoCategories);
+
+        AcademyFixture.academyCategoryAboutTwoCategories(savedAcademyWithTwoCategories)
+                .forEach(
+                        academyCategory -> academyCategoryRepository.save(academyCategory)
+                );
+
+        Lesson lesson = AcademyFixture.twoCategoriesLessonFor(savedAcademyWithTwoCategories);
+        Lesson savedALesson = lessonRepository.save(lesson);
+
+        ReviewCount savedReviewCount = reviewCountRepository.save(
+                AcademyFixture.reviewCountDefault(savedAcademyWithTwoCategories));
+
+        return savedAcademyWithTwoCategories;
     }
 
 }
