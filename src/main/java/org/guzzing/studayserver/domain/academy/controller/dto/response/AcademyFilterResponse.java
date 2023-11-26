@@ -2,12 +2,14 @@ package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
 
+import java.util.List;
+
 public record AcademyFilterResponse(
         Long academyId,
         String academyName,
         String address,
         String contact,
-        String areaOfExpertise,
+        List<String> categories,
         Double latitude,
         Double longitude,
         String shuttleAvailable,
@@ -20,7 +22,7 @@ public record AcademyFilterResponse(
                 academyFilterResult.academyName(),
                 academyFilterResult.fullAddress(),
                 academyFilterResult.contact(),
-                academyFilterResult.areaOfExpertise(),
+                academyFilterResult.categories(),
                 academyFilterResult.latitude(),
                 academyFilterResult.longitude(),
                 academyFilterResult.shuttleAvailable(),

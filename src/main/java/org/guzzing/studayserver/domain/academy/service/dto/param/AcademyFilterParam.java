@@ -7,7 +7,7 @@ import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
 public record AcademyFilterParam(
         Double baseLatitude,
         Double baseLongitude,
-        List<String> areaOfExpertises,
+        List<String> categories,
         Long desiredMinAmount,
         Long desiredMaxAmount
 ) {
@@ -16,7 +16,7 @@ public record AcademyFilterParam(
             String pointFormat) {
         return new AcademyFilterCondition(
                 pointFormat,
-                SqlFormatter.makeWhereInString(param.areaOfExpertises),
+                SqlFormatter.makeWhereInString(param.categories),
                 param.desiredMinAmount,
                 param.desiredMaxAmount
         );

@@ -7,7 +7,7 @@ public record AcademiesByLocationResult(
         String academyName,
         String address,
         String contact,
-        String areaOfExpertise,
+        String categories,
         Double latitude,
         Double longitude,
         String shuttleAvailable,

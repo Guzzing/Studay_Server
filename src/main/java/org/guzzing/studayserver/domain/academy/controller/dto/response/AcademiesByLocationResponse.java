@@ -20,7 +20,7 @@ public record AcademiesByLocationResponse(
                 academiesByLocationResult.academyName(),
                 academiesByLocationResult.address(),
                 academiesByLocationResult.contact(),
-                academiesByLocationResult.areaOfExpertise(),
+                academiesByLocationResult.categories(),
                 academiesByLocationResult.latitude(),
                 academiesByLocationResult.longitude(),
                 academiesByLocationResult.shuttleAvailable(),
