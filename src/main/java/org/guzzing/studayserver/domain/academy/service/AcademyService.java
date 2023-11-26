@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.academy.service;
 
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
@@ -13,13 +14,17 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLess
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.util.FilterParser;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
-import org.guzzing.studayserver.domain.academy.util.model.Direction;
+import org.guzzing.studayserver.domain.academy.util.Direction;
+import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class AcademyService {
@@ -90,13 +95,13 @@ public class AcademyService {
                 Direction.SOUTHWEST);
         String diagonal = SqlFormatter.makeDiagonalByLineString(northEast, southWest);
 
-        return AcademyFilterResults.from(
-                academyRepository.filterAcademies(
-                        AcademyFilterParam.to(
-                                param,
-                                diagonal),
-                        memberId)
-        );
+        List<AcademyByFiltering> academiesByFiltering = academyRepository.filterAcademies(
+                AcademyFilterParam.to(param, diagonal), memberId);
+
+        Map<Long,List<Long>> academyIdWithCategories = FilterParser.makeCategories(academiesByFiltering);
+        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctFilteredAcademies(academiesByFiltering);
+
+        return AcademyFilterResults.from(academyIdWithCategories,distinctFilteredAcademies);
     }
 
     private Location calculateLocationWithinRadiusInDirection(
