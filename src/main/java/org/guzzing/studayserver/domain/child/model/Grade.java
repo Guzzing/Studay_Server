@@ -16,9 +16,22 @@ public enum Grade {
     MIDDLE_SCHOOL_3("중학교 3학년"),
     HIGH_SCHOOL_1("고등학교 1학년"),
     HIGH_SCHOOL_2("고등학교 2학년"),
-    HIGH_SCHOOL_3("고등학교 3학년");
+    HIGH_SCHOOL_3("고등학교 3학년"),
+    GRADUATED("성인");
 
     private final String description;
+
+    Grade(String description) {
+        this.description = description;
+    }
+
+    public static Grade increaseGrade(final Grade grade) {
+        int ordinal = grade.ordinal();
+
+        return ++ ordinal >= Grade.values().length
+                ? GRADUATED
+                : Grade.values()[ordinal];
+    }
 
     public static Grade fromDescription(String description) {
         return Arrays.stream(Grade.values())
@@ -27,9 +40,6 @@ public enum Grade {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 학년입니다: " + description));
     }
 
-    Grade(String description) {
-        this.description = description;
-    }
 }
 
 

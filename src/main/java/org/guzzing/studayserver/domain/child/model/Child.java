@@ -87,4 +87,8 @@ public class Child {
         this.profileImageUri = new ProfileImageUri(imageUri);
     }
 
+    public void increaseGrade() {
+        this.grade = Grade.increaseGrade(this.grade);
+    }
+
 }
