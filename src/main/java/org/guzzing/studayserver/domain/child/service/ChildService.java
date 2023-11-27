@@ -34,7 +34,7 @@ public class ChildService {
     }
 
     @Transactional
-    @Scheduled(cron = "${schedule.cron.child.increase-grade}")
+    @Scheduled(cron = "0 0 0 1 1 *")
     public void increaseGrade() {
         childRepository.findAll()
                 .forEach(Child::increaseGrade);
