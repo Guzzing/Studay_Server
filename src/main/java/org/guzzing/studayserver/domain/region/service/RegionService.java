@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.region.service;
 
 import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SIDO;
 
+import com.amazonaws.regions.Regions;
 import java.util.List;
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
@@ -9,6 +10,7 @@ import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResul
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,13 @@ public class RegionService {
     }
 
     public RegionResult findLocation(final String sido, final String sigungu, final String upmyeondong) {
-        Region region = regionRepository.findBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
+        Region region = regionRepository.getBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
+        return RegionResult.from(region);
+    }
+
+    public RegionResult findAreaContainningPoint(final Point point) {
+        Region region = regionRepository.getRegionsContainingPoint(point);
+
         return RegionResult.from(region);
     }
 
