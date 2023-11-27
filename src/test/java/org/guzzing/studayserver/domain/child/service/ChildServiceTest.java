@@ -58,7 +58,7 @@ class ChildServiceTest {
         void success() {
             // Given
             Long memberId = 1L;
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년", memberId);
+            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
             Long expectedChildId = 2L;
 
             Member mockMember = mock(Member.class);
@@ -69,7 +69,7 @@ class ChildServiceTest {
             given(childRepository.save(any(Child.class))).willReturn(mockChild);
 
             // When
-            Long savedChildId = childService.create(param);
+            Long savedChildId = childService.create(param, memberId);
 
             // Then
             assertThat(savedChildId).isEqualTo(expectedChildId);
@@ -81,12 +81,12 @@ class ChildServiceTest {
         void givenInvalidMemberId_throwException() {
             // Given
             Long invalidMemberId = 999L;
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년", invalidMemberId);
+            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
 
             given(memberRepository.findById(invalidMemberId)).willReturn(Optional.empty());
 
             // When & Then
-            assertThatThrownBy(() -> childService.create(param))
+            assertThatThrownBy(() -> childService.create(param, invalidMemberId))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("잘못된 멤버 아이디입니다: " + invalidMemberId);
         }
@@ -103,12 +103,12 @@ class ChildServiceTest {
 
             given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년", memberId);
+            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
 
             given(childRepository.save(any())).willReturn(new Child(param.nickname(), param.grade()));
 
             // When & Then
-            assertThatThrownBy(() -> childService.create(param))
+            assertThatThrownBy(() -> childService.create(param, memberId))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
         }

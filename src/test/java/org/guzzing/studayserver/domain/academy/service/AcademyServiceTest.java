@@ -6,7 +6,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
-
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
@@ -48,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
-    private static final   double LATITUDE = 37.4449168;
+    private static final double LATITUDE = 37.4449168;
     private static final double LONGITUDE = 127.1388684;
 
     @Autowired
@@ -253,6 +252,7 @@ class AcademyServiceTest {
 
         //When
         AcademyAndLessonDetailResult academyAndLessonDetail = academyService.getAcademyAndLessonDetail(savedLesson.getId());
+
 
         //Then
         assertThat(academyAndLessonDetail.academyName()).isEqualTo(savedAcademy.getAcademyName());

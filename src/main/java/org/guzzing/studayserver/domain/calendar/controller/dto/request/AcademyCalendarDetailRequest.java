@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.request;
 
+import java.time.LocalDate;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.validation.DateStringValidator;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeParam;
-
-import java.time.LocalDate;
 
 public record AcademyCalendarDetailRequest(
         String requestedDate,
@@ -33,7 +32,7 @@ public record AcademyCalendarDetailRequest(
     }
 
     private static void isValidId(Long lessonId) {
-        if (lessonId == null ) {
+        if (lessonId == null) {
             throw new IllegalArgumentException("id는 null일 수 없습니다.");
         }
         if (lessonId < 0) {

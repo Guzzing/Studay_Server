@@ -4,6 +4,7 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -32,6 +33,7 @@ import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindRes
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.ChildService;
+import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
@@ -87,7 +89,7 @@ class ChildRestControllerTest {
             Long expectedChildId = 2L;
 
             // When
-            when(childService.create(any())).thenReturn(expectedChildId);
+            when(childService.create(any(ChildCreateParam.class), anyLong())).thenReturn(expectedChildId);
 
             // Then
             mockMvc.perform(post("/children")

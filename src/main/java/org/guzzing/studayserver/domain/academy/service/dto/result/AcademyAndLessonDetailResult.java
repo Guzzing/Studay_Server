@@ -13,6 +13,7 @@ public record AcademyAndLessonDetailResult(
         Long totalFee,
         List<String> categories
 ) {
+
     public static AcademyAndLessonDetailResult from(Lesson lesson, List<Long> categoryIds) {
         return new AcademyAndLessonDetailResult(
                 lesson.getAcademy().getAcademyName(),

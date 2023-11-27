@@ -13,6 +13,7 @@ import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +34,15 @@ public class ChildService {
     }
 
     @Transactional
-    public Long create(ChildCreateParam param) {
-        Member member = getMember(param.memberId());
+    @Scheduled(cron = "0 0 0 1 1 *")
+    public void increaseGrade() {
+        childRepository.findAll()
+                .forEach(Child::increaseGrade);
+    }
+
+    @Transactional
+    public Long create(ChildCreateParam param, Long memberId) {
+        Member member = getMember(memberId);
 
         Child child = new Child(param.nickname(), param.grade());
         setDefaultProfileImageToChild(child, member);

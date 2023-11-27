@@ -41,7 +41,7 @@ public class ChildRestController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Long> create(@MemberId Long memberId, @RequestBody @Valid ChildCreateRequest request) {
-        Long createdChildId = childService.create(request.toParam(memberId));
+        Long createdChildId = childService.create(request.toParam(), memberId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

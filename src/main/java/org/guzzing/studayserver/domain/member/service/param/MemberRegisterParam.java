@@ -1,19 +1,11 @@
 package org.guzzing.studayserver.domain.member.service.param;
 
 import java.util.List;
+import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 
 public record MemberRegisterParam(
-        Long memberId,
         String nickname,
         String email,
-        List<MemberAdditionalChildParam> children
+        List<ChildCreateParam> children
 ) {
-
-    public record MemberAdditionalChildParam(
-            String nickname,
-            String grade
-    ) {
-
-    }
-
 }

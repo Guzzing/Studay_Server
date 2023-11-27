@@ -1,15 +1,14 @@
 package org.guzzing.studayserver.domain.calendar.facade.dto;
 
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.calendar.model.Periodicity;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
-import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
 
 public record AcademyCalendarDetailFacadeResult(
         String date,
@@ -79,10 +78,12 @@ public record AcademyCalendarDetailFacadeResult(
             List<FacadeLessonTime> lessonTimes,
             Periodicity periodicity
     ) {
+
         public record FacadeLessonTime(
                 LocalTime startTime,
                 LocalTime endTime
         ) {
+
         }
     }
 

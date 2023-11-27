@@ -4,12 +4,10 @@ import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
-
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
-
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LessonException;
 import org.springframework.stereotype.Service;

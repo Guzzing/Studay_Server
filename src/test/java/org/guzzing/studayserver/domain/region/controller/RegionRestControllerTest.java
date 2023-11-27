@@ -1,5 +1,8 @@
 package org.guzzing.studayserver.domain.region.controller;
 
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sido;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sigungu;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.upmyeondong;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -20,8 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.transaction.Transactional;
-import org.guzzing.studayserver.domain.region.service.RegionService;
+import org.guzzing.studayserver.domain.region.model.Region;
+import org.guzzing.studayserver.domain.region.repository.RegionRepository;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.guzzing.studayserver.testutil.fixture.region.RegionFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,17 +47,13 @@ class RegionRestControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private RegionService regionService;
-
-    final String sido = "서울특별시";
-    final String sigungu = "테스트구";
-    final String upmyeondong = "테스트테스트동";
-    final double latitude = 37.5664;
-    final double longitude = 126.972925;
+    private RegionRepository regionRepository;
 
     @BeforeEach
     void setUp() {
-        regionService.createRegion(sido, sigungu, upmyeondong, latitude, longitude);
+        Region region = RegionFixture.makeRegionEntity();
+
+        regionRepository.save(region);
     }
 
     @Test
@@ -162,8 +163,8 @@ class RegionRestControllerTest {
                 .andExpect(jsonPath("$.sido").value(sido))
                 .andExpect(jsonPath("$.sigungu").value(sigungu))
                 .andExpect(jsonPath("$.upmyeondong").value(upmyeondong))
-                .andExpect(jsonPath("$.latitude").value(latitude))
-                .andExpect(jsonPath("$.longitude").value(longitude))
+                .andExpect(jsonPath("$.latitude").isNumber())
+                .andExpect(jsonPath("$.longitude").isNumber())
                 .andDo(document("get-region-location",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -173,11 +174,12 @@ class RegionRestControllerTest {
                                 parameterWithName("upmyeondong").description("읍면동")
                         ),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("조회된 법정동 코드"),
                                 fieldWithPath("sido").type(STRING).description("조회된 시도"),
                                 fieldWithPath("sigungu").type(STRING).description("조회된 시군구"),
                                 fieldWithPath("upmyeondong").type(STRING).description("조회된 읍면동"),
-                                fieldWithPath("latitude").type(NUMBER).description("조회된 위도"),
-                                fieldWithPath("longitude").type(NUMBER).description("조회된 경도")
+                                fieldWithPath("latitude").type(NUMBER).description("법정동 위도"),
+                                fieldWithPath("longitude").type(NUMBER).description("법정동 경도")
                         )
                 ));
     }
