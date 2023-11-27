@@ -1,9 +1,11 @@
 package org.guzzing.studayserver.domain.academy.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+@Getter
 @Table(name = "academy_categories")
 @Entity
 public class AcademyCategory {

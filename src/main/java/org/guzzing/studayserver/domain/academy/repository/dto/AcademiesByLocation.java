@@ -5,7 +5,6 @@ public record AcademiesByLocation(
         String academyName,
         String fullAddress,
         String phoneNumber,
-        String areaOfExpertise,
         Double latitude,
         Double longitude,
         String shuttleAvailable,

@@ -2,12 +2,14 @@ package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResult;
 
+import java.util.List;
+
 public record AcademiesByLocationResponse(
         Long academyId,
         String academyName,
         String address,
         String contact,
-        String areaOfExpertise,
+        List<String> categories,
         Double latitude,
         Double longitude,
         String shuttleAvailable,
