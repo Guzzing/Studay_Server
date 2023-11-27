@@ -22,6 +22,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

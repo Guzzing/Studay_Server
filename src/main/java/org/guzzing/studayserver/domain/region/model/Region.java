@@ -1,6 +1,9 @@
 package org.guzzing.studayserver.domain.region.model;
 
+import static lombok.AccessLevel.PROTECTED;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,62 +11,56 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.guzzing.studayserver.domain.region.model.vo.Address;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 
 @Getter
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "regions")
 public class Region {
 
     @Transient
     public static final List<String> BASE_REGION_SIDO = List.of("서울특별시", "경기도");
-
     @Transient
     public static final List<String> SIGUNGU_POSTFIX = List.of("시", "구", "군");
-
     @Transient
     public static final List<String> UPMYEONDONG_POSTFIX = List.of("읍", "면", "동", "군", "구");
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "code", nullable = false)
     private Long id;
 
-    @Column(name = "sido", nullable = false)
-    private String sido;
+    @Embedded
+    private Address address;
 
-    @Column(name = "sigungu", nullable = false)
-    private String sigungu;
+    @Column(name = "point", nullable = false)
+    private Point point;
 
-    @Column(name = "upmyeondong", nullable = false)
-    private String upmyeondong;
+    @Column(name = "area", nullable = true)
+    private MultiPolygon area;
 
-    @Column(name = "latitude", nullable = false)
-    private double latitude;
-
-    @Column(name = "longitude", nullable = false)
-    private double longitude;
-
-    protected Region() {
+    public Region(Long id, Address address, Point point, MultiPolygon area) {
+        this.id = id;
+        this.address = address;
+        this.point = point;
+        this.area = area;
     }
 
-    protected Region(
-            final String sido,
-            final String sigungu,
-            final String upmyeondong,
-            final double latitude,
-            final double longitude
-    ) {
-        this.sido = sido;
-        this.sigungu = sigungu;
-        this.upmyeondong = upmyeondong;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public String getSido() {
+        return this.address.getSido();
     }
 
-    public static Region of(
-            final String sido, final String sigungu, final String upmyeondong,
-            final double latitude, final double longitude
-    ) {
-        return new Region(sido, sigungu, upmyeondong, latitude, longitude);
+    public String getSigungu() {
+        return this.address.getSigungu();
     }
+
+    public String getUpmyeondong() {
+        return this.address.getUpmyeondong();
+    }
+
 }

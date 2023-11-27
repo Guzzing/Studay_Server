@@ -1,14 +1,23 @@
 package org.guzzing.studayserver.domain.region.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sido;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sigungu;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.upmyeondong;
 
+import org.guzzing.studayserver.domain.region.model.Region;
+import org.guzzing.studayserver.domain.region.repository.RegionRepository;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
+import org.guzzing.studayserver.testutil.fixture.region.RegionFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,18 +29,14 @@ class RegionServiceTest {
     @Autowired
     private RegionService regionService;
 
-    private RegionResult savedRegion;
-
-    final String sido = "서울특별시";
-    final String sigungu = "테스트구";
-    final String upmyeondong = "테스트테스트동";
+    @Autowired
+    private RegionRepository regionRepository;
 
     @BeforeEach
     void setUp() {
-        final double latitude = 37.5664;
-        final double longitude = 126.972925;
+        Region region = RegionFixture.makeRegionEntity();
 
-        savedRegion = regionService.createRegion(sido, sigungu, upmyeondong, latitude, longitude);
+        regionRepository.save(region);
     }
 
     @Test
@@ -78,8 +83,8 @@ class RegionServiceTest {
         // Then
         assertThat(result.sido()).isEqualTo(sido);
         assertThat(result.upmyeondong()).isEqualTo(upmyeondong);
-        assertThat(result.latitude()).isLessThanOrEqualTo(40.0);
-        assertThat(result.longtigute()).isLessThanOrEqualTo(130.0);
+        assertThat(result.point().getX()).isLessThanOrEqualTo(40.0);
+        assertThat(result.point().getY()).isLessThanOrEqualTo(130.0);
     }
 
 }

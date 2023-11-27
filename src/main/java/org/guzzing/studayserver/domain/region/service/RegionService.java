@@ -41,12 +41,4 @@ public class RegionService {
         return RegionResult.from(region);
     }
 
-    public RegionResult createRegion(
-            final String sido, final String sigungu, final String upmyeondong,
-            final double latitude, final double longitude
-    ) {
-        Region region = regionRepository.save(Region.of(sido, sigungu, upmyeondong, latitude, longitude));
-        return RegionResult.from(region);
-    }
-
 }
