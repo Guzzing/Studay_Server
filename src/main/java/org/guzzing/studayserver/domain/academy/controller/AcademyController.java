@@ -9,8 +9,9 @@ import org.guzzing.studayserver.domain.academy.controller.dto.response.Academies
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyFilterResponses;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
+import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
@@ -29,9 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AcademyController {
 
     private final AcademyService academyService;
+    private final AcademyFacade academyFacade;
 
-    public AcademyController(AcademyService academyService) {
+    public AcademyController(AcademyService academyService, AcademyFacade academyFacade) {
         this.academyService = academyService;
+        this.academyFacade = academyFacade;
     }
 
     @GetMapping(
@@ -52,11 +55,10 @@ public class AcademyController {
             @ModelAttribute @Valid AcademiesByLocationRequest request,
             @MemberId Long memberId
     ) {
-        AcademiesByLocationResults academiesByLocation =
-                academyService.findAcademiesByLocation(AcademiesByLocationRequest.to(request), memberId);
+        AcademiesByLocationFacadeResult response = academyFacade.findByLocation(AcademiesByLocationRequest.to(request, memberId));
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademiesByLocationResponses.from(academiesByLocation));
+                .body(AcademiesByLocationResponses.from(response));
     }
 
     @GetMapping(
