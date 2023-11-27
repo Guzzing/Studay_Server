@@ -6,7 +6,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
-
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
@@ -43,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
-    private static final   double LATITUDE = 37.4449168;
+    private static final double LATITUDE = 37.4449168;
     private static final double LONGITUDE = 127.1388684;
 
     @Autowired
@@ -207,7 +206,8 @@ class AcademyServiceTest {
     @DisplayName("스케줄 상세보기 때 필요한 학원 정보를 올바르게 불러오는지 확인한다.")
     void getAcademyAndLessonDetail_success() {
         //When
-        AcademyAndLessonDetailResult academyAndLessonDetail = academyService.getAcademyAndLessonDetail(savedALessonAboutSungnam.getId());
+        AcademyAndLessonDetailResult academyAndLessonDetail = academyService.getAcademyAndLessonDetail(
+                savedALessonAboutSungnam.getId());
 
         //Then
         assertThat(academyAndLessonDetail.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());

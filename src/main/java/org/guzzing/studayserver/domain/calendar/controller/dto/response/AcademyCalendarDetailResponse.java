@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
-import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
-import org.guzzing.studayserver.domain.calendar.model.Periodicity;
-
 import java.time.LocalTime;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 
 public record AcademyCalendarDetailResponse(
         String date,
@@ -36,6 +35,7 @@ public record AcademyCalendarDetailResponse(
             String academyName,
             String address
     ) {
+
         public static AcademyInfoResponseAboutScheduleDetail from(
                 AcademyCalendarDetailFacadeResult.AcademyInfoAboutScheduleDetail academyInfo) {
             return new AcademyInfoResponseAboutScheduleDetail(
@@ -70,6 +70,7 @@ public record AcademyCalendarDetailResponse(
                 LocalTime startTime,
                 LocalTime endTime
         ) {
+
         }
     }
 

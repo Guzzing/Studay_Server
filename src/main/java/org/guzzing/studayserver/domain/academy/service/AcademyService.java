@@ -37,7 +37,7 @@ public class AcademyService {
     private final LikeAccessService likeAccessService;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
+            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;

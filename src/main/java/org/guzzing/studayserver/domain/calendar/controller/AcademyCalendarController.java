@@ -37,7 +37,8 @@ public class AcademyCalendarController {
     private final AcademyCalendarService academyCalendarService;
     private final AcademyCalendarFacade academyCalendarFacade;
 
-    public AcademyCalendarController(AcademyCalendarService academyCalendarService, AcademyCalendarFacade academyCalendarFacade) {
+    public AcademyCalendarController(AcademyCalendarService academyCalendarService,
+            AcademyCalendarFacade academyCalendarFacade) {
         this.academyCalendarService = academyCalendarService;
         this.academyCalendarFacade = academyCalendarFacade;
     }
@@ -109,7 +110,8 @@ public class AcademyCalendarController {
             @ModelAttribute AcademyCalendarDetailRequest academyCalendarDetailRequest
     ) {
         AcademyCalendarDetailFacadeResult calendarDetailInfo
-                = academyCalendarFacade.getCalendarDetailInfo(AcademyCalendarDetailRequest.to(academyCalendarDetailRequest));
+                = academyCalendarFacade.getCalendarDetailInfo(
+                AcademyCalendarDetailRequest.to(academyCalendarDetailRequest));
 
         return ResponseEntity
                 .status(HttpStatus.OK)

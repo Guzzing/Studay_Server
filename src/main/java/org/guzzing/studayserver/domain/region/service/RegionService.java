@@ -9,6 +9,7 @@ import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResul
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,15 +38,13 @@ public class RegionService {
     }
 
     public RegionResult findLocation(final String sido, final String sigungu, final String upmyeondong) {
-        Region region = regionRepository.findBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
+        Region region = regionRepository.getBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong);
         return RegionResult.from(region);
     }
 
-    public RegionResult createRegion(
-            final String sido, final String sigungu, final String upmyeondong,
-            final double latitude, final double longitude
-    ) {
-        Region region = regionRepository.save(Region.of(sido, sigungu, upmyeondong, latitude, longitude));
+    public RegionResult findRegionContainingPoint(final Point point) {
+        Region region = regionRepository.getByAreaContainingPoint(point);
+
         return RegionResult.from(region);
     }
 
