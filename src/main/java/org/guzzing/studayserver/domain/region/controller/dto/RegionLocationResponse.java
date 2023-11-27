@@ -1,8 +1,6 @@
 package org.guzzing.studayserver.domain.region.controller.dto;
 
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Point;
 
 public record RegionLocationResponse(
         long id,

@@ -1,16 +1,16 @@
 package org.guzzing.studayserver.domain.calendar.service.dto.result;
 
-import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
-
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
 
 public record AcademyCalendarDetailResults(
         Map<Long, AcademyCalendarDetailResult> academyCalendarDetailResults
 
 ) {
+
     public static AcademyCalendarDetailResults from(List<AcademyCalenderDetailInfo> academyCalenderDetailInfos) {
         Map<Long, AcademyCalendarDetailResult> academyCalendarDetailResults = new HashMap<>();
         academyCalenderDetailInfos.
@@ -28,6 +28,7 @@ public record AcademyCalendarDetailResults(
             LocalTime lessonEndTime,
             String memo
     ) {
+
         public static AcademyCalendarDetailResult from(AcademyCalenderDetailInfo academyCalenderDetailInfo) {
             return new AcademyCalendarDetailResult(
                     academyCalenderDetailInfo.getDashboardId(),

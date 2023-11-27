@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.region.service;
 
 import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SIDO;
 
-import com.amazonaws.regions.Regions;
 import java.util.List;
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;

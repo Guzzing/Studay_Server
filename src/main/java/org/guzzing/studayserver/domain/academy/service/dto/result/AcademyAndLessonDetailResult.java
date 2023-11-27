@@ -9,6 +9,7 @@ public record AcademyAndLessonDetailResult(
         Integer capacity,
         Long totalFee
 ) {
+
     public static AcademyAndLessonDetailResult from(Lesson lesson) {
         return new AcademyAndLessonDetailResult(
                 lesson.getAcademy().getAcademyName(),

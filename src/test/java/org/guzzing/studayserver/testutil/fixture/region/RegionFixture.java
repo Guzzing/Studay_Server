@@ -24,7 +24,8 @@ public class RegionFixture {
         final Point point = makePoint(geometryFactory, 37.589187, 126.969292);
 
         final Polygon polygon = geometryFactory.createPolygon(new Coordinate[]{
-                new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(0, 1), new Coordinate(0, 0)
+                new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(0, 1),
+                new Coordinate(0, 0)
         });
 
         final MultiPolygon area = geometryFactory.createMultiPolygon(new Polygon[]{polygon});

@@ -5,4 +5,5 @@ public record AcademyCalendarDetailChildInfo(
         String childName,
         String imageUrl
 ) {
+
 }

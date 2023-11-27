@@ -25,11 +25,6 @@ import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardSch
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class AcademyCalendarService {
 
