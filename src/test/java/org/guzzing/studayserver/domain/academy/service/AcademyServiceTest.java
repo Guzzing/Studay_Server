@@ -8,6 +8,7 @@ import java.util.Random;
 import javax.sql.DataSource;
 
 import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
@@ -136,13 +137,22 @@ class AcademyServiceTest {
         reviewCountRepository.deleteAll();
         academyRepository.deleteAll();
 
+
         List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
         for (Academy academy : academies) {
             Academy savedAcademy = academyRepository.save(academy);
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
             reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
-        }
 
+            AcademyFixture.academyCategoryAboutSungnam(savedAcademy)
+                    .forEach(
+                            academyCategory -> academyCategoryRepository.save(academyCategory)
+                    );
+        }
+        List<String> categoryNames = AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam).stream()
+                .map(academyCategory -> academyCategory.getCategoryId())
+                .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                .toList();
         //When
         AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
                 AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE),
@@ -150,6 +160,13 @@ class AcademyServiceTest {
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
+        academiesByLocations.academiesByLocationResults()
+                .stream()
+                .map( academiesByLocationResult -> academiesByLocationResult.categories())
+                .forEach(
+                        categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
+                );
+
     }
 
     @Test

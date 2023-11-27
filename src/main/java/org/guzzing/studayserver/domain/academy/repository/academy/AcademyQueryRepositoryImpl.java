@@ -21,7 +21,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
 
         String nativeQuery = """
                 SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress,
-                        a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,
+                         a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,
                         (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked
                 FROM academies AS a
                 LEFT JOIN likes AS l
@@ -38,7 +38,6 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .addScalar("academyName", StandardBasicTypes.STRING)
                 .addScalar("fullAddress", StandardBasicTypes.STRING)
                 .addScalar("phoneNumber", StandardBasicTypes.STRING)
-                .addScalar("areaOfExpertise", StandardBasicTypes.STRING)
                 .addScalar("latitude", StandardBasicTypes.DOUBLE)
                 .addScalar("longitude", StandardBasicTypes.DOUBLE)
                 .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
@@ -52,11 +51,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                         (String) tuple[1],
                                         (String) tuple[2],
                                         (String) tuple[3],
-                                        (String) tuple[4],
+                                        (Double) tuple[4],
                                         (Double) tuple[5],
-                                        (Double) tuple[6],
-                                        (String) tuple[7],
-                                        (boolean) tuple[8]
+                                        (String) tuple[6],
+                                        (boolean) tuple[7]
                                 );
                             }
 
