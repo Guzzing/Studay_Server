@@ -39,9 +39,9 @@ public class Academy extends BaseEntity {
     @Column(nullable = false, columnDefinition = "point")
     private Point point;
 
-    @Column(name = "source_academy_identifier", nullable = false)
+    @Column(name = "source_academy_identifier")
     private Long sourceAcademyIdentifier;
-    
+
     protected Academy(
             final AcademyInfo academyInfo,
             final Address fullAddress,
