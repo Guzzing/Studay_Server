@@ -154,8 +154,7 @@ class AcademyServiceTest {
                 .toList();
         //When
         AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
-                AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE),
-                savedMember.getId());
+                AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE));
 
         //Then
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());

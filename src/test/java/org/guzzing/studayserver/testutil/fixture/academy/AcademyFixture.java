@@ -12,6 +12,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvail
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
+import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.locationtech.jts.geom.Point;
 
 public class AcademyFixture {
@@ -39,7 +40,7 @@ public class AcademyFixture {
                 academyInfo,
                 Address.of("경기도 성남시 중원구 망포동"),
                 Location.of(LATITUDE, LONGITUDE));
-        academy.changePoint(GeometryTypeFactory.createPoint(LATITUDE, LONGITUDE));
+        academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
         return academy;
     }
@@ -52,7 +53,7 @@ public class AcademyFixture {
                 academyInfo,
                 Address.of("경기도 성남시 중원구 망포동"),
                 Location.of(LATITUDE, LONGITUDE));
-        academy.changePoint(GeometryTypeFactory.createPoint(LATITUDE, LONGITUDE));
+        academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
         return academy;
     }
@@ -65,7 +66,7 @@ public class AcademyFixture {
                             academyInfo,
                             Address.of("경기도 성남시 중원구 망포동"),
                             Location.of(37.4449168, 127.1388684));
-                    academy.changePoint(GeometryTypeFactory.createPoint(LATITUDE, LONGITUDE));
+                    academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
                     return academy;
                 }).toList();
@@ -87,7 +88,7 @@ public class AcademyFixture {
                     Address.of("경기도 성남시 중원구 망포동"),
                     randomLocations.get(i));
             academies.add(academy);
-            Point point = GeometryTypeFactory.createPoint(
+            Point point = GeometryUtil.createPoint(
                     randomLocations.get(i).getLatitude(),
                     randomLocations.get(i).getLongitude()
             );
@@ -110,7 +111,7 @@ public class AcademyFixture {
     }
 
     public static AcademiesByLocationParam academiesByLocationParam(double latitude, double longitude) {
-        return AcademiesByLocationParam.of(latitude, longitude);
+        return AcademiesByLocationParam.of(latitude, longitude,1L);
     }
 
     public static AcademyFilterParam academyFilterParam(
