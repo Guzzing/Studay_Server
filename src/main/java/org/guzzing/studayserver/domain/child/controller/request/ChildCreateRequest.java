@@ -13,7 +13,7 @@ public record ChildCreateRequest(
         String grade
 ) {
 
-    public ChildCreateParam toParam(Long memberId) {
-        return new ChildCreateParam(nickname, grade, memberId);
+    public ChildCreateParam toParam() {
+        return new ChildCreateParam(nickname, grade);
     }
 }

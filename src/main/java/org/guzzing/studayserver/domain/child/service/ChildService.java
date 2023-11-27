@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.child.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
@@ -11,6 +12,8 @@ import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
+import org.guzzing.studayserver.domain.member.annotation.ValidMember;
+import org.guzzing.studayserver.domain.member.annotation.ValidatedMemberId;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -33,8 +36,8 @@ public class ChildService {
     }
 
     @Transactional
-    public Long create(ChildCreateParam param) {
-        Member member = getMember(param.memberId());
+    public Long create(ChildCreateParam param, Long memberId) {
+        Member member = getMember(memberId);
 
         Child child = new Child(param.nickname(), param.grade());
         setDefaultProfileImageToChild(child, member);

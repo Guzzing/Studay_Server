@@ -1,12 +1,12 @@
 package org.guzzing.studayserver.domain.member.service;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
+import org.guzzing.studayserver.domain.child.service.ChildService;
+import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
-import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam.MemberAdditionalChildParam;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult.MemberChildInformationResult;
 import org.springframework.stereotype.Service;
@@ -17,23 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ProfileImageProvider profileImageProvider;
+    private final ChildService childService;
 
-    public MemberService(MemberRepository memberRepository, ProfileImageProvider profileImageProvider) {
+    public MemberService(MemberRepository memberRepository, ChildService childService) {
         this.memberRepository = memberRepository;
-        this.profileImageProvider = profileImageProvider;
+        this.childService = childService;
     }
 
     @Transactional
-    public Long register(MemberRegisterParam param) {
-        Member member = getMember(param.memberId());
+    public Long register(MemberRegisterParam param, Long memberId) {
+        Member member = getMember(memberId);
 
         member.update(param.nickname(), param.email());
 
-        for (MemberAdditionalChildParam childParam : param.children()) {
-            Child child = new Child(childParam.nickname(), childParam.grade());
-            setDefaultProfileImageToChild(child, member);
-            child.assignToNewMemberOnly(member);
+        for (ChildCreateParam childParam : param.children()) {
+            childService.create(childParam, memberId);
         }
 
         return member.getId();
@@ -55,16 +53,5 @@ public class MemberService {
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
-    }
-
-    private void setDefaultProfileImageToChild(final Child child, final Member member) {
-        final List<String> uris = member.getChildren()
-                .stream()
-                .map(Child::getProfileImageURIPath)
-                .toList();
-
-        final String defaultProfileImageURI = profileImageProvider.provideDefaultProfileImageURI(uris);
-
-        child.updateProfileImageUri(defaultProfileImageURI);
     }
 }
