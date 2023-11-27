@@ -16,7 +16,6 @@ public record AcademyCalendarDetailFacadeResult(
         LessonInfo lessonInfo,
         List<FacadeChildInfo> childrenInfos,
         List<String> categories
-
 ) {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)", Locale.KOREAN);
