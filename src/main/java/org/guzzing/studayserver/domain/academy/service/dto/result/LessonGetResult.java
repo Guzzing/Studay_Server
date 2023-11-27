@@ -13,7 +13,7 @@ public record LessonGetResult(
     public static LessonGetResult from(Lesson lesson) {
         return new LessonGetResult(
                 lesson.getId(),
-                lesson.getSubject(),
+                lesson.getCurriculum(),
                 lesson.getCapacity(),
                 lesson.getDuration(),
                 lesson.getTotalFee()
