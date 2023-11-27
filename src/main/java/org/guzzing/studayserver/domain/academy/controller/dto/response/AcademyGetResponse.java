@@ -11,7 +11,7 @@ public record AcademyGetResponse(
         String shuttleAvailability,
         Long expectedFee,
         String updatedDate,
-        List<String> areaOfExpertise,
+        List<String> categories,
         LessonGetResponses lessonGetResponses,
         ReviewPercentGetResponse reviewPercentGetResponse,
         boolean isLiked
