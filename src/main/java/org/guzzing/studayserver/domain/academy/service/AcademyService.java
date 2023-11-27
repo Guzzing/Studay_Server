@@ -55,7 +55,8 @@ public class AcademyService {
                 academyRepository.getById(academyId),
                 lessonRepository.findAllByAcademyId(academyId),
                 reviewCountRepository.getByAcademyId(academyId),
-                isLiked(academyId, memberId));
+                isLiked(academyId, memberId),
+                academyCategoryRepository.findCategoryIdsByAcademyId(academyId));
     }
 
     @Transactional(readOnly = true)

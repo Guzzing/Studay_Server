@@ -21,12 +21,12 @@ public class AcademyFixture {
 
     public static List<AcademyInfo> academyInfos() {
         return List.of(
-                AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
-                AcademyInfo.of("박세영 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
-                AcademyInfo.of("김별 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
-                AcademyInfo.of("김희석보스 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
-                AcademyInfo.of("김유진 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
-                AcademyInfo.of("김지성 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
+                AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+                AcademyInfo.of("박세영 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+                AcademyInfo.of("김별 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+                AcademyInfo.of("김희석보스 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+                AcademyInfo.of("김유진 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+                AcademyInfo.of("김지성 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
                 AcademyInfo.of("김지성 보습학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "입시, 검정 및 보습")
         );
     }
@@ -135,6 +135,13 @@ public class AcademyFixture {
                 AcademyCategory.of(academyWithTwoCategories, CategoryInfo.MATH.getId())
         );
     }
+
+    public static List<AcademyCategory> academyCategoryAboutSungnam(Academy sungnamAcademy) {
+        return List.of(
+                AcademyCategory.of(sungnamAcademy, CategoryInfo.COMPUTER.getId())
+        );
+    }
+
 
     private static Long hashCode(String academyName) {
         return (long) Objects.hash("수원", academyName, "경기도 성남시 중원구 망포동", "김별");

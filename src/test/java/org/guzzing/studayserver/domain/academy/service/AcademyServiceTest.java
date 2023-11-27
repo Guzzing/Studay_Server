@@ -89,6 +89,11 @@ class AcademyServiceTest {
         academyAboutSungnam.changeEducationFee(100000L);
         savedAcademyAboutSungnam = academyRepository.save(academyAboutSungnam);
 
+        AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam)
+                .forEach(
+                        academyCategory -> academyCategoryRepository.save(academyCategory)
+                );
+
         Lesson lessonAboutSungnam = AcademyFixture.lessonForSunganm(savedAcademyAboutSungnam);
         savedALessonAboutSungnam = lessonRepository.save(lessonAboutSungnam);
 
@@ -99,6 +104,9 @@ class AcademyServiceTest {
     @Test
     @DisplayName("학원 ID로 학원 정보를 조회할 때 학원 정보, 수업 정보, 리뷰를 확인할 수 있다.")
     void getAcademy_academyId_reviewsAndLessons() {
+        //Given
+        List<Long> savedCategoryIds = academyCategoryRepository.findCategoryIdsByAcademyId(savedAcademyAboutSungnam.getId());
+
         //When
         AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),
                 savedMember.getId());
@@ -111,7 +119,9 @@ class AcademyServiceTest {
                 savedAcademyAboutSungnam.getShuttleAvailability().toString());
         assertThat(academyGetResult.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee());
         assertThat(academyGetResult.updatedDate()).isEqualTo(savedAcademyAboutSungnam.getUpdatedDate().toString());
-        assertThat(academyGetResult.areaOfExpertise()).isEqualTo(savedAcademyAboutSungnam.getAreaOfExpertise());
+        savedCategoryIds.forEach(
+                savedCategoryId -> assertThat(academyGetResult.categories()).contains(CategoryInfo.getCategoryNameById(savedCategoryId))
+        );
         assertThat(academyGetResult.lessonGetResults().lessonGetResults()).contains(
                 LessonGetResult.from(savedALessonAboutSungnam));
         assertThat(academyGetResult.reviewPercentGetResult()).isEqualTo(
