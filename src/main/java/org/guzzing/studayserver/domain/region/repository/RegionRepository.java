@@ -18,14 +18,14 @@ public interface RegionRepository {
     default Region getBySidoAndSigunguAndUpmyeondong(final String sido, final String sigungu,
             final String upmyeondong) {
         return this.findBySidoAndSigunguAndUpmyeondong(sido, sigungu, upmyeondong)
-                .orElseThrow(() -> new EntityNotFoundException("해당 시도군구읍면동에 해당하는 법정동 지역이 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 지역에 해당하는 법정동 지역이 없습니다."));
     }
 
-    Optional<Region> findRegionsContainingPoint(final Point point);
+    Optional<Region> findByAreaContainingPoint(final Point point);
 
-    default Region getRegionsContainingPoint(final Point point) {
-        return this.findRegionsContainingPoint(point)
-                .orElseThrow(() -> new EntityNotFoundException("해당하는 좌표가 포함된 지역이 없습니다."));
+    default Region getByAreaContainingPoint(final Point point) {
+        return this.findByAreaContainingPoint(point)
+                .orElseThrow(() -> new EntityNotFoundException("해당 위경도에 해당하는 법정동 지역이 없습니다."));
     }
 
     Region save(Region region);

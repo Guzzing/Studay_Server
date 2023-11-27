@@ -42,8 +42,8 @@ public class RegionService {
         return RegionResult.from(region);
     }
 
-    public RegionResult findAreaContainningPoint(final Point point) {
-        Region region = regionRepository.getRegionsContainingPoint(point);
+    public RegionResult findRegionContainingPoint(final Point point) {
+        Region region = regionRepository.getByAreaContainingPoint(point);
 
         return RegionResult.from(region);
     }
