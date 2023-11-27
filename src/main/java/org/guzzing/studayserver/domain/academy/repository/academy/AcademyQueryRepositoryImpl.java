@@ -22,8 +22,11 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
         String nativeQuery = """
                 SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress,
                          a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,
-                        (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked
+                        (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked,
+                        ac.category_id as categoryId
                 FROM academies AS a
+                LEFT JOIN academy_categories as ac
+                ON a.id = ac.academy_id
                 LEFT JOIN likes AS l
                 ON a.id = l.academy_id AND l.member_id = %s
                 WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s, a.point)=1""";
@@ -42,6 +45,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .addScalar("longitude", StandardBasicTypes.DOUBLE)
                 .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
                 .addScalar("isLiked", StandardBasicTypes.BOOLEAN)
+                .addScalar("categoryId",StandardBasicTypes.LONG)
                 .setResultTransformer(
                         new ResultTransformer() {
                             @Override
@@ -54,7 +58,8 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                         (Double) tuple[4],
                                         (Double) tuple[5],
                                         (String) tuple[6],
-                                        (boolean) tuple[7]
+                                        (boolean) tuple[7],
+                                        (Long) tuple[8]
                                 );
                             }
 
