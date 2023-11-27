@@ -23,7 +23,7 @@ public class DashboardFacadeConverter {
                 result.lessonId(),
                 result.scheduleInfos(),
                 result.paymentInfo(),
-                result.simpleMemoTypeMap(),
+                result.simpleMemo(),
                 result.isActive(),
                 result.isDeleted());
     }
@@ -32,7 +32,7 @@ public class DashboardFacadeConverter {
         return new DashboardPutResult(
                 result.dashboardId(),
                 result.paymentInfo(),
-                result.simpleMemoTypeMap());
+                result.simpleMemo());
     }
 
     public DashboardPatchResult patchFromResult(final DashboardResult result) {
@@ -52,7 +52,7 @@ public class DashboardFacadeConverter {
                 lessonInfo,
                 result.scheduleInfos(),
                 result.paymentInfo(),
-                result.simpleMemoTypeMap(),
+                result.simpleMemo(),
                 result.isActive(),
                 result.isDeleted());
     }

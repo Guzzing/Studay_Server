@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.dashboard.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
@@ -45,12 +46,11 @@ public class DashboardService {
     @Transactional
     public DashboardResult editDashboard(final DashboardPutParam param) {
         final FeeInfo feeInfo = serviceConverter.convertToFeeInfo(param.paymentInfo());
-        final List<SimpleMemoType> simpleMemoTypes = serviceConverter.convertToSelectedSimpleMemoTypes(
-                param.simpleMemoTypeMap());
+        final Map<String, Boolean> simpleMemo = serviceConverter.convertToSimpleMemoMap(param.simpleMemo());
 
         final Dashboard dashboard = dashboardRepository.findDashboardById(param.dashboardId())
                 .updateFeeInfo(feeInfo)
-                .updateSimpleMemo(simpleMemoTypes);
+                .updateSimpleMemo(simpleMemo);
 
         return serviceConverter.from(dashboard);
     }

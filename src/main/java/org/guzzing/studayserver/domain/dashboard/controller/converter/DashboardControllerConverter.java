@@ -11,7 +11,6 @@ import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
@@ -20,7 +19,7 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
@@ -43,14 +42,14 @@ public class DashboardControllerConverter {
                 request.lessonId(),
                 convertToScheduleInfos(request.schedules()),
                 request.paymentInfo(),
-                convertToSimpleMemoTypeMap(request.simpleMemo()));
+                request.simpleMemo());
     }
 
     public DashboardPutParam to(final long dashboardId, final DashboardPutRequest request) {
         return new DashboardPutParam(
                 dashboardId,
                 request.paymentInfo(),
-                convertToSimpleMemoTypeMap(request.simpleMemo()));
+                request.simpleMemo());
     }
 
     public DashboardPostResponse from(final DashboardPostResult result) {
@@ -65,7 +64,7 @@ public class DashboardControllerConverter {
         return new DashboardPutResponse(
                 result.dashboardId(),
                 result.paymentInfo(),
-                convertToSimpleMemo(result.simpleMemoTypeMap()));
+                result.simpleMemo());
     }
 
     public DashboardPatchResponse from(final DashboardPatchResult result) {
@@ -80,7 +79,7 @@ public class DashboardControllerConverter {
                 result.lessonInfo(),
                 convertToSchedules(result.scheduleInfos()),
                 result.paymentInfo(),
-                convertToSimpleMemo(result.simpleMemoTypeMap()),
+                result.simpleMemo(),
                 result.isActive(),
                 result.isDeleted());
     }
@@ -100,19 +99,8 @@ public class DashboardControllerConverter {
                         scheduleInfo.dayOfWeek().getValue(),
                         scheduleInfo.startTime(),
                         scheduleInfo.endTime()
-//                        , scheduleInfo.repeatance().name()
                 ))
                 .toList();
-    }
-
-    private SimpleMemo convertToSimpleMemo(final Map<SimpleMemoType, Boolean> simpleMemoMap) {
-        return new SimpleMemo(
-                simpleMemoMap.get(KINDNESS),
-                simpleMemoMap.get(GOOD_FACILITY),
-                simpleMemoMap.get(CHEAP_FEE),
-                simpleMemoMap.get(GOOD_MANAGEMENT),
-                simpleMemoMap.get(LOVELY_TEACHING),
-                simpleMemoMap.get(SHUTTLE_AVAILABILITY));
     }
 
     private ScheduleInfos convertToScheduleInfos(final List<Schedule> schedules) {
@@ -121,24 +109,10 @@ public class DashboardControllerConverter {
                         DayOfWeek.of(schedule.dayOfWeek()),
                         schedule.startTime(), schedule.endTime(),
                         WEEKLY
-//                        Repeatance.of(schedule.repeatance())
                 ))
                 .toList();
 
         return new ScheduleInfos(infos);
-    }
-
-    private Map<SimpleMemoType, Boolean> convertToSimpleMemoTypeMap(final SimpleMemo simpleMemo) {
-        Map<SimpleMemoType, Boolean> map = new ConcurrentHashMap<>();
-
-        map.put(KINDNESS, simpleMemo.kindness());
-        map.put(GOOD_FACILITY, simpleMemo.goodFacility());
-        map.put(CHEAP_FEE, simpleMemo.cheapFee());
-        map.put(GOOD_MANAGEMENT, simpleMemo.goodManagement());
-        map.put(LOVELY_TEACHING, simpleMemo.lovelyTeaching());
-        map.put(SHUTTLE_AVAILABILITY, simpleMemo.shuttleAvailability());
-
-        return map;
     }
 
 }

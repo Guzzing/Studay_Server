@@ -5,6 +5,7 @@ import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 
@@ -15,7 +16,7 @@ public record DashboardGetResult(
         LessonInfo lessonInfo,
         ScheduleInfos scheduleInfos,
         PaymentInfo paymentInfo,
-        Map<SimpleMemoType, Boolean> simpleMemoTypeMap,
+        SimpleMemo simpleMemo,
         boolean isActive,
         boolean isDeleted
 ) {

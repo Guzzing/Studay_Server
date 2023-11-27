@@ -85,7 +85,7 @@ class DashboardServiceTest {
         assertThat(dashboardResult).satisfies(result -> {
             assertThat(result.dashboardId()).isEqualTo(dashboard.getId());
             assertThat(result.paymentInfo()).isEqualTo(param.paymentInfo());
-            assertThat(result.simpleMemoTypeMap()).isNotEmpty();
+            assertThat(result.simpleMemo()).isNotNull();
         });
     }
 
