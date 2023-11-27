@@ -26,19 +26,17 @@ public class AcademyCategory {
 
     private AcademyCategory(
             final Academy academy,
-            final Long categoryId
-    ){
+            final Long categoryId) {
         this.academy = academy;
         this.categoryId = categoryId;
     }
 
     public static AcademyCategory of(
             final Academy academy,
-            final Long categoryId
-    ){
+            final Long categoryId) {
         return new AcademyCategory(
                 academy,
-                categoryId
-        );
+                categoryId);
     }
+
 }

@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 
 public record LessonScheduleLoadToUpdateResponse(

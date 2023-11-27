@@ -6,8 +6,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
-import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
@@ -37,13 +37,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Import(TestDatabaseConfig.class)
 @SpringBootTest(webEnvironment = NONE)
-@ActiveProfiles({"dev","oauth"})
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
@@ -160,7 +158,7 @@ class AcademyServiceTest {
         assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
         academiesByLocations.academiesByLocationResults()
                 .stream()
-                .map( academiesByLocationResult -> academiesByLocationResult.categories())
+                .map(academiesByLocationResult -> academiesByLocationResult.categories())
                 .forEach(
                         categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
                 );
@@ -226,9 +224,9 @@ class AcademyServiceTest {
                     isGreaterThanOrEqualTo(minFee)
                     .isLessThanOrEqualTo(maxFee);
             academyFilterResult.categories()
-                            .forEach(
-                                    result -> assertThat(academyFilterParam.categories()).contains(result)
-                            );
+                    .forEach(
+                            result -> assertThat(academyFilterParam.categories()).contains(result)
+                    );
         }
     }
 
@@ -310,6 +308,7 @@ class AcademyServiceTest {
     record SavedAcademyAndLesson(
             Academy academy,
             Lesson lesson
-    ) { }
+    ) {
+    }
 
 }

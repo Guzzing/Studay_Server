@@ -5,7 +5,9 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidCategoryName;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 

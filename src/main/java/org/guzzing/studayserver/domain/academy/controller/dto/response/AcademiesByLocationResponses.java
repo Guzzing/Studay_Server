@@ -24,6 +24,7 @@ public record AcademiesByLocationResponses(
                 academiesByLocationResult.upmyeondong()
         );
     }
+
     public record AcademiesByLocationResponse(
             Long academyId,
             String academyName,
@@ -38,7 +39,7 @@ public record AcademiesByLocationResponses(
 
         public static AcademiesByLocationResponse from(
                 AcademiesByLocationFacadeResult.AcademyByLocationFacadeResult result) {
-            return new AcademiesByLocationResponse (
+            return new AcademiesByLocationResponse(
                     result.academyId(),
                     result.academyName(),
                     result.address(),

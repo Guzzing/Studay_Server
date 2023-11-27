@@ -15,7 +15,7 @@ public record AcademiesByLocationRequest(
         Double lng
 ) {
 
-    public static AcademiesByLocationFacadeParam to (AcademiesByLocationRequest request, Long memberId) {
+    public static AcademiesByLocationFacadeParam to(AcademiesByLocationRequest request, Long memberId) {
         return new AcademiesByLocationFacadeParam(
                 request.lat,
                 request.lng,

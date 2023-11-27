@@ -38,7 +38,7 @@ public class AcademyCalendarController {
     private final AcademyCalendarFacade academyCalendarFacade;
 
     public AcademyCalendarController(AcademyCalendarService academyCalendarService,
-            AcademyCalendarFacade academyCalendarFacade) {
+                                     AcademyCalendarFacade academyCalendarFacade) {
         this.academyCalendarService = academyCalendarService;
         this.academyCalendarFacade = academyCalendarFacade;
     }

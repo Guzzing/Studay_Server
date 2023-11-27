@@ -16,7 +16,7 @@ public record AcademiesByLocationFacadeResult(
     public static AcademiesByLocationFacadeResult from(
             AcademiesByLocationResults academiesByLocationResults,
             RegionResult regionResult) {
-        return new  AcademiesByLocationFacadeResult(
+        return new AcademiesByLocationFacadeResult(
                 academiesByLocationResults.academiesByLocationResults().stream()
                         .map(academyByLocationResult -> AcademyByLocationFacadeResult.from(academyByLocationResult))
                         .toList(),

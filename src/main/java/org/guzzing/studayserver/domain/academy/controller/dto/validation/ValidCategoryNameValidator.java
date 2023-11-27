@@ -28,8 +28,8 @@ public class ValidCategoryNameValidator implements ConstraintValidator<ValidCate
         return true;
     }
 
-    private boolean isValidAreaOfExpertise(String areaOfExpertise) {
+    private boolean isValidAreaOfExpertise(String categoryName) {
         return Arrays.stream(CategoryInfo.values())
-                .anyMatch(enumValue -> enumValue.getCategoryName().equals(areaOfExpertise));
+                .anyMatch(enumValue -> enumValue.getCategoryName().equals(categoryName));
     }
 }
