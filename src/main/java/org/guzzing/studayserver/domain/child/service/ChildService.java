@@ -33,6 +33,7 @@ public class ChildService {
         this.profileImageProvider = profileImageProvider;
     }
 
+    @Transactional
     @Scheduled(cron = "0 0 0 1 1 *")
     public void increaseGrade() {
         childRepository.findAll()
