@@ -61,7 +61,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public AcademiesByLocationResults findAcademiesByLocation(AcademiesByLocationParam param, Long memberId) {
+    public AcademiesByLocationResults findAcademiesByLocation(AcademiesByLocationParam param) {
         Location northEast = calculateLocationWithinRadiusInDirection(
                 param.baseLatitude(),
                 param.baseLongitude(),
@@ -72,10 +72,12 @@ public class AcademyService {
                 Direction.SOUTHWEST);
         String diagonal = SqlFormatter.makeDiagonalByLineString(northEast, southWest);
 
-        List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal, memberId);
-        Map<Long, List<Long>> academiesWithCategoryIds = makePairsAcademyWithCategoryId(academiesByLocation);
+        List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal, param.memberId());
 
-        return AcademiesByLocationResults.to(academiesByLocation, academiesWithCategoryIds);
+        Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithLocation(academiesByLocation);
+        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithLocation(academiesByLocation);
+
+        return AcademiesByLocationResults.to(academyIdWithCategories, distinctFilteredAcademies);
     }
 
     private Map<Long, List<Long>> makePairsAcademyWithCategoryId(List<AcademiesByLocation> academiesByLocation) {
@@ -114,8 +116,8 @@ public class AcademyService {
         List<AcademyByFiltering> academiesByFiltering = academyRepository.filterAcademies(
                 AcademyFilterParam.to(param, diagonal), memberId);
 
-        Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategories(academiesByFiltering);
-        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctFilteredAcademies(academiesByFiltering);
+        Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithFilter(academiesByFiltering);
+        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithFilter(academiesByFiltering);
 
         return AcademyFilterResults.from(academyIdWithCategories, distinctFilteredAcademies);
     }

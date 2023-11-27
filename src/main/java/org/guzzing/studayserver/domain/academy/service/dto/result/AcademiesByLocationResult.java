@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 
 import java.util.List;
 
@@ -16,17 +17,17 @@ public record AcademiesByLocationResult(
         boolean isLiked
 ) {
 
-    public static AcademiesByLocationResult from(AcademiesByLocation academiesByLocation, List<String> categories) {
+    public static AcademiesByLocationResult from(DistinctFilteredAcademy distinctFilteredAcademy, List<String> categories) {
         return new AcademiesByLocationResult(
-                academiesByLocation.academyId(),
-                academiesByLocation.academyName(),
-                academiesByLocation.fullAddress(),
-                academiesByLocation.phoneNumber(),
+                distinctFilteredAcademy.academyId(),
+                distinctFilteredAcademy.academyName(),
+                distinctFilteredAcademy.fullAddress(),
+                distinctFilteredAcademy.phoneNumber(),
                 categories,
-                academiesByLocation.latitude(),
-                academiesByLocation.longitude(),
-                academiesByLocation.shuttleAvailable(),
-                academiesByLocation.isLiked()
+                distinctFilteredAcademy.latitude(),
+                distinctFilteredAcademy.longitude(),
+                distinctFilteredAcademy.shuttleAvailable(),
+                distinctFilteredAcademy.isLiked()
         );
     }
 
