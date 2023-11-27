@@ -78,7 +78,7 @@ class ReviewServiceTest {
 
         assertThat(result).satisfies(entry -> {
             assertThat(entry.memberId()).isEqualTo(ReviewFixture.memberId);
-            assertThat(entry.academyId()).isEqualTo(ReviewFixture.academyId);
+            assertThat(entry.academyId()).isEqualTo(savedAcademy.getId());
             assertThat(entry.cheapFee()).isEqualTo(validReviewMap.get(CHEAP_FEE));
             assertThat(entry.goodFacility()).isEqualTo(validReviewMap.get(GOOD_FACILITY));
         });
