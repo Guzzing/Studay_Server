@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,16 +1,9 @@
 package org.guzzing.studayserver.domain.dashboard.controller.converter;
 
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_MANAGEMENT;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.KINDNESS;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
-import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.SHUTTLE_AVAILABILITY;
 
 import java.time.DayOfWeek;
 import java.util.List;
-import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardGetResponse;
@@ -19,13 +12,11 @@ import org.guzzing.studayserver.domain.dashboard.controller.dto.response.Dashboa
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPostResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.response.DashboardPutResponse;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;

@@ -6,9 +6,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.amazonaws.services.s3.model.JSONType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
-import io.swagger.v3.core.util.Json;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -20,10 +18,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
-import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.guzzing.studayserver.global.exception.DashboardException;
 import org.hibernate.annotations.Type;
 

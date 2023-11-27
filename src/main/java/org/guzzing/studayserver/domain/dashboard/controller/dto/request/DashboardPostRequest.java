@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 
 public record DashboardPostRequest(
         @Positive Long childId,
