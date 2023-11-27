@@ -6,7 +6,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidAreaOfExpertise;
+import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidCategoryName;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 
 public record AcademyFilterRequest(
@@ -21,8 +21,8 @@ public record AcademyFilterRequest(
         @DecimalMax(value = "130.0", message = "Invalid longitude")
         Double lng,
 
-        @ValidAreaOfExpertise
-        List<String> areaOfExpertises,
+        @ValidCategoryName
+        List<String> categories,
 
         @PositiveOrZero
         Long desiredMinAmount,
@@ -40,7 +40,7 @@ public record AcademyFilterRequest(
         return new AcademyFilterParam(
                 request.lat,
                 request.lng,
-                request.areaOfExpertises(),
+                request.categories(),
                 request.desiredMinAmount,
                 request.desiredMaxAmount
         );
