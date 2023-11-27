@@ -41,8 +41,8 @@ public class ChildService {
     }
 
     @Transactional
-    public Long create(ChildCreateParam param) {
-        Member member = getMember(param.memberId());
+    public Long create(ChildCreateParam param, Long memberId) {
+        Member member = getMember(memberId);
 
         Child child = new Child(param.nickname(), param.grade());
         setDefaultProfileImageToChild(child, member);

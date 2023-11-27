@@ -30,7 +30,7 @@ public class MemberRestController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Long> register(@MemberId Long memberId, @RequestBody @Valid MemberRegisterRequest request) {
-        Long registeredMemberId = memberService.register(request.toParam(memberId));
+        Long registeredMemberId = memberService.register(request.toParam(), memberId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
