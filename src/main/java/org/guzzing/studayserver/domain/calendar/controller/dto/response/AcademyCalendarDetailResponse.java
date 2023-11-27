@@ -10,7 +10,8 @@ public record AcademyCalendarDetailResponse(
         String date,
         AcademyInfoResponseAboutScheduleDetail academyInfo,
         LessonInfoResponse lessonInfo,
-        List<ChildInfoResponse> childrenInfos
+        List<ChildInfoResponse> childrenInfos,
+        List<String> categories
 ) {
 
     public static AcademyCalendarDetailResponse from(
@@ -28,7 +29,8 @@ public record AcademyCalendarDetailResponse(
                                 childInfo.imageUrl(),
                                 childInfo.memo(),
                                 childInfo.dashBoardId()))
-                        .toList()
+                        .toList(),
+                academyCalendarDetailFacadeResult.categories()
         );
     }
 

@@ -15,7 +15,8 @@ public record AcademyCalendarDetailFacadeResult(
         String date,
         AcademyInfoAboutScheduleDetail academyInfoAboutScheduleDetail,
         LessonInfo lessonInfo,
-        List<FacadeChildInfo> childrenInfos
+        List<FacadeChildInfo> childrenInfos,
+        List<String> categories
 
 ) {
 
@@ -59,7 +60,8 @@ public record AcademyCalendarDetailFacadeResult(
                                         academyCalendarDetailResults.academyCalendarDetailResults()
                                                 .get(childImage.childId()).dashboardId()
                                 ))
-                        .toList()
+                        .toList(),
+                academyAndLessonDetailResult.categories()
         );
     }
 
