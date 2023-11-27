@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.academy.service.dto.param;
 
 import java.util.List;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
 
 public record AcademyFilterParam(
@@ -16,7 +17,10 @@ public record AcademyFilterParam(
             String pointFormat) {
         return new AcademyFilterCondition(
                 pointFormat,
-                SqlFormatter.makeWhereInString(param.categories),
+                SqlFormatter.makeWhereInString(
+                        param.categories.stream()
+                                .map(categoryName -> CategoryInfo.getCategoryIdByName(categoryName))
+                                .toList()),
                 param.desiredMinAmount,
                 param.desiredMaxAmount
         );

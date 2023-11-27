@@ -1,7 +1,9 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
+import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
@@ -30,23 +32,20 @@ import java.util.*;
 public class AcademyService {
 
     private static final Double DISTANCE = 2.0;
-
     private static final int PAGE_SIZE = 5;
-
     private final AcademyRepository academyRepository;
-
     private final LessonRepository lessonRepository;
-
     private final ReviewCountRepository reviewCountRepository;
-
     private final LikeAccessService likeAccessService;
+    private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService) {
+                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService, AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
         this.likeAccessService = likeAccessService;
+        this.academyCategoryRepository = academyCategoryRepository;
     }
 
     //캐시 이용하기(지금 상황에서는 백오피스가 없기 때문에 3달에 한 번 업데이트 되기 때문에 가능)
@@ -129,8 +128,10 @@ public class AcademyService {
 
     @Transactional(readOnly = true)
     public AcademyAndLessonDetailResult getAcademyAndLessonDetail(Long lessonId) {
+        Lesson lesson = lessonRepository.getLessonById(lessonId);
+        List<Long> categoryIds = academyCategoryRepository.findCategoryIdsByAcademyId(lesson.getAcademyId());
 
-        return AcademyAndLessonDetailResult.from(lessonRepository.getLessonById(lessonId));
+        return AcademyAndLessonDetailResult.from(lesson, categoryIds);
     }
 
 }

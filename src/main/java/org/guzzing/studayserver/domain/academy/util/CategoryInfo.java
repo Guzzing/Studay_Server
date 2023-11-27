@@ -33,4 +33,12 @@ public enum CategoryInfo {
                 .orElseThrow(()-> new IllegalArgumentException("일치하는 카테고리명이 없습니다."));
     }
 
+    public static Long getCategoryIdByName(String categoryName ) {
+        return Arrays.stream(CategoryInfo.values())
+                .filter(categoryInfo -> categoryInfo.getCategoryName().equals(categoryName))
+                .map(categoryInfo -> categoryInfo.getId())
+                .findFirst()
+                .orElseThrow(()-> new IllegalArgumentException("일치하는 카테고리 아이디가 없습니다."));
+    }
+
 }
