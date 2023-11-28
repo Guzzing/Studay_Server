@@ -127,18 +127,21 @@ public class AcademyCalendarService {
     }
 
     @Transactional
-    public void     deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam) {
+    public void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam) {
         if (!academyCalendarDeleteParam.isAllDeleted()) {
             academyScheduleRepository.deleteAcademyScheduleById(academyCalendarDeleteParam.academyScheduleId());
             return;
         }
+
         Long dashboardId = academyScheduleRepository.findDashboardIdByAcademyScheduleId(
                 academyCalendarDeleteParam.academyScheduleId());
-
         List<AcademyTimeTemplateDateInfo> academyTimeTemplates =
                 academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(dashboardId);
-        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
-        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
+        LocalDate requestedDate
+                = academyScheduleRepository.findScheduleDate(academyCalendarDeleteParam.academyScheduleId());
+
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, requestedDate);
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, requestedDate);
     }
 
     private void deleteAcademyTimeTemplates(
