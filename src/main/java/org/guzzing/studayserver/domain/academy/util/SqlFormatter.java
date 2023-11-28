@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.academy.util;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 

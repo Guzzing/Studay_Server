@@ -1,5 +1,9 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
@@ -17,17 +21,15 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLess
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.util.Direction;
 import org.guzzing.studayserver.domain.academy.util.FilterParser;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
-import org.guzzing.studayserver.domain.academy.util.Direction;
 import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class AcademyService {
@@ -41,7 +43,8 @@ public class AcademyService {
     private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService, AcademyCategoryRepository academyCategoryRepository) {
+            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
+            AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
@@ -72,10 +75,12 @@ public class AcademyService {
                 Direction.SOUTHWEST);
         String diagonal = SqlFormatter.makeDiagonalByLineString(northEast, southWest);
 
-        List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal, param.memberId());
+        List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal,
+                param.memberId());
 
         Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithLocation(academiesByLocation);
-        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithLocation(academiesByLocation);
+        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithLocation(
+                academiesByLocation);
 
         return AcademiesByLocationResults.to(academyIdWithCategories, distinctFilteredAcademies);
     }
@@ -86,7 +91,8 @@ public class AcademyService {
                 stream()
                 .map(academyByLocation -> academyByLocation.academyId())
                 .forEach(academyId ->
-                        academiesWithCategoryIds.put(academyId, academyCategoryRepository.findCategoryIdsByAcademyId(academyId))
+                        academiesWithCategoryIds.put(academyId,
+                                academyCategoryRepository.findCategoryIdsByAcademyId(academyId))
                 );
 
         return academiesWithCategoryIds;
@@ -117,7 +123,8 @@ public class AcademyService {
                 AcademyFilterParam.to(param, diagonal), memberId);
 
         Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithFilter(academiesByFiltering);
-        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithFilter(academiesByFiltering);
+        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithFilter(
+                academiesByFiltering);
 
         return AcademyFilterResults.from(academyIdWithCategories, distinctFilteredAcademies);
     }

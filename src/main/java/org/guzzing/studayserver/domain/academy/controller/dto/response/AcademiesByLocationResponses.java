@@ -1,10 +1,7 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
 import java.util.List;
-
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 
 public record AcademiesByLocationResponses(
         List<AcademiesByLocationResponse> academiesByLocationResponse,
@@ -17,7 +14,8 @@ public record AcademiesByLocationResponses(
         return new AcademiesByLocationResponses(
                 academiesByLocationResult.academiesByLocationResults()
                         .stream()
-                        .map(academiesByLocationFacadeResult -> AcademiesByLocationResponse.from(academiesByLocationFacadeResult))
+                        .map(academiesByLocationFacadeResult -> AcademiesByLocationResponse.from(
+                                academiesByLocationFacadeResult))
                         .toList(),
                 academiesByLocationResult.sido(),
                 academiesByLocationResult.sigungu(),

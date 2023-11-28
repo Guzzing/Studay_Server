@@ -6,7 +6,6 @@ import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_MANAG
 import static org.guzzing.studayserver.domain.review.model.ReviewType.KINDNESS;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.LOVELY_TEACHING;
 
-import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;

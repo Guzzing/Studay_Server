@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
