@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.controller.vo;
+package org.guzzing.studayserver.domain.dashboard.model.vo;
 
 public record SimpleMemo(
         boolean kindness,
