@@ -13,11 +13,11 @@ public enum NewReviewType {
     LOVELY_TEACHING,
     SHUTTLE_AVAILABILITY;
 
-    public static Map<NewReviewType, Integer> newReviewCountOf(final List<String> list) {
+    public static Map<NewReviewType, Integer> newReviewCountOf(final Map<String, Boolean> map) {
         return Arrays.stream(NewReviewType.values())
                 .collect(Collectors.toMap(
                         reviewType -> reviewType,
-                        reviewType -> list.contains(reviewType.name()) ? 1 : 0
+                        reviewType -> map.get(reviewType.name()) ? 1 : 0
                 ));
     }
 }
