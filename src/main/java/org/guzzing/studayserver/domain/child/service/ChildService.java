@@ -45,8 +45,8 @@ public class ChildService {
         Member member = getMember(memberId);
 
         Child child = new Child(param.nickname(), param.grade());
-        setDefaultProfileImageToChild(child, member);
         child.assignToNewMemberOnly(member);
+        setDefaultProfileImageToChild(child);
 
         Child savedChild = childRepository.save(child);
         return savedChild.getId();
@@ -96,9 +96,11 @@ public class ChildService {
         return new ChildProfileImagePatchResult(childId, profileImageUri);
     }
 
-    private void setDefaultProfileImageToChild(final Child child, final Member member) {
+    private void setDefaultProfileImageToChild(final Child child) {
+        Member member = child.getMember();
         final List<String> uris = member.getChildren()
                 .stream()
+                .filter(c -> !c.equals(child))
                 .map(Child::getProfileImageURIPath)
                 .toList();
 
