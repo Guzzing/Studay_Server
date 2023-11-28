@@ -89,8 +89,7 @@ public class AcademyCalenderFixture {
             Long academyScheduleId) {
         return new AcademyCalendarDeleteParam(
                 academyScheduleId,
-                true,
-                START_DATE_OF_ATTENDANCE.plusDays(30L)
+                true
         );
     }
 
@@ -98,8 +97,7 @@ public class AcademyCalenderFixture {
             Long academyScheduleId) {
         return new AcademyCalendarDeleteParam(
                 academyScheduleId,
-                false,
-                START_DATE_OF_ATTENDANCE.plusDays(30L)
+                false
         );
     }
 

@@ -23,8 +23,6 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
-import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
-import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
@@ -271,7 +269,7 @@ class AcademyCalendarServiceTest {
         //Then
         isAfterDeletedScheduleAcademySchedules.forEach(
                 schedule -> assertThat(
-                        schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
+                        schedule.getScheduleDate().isBefore(academySchedules.get(0).getScheduleDate())).isTrue()
         );
     }
 
