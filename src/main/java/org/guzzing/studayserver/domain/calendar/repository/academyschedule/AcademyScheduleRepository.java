@@ -6,6 +6,7 @@ import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
+import org.springframework.data.repository.query.Param;
 
 public interface AcademyScheduleRepository {
 
@@ -29,4 +30,5 @@ public interface AcademyScheduleRepository {
 
     List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 
+    Long findDashboardIdByAcademyScheduleId(Long academyScheduleId);
 }
