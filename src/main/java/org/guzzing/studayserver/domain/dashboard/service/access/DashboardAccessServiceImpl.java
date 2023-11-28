@@ -63,7 +63,7 @@ public class DashboardAccessServiceImpl implements DashboardAccessService {
 
     private String getLessonSubject(final long lessonId) {
         return academyAccessService.findLessonInfo(lessonId)
-                .subject();
+                .curriculum();
     }
 
     private LocalTime getTime(final String time) {
