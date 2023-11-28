@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
 import java.time.LocalTime;
 import java.util.List;
+
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 
@@ -9,7 +10,8 @@ public record AcademyCalendarDetailResponse(
         String date,
         AcademyInfoResponseAboutScheduleDetail academyInfo,
         LessonInfoResponse lessonInfo,
-        List<ChildInfoResponse> childrenInfos
+        List<ChildInfoResponse> childrenInfos,
+        List<String> categories
 ) {
 
     public static AcademyCalendarDetailResponse from(
@@ -27,7 +29,8 @@ public record AcademyCalendarDetailResponse(
                                 childInfo.imageUrl(),
                                 childInfo.memo(),
                                 childInfo.dashBoardId()))
-                        .toList()
+                        .toList(),
+                academyCalendarDetailFacadeResult.categories()
         );
     }
 

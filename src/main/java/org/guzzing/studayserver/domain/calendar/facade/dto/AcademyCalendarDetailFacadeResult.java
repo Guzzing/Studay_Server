@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
@@ -14,8 +15,8 @@ public record AcademyCalendarDetailFacadeResult(
         String date,
         AcademyInfoAboutScheduleDetail academyInfoAboutScheduleDetail,
         LessonInfo lessonInfo,
-        List<FacadeChildInfo> childrenInfos
-
+        List<FacadeChildInfo> childrenInfos,
+        List<String> categories
 ) {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)", Locale.KOREAN);
@@ -58,7 +59,8 @@ public record AcademyCalendarDetailFacadeResult(
                                         academyCalendarDetailResults.academyCalendarDetailResults()
                                                 .get(childImage.childId()).dashboardId()
                                 ))
-                        .toList()
+                        .toList(),
+                academyAndLessonDetailResult.categories()
         );
     }
 

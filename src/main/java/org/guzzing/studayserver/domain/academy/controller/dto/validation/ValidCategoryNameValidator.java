@@ -2,13 +2,15 @@ package org.guzzing.studayserver.domain.academy.controller.dto.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
+
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidAreaOfExpertiseValidator implements ConstraintValidator<ValidAreaOfExpertise, List<String>> {
+public class ValidCategoryNameValidator implements ConstraintValidator<ValidCategoryName, List<String>> {
 
     @Override
-    public void initialize(ValidAreaOfExpertise constraintAnnotation) {
+    public void initialize(ValidCategoryName constraintAnnotation) {
     }
 
     @Override
@@ -26,8 +28,8 @@ public class ValidAreaOfExpertiseValidator implements ConstraintValidator<ValidA
         return true;
     }
 
-    private boolean isValidAreaOfExpertise(String areaOfExpertise) {
-        return Arrays.stream(AreaOfExpertise.values())
-                .anyMatch(enumValue -> enumValue.getAreaOfExpertise().equals(areaOfExpertise));
+    private boolean isValidAreaOfExpertise(String categoryName) {
+        return Arrays.stream(CategoryInfo.values())
+                .anyMatch(enumValue -> enumValue.getCategoryName().equals(categoryName));
     }
 }

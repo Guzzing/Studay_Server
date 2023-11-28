@@ -57,6 +57,9 @@ public class AcademyAccessServiceImpl implements
         }
     }
 
+    /**
+     * 응답으로 카테고리 종류 1개 이상으로 수정 List<String> categories
+     */
     @Override
     public AcademyInfo findAcademyInfo(final Long academyId) {
         final Academy academy = academyRepository.findAcademyById(academyId)

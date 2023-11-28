@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 
+import java.util.List;
+
 public record AcademyGetResponse(
         String academyName,
         String contact,
@@ -9,7 +11,7 @@ public record AcademyGetResponse(
         String shuttleAvailability,
         Long expectedFee,
         String updatedDate,
-        String areaOfExpertise,
+        List<String> categories,
         LessonGetResponses lessonGetResponses,
         ReviewPercentGetResponse reviewPercentGetResponse,
         boolean isLiked
@@ -23,7 +25,7 @@ public record AcademyGetResponse(
                 academyGetResult.shuttleAvailability(),
                 academyGetResult.expectedFee(),
                 academyGetResult.updatedDate(),
-                academyGetResult.areaOfExpertise(),
+                academyGetResult.categories(),
 
                 LessonGetResponses.from(academyGetResult.lessonGetResults()),
                 ReviewPercentGetResponse.from(academyGetResult.reviewPercentGetResult()),

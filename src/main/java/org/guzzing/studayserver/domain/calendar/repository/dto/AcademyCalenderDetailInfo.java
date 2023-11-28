@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.repository.dto;
 
 import java.time.LocalTime;
 import java.util.Objects;
+
 import lombok.Getter;
 
 @Getter
@@ -14,7 +15,7 @@ public class AcademyCalenderDetailInfo {
     private final String memo;
 
     public AcademyCalenderDetailInfo(Long dashboardId, Long childId, LocalTime lessonStartTime, LocalTime lessonEndTime,
-            String memo) {
+                                     String memo) {
         this.dashboardId = dashboardId;
         this.childId = childId;
         this.lessonStartTime = lessonStartTime;

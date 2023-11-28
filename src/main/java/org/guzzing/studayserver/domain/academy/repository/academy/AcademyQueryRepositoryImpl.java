@@ -2,7 +2,9 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
@@ -21,9 +23,12 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
 
         String nativeQuery = """
                 SELECT a.id AS academyId, a.academy_name AS academyName, a.phone_number AS phoneNumber, a.full_address AS fullAddress,
-                        a.area_of_expertise AS areaOfExpertise, a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,
-                        (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked
+                         a.latitude AS latitude , a.longitude AS longitude, a.shuttle AS shuttleAvailable,
+                        (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked,
+                        ac.category_id as categoryId
                 FROM academies AS a
+                LEFT JOIN academy_categories as ac
+                ON a.id = ac.academy_id
                 LEFT JOIN likes AS l
                 ON a.id = l.academy_id AND l.member_id = %s
                 WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s, a.point)=1""";
@@ -38,11 +43,11 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .addScalar("academyName", StandardBasicTypes.STRING)
                 .addScalar("fullAddress", StandardBasicTypes.STRING)
                 .addScalar("phoneNumber", StandardBasicTypes.STRING)
-                .addScalar("areaOfExpertise", StandardBasicTypes.STRING)
                 .addScalar("latitude", StandardBasicTypes.DOUBLE)
                 .addScalar("longitude", StandardBasicTypes.DOUBLE)
                 .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
                 .addScalar("isLiked", StandardBasicTypes.BOOLEAN)
+                .addScalar("categoryId", StandardBasicTypes.LONG)
                 .setResultTransformer(
                         new ResultTransformer() {
                             @Override
@@ -52,11 +57,11 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                         (String) tuple[1],
                                         (String) tuple[2],
                                         (String) tuple[3],
-                                        (String) tuple[4],
+                                        (Double) tuple[4],
                                         (Double) tuple[5],
-                                        (Double) tuple[6],
-                                        (String) tuple[7],
-                                        (boolean) tuple[8]
+                                        (String) tuple[6],
+                                        (boolean) tuple[7],
+                                        (Long) tuple[8]
                                 );
                             }
 
@@ -74,17 +79,18 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     public List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition, Long memberId) {
         String nativeQuery = """
                 SELECT  a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, 
-                        a.phone_number AS phoneNumber, a.area_of_expertise AS areaOfExpertise, a.latitude, a.longitude, a.shuttle AS shuttleAvailable, 
+                        a.phone_number AS phoneNumber, a.latitude, a.longitude, a.shuttle AS shuttleAvailable, 
+                        ac.category_id as categoryId,
                         (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked 
-                FROM academies AS a 
-                LEFT JOIN likes AS l 
-                ON a.id = l.academy_id AND l.member_id = %s
+                FROM academy_categories as ac
+                LEFT JOIN academies AS a ON ac.academy_id = a.id 
+                LEFT JOIN likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s, a.point)=1""";
 
         String formattedQuery = String.format(nativeQuery, memberId, academyFilterCondition.pointFormat());
 
-        if (academyFilterCondition.areaOfExpertises() != null && !academyFilterCondition.areaOfExpertises().isEmpty()) {
-            formattedQuery += " AND area_of_expertise IN " + academyFilterCondition.areaOfExpertises();
+        if (academyFilterCondition.categories() != null && !academyFilterCondition.categories().isEmpty()) {
+            formattedQuery += " AND ac.category_id IN " + academyFilterCondition.categories();
         }
 
         if (academyFilterCondition.desiredMinAmount() != null && academyFilterCondition.desiredMaxAmount() != null) {
@@ -99,7 +105,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .addScalar("academyName", StandardBasicTypes.STRING)
                 .addScalar("fullAddress", StandardBasicTypes.STRING)
                 .addScalar("phoneNumber", StandardBasicTypes.STRING)
-                .addScalar("areaOfExpertise", StandardBasicTypes.STRING)
+                .addScalar("categoryId", StandardBasicTypes.LONG)
                 .addScalar("latitude", StandardBasicTypes.DOUBLE)
                 .addScalar("longitude", StandardBasicTypes.DOUBLE)
                 .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
@@ -113,7 +119,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                         (String) tuple[1],
                                         (String) tuple[2],
                                         (String) tuple[3],
-                                        (String) tuple[4],
+                                        (Long) tuple[4],
                                         (Double) tuple[5],
                                         (Double) tuple[6],
                                         (String) tuple[7],

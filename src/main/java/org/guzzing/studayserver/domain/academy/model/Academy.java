@@ -7,7 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.util.Objects;
+
 import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
@@ -36,17 +38,19 @@ public class Academy extends BaseEntity {
     @Column(name = "max_education_fee")
     private Long maxEducationFee;
 
-    @Column(nullable = false, columnDefinition = "point")
+    @Column(name = "point", nullable = false, columnDefinition = "point")
     private Point point;
 
-    @Column(name = "source_academy_identifier")
+    @Column(name = "source_academy_identifier", nullable = false)
     private Long sourceAcademyIdentifier;
 
     protected Academy(
+            final Long sourceAcademyIdentifier,
             final AcademyInfo academyInfo,
             final Address fullAddress,
             final Location location
     ) {
+        this.sourceAcademyIdentifier = sourceAcademyIdentifier;
         this.academyInfo = academyInfo;
         this.fullAddress = fullAddress;
         this.location = location;
@@ -55,8 +59,8 @@ public class Academy extends BaseEntity {
     protected Academy() {
     }
 
-    public static Academy of(final AcademyInfo academyInfo, final Address address, final Location location) {
-        return new Academy(academyInfo, address, location);
+    public static Academy of(final Long sourceAcademyIdentifier, final AcademyInfo academyInfo, final Address address, final Location location) {
+        return new Academy(sourceAcademyIdentifier, academyInfo, address, location);
     }
 
     public void changeEducationFee(Long maxEducationFee) {
@@ -89,20 +93,14 @@ public class Academy extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(
-                fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(
-                maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point) && Objects.equals(sourceAcademyIdentifier, academy.sourceAcademyIdentifier);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, academyInfo, fullAddress, location, maxEducationFee, point);
+        return Objects.hash(id, academyInfo, fullAddress, location, maxEducationFee, point, sourceAcademyIdentifier);
     }
 }

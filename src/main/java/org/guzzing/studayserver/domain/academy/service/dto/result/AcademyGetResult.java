@@ -4,6 +4,7 @@ import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
+import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 public record AcademyGetResult(
         String academyName,
@@ -12,17 +13,18 @@ public record AcademyGetResult(
         String shuttleAvailability,
         Long expectedFee,
         String updatedDate,
-        String areaOfExpertise,
         LessonGetResults lessonGetResults,
         ReviewPercentGetResult reviewPercentGetResult,
-        boolean isLiked
+        boolean isLiked,
+        List<String> categories
 ) {
 
     public static AcademyGetResult from(
             Academy academy,
             List<Lesson> lessons,
             ReviewCount reviewCount,
-            boolean isLiked) {
+            boolean isLiked,
+            List<Long> categories) {
         return new AcademyGetResult(
                 academy.getAcademyName(),
                 academy.getContact(),
@@ -30,12 +32,15 @@ public record AcademyGetResult(
                 academy.getShuttleAvailability(),
                 academy.getMaxEducationFee(),
                 academy.getUpdatedDate().toString(),
-                academy.getAreaOfExpertise(),
 
                 LessonGetResults.from(lessons),
                 ReviewPercentGetResult.from(reviewCount),
 
-                isLiked
+                isLiked,
+
+                categories.stream()
+                        .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                        .toList()
         );
     }
 

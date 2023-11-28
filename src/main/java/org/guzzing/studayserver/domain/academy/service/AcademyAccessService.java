@@ -21,5 +21,4 @@ public interface AcademyAccessService {
 
     AcademyAndLessonDetailResult getAcademyAndLessonDetail(final Long lessonId);
 
-
 }

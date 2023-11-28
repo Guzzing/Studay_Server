@@ -6,6 +6,8 @@ import org.guzzing.studayserver.domain.region.model.Region;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 public interface RegionJpaRepository extends JpaRepository<Region, Long>, RegionRepository {
 
@@ -21,6 +23,6 @@ public interface RegionJpaRepository extends JpaRepository<Region, Long>, Region
 
     @Override
     @Query("select r from Region r where ST_Contains(r.area, :point) = true")
-    Optional<Region> findByAreaContainingPoint(final Point point);
+    Optional<Region> findByAreaContainingPoint(@Param("point") final Point point);
 
 }

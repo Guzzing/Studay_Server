@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.facade.dto;
 
 import java.time.LocalDate;
 import java.util.List;
+
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDetailParam;
 
 public record AcademyCalendarDetailFacadeParam(
