@@ -14,4 +14,5 @@ public interface AcademyCategoryJpaRepository extends JpaRepository<AcademyCateg
     @Query("select ac.categoryId from AcademyCategory as ac where ac.academy.id =:academyId")
     List<Long> findCategoryIdsByAcademyId(@Param("academyId") Long academyId);
 
+    void deleteAll();
 }

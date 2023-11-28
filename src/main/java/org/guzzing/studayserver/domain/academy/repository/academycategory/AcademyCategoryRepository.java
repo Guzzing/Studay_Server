@@ -10,4 +10,6 @@ public interface AcademyCategoryRepository {
 
     List<Long> findCategoryIdsByAcademyId(Long academyId);
 
+    void deleteAll();
+
 }

@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -132,8 +133,8 @@ class AcademyServiceTest {
         //Given
         lessonRepository.deleteAll();
         reviewCountRepository.deleteAll();
+        academyCategoryRepository.deleteAll();
         academyRepository.deleteAll();
-
 
         List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
         for (Academy academy : academies) {
@@ -286,6 +287,7 @@ class AcademyServiceTest {
     private SavedAcademyAndLesson academySetUpForFilterAndDetail() {
         lessonRepository.deleteAll();
         reviewCountRepository.deleteAll();
+        academyCategoryRepository.deleteAll();
         academyRepository.deleteAll();
 
         Academy academyWithTwoCategories = AcademyFixture.twoCategoriesAcademy();
