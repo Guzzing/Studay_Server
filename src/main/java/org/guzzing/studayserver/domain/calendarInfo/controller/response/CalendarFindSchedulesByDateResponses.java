@@ -79,7 +79,7 @@ public record CalendarFindSchedulesByDateResponses(
             Long lessonId,
             String academyName,
             String lessonName,
-            LocalTime endTIme,
+            LocalTime endTime,
             List<OverlappingScheduleResponse> overlappingSchedules
     ) {
 
