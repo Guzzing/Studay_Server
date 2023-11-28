@@ -7,9 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import java.util.Objects;
-
 import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
@@ -59,7 +57,8 @@ public class Academy extends BaseEntity {
     protected Academy() {
     }
 
-    public static Academy of(final Long sourceAcademyIdentifier, final AcademyInfo academyInfo, final Address address, final Location location) {
+    public static Academy of(final Long sourceAcademyIdentifier, final AcademyInfo academyInfo, final Address address,
+            final Location location) {
         return new Academy(sourceAcademyIdentifier, academyInfo, address, location);
     }
 
@@ -93,10 +92,17 @@ public class Academy extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Academy academy = (Academy) o;
-        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point) && Objects.equals(sourceAcademyIdentifier, academy.sourceAcademyIdentifier);
+        return Objects.equals(id, academy.id) && Objects.equals(academyInfo, academy.academyInfo) && Objects.equals(
+                fullAddress, academy.fullAddress) && Objects.equals(location, academy.location) && Objects.equals(
+                maxEducationFee, academy.maxEducationFee) && Objects.equals(point, academy.point) && Objects.equals(
+                sourceAcademyIdentifier, academy.sourceAcademyIdentifier);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package org.guzzing.studayserver.domain.academy.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FilterParser {
 
@@ -19,7 +22,8 @@ public class FilterParser {
 
         academiesByFiltering.forEach(
                 academyByFiltering -> {
-                    List<Long> categories = academyIdWithCategories.computeIfAbsent(academyByFiltering.academyId(), c -> new ArrayList<>());
+                    List<Long> categories = academyIdWithCategories.computeIfAbsent(academyByFiltering.academyId(),
+                            c -> new ArrayList<>());
                     categories.add(academyByFiltering.categoryId());
 
                     academyIdWithCategories.put(academyByFiltering.academyId(), categories);
@@ -34,7 +38,8 @@ public class FilterParser {
 
         academiesByLocations.forEach(
                 academyByFiltering -> {
-                    List<Long> categories = academyIdWithCategories.computeIfAbsent(academyByFiltering.academyId(), c -> new ArrayList<>());
+                    List<Long> categories = academyIdWithCategories.computeIfAbsent(academyByFiltering.academyId(),
+                            c -> new ArrayList<>());
                     categories.add(academyByFiltering.categoryId());
 
                     academyIdWithCategories.put(academyByFiltering.academyId(), categories);
@@ -44,7 +49,8 @@ public class FilterParser {
         return academyIdWithCategories;
     }
 
-    public static Set<DistinctFilteredAcademy> distinctAcademiesWithLocation(List<AcademiesByLocation> academiesByLocations) {
+    public static Set<DistinctFilteredAcademy> distinctAcademiesWithLocation(
+            List<AcademiesByLocation> academiesByLocations) {
         Set<DistinctFilteredAcademy> distinctFilteredAcademies = new HashSet<>();
         academiesByLocations.forEach(
                 academyByFiltering -> distinctFilteredAcademies.add(
@@ -64,7 +70,8 @@ public class FilterParser {
         return distinctFilteredAcademies;
     }
 
-    public static Set<DistinctFilteredAcademy> distinctAcademiesWithFilter(List<AcademyByFiltering> academiesByFiltering) {
+    public static Set<DistinctFilteredAcademy> distinctAcademiesWithFilter(
+            List<AcademyByFiltering> academiesByFiltering) {
         Set<DistinctFilteredAcademy> distinctFilteredAcademies = new HashSet<>();
         academiesByFiltering.forEach(
                 academyByFiltering -> distinctFilteredAcademies.add(

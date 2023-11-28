@@ -1,9 +1,7 @@
 package org.guzzing.studayserver.domain.review.model;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
@@ -34,18 +32,11 @@ public enum ReviewType {
         return selectedReviewMap;
     }
 
-    public static List<ReviewType> convertReviewMapToReviewList(final Map<ReviewType, Boolean> map) {
-        return map.entrySet().stream()
-                .filter(Entry::getValue)
-                .map(Entry::getKey)
-                .toList();
-    }
-
-    public static Map<ReviewType, Boolean> convertReviewListToReviewMap(final List<ReviewType> list) {
+    public static Map<ReviewType, Boolean> convertReviewListToReviewMap(final Map<String, Boolean> map) {
         return Arrays.stream(ReviewType.values())
                 .collect(Collectors.toMap(
                         reviewType -> reviewType,
-                        list::contains
+                        reviewType -> map.get(reviewType.name())
                 ));
     }
 

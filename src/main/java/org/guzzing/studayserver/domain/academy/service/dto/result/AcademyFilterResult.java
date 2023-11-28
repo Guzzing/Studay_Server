@@ -1,9 +1,8 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
-
-import java.util.List;
 
 public record AcademyFilterResult(
         Long academyId,

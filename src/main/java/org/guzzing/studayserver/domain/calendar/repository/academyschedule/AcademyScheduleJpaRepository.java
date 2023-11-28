@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
@@ -29,7 +28,7 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             AND ash.scheduleDate >= :startDateOfAttendanceToUpdate
             """)
     void deleteAfterUpdatedStartDate(@Param(value = "academyTimeTemplateId") Long academyTimeTemplateId,
-                                     @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
+            @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
 
     List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 

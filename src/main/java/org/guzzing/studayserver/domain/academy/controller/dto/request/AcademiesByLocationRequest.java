@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.academy.controller.dto.request;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 
 public record AcademiesByLocationRequest(
         @NotNull(message = "Latitude cannot be null")

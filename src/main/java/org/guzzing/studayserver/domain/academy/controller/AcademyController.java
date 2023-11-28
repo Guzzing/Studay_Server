@@ -55,7 +55,8 @@ public class AcademyController {
             @ModelAttribute @Valid AcademiesByLocationRequest request,
             @MemberId Long memberId
     ) {
-        AcademiesByLocationFacadeResult response = academyFacade.findByLocation(AcademiesByLocationRequest.to(request, memberId));
+        AcademiesByLocationFacadeResult response = academyFacade.findByLocation(
+                AcademiesByLocationRequest.to(request, memberId));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByLocationResponses.from(response));

@@ -10,4 +10,5 @@ public record DistinctFilteredAcademy(
         String shuttleAvailable,
         boolean isLiked
 ) {
+
 }
