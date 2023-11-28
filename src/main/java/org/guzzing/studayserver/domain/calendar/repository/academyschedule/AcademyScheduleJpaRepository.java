@@ -76,4 +76,8 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             + "AND ash.scheduleDate = :date")
     List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 
+    @Query("select ash.scheduleDate from AcademySchedule as ash" +
+                    " where ash.id = :scheduleId")
+    LocalDate findScheduleDate(@Param("scheduleId") Long scheduleId);
+
 }

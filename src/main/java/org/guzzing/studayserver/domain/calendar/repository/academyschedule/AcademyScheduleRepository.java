@@ -31,4 +31,6 @@ public interface AcademyScheduleRepository {
     List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
 
     Long findDashboardIdByAcademyScheduleId(Long academyScheduleId);
+
+    LocalDate findScheduleDate(Long scheduleId);
 }
