@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.child.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
@@ -11,6 +12,8 @@ import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
+import org.guzzing.studayserver.domain.member.annotation.ValidMember;
+import org.guzzing.studayserver.domain.member.annotation.ValidatedMemberId;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,9 +47,10 @@ public class ChildService {
     public Long create(ChildCreateParam param, Long memberId) {
         Member member = getMember(memberId);
 
-        Child child = new Child(param.nickname(), param.grade());
+        String defaultProfileImage = getDefaultProfileImageToChild(member);
+        Child child = new Child(param.nickname(), param.grade(), defaultProfileImage);
+
         child.assignToNewMemberOnly(member);
-        setDefaultProfileImageToChild(child);
 
         Child savedChild = childRepository.save(child);
         return savedChild.getId();
@@ -68,17 +72,17 @@ public class ChildService {
 
     @Transactional
     public void delete(ChildDeleteParam param) {
-        Member member = getMember(param.memberId());
+        Child child = childRepository.findByIdAndMemberId(param.childId(), param.memberId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
 
-        member.removeChild(param.childId());
+        childRepository.delete(child);
     }
 
     @Transactional
     public Long modify(ChildModifyParam param) {
-        Member member = getMember(param.memberId());
+        Child child = childRepository.findByIdAndMemberId(param.childId(), param.memberId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
 
-        Child child = member.findChild(param.childId())
-                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 아이입니다: " + param.childId()));
         child.update(param.nickname(), param.grade());
 
         return child.getId();
@@ -96,17 +100,13 @@ public class ChildService {
         return new ChildProfileImagePatchResult(childId, profileImageUri);
     }
 
-    private void setDefaultProfileImageToChild(final Child child) {
-        Member member = child.getMember();
+    private String getDefaultProfileImageToChild(final Member member) {
         final List<String> uris = member.getChildren()
                 .stream()
-                .filter(c -> !c.equals(child))
                 .map(Child::getProfileImageURIPath)
                 .toList();
 
-        final String defaultProfileImageURI = profileImageProvider.provideDefaultProfileImageURI(uris);
-
-        child.updateProfileImageUri(defaultProfileImageURI);
+        return  profileImageProvider.provideDefaultProfileImageURI(uris);
     }
 
     private Member getMember(Long memberId) {

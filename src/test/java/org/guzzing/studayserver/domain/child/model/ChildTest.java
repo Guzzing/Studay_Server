@@ -23,7 +23,7 @@ class ChildTest {
 
         @BeforeEach
         void setUp() {
-            child = new Child("아이 닉네임", "초등학교 1학년");
+            child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
             member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
         }
 
@@ -52,7 +52,7 @@ class ChildTest {
     @Test
     void update_success() {
         // Given
-        Child child = new Child("아이 닉네임", "초등학교 1학년");
+        Child child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
 
         String updatedNickname = "닉네임 수정";
         String updatedGrade = "초등학교 2학년";

@@ -43,10 +43,10 @@ class MemberTest {
     @Test
     void addChild_success() {
         // Given & When
-        Child child1 = new Child("child1", "중학교 1학년");
+        Child child1 = new Child("child1", "중학교 1학년", "imageUrl");
         child1.assignToNewMemberOnly(member);
 
-        Child child2 = new Child("child2", "중학교 2학년");
+        Child child2 = new Child("child2", "중학교 2학년", "imageUrl");
         child2.assignToNewMemberOnly(member);
 
         // Then
@@ -58,11 +58,11 @@ class MemberTest {
     void addChild_failure_exceedsLimit() {
         // Given
         for (int i = 0; i < 5; i++) {
-            Child child = new Child("child1", "중학교 1학년");
+            Child child = new Child("child1", "중학교 1학년", "imageUrl");
             child.assignToNewMemberOnly(member);
         }
 
-        Child exceededChild = new Child("child1", "중학교 1학년");
+        Child exceededChild = new Child("child1", "중학교 1학년", "imageUrl");
 
         // When & Then
         assertThatThrownBy(() -> exceededChild.assignToNewMemberOnly(member))
@@ -80,7 +80,7 @@ class MemberTest {
             Member member = new Member(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
 
             Long childId = 1L;
-            Child child = new Child("아이 닉네임", "초등학교 1학년");
+            Child child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
 
             Child spyChild = spy(child);
             spyChild.assignToNewMemberOnly(member);
