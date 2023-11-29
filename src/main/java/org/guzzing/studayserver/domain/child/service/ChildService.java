@@ -61,16 +61,14 @@ public class ChildService {
 
     @Transactional
     public void delete(ChildDeleteParam param) {
-        Child child = childRepository.findByIdAndMemberId(param.childId(), param.memberId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
+        Child child = getChildByIdAndMemberId(param.childId(), param.memberId());
 
         childRepository.delete(child);
     }
 
     @Transactional
     public Long modify(ChildModifyParam param) {
-        Child child = childRepository.findByIdAndMemberId(param.childId(), param.memberId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
+        Child child = getChildByIdAndMemberId(param.childId(), param.memberId());
 
         child.update(param.nickname(), param.grade());
 
@@ -89,6 +87,16 @@ public class ChildService {
         return new ChildProfileImagePatchResult(childId, profileImageUri);
     }
 
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
+    }
+
+    private Child getChildByIdAndMemberId(Long childId, Long memberId) {
+        return childRepository.findByIdAndMemberId(childId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
+    }
+
     private String getDefaultProfileImageToChild(final Member member) {
         final List<String> uris = member.getChildren()
                 .stream()
@@ -96,11 +104,6 @@ public class ChildService {
                 .toList();
 
         return profileImageProvider.provideDefaultProfileImageURI(uris);
-    }
-
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 멤버 아이디입니다: " + memberId));
     }
 
 }
