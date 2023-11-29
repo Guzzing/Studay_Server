@@ -6,11 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.stream.Stream;
+
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
@@ -427,36 +428,6 @@ class AcademyCalendarControllerTest {
                             Periodicity.WEEKLY.toString(),
                             null
                     )
-            );
-        }
-
-        private static Stream<AcademyCalendarDeleteRequest> provideInvalidDeleteRequests() {
-            return Stream.of(
-                    new AcademyCalendarDeleteRequest(
-                            null,
-                            1L,
-                            true,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            null,
-                            true,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            1L,
-                            null,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            1L,
-                            null,
-                            "2024515"
-                    )
-
             );
         }
 

@@ -20,15 +20,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/academy-schedules")
@@ -63,7 +55,7 @@ public class AcademyCalendarController {
             path = "/{academyScheduleId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademyCalendarLoadToUpdateResponse> loadTimeTemplateToUpdate(
-            @PathVariable @NotNull Long academyScheduleId) {
+            @PathVariable Long academyScheduleId) {
 
         AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
                 academyScheduleId);
@@ -90,12 +82,14 @@ public class AcademyCalendarController {
     }
 
     @DeleteMapping(
+            path = "/{scheduleId}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Void> deleteSchedule(
-            @RequestBody @Valid AcademyCalendarDeleteRequest academyCalendarDeleteRequest
+            @PathVariable Long scheduleId,
+            @RequestParam boolean isAllDeleted
     ) {
-        academyCalendarService.deleteSchedule(AcademyCalendarDeleteRequest.to(academyCalendarDeleteRequest));
+        academyCalendarService.deleteSchedule(AcademyCalendarDeleteRequest.to(scheduleId, isAllDeleted));
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
@@ -103,15 +97,16 @@ public class AcademyCalendarController {
     }
 
     @GetMapping(
-            path = "/detail",
+            path = "/detail/{scheduleId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<AcademyCalendarDetailResponse> getDetailSchedule(
+            @PathVariable Long scheduleId,
             @ModelAttribute AcademyCalendarDetailRequest academyCalendarDetailRequest
     ) {
         AcademyCalendarDetailFacadeResult calendarDetailInfo
                 = academyCalendarFacade.getCalendarDetailInfo(
-                AcademyCalendarDetailRequest.to(academyCalendarDetailRequest));
+                AcademyCalendarDetailRequest.to(scheduleId, academyCalendarDetailRequest));
 
         return ResponseEntity
                 .status(HttpStatus.OK)

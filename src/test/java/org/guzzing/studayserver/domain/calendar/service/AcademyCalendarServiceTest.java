@@ -21,7 +21,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDetailParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
@@ -36,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
 class AcademyCalendarServiceTest {
-
     @Autowired
     private AcademyCalendarService academyCalendarService;
 
@@ -56,7 +55,8 @@ class AcademyCalendarServiceTest {
     @DisplayName("대시보드를 통해 가져온 학원 일정 정보를 바탕으로 학원 스케줄을 생성하고 그 범위 이내에 올바르게 생성되는지 확인한다.")
     void createSchedules_success() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam =
+                AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
         RepeatPeriod fridayRepeatPeriod = AcademyCalenderFixture.fridayRepeatPeriod();
         RepeatPeriod mondayRepeatPeriod = AcademyCalenderFixture.mondayRepeatPeriod();
 
@@ -84,8 +84,8 @@ class AcademyCalendarServiceTest {
     void createOverlapSchedules_throwException() {
         //Given
         academyTimeTemplateRepository.save(AcademyCalenderFixture.overlapAcademyTimeTemplate());
-
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
 
         //When & Then
         assertThatThrownBy(
@@ -164,11 +164,12 @@ class AcademyCalendarServiceTest {
     @DisplayName("모든 일정에 대해서 일괄 수정을 진행한 결과가 의도한 일정 범위 내에 잘 만들어졌는지 확인한다.")
     void updateTimeTemplate_isAllUpdated() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam =
+                AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
 
         academyCalendarService.createSchedules(academyCalendarCreateParam);
         AcademyCalendarUpdateParam academyCalendarUpdateParam =
-                AcademyCalenderFixture.isAllUpdatedAcademyCalendarUpdateParam(academyCalendarCreateParam.dashboardId());
+                AcademyCalenderFixture.isAllUpdatedAcademyCalendarUpdateParam();
 
         //When
         academyCalendarService.updateTimeTemplate(academyCalendarUpdateParam);
@@ -185,18 +186,18 @@ class AcademyCalendarServiceTest {
         allAcademySchedules.forEach(academySchedule -> {
             assertThat(schedules).contains(academySchedule.getScheduleDate());
         });
-
     }
 
     @Test
     @DisplayName("해당 일 이후 수정된 스케줄 개수와 수정되지 않고 남은 스케줄의 개수가 전체 스케줄의 개수와 일치하는지 확인한다.")
     void updateTimeTemplate_afterUpdated() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+
         academyCalendarService.createSchedules(academyCalendarCreateParam);
         AcademyCalendarUpdateParam academyCalendarUpdateParam =
-                AcademyCalenderFixture.isNotAllUpdatedAcademyCalendarUpdateParam(
-                        academyCalendarCreateParam.dashboardId());
+                AcademyCalenderFixture.isNotAllUpdatedAcademyCalendarUpdateParam();
 
         //When
         academyCalendarService.updateTimeTemplate(academyCalendarUpdateParam);
@@ -223,7 +224,9 @@ class AcademyCalendarServiceTest {
     @DisplayName("해당 일자의 스케줄만 삭제하였을 때 기존에 남은 스케줄 개수에서 하나만 줄어들었는지 확인한다.")
     void deletedSchedule_isOnlyThatSchedule() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+
         AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(
                 academyCalendarCreateParam);
         Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
@@ -246,35 +249,40 @@ class AcademyCalendarServiceTest {
     @DisplayName("해당 일 이후 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
     void deletedSchedule_isAfterSchedule() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam =
+                AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
         AcademyCalendarCreateResults academyCalendarCreateResults = academyCalendarService.createSchedules(
                 academyCalendarCreateParam);
+
         Long timeTemplateId = academyCalendarCreateResults.academyTimeTemplateIds().get(0);
 
         List<AcademySchedule> academySchedules = academyScheduleRepository.findByAcademyTimeTemplateId(timeTemplateId);
         Long scheduleId = academySchedules.get(0).getId();
+
         AcademyCalendarDeleteParam academyCalendarDeleteParam =
                 AcademyCalenderFixture.isAfterAcademyCalendarDeleteParam(scheduleId);
 
-        //When
+
         academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
         List<AcademySchedule> isAfterDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
         isAfterDeletedScheduleAcademySchedules.forEach(
                 schedule -> assertThat(
-                        schedule.getScheduleDate().isBefore(academyCalendarDeleteParam.requestDate())).isTrue()
+                        schedule.getScheduleDate().isBefore(academySchedules.get(0).getScheduleDate())).isTrue()
         );
     }
 
     @Test
-    @DisplayName("해당 일 이후 삭제하는 경우 남은 스케줄의 일정이 해당일 이전으로 올바르게 남아있는지 확인한다.")
+    @DisplayName("대시보드에 삭제를 요청하는 경우  남은 스케줄의 일정이 요청일 이전으로 올바르게 남아있는지 확인한다.")
     void deletedScheduleByDashboard_isAfterSchedule() {
         //Given
-        AcademyCalendarCreateParam academyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam academyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
-        AcademyCalendarDeleteByDashboardParam param = AcademyCalenderFixture.academyCalendarDeleteByDashboardParam();
+        AcademyCalendarDeleteByDashboardParam param
+                = AcademyCalenderFixture.academyCalendarDeleteByDashboardParam();
 
         //When
         academyCalendarService.deleteSchedulesByDashboard(param);
@@ -293,20 +301,12 @@ class AcademyCalendarServiceTest {
         //Given
         LocalDate detailRequestedDate = LocalDate.of(2023, 11, 20);
 
-        AcademyCalendarCreateParam firstChildAcademyCalendarCreateParam = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+        AcademyCalendarCreateParam firstChildAcademyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
         AcademyCalendarCreateResults firstChildTimeTemplates = academyCalendarService.createSchedules(
                 firstChildAcademyCalendarCreateParam);
-        AcademyCalendarCreateParam secondChildAcademyCalendarCreateParam = AcademyCalenderFixture.secondChildAcademyCalenderCreateParam();
-        AcademyCalendarCreateResults secondChildTimeTemplates = academyCalendarService.createSchedules(
-                secondChildAcademyCalendarCreateParam);
 
         AcademyTimeTemplate firstChildMondayTimeTemplate = firstChildTimeTemplates.academyTimeTemplateIds()
-                .stream()
-                .filter(id -> academyTimeTemplateRepository.getById(id).getDayOfWeek() == DayOfWeek.MONDAY)
-                .map(id -> academyTimeTemplateRepository.getById(id))
-                .findFirst()
-                .get();
-        AcademyTimeTemplate secondChildMondayTimeTemplate = secondChildTimeTemplates.academyTimeTemplateIds()
                 .stream()
                 .filter(id -> academyTimeTemplateRepository.getById(id).getDayOfWeek() == DayOfWeek.MONDAY)
                 .map(id -> academyTimeTemplateRepository.getById(id))
@@ -315,55 +315,28 @@ class AcademyCalendarServiceTest {
 
         List<AcademySchedule> firstChildSchedules = academyScheduleRepository.findByAcademyTimeTemplateId(
                 firstChildMondayTimeTemplate.getId());
-        List<AcademySchedule> secondChildSchedules = academyScheduleRepository.findByAcademyTimeTemplateId(
-                secondChildMondayTimeTemplate.getId());
 
         Long firstChildScheduleId = firstChildSchedules.stream()
                 .filter(academySchedule -> academySchedule.getScheduleDate().equals(detailRequestedDate))
                 .map(academySchedule -> academySchedule.getId())
                 .findFirst()
                 .get();
-        Long secondChildScheduleId = secondChildSchedules.stream()
-                .filter(academySchedule -> academySchedule.getScheduleDate().equals(detailRequestedDate))
-                .map(academySchedule -> academySchedule.getId())
-                .findFirst()
-                .get();
 
         AcademyCalendarDetailParam academyCalendarDetailParam = new AcademyCalendarDetailParam(
-                List.of(new AcademyCalendarDetailParam.ChildrenSchedule(firstChildAcademyCalendarCreateParam.childId(),
-                                firstChildScheduleId),
-                        new AcademyCalendarDetailParam.ChildrenSchedule(secondChildAcademyCalendarCreateParam.childId(),
-                                secondChildScheduleId))
-        );
+               firstChildAcademyCalendarCreateParam.childId(),firstChildScheduleId);
 
         //When
-        AcademyCalendarDetailResults academyCalendarDetailResults = academyCalendarService.detailSchedules(
+        AcademyCalendarDetailResult academyCalendarDetailResult = academyCalendarService.detailSchedules(
                 academyCalendarDetailParam);
 
         //Then
-        AcademyCalendarDetailResults.AcademyCalendarDetailResult firstChildAcademyCalendarDetailResult
-                = academyCalendarDetailResults
-                .academyCalendarDetailResults()
-                .get(firstChildAcademyCalendarCreateParam.childId());
-        assertThat(firstChildAcademyCalendarDetailResult.dashboardId()).isEqualTo(
+        assertThat(academyCalendarDetailResult.dashboardId()).isEqualTo(
                 firstChildMondayTimeTemplate.getDashboardId());
-        assertThat(firstChildAcademyCalendarDetailResult.memo()).isEqualTo(firstChildMondayTimeTemplate.getMemo());
-        assertThat(firstChildAcademyCalendarDetailResult.lessonStartTime()).isEqualTo(
+        assertThat(academyCalendarDetailResult.memo()).isEqualTo(firstChildMondayTimeTemplate.getMemo());
+        assertThat(academyCalendarDetailResult.lessonStartTime()).isEqualTo(
                 firstChildSchedules.get(0).getLessonStartTime());
-        assertThat(firstChildAcademyCalendarDetailResult.lessonEndTime()).isEqualTo(
+        assertThat(academyCalendarDetailResult.lessonEndTime()).isEqualTo(
                 firstChildSchedules.get(0).getLessonEndTime());
-
-        AcademyCalendarDetailResults.AcademyCalendarDetailResult secondChildAcademyCalendarDetailResult
-                = academyCalendarDetailResults
-                .academyCalendarDetailResults()
-                .get(secondChildAcademyCalendarCreateParam.childId());
-        assertThat(secondChildAcademyCalendarDetailResult.dashboardId()).isEqualTo(
-                secondChildMondayTimeTemplate.getDashboardId());
-        assertThat(secondChildAcademyCalendarDetailResult.memo()).isEqualTo(secondChildMondayTimeTemplate.getMemo());
-        assertThat(secondChildAcademyCalendarDetailResult.lessonStartTime()).isEqualTo(
-                secondChildSchedules.get(0).getLessonStartTime());
-        assertThat(secondChildAcademyCalendarDetailResult.lessonEndTime()).isEqualTo(
-                secondChildSchedules.get(0).getLessonEndTime());
     }
 
 }
