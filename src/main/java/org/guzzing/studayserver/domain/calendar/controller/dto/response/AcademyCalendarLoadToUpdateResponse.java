@@ -9,6 +9,7 @@ public record AcademyCalendarLoadToUpdateResponse(
         Long childId,
         Long academyId,
         Long lessonId,
+        Long dashboardId,
         List<LessonScheduleLoadToUpdateResponse> lessonSchedule,
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
@@ -21,6 +22,7 @@ public record AcademyCalendarLoadToUpdateResponse(
                 result.childId(),
                 result.academyId(),
                 result.lessonId(),
+                result.dashboardId(),
                 result.lessonScheduleAccessResults().stream()
                         .map(lessonScheduleAccessResult ->
                                 LessonScheduleLoadToUpdateResponse.from(lessonScheduleAccessResult))
