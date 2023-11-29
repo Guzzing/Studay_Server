@@ -52,7 +52,6 @@ public class AcademyService {
         this.academyCategoryRepository = academyCategoryRepository;
     }
 
-    //캐시 이용하기(지금 상황에서는 백오피스가 없기 때문에 3달에 한 번 업데이트 되기 때문에 가능)
     @Transactional(readOnly = true)
     public AcademyGetResult getAcademy(Long academyId, Long memberId) {
         return AcademyGetResult.from(
@@ -83,19 +82,6 @@ public class AcademyService {
                 academiesByLocation);
 
         return AcademiesByLocationResults.to(academyIdWithCategories, distinctFilteredAcademies);
-    }
-
-    private Map<Long, List<Long>> makePairsAcademyWithCategoryId(List<AcademiesByLocation> academiesByLocation) {
-        Map<Long, List<Long>> academiesWithCategoryIds = new HashMap<>();
-        academiesByLocation.
-                stream()
-                .map(academyByLocation -> academyByLocation.academyId())
-                .forEach(academyId ->
-                        academiesWithCategoryIds.put(academyId,
-                                academyCategoryRepository.findCategoryIdsByAcademyId(academyId))
-                );
-
-        return academiesWithCategoryIds;
     }
 
     @Transactional(readOnly = true)
