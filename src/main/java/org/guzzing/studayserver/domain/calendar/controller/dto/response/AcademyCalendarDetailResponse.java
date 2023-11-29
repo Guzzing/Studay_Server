@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
@@ -10,7 +9,7 @@ public record AcademyCalendarDetailResponse(
         String date,
         AcademyInfoResponseAboutScheduleDetail academyInfo,
         LessonInfoResponse lessonInfo,
-        List<ChildInfoResponse> childrenInfos,
+        ChildInfoResponse childrenInfo,
         List<String> categories
 ) {
 
@@ -22,14 +21,12 @@ public record AcademyCalendarDetailResponse(
                 AcademyInfoResponseAboutScheduleDetail.from(
                         academyCalendarDetailFacadeResult.academyInfoAboutScheduleDetail()),
                 LessonInfoResponse.from(academyCalendarDetailFacadeResult.lessonInfo()),
-                academyCalendarDetailFacadeResult.childrenInfos().stream()
-                        .map(childInfo -> new ChildInfoResponse(
-                                childInfo.childId(),
-                                childInfo.childName(),
-                                childInfo.imageUrl(),
-                                childInfo.memo(),
-                                childInfo.dashBoardId()))
-                        .toList(),
+               new ChildInfoResponse(
+                       academyCalendarDetailFacadeResult.childrenInfo().childId(),
+                               academyCalendarDetailFacadeResult.childrenInfo().childName(),
+                       academyCalendarDetailFacadeResult.childrenInfo().imageUrl(),
+                       academyCalendarDetailFacadeResult.childrenInfo().memo(),
+                       academyCalendarDetailFacadeResult.childrenInfo().dashBoardId()),
                 academyCalendarDetailFacadeResult.categories()
         );
     }
@@ -52,7 +49,7 @@ public record AcademyCalendarDetailResponse(
             String lessonName,
             Integer capacity,
             Long totalFee,
-            List<LessonTimeResponse> lessonTimes,
+            LessonTimeResponse lessonTimes,
             Periodicity periodicity
     ) {
 
@@ -61,17 +58,15 @@ public record AcademyCalendarDetailResponse(
                     lessonInfo.lessonName(),
                     lessonInfo.capacity(),
                     lessonInfo.totalFee(),
-                    lessonInfo.lessonTimes().stream()
-                            .map(lessonTime -> new LessonTimeResponse(
-                                    lessonTime.startTime(), lessonTime.endTime()))
-                            .toList(),
-                    lessonInfo.periodicity()
-            );
+                     new LessonTimeResponse(
+                             lessonInfo.lessonTimes().startTime(),
+                             lessonInfo.lessonTimes().endTime()),
+                    Periodicity.WEEKLY);
         }
 
         public record LessonTimeResponse(
-                LocalTime startTime,
-                LocalTime endTime
+                String startTime,
+                String endTime
         ) {
 
         }

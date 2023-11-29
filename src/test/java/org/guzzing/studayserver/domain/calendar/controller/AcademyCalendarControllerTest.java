@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
