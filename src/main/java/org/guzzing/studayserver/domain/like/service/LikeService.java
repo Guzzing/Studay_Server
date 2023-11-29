@@ -9,6 +9,8 @@ import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikedAcademyFeeInfo;
+import org.guzzing.studayserver.domain.member.annotation.ValidMember;
+import org.guzzing.studayserver.domain.member.annotation.ValidatedMemberId;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.global.exception.LikeException;
 import org.springframework.stereotype.Service;
@@ -50,10 +52,15 @@ public class LikeService {
     }
 
     @Transactional
-    public void removeLikeOfAcademy(final Long likeId, final Long memberId) {
+    public void removeLike(final Long likeId, final Long memberId) {
         memberAccessService.validateMember(memberId);
 
         likeRepository.deleteById(likeId);
+    }
+
+    @ValidMember
+    public void deleteLikeOfAcademy(final Long academyId, @ValidatedMemberId final Long memberId) {
+        likeRepository.deleteByAcademyId(academyId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {

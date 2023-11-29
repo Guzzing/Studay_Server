@@ -7,6 +7,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Component;
 
@@ -39,4 +40,5 @@ public class ValidMemberAspect {
                     .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
         }
     }
+
 }

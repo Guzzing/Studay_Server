@@ -9,6 +9,8 @@ public interface LikeRepository {
 
     void deleteById(final Long likeId);
 
+    void deleteByAcademyId(final Long academyId);
+
     boolean existsById(final Long id);
 
     List<Like> findByMemberId(final Long memberId);
