@@ -1,12 +1,19 @@
 package org.guzzing.studayserver.domain.dashboard.service.converter;
 
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_MANAGEMENT;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.KINDNESS;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.LOVELY_TEACHING;
+import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.SHUTTLE_AVAILABILITY;
+
 import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.DashboardSchedule;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
@@ -23,7 +30,7 @@ public class DashboardServiceConverter {
                 param.lessonId(),
                 convertToDashboardSchedules(param.scheduleInfos()),
                 convertToFeeInfo(param.paymentInfo()),
-                convertToSelectedSimpleMemoTypes(param.simpleMemoTypeMap()),
+                convertToSimpleMemoMap(param.simpleMemo()),
                 false,
                 false);
     }
@@ -36,7 +43,7 @@ public class DashboardServiceConverter {
                 entity.getLessonId(),
                 convertToScheduleInfos(entity.getDashboardSchedules()),
                 convertToPaymentInfo(entity.getFeeInfo()),
-                convertToSimpleMemoTypeMap(entity.getSimpleMemoTypes()),
+                convertToSimpleMemo(entity.getSimpleMemo()),
                 entity.isActive(),
                 entity.isDeleted());
     }
@@ -50,8 +57,14 @@ public class DashboardServiceConverter {
                 paymentInfo.paymentDay());
     }
 
-    public List<SimpleMemoType> convertToSelectedSimpleMemoTypes(final Map<SimpleMemoType, Boolean> map) {
-        return SimpleMemoType.getSelectedSimpleMemos(map);
+    public Map<String, Boolean> convertToSimpleMemoMap(final SimpleMemo simpleMemo) {
+        return Map.of(
+                KINDNESS.getType(), simpleMemo.kindness(),
+                GOOD_FACILITY.getType(), simpleMemo.goodFacility(),
+                CHEAP_FEE.getType(), simpleMemo.cheapFee(),
+                GOOD_MANAGEMENT.getType(), simpleMemo.goodManagement(),
+                LOVELY_TEACHING.getType(), simpleMemo.lovelyTeaching(),
+                SHUTTLE_AVAILABILITY.getType(), simpleMemo.shuttleAvailability());
     }
 
     private List<DashboardSchedule> convertToDashboardSchedules(final ScheduleInfos scheduleInfos) {
@@ -89,8 +102,14 @@ public class DashboardServiceConverter {
                 feeInfo.getPaymentDay());
     }
 
-    private Map<SimpleMemoType, Boolean> convertToSimpleMemoTypeMap(final List<SimpleMemoType> simpleMemoTypes) {
-        return SimpleMemoType.convertToSimpleMemoMap(simpleMemoTypes);
+    private SimpleMemo convertToSimpleMemo(final Map<String, Boolean> map) {
+        return new SimpleMemo(
+                map.get(KINDNESS.getType()),
+                map.get(GOOD_FACILITY.getType()),
+                map.get(CHEAP_FEE.getType()),
+                map.get(GOOD_MANAGEMENT.getType()),
+                map.get(LOVELY_TEACHING.getType()),
+                map.get(SHUTTLE_AVAILABILITY.getType()));
     }
 
 }

@@ -3,8 +3,10 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import org.guzzing.studayserver.domain.academy.model.*;
+import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
+import org.guzzing.studayserver.domain.academy.model.Lesson;
+import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;

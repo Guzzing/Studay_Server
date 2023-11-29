@@ -6,7 +6,6 @@ import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_MANAG
 import static org.guzzing.studayserver.domain.review.model.ReviewType.KINDNESS;
 import static org.guzzing.studayserver.domain.review.model.ReviewType.LOVELY_TEACHING;
 
-import java.util.List;
 import java.util.Map;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
@@ -23,18 +22,17 @@ public record ReviewPostResult(
 ) {
 
     public static ReviewPostResult from(final Review entity) {
-        List<ReviewType> reviewTypes = entity.getReviewTypes();
-        Map<ReviewType, Boolean> reviewMap = ReviewType.convertReviewListToReviewMap(reviewTypes);
+        final Map<ReviewType, Boolean> reviewType = ReviewType.convertReviewListToReviewMap(entity.getReviewType());
 
         return new ReviewPostResult(
                 entity.getId(),
                 entity.getMemberId(),
                 entity.getAcademyId(),
-                reviewMap.get(KINDNESS),
-                reviewMap.get(CHEAP_FEE),
-                reviewMap.get(GOOD_FACILITY),
-                reviewMap.get(GOOD_MANAGEMENT),
-                reviewMap.get(LOVELY_TEACHING));
+                reviewType.get(KINDNESS),
+                reviewType.get(CHEAP_FEE),
+                reviewType.get(GOOD_FACILITY),
+                reviewType.get(GOOD_MANAGEMENT),
+                reviewType.get(LOVELY_TEACHING));
     }
 
 }

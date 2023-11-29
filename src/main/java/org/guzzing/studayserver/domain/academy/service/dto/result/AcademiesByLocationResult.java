@@ -1,9 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 
 public record AcademiesByLocationResult(
         Long academyId,
@@ -17,7 +15,8 @@ public record AcademiesByLocationResult(
         boolean isLiked
 ) {
 
-    public static AcademiesByLocationResult from(DistinctFilteredAcademy distinctFilteredAcademy, List<String> categories) {
+    public static AcademiesByLocationResult from(DistinctFilteredAcademy distinctFilteredAcademy,
+            List<String> categories) {
         return new AcademiesByLocationResult(
                 distinctFilteredAcademy.academyId(),
                 distinctFilteredAcademy.academyName(),

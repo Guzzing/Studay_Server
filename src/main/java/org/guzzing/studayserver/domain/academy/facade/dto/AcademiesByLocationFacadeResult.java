@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.academy.facade.dto;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
-
-import java.util.List;
 
 public record AcademiesByLocationFacadeResult(
         List<AcademyByLocationFacadeResult> academiesByLocationResults,
@@ -37,6 +36,7 @@ public record AcademiesByLocationFacadeResult(
             String shuttleAvailable,
             boolean isLiked
     ) {
+
         public static AcademyByLocationFacadeResult from(AcademiesByLocationResult result) {
             return new AcademyByLocationFacadeResult(
                     result.academyId(),

@@ -286,7 +286,7 @@ class DashboardRestControllerTest {
                                                         .description("강의 분야 구분"),
                                                 fieldWithPath("lessonInfo").type(OBJECT).description("수업 정보"),
                                                 fieldWithPath("lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
-                                                fieldWithPath("lessonInfo.subject").type(STRING).description("수업 과목"),
+                                                fieldWithPath("lessonInfo.curriculum").type(STRING).description("수업 과목"),
                                                 fieldWithPath("lessonInfo.capacity").type(NUMBER).description("수업 정원"),
                                                 fieldWithPath("lessonInfo.duration").type(STRING).description("강의 기간"),
                                                 fieldWithPath("lessonInfo.totalFee").type(NUMBER).description("총 수강료"),
@@ -402,7 +402,7 @@ class DashboardRestControllerTest {
                                                 fieldWithPath("responses[].lessonInfo").type(OBJECT).description("수업 정보"),
                                                 fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER)
                                                         .description("수업 아이디"),
-                                                fieldWithPath("responses[].lessonInfo.subject").type(STRING)
+                                                fieldWithPath("responses[].lessonInfo.curriculum").type(STRING)
                                                         .description("수업 과목"),
                                                 fieldWithPath("responses[].lessonInfo.capacity").type(NUMBER)
                                                         .description("수업 정원"),

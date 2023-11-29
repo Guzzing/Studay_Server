@@ -6,6 +6,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,11 +15,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
 import org.guzzing.studayserver.global.exception.DashboardException;
+import org.hibernate.annotations.Type;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -47,8 +49,9 @@ public class Dashboard {
     @Embedded
     private FeeInfo feeInfo;
 
-    @Column(name = "simple_memos", nullable = false)
-    private List<SimpleMemoType> simpleMemoTypes;
+    @Type(JsonType.class)
+    @Column(name = "simple_memo", nullable = false, columnDefinition = "LONGTEXT")
+    private Map<String, Boolean> simpleMemo;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
@@ -62,7 +65,7 @@ public class Dashboard {
             final Long lessonId,
             final List<DashboardSchedule> dashboardSchedules,
             final FeeInfo feeInfo,
-            final List<SimpleMemoType> simpleMemoTypes,
+            final Map<String, Boolean> simpleMemo,
             final boolean isActive,
             final boolean isDeleted
     ) {
@@ -73,7 +76,7 @@ public class Dashboard {
         this.lessonId = lessonId;
         this.dashboardSchedules = dashboardSchedules;
         this.feeInfo = feeInfo;
-        this.simpleMemoTypes = simpleMemoTypes;
+        this.simpleMemo = simpleMemo;
         this.isActive = isActive;
         this.isDeleted = isDeleted;
     }
@@ -96,8 +99,8 @@ public class Dashboard {
         return this;
     }
 
-    public Dashboard updateSimpleMemo(final List<SimpleMemoType> simpleMemoTypes) {
-        this.simpleMemoTypes = simpleMemoTypes;
+    public Dashboard updateSimpleMemo(final Map<String, Boolean> simpleMemo) {
+        this.simpleMemo = simpleMemo;
         return this;
     }
 

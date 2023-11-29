@@ -4,7 +4,6 @@ import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SI
 
 import java.util.List;
 import java.util.Optional;
-
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
@@ -46,7 +45,7 @@ public class RegionService {
 
     public RegionResult findRegionContainingPoint(final Point point) {
         Optional<Region> region1 =
-                regionRepository.findBySidoAndSigunguAndUpmyeondong("경기도","수원시 장안구","파장동");
+                regionRepository.findBySidoAndSigunguAndUpmyeondong("경기도", "수원시 장안구", "파장동");
 
         return RegionResult.from(region1.get());
     }

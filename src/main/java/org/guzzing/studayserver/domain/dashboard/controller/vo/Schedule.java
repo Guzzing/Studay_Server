@@ -1,16 +1,16 @@
 package org.guzzing.studayserver.domain.dashboard.controller.vo;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import org.guzzing.studayserver.global.exception.DashboardException;
 
 public record Schedule(
-        Integer dayOfWeek,
-        String startTime,
-        String endTime
-//        반복 주기 매주로 고정
-//        , String repeatance
+        @Positive Integer dayOfWeek,
+        @NotNull String startTime,
+        @NotNull String endTime
 ) {
 
     public Schedule {

@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.dashboard.service.dto.response;
 
-import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
-import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 
 public record DashboardResult(
@@ -12,7 +11,7 @@ public record DashboardResult(
         long lessonId,
         ScheduleInfos scheduleInfos,
         PaymentInfo paymentInfo,
-        Map<SimpleMemoType, Boolean> simpleMemoTypeMap,
+        SimpleMemo simpleMemo,
         boolean isActive,
         boolean isDeleted
 ) {

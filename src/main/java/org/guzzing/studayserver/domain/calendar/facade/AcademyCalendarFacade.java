@@ -18,7 +18,7 @@ public class AcademyCalendarFacade {
     private final AcademyCalendarService academyCalendarService;
 
     public AcademyCalendarFacade(AcademyAccessService academyService, ChildAccessService childService,
-                                 AcademyCalendarService academyCalendarService) {
+            AcademyCalendarService academyCalendarService) {
         this.academyService = academyService;
         this.childService = childService;
         this.academyCalendarService = academyCalendarService;

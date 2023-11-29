@@ -8,10 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-
 import lombok.Getter;
 
 @Getter

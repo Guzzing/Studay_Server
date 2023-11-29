@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 
 public record AcademyGetResponse(
         String academyName,

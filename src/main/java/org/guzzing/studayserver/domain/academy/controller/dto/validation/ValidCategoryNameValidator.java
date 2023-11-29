@@ -2,10 +2,9 @@ package org.guzzing.studayserver.domain.academy.controller.dto.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
-
 import java.util.Arrays;
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 public class ValidCategoryNameValidator implements ConstraintValidator<ValidCategoryName, List<String>> {
 

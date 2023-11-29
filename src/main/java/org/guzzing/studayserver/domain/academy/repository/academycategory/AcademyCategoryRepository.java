@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.academy.repository.academycategory;
 
-import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 
 public interface AcademyCategoryRepository {
 

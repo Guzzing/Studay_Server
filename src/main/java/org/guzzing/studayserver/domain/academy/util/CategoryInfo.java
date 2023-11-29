@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.academy.util;
 
-import lombok.Getter;
-
 import java.util.Arrays;
+import lombok.Getter;
 
 @Getter
 public enum CategoryInfo {
