@@ -21,7 +21,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDetailParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
@@ -31,10 +31,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
+@ActiveProfiles({"dev","oauth"})
 class AcademyCalendarServiceTest {
     @Autowired
     private AcademyCalendarService academyCalendarService;
@@ -306,18 +308,7 @@ class AcademyCalendarServiceTest {
         AcademyCalendarCreateResults firstChildTimeTemplates = academyCalendarService.createSchedules(
                 firstChildAcademyCalendarCreateParam);
 
-        AcademyCalendarCreateParam secondChildAcademyCalendarCreateParam
-                = AcademyCalenderFixture.secondChildAcademyCalenderCreateParam();
-        AcademyCalendarCreateResults secondChildTimeTemplates = academyCalendarService.createSchedules(
-                secondChildAcademyCalendarCreateParam);
-
         AcademyTimeTemplate firstChildMondayTimeTemplate = firstChildTimeTemplates.academyTimeTemplateIds()
-                .stream()
-                .filter(id -> academyTimeTemplateRepository.getById(id).getDayOfWeek() == DayOfWeek.MONDAY)
-                .map(id -> academyTimeTemplateRepository.getById(id))
-                .findFirst()
-                .get();
-        AcademyTimeTemplate secondChildMondayTimeTemplate = secondChildTimeTemplates.academyTimeTemplateIds()
                 .stream()
                 .filter(id -> academyTimeTemplateRepository.getById(id).getDayOfWeek() == DayOfWeek.MONDAY)
                 .map(id -> academyTimeTemplateRepository.getById(id))
@@ -326,55 +317,28 @@ class AcademyCalendarServiceTest {
 
         List<AcademySchedule> firstChildSchedules = academyScheduleRepository.findByAcademyTimeTemplateId(
                 firstChildMondayTimeTemplate.getId());
-        List<AcademySchedule> secondChildSchedules = academyScheduleRepository.findByAcademyTimeTemplateId(
-                secondChildMondayTimeTemplate.getId());
 
         Long firstChildScheduleId = firstChildSchedules.stream()
                 .filter(academySchedule -> academySchedule.getScheduleDate().equals(detailRequestedDate))
                 .map(academySchedule -> academySchedule.getId())
                 .findFirst()
                 .get();
-        Long secondChildScheduleId = secondChildSchedules.stream()
-                .filter(academySchedule -> academySchedule.getScheduleDate().equals(detailRequestedDate))
-                .map(academySchedule -> academySchedule.getId())
-                .findFirst()
-                .get();
 
         AcademyCalendarDetailParam academyCalendarDetailParam = new AcademyCalendarDetailParam(
-                List.of(new AcademyCalendarDetailParam.ChildrenSchedule(firstChildAcademyCalendarCreateParam.childId(),
-                                firstChildScheduleId),
-                        new AcademyCalendarDetailParam.ChildrenSchedule(secondChildAcademyCalendarCreateParam.childId(),
-                                secondChildScheduleId))
-        );
+               firstChildAcademyCalendarCreateParam.childId(),firstChildScheduleId);
 
         //When
-        AcademyCalendarDetailResults academyCalendarDetailResults = academyCalendarService.detailSchedules(
+        AcademyCalendarDetailResult academyCalendarDetailResult = academyCalendarService.detailSchedules(
                 academyCalendarDetailParam);
 
         //Then
-        AcademyCalendarDetailResults.AcademyCalendarDetailResult firstChildAcademyCalendarDetailResult
-                = academyCalendarDetailResults
-                .academyCalendarDetailResults()
-                .get(firstChildAcademyCalendarCreateParam.childId());
-        assertThat(firstChildAcademyCalendarDetailResult.dashboardId()).isEqualTo(
+        assertThat(academyCalendarDetailResult.dashboardId()).isEqualTo(
                 firstChildMondayTimeTemplate.getDashboardId());
-        assertThat(firstChildAcademyCalendarDetailResult.memo()).isEqualTo(firstChildMondayTimeTemplate.getMemo());
-        assertThat(firstChildAcademyCalendarDetailResult.lessonStartTime()).isEqualTo(
+        assertThat(academyCalendarDetailResult.memo()).isEqualTo(firstChildMondayTimeTemplate.getMemo());
+        assertThat(academyCalendarDetailResult.lessonStartTime()).isEqualTo(
                 firstChildSchedules.get(0).getLessonStartTime());
-        assertThat(firstChildAcademyCalendarDetailResult.lessonEndTime()).isEqualTo(
+        assertThat(academyCalendarDetailResult.lessonEndTime()).isEqualTo(
                 firstChildSchedules.get(0).getLessonEndTime());
-
-        AcademyCalendarDetailResults.AcademyCalendarDetailResult secondChildAcademyCalendarDetailResult
-                = academyCalendarDetailResults
-                .academyCalendarDetailResults()
-                .get(secondChildAcademyCalendarCreateParam.childId());
-        assertThat(secondChildAcademyCalendarDetailResult.dashboardId()).isEqualTo(
-                secondChildMondayTimeTemplate.getDashboardId());
-        assertThat(secondChildAcademyCalendarDetailResult.memo()).isEqualTo(secondChildMondayTimeTemplate.getMemo());
-        assertThat(secondChildAcademyCalendarDetailResult.lessonStartTime()).isEqualTo(
-                secondChildSchedules.get(0).getLessonStartTime());
-        assertThat(secondChildAcademyCalendarDetailResult.lessonEndTime()).isEqualTo(
-                secondChildSchedules.get(0).getLessonEndTime());
     }
 
 }
