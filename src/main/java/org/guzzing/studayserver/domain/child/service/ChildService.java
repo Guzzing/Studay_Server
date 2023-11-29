@@ -35,14 +35,7 @@ public class ChildService {
         this.childRepository = childRepository;
         this.profileImageProvider = profileImageProvider;
     }
-
-    @Transactional
-    @Scheduled(cron = "0 0 0 1 1 *")
-    public void increaseGrade() {
-        childRepository.findAll()
-                .forEach(Child::increaseGrade);
-    }
-
+    
     @Transactional
     public Long create(ChildCreateParam param, Long memberId) {
         Member member = getMember(memberId);
