@@ -44,9 +44,9 @@ public class DashboardAccessServiceImpl implements DashboardAccessService {
                 .toList();
 
         return new DashboardScheduleAccessResult(
-                getChildNickName(result.childId()),
-                getAcademyName(result.academyId()),
-                getLessonSubject(result.lessonId()),
+                result.childId(),
+                result.academyId(),
+                result.lessonId(),
                 Periodicity.WEEKLY,
                 schedules);
     }
