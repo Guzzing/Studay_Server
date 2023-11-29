@@ -176,9 +176,9 @@ public class AcademyCalenderFixture {
 
     public static DashboardScheduleAccessResult dashboardScheduleAccessResult() {
         return new DashboardScheduleAccessResult(
-                "빵빵이",
-                "김별 언어학원",
-                "Java는 무엇일까?",
+                1L,
+                1L,
+                1L,
                 WEEKLY_PERIODICITY,
                 List.of(
                         new LessonScheduleAccessResult(

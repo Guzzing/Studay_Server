@@ -7,6 +7,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
@@ -125,10 +126,11 @@ class AcademyCalendarServiceTest {
                 academyScheduleId);
 
         //Then
-        assertThat(academyCalendarLoadToUpdateResult.academyName()).isEqualTo(
-                mockDashboardScheduleAccessResult.academyName());
-        assertThat(academyCalendarLoadToUpdateResult.lessonName()).isEqualTo(
-                mockDashboardScheduleAccessResult.lessonName());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        assertThat(academyCalendarLoadToUpdateResult.academyId()).isEqualTo(
+                mockDashboardScheduleAccessResult.academyId());
+        assertThat(academyCalendarLoadToUpdateResult.lessonId()).isEqualTo(
+                mockDashboardScheduleAccessResult.lessonId());
         assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
                 savedFridayAcademyTimeTemplate.getStartDateOfAttendance());
         assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
@@ -146,16 +148,16 @@ class AcademyCalendarServiceTest {
                 .forEach(lessonScheduleAccessResult -> {
                     if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.MONDAY) {
                         assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
-                                savedMondayAcademySchedule.getLessonEndTime());
+                                savedMondayAcademySchedule.getLessonEndTime().format(timeFormatter));
                         assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
-                                savedMondayAcademySchedule.getLessonStartTime());
+                                savedMondayAcademySchedule.getLessonStartTime().format(timeFormatter));
                     }
 
                     if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.FRIDAY) {
                         assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
-                                savedFridayAcademySchedule.getLessonEndTime());
+                                savedFridayAcademySchedule.getLessonEndTime().format(timeFormatter));
                         assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
-                                savedFridayAcademySchedule.getLessonStartTime());
+                                savedFridayAcademySchedule.getLessonStartTime().format(timeFormatter));
                     }
                 });
     }
