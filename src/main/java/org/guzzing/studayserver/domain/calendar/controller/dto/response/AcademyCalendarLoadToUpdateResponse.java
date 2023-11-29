@@ -36,17 +36,24 @@ public record AcademyCalendarLoadToUpdateResponse(
 
     public record LessonScheduleLoadToUpdateResponse(
             DayOfWeek dayOfWeek,
-            String lessonStartTime,
-            String lessonEndTime
+            LessonTime lessonTime
     ) {
 
         public static LessonScheduleLoadToUpdateResponse from(
                 AcademyCalendarLoadToUpdateResult.LessonScheduleInfo result) {
             return new LessonScheduleLoadToUpdateResponse(
                     result.dayOfWeek(),
+                    new LessonTime(
                     result.lessonStartTime(),
-                    result.lessonEndTime()
+                    result.lessonEndTime())
             );
+        }
+
+        public record LessonTime (
+                String lessonStartTime,
+                String lessonEndTime
+        ) {
+
         }
     }
 }
