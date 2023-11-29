@@ -17,7 +17,8 @@ public record AcademyCalendarDetailFacadeResult(
         List<String> categories
 ) {
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)", Locale.KOREAN);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)",
+            Locale.KOREAN);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public static AcademyCalendarDetailFacadeResult from(

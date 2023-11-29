@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
 class AcademyCalendarServiceTest {
+
     @Autowired
     private AcademyCalendarService academyCalendarService;
 
@@ -264,7 +265,6 @@ class AcademyCalendarServiceTest {
         AcademyCalendarDeleteParam academyCalendarDeleteParam =
                 AcademyCalenderFixture.isAfterAcademyCalendarDeleteParam(scheduleId);
 
-
         academyCalendarService.deleteSchedule(academyCalendarDeleteParam);
         List<AcademySchedule> isAfterDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
 
@@ -325,7 +325,7 @@ class AcademyCalendarServiceTest {
                 .get();
 
         AcademyCalendarDetailParam academyCalendarDetailParam = new AcademyCalendarDetailParam(
-               firstChildAcademyCalendarCreateParam.childId(),firstChildScheduleId);
+                firstChildAcademyCalendarCreateParam.childId(), firstChildScheduleId);
 
         //When
         AcademyCalendarDetailResult academyCalendarDetailResult = academyCalendarService.detailSchedules(

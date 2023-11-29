@@ -21,6 +21,7 @@ public record AcademyCalendarLoadToUpdateResult(
 ) {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
     public static AcademyCalendarLoadToUpdateResult of(
             AcademyTimeTemplate academyTimeTemplate,
             DashboardScheduleAccessResult dashboardScheduleAccessResult
@@ -46,6 +47,7 @@ public record AcademyCalendarLoadToUpdateResult(
             String lessonStartTime,
             String lessonEndTime
     ) {
+
         public static LessonScheduleInfo from(LessonScheduleAccessResult lessonScheduleAccessResult) {
             return new LessonScheduleInfo(
                     lessonScheduleAccessResult.dayOfWeek(),
