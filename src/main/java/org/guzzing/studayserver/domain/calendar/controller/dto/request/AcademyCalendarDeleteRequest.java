@@ -6,6 +6,7 @@ public record AcademyCalendarDeleteRequest(
         Long academyScheduleId,
         Boolean isAllDeleted
 ) {
+
     public static AcademyCalendarDeleteParam to(Long academyScheduleId, boolean isAllDeleted) {
         return new AcademyCalendarDeleteParam(
                 academyScheduleId,

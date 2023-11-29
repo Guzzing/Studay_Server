@@ -6,6 +6,7 @@ public record AcademyCalendarDetailRequest(
         Long lessonId,
         Long childId
 ) {
+
     public AcademyCalendarDetailRequest {
         isValidId(lessonId);
         isValidId(childId);
