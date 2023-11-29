@@ -1,34 +1,34 @@
 package org.guzzing.studayserver.domain.calendar.facade.dto;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
 
 public record AcademyCalendarDetailFacadeResult(
         String date,
         AcademyInfoAboutScheduleDetail academyInfoAboutScheduleDetail,
         LessonInfo lessonInfo,
-        List<FacadeChildInfo> childrenInfos,
+        FacadeChildInfo childrenInfo,
         List<String> categories
 ) {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)", Locale.KOREAN);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd (E)", Locale.KOREAN);
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public static AcademyCalendarDetailFacadeResult from(
             AcademyAndLessonDetailResult academyAndLessonDetailResult,
-            List<AcademyCalendarDetailChildInfo> childImages,
-            AcademyCalendarDetailResults academyCalendarDetailResults,
+            AcademyCalendarDetailChildInfo childImage,
+            AcademyCalendarDetailResult academyCalendarDetailResult,
             LocalDate requestedDate
     ) {
         return new AcademyCalendarDetailFacadeResult(
-                requestedDate.format(formatter),
+                requestedDate.format(DATE_FORMATTER),
                 new AcademyInfoAboutScheduleDetail(
                         academyAndLessonDetailResult.academyName(),
                         academyAndLessonDetailResult.address()
@@ -37,29 +37,18 @@ public record AcademyCalendarDetailFacadeResult(
                         academyAndLessonDetailResult.lessonName(),
                         academyAndLessonDetailResult.capacity(),
                         academyAndLessonDetailResult.totalFee(),
-                        academyCalendarDetailResults.academyCalendarDetailResults()
-                                .values().stream().map(
-                                        academyCalendarDetailResult ->
-                                                new LessonInfo.FacadeLessonTime(
-                                                        academyCalendarDetailResult.lessonStartTime(),
-                                                        academyCalendarDetailResult.lessonEndTime()
-                                                )
-                                )
-                                .toList(),
+                        new LessonInfo.FacadeLessonTime(
+                                academyCalendarDetailResult.lessonStartTime().format(TIME_FORMATTER),
+                                academyCalendarDetailResult.lessonEndTime().format(TIME_FORMATTER)),
                         Periodicity.WEEKLY
                 ),
-                childImages.stream()
-                        .map(childImage ->
-                                new FacadeChildInfo(
-                                        childImage.childId(),
-                                        childImage.childName(),
-                                        childImage.imageUrl(),
-                                        academyCalendarDetailResults.academyCalendarDetailResults()
-                                                .get(childImage.childId()).memo(),
-                                        academyCalendarDetailResults.academyCalendarDetailResults()
-                                                .get(childImage.childId()).dashboardId()
-                                ))
-                        .toList(),
+                new FacadeChildInfo(
+                        childImage.childId(),
+                        childImage.childName(),
+                        childImage.imageUrl(),
+                        academyCalendarDetailResult.memo(),
+                        academyCalendarDetailResult.dashboardId()
+                ),
                 academyAndLessonDetailResult.categories()
         );
     }
@@ -75,13 +64,13 @@ public record AcademyCalendarDetailFacadeResult(
             String lessonName,
             Integer capacity,
             Long totalFee,
-            List<FacadeLessonTime> lessonTimes,
+            FacadeLessonTime lessonTimes,
             Periodicity periodicity
     ) {
 
         public record FacadeLessonTime(
-                LocalTime startTime,
-                LocalTime endTime
+                String startTime,
+                String endTime
         ) {
 
         }
