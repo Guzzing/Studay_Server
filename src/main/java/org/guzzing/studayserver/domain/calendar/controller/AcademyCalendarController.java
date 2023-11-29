@@ -82,8 +82,7 @@ public class AcademyCalendarController {
     }
 
     @DeleteMapping(
-            path = "/{scheduleId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            path = "/{scheduleId}"
     )
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long scheduleId,
