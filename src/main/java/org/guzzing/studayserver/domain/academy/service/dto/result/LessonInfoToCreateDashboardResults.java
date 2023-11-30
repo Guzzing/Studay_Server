@@ -25,7 +25,7 @@ public record LessonInfoToCreateDashboardResults(
         public static LessonInfoToCreateDashboardResult from(LessonInfoToCreateDashboard lessonInfoToCreateDashboard) {
             return new LessonInfoToCreateDashboardResult(
                     lessonInfoToCreateDashboard.getId(),
-                    lessonInfoToCreateDashboard.getSubject()
+                    lessonInfoToCreateDashboard.getCurriculum()
             );
         }
     }

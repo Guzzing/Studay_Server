@@ -44,10 +44,8 @@ public class RegionService {
     }
 
     public RegionResult findRegionContainingPoint(final Point point) {
-        Optional<Region> region1 =
-                regionRepository.findBySidoAndSigunguAndUpmyeondong("경기도", "수원시 장안구", "파장동");
-
-        return RegionResult.from(region1.get());
+        Region byAreaContainingPoint = regionRepository.getByAreaContainingPoint(point);
+        return RegionResult.from(byAreaContainingPoint);
     }
 
 }

@@ -132,9 +132,9 @@ public class AcademyService {
 
     @Transactional(readOnly = true)
     public LessonInfoToCreateDashboardResults getLessonsInfoAboutAcademy(Long academyId) {
-        academyRepository.getById(academyId);
 
-        return LessonInfoToCreateDashboardResults.from(lessonRepository.findAllLessonInfoByAcademyId(academyId));
+        return LessonInfoToCreateDashboardResults.from(
+                lessonRepository.findAllLessonInfoByAcademyId(academyId));
     }
 
     @Transactional(readOnly = true)

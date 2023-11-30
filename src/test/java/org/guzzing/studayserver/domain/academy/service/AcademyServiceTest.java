@@ -278,7 +278,7 @@ class AcademyServiceTest {
                             assertThat(lessonInfoToCreateDashboardResult.lessonId()).isEqualTo(
                                     savedALessonAboutSungnam.getId());
                             assertThat(lessonInfoToCreateDashboardResult.subject()).isEqualTo(
-                                    savedALessonAboutSungnam.getSubject());
+                                    savedALessonAboutSungnam.getCurriculum());
                         }
                 );
 
