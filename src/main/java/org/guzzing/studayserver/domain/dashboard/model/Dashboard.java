@@ -91,6 +91,7 @@ public class Dashboard {
             throw new DashboardException("비활성화된 대시보드만 삭제가 가능합니다.");
         }
 
+        this.toggleActive();
         this.isDeleted = true;
     }
 
