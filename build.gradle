@@ -99,6 +99,8 @@ dependencies {
     // spatial type
     implementation 'org.hibernate:hibernate-spatial:6.3.1.Final'
 
+    // Netty/Resolver/DNS/Native/MacOS
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
 }
 
 tasks.named('test') {
