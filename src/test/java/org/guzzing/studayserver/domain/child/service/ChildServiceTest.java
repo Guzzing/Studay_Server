@@ -2,19 +2,14 @@ package org.guzzing.studayserver.domain.child.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.childId;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.model.Grade;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
@@ -22,14 +17,12 @@ import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
-import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,262 +37,200 @@ class ChildServiceTest {
     @Autowired
     private ChildService childService;
 
-    @MockBean
+    @Autowired
     private ChildRepository childRepository;
 
-    @MockBean
+    @Autowired
     private MemberRepository memberRepository;
 
     @MockBean
     private ProfileImageProvider profileImageProvider;
 
-    @Nested
-    class Create {
+    @DisplayName("아이를 등록한다.")
+    @Test
+    void create_success() {
+        // Given
+        String childNickname = "아이 닉네임";
+        String childGrade = "초등학교 1학년";
 
-        @DisplayName("아이 생성 성공")
-        @Test
-        void success() {
-            // Given
-            Long memberId = 1L;
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-            Long expectedChildId = 2L;
+        Member member = createMember("123");
 
-            Member mockMember = mock(Member.class);
-            Child mockChild = mock(Child.class);
+        ChildCreateParam param = new ChildCreateParam(childNickname, childGrade);
 
-            given(mockChild.getId()).willReturn(expectedChildId);
-            given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(mockMember));
-            given(childRepository.save(any(Child.class))).willReturn(mockChild);
+        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+                .willReturn("image.png");
 
-            // When
-            Long savedChildId = childService.create(param, memberId);
+        // When
+        Long savedChildId = childService.create(param, member.getId());
 
-            // Then
-            assertThat(savedChildId).isEqualTo(expectedChildId);
-            verify(childRepository).save(any(Child.class));
-        }
-
-        @DisplayName("잘못된 멤버 아이디로 인한 예외를 발생시킨다.")
-        @Test
-        void givenInvalidMemberId_throwException() {
-            // Given
-            Long invalidMemberId = 999L;
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-
-            given(memberRepository.findById(invalidMemberId)).willReturn(Optional.empty());
-
-            // When & Then
-            assertThatThrownBy(() -> childService.create(param, invalidMemberId))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("잘못된 멤버 아이디입니다: " + invalidMemberId);
-        }
-
-        @DisplayName("멤버에게 할당된 아이의 수가 최대치를 넘을 경우 예외를 발생시킨다")
-        @Test
-        void whenExceedingMaxChildren_throwException() {
-            // Given
-            Long memberId = 1L;
-            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
-            for (int i = 0; i < Member.CHILDREN_MAX_SIZE; i++) {
-                member.addChild(mock(Child.class));
-            }
-
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-
-            ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-
-            given(childRepository.save(any())).willReturn(new Child(param.nickname(), param.grade(), "imageUrl"));
-
-            // When & Then
-            assertThatThrownBy(() -> childService.create(param, memberId))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
-        }
-
+        // Then
+        assertThat(member.getChildren()).isNotEmpty();
     }
 
-    @Nested
-    class FindByMemberId {
+    @DisplayName("멤버가 존재하지 않는다면 아이가 생성되지 않는다.")
+    @Test
+    void create_throwInvalidMemberIdException() {
+        // Given
+        Long nonExistenceMemberId = 1L;
 
-        @DisplayName("멤버의 아이들의 정보를 반환한다.")
-        @Test
-        void success() {
-            // Given
-            Long memberId = 1L;
+        String childNickname = "아이 닉네임";
+        String childGrade = "초등학교 1학년";
 
-            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+        ChildCreateParam param = new ChildCreateParam(childNickname, childGrade);
 
-            Child child1 = new Child("아이 닉네임1", "초등학교 1학년", "imageUrl");
-            child1.updateProfileImageUri("icon_1_1.png");
-            Child child2 = new Child("아이 닉네임2", "초등학교 2학년", "imageUrl");
-            child2.updateProfileImageUri("icon_2_0.png");
-
-            Child spyChild1 = spy(child1);
-            spyChild1.assignToNewMemberOnly(member);
-            Child spyChild2 = spy(child2);
-            spyChild2.assignToNewMemberOnly(member);
-
-            Long spyChild1Id = 100L;
-            Long spyChild2Id = 200L;
-            given(spyChild1.getId()).willReturn(spyChild1Id);
-            given(spyChild2.getId()).willReturn(spyChild2Id);
-
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-
-            ChildrenFindResult expectedResult = new ChildrenFindResult(List.of(
-                    new ChildFindResult(spyChild1Id, spyChild1.getProfileImageURLPath(), spyChild1.getNickName(),
-                            spyChild1.getGrade(), "휴식 중!"),
-                    new ChildFindResult(spyChild2Id, spyChild2.getProfileImageURLPath(), spyChild2.getNickName(),
-                            spyChild2.getGrade(), "휴식 중!")
-            ));
-
-            // When
-            ChildrenFindResult actualResult = childService.findByMemberId(memberId);
-
-            // Then
-            assertThat(actualResult).isEqualTo(expectedResult);
-        }
-
-        @DisplayName("잘못된 멤버 아이디로 인한 예외를 발생시킨다.")
-        @Test
-        void givenInvalidMemberId_throwException() {
-            // Given
-            Long invalidMemberId = 999L;
-
-            given(memberRepository.findById(invalidMemberId)).willReturn(Optional.empty());
-
-            // When & Then
-            assertThatThrownBy(() -> childService.findByMemberId(invalidMemberId))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("잘못된 멤버 아이디입니다: " + invalidMemberId);
-        }
-
+        // When & Then
+        assertThatThrownBy(() -> childService.create(param, nonExistenceMemberId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("잘못된 멤버 아이디입니다: " + nonExistenceMemberId);
     }
 
-    @Nested
-    class Delete {
+    @DisplayName("멤버에게 할당된 아이의 수가 최대치를 넘을 경우 예외를 발생시킨다")
+    @Test
+    void create_throwChildLimitExceededException() {
+        // Given
+        Member member = createMember("123");
 
-        @DisplayName("할당된 아이를 삭제한다.")
-        @Test
-        void deleteChild() {
-            // Given
-            Long memberId = 1L;
-            Long childId = 20L;
+        createChild("아이 닉네임", member);
+        createChild("아이 닉네임", member);
+        createChild("아이 닉네임", member);
+        createChild("아이 닉네임", member);
+        createChild("아이 닉네임", member);
 
-            Child child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
+        ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
+        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+                .willReturn("image.png");
 
-            given(childRepository.findByIdAndMemberId(childId, memberId)).willReturn(Optional.of(child));
-
-            ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
-
-            // When
-            childService.delete(param);
-
-            // Then
-            verify(childRepository).delete(child);
-        }
-
-        @DisplayName("멤버에 할당되지 않은 아이일 경우 삭제하지 않는다.")
-        @Test
-        void givenChildNotAssignedToMember_doNothing() {
-            Long memberId = 1L;
-            Long childId = 20L;
-
-            ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
-
-            // When & Then
-            assertThatThrownBy(() -> childService.delete(param))
-                    .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessageContaining("존재하지 않는 아이입니다.");
-        }
-
-        @DisplayName("잘못된 멤버 아이디인 경우 예외를 발생시킨다.")
-        @Test
-        void givenInvalidMemberId_throwsException() {
-            // Given
-            Long invalidMemberId = 999L;
-
-            given(memberRepository.findById(invalidMemberId)).willReturn(Optional.empty());
-
-            ChildDeleteParam param = new ChildDeleteParam(invalidMemberId, 1L);
-
-            // When & Then
-            Assertions.assertThatThrownBy(() -> childService.delete(param))
-                    .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessageContaining("존재하지 않는 아이입니다.");
-        }
+        // When & Then
+        assertThatThrownBy(() -> childService.create(param, member.getId()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining(String.format("멤버당 아이는 최대 %d까지 등록할 수 있습니다.", Member.CHILDREN_MAX_SIZE));
     }
 
-    @Nested
-    class Modify {
+    @DisplayName("멤버의 아이들의 정보를 반환한다.")
+    @Test
+    void findByMemberId_success() {
+        // Given
+        Member member = createMember("123");
 
-        @DisplayName("원하는 아이의 정보를 수정한다.")
-        @Test
-        void success() {
-            // Given
-            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+        createChild("아이 닉네임", member);
+        createChild("아이 닉네임", member);
 
-            Child mockChild = mock(Child.class);
-            given(mockChild.getId()).willReturn(param.childId());
+        // When
+        ChildrenFindResult result = childService.findByMemberId(member.getId());
 
-            given(childRepository.findByIdAndMemberId(param.childId(), param.memberId()))
-                    .willReturn(Optional.of(mockChild));
+        // Then
+        assertThat(result.children()).hasSize(2);
+    }
 
-            // When
-            Long updatedChildId = childService.modify(param);
+    @DisplayName("존재하지 않는 멤버일 경우, 아이를 찾을 수 없다.")
+    @Test
+    void findByMemberId_throwException() {
+        // Given
+        Long nonExistenceMemberId = 1L;
 
-            // Then
-            assertThat(updatedChildId).isEqualTo(param.childId());
-            verify(mockChild).update(param.nickname(), param.grade());
-        }
+        // When & Then
+        assertThatThrownBy(() -> childService.findByMemberId(nonExistenceMemberId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("잘못된 멤버 아이디입니다: " + nonExistenceMemberId);
+    }
 
-        @DisplayName("존재하지 않는 멤버라면 예외를 발생시킨다.")
-        @Test
-        void whenNonExistentMember_throwException() {
-            // Given
-            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+    @DisplayName("할당된 아이를 삭제한다.")
+    @Test
+    void deleteChild() {
+        // Given
+        Member member = createMember("123");
 
-            // When & Then
-            assertThatThrownBy(() -> childService.modify(param))
-                    .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessageContaining("존재하지 않는 아이입니다.");
-        }
+        Child child = createChild("아이 닉네임", member);
 
-        @DisplayName("멤버에 존재하지 않는 아이라면 예외를 발생시킨다.")
-        @Test
-        void whenUnassignedChildId_throwsException() {
-            // Given
-            ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
+        ChildDeleteParam param = new ChildDeleteParam(member.getId(), child.getId());
 
-            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+        // When
+        childService.delete(param);
+        ChildrenFindResult result = childService.findByMemberId(member.getId());
 
-            given(memberRepository.findById(param.memberId())).willReturn(Optional.of(member));
+        // Then
+        assertThat(result.children()).isEmpty();
+    }
 
-            // When & Then
-            assertThatThrownBy(() -> childService.modify(param))
-                    .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessageContaining("존재하지 않는 아이입니다.");
-        }
+    @DisplayName("멤버에 할당되지 않은 아이일 경우 삭제하지 않는다.")
+    @Test
+    void deleteChild_throwException() {
+        Member member1 = createMember("123");
+        Member member2 = createMember("124");
 
-        @Test
-        @DisplayName("아이의 프로필 이미지를 변경한다.")
-        void modifyProfileImage_ChildIdAndMultipartFile_ChangeProfileImageUri() {
-            // Given
-            long childId = 24L;
-            Child mockChild = new Child("원우주니어", Grade.MIDDLE_SCHOOL_3.getDescription(), "imageUrl");
+        Child child = createChild("아이 닉네임", member1);
 
-            given(childRepository.findById(anyLong())).willReturn(Optional.of(mockChild));
-            given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
+        ChildDeleteParam param = new ChildDeleteParam(member2.getId(), child.getId());
 
-            final String fileName = "file.png";
-            final byte[] content = "file-content".getBytes();
-            final MockMultipartFile multipartFile = new MockMultipartFile(fileName, content);
+        // When & Then
+        assertThatThrownBy(() -> childService.delete(param))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("존재하지 않는 아이입니다.");
+    }
 
-            // When
-            ChildProfileImagePatchResult result = childService.modifyProfileImage(childId, multipartFile);
+    @DisplayName("원하는 아이의 정보를 수정한다.")
+    @Test
+    void modify_success() {
+        Member member = createMember("123");
 
-            // Then
-            assertThat(result.childId()).isEqualTo(childId);
-        }
+        Child child = createChild("원래 아이 닉네임", member);
+
+        // Given
+        ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", member.getId(), child.getId());
+
+        // When
+        Long updatedChildId = childService.modify(param);
+
+        // Then
+        assertThat(updatedChildId).isEqualTo(param.childId());
+    }
+
+    @DisplayName("멤버에 존재하지 않는 아이라면 예외를 발생시킨다.")
+    @Test
+    void modify_throwException() {
+        // Given
+        Member member = createMember("123");
+
+        ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", member.getId(), 1L);
+
+        // When & Then
+        assertThatThrownBy(() -> childService.modify(param))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("존재하지 않는 아이입니다.");
+    }
+
+    @Test
+    @DisplayName("아이의 프로필 이미지를 변경한다.")
+    void modifyProfileImage_ChildIdAndMultipartFile_ChangeProfileImageUri() {
+        // Given
+        Member member = createMember("123");
+
+        Child child = createChild("아이 닉네임", member);
+
+        final String fileName = "file.png";
+        final byte[] content = "file-content".getBytes();
+        final MockMultipartFile multipartFile = new MockMultipartFile(fileName, content);
+
+        given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
+
+        // When
+        ChildProfileImagePatchResult result = childService.modifyProfileImage(child.getId(), multipartFile);
+
+        // Then
+        assertThat(result.childId()).isEqualTo(child.getId());
+    }
+
+    private Member createMember(String socialId) {
+        Member member = Member.of(new NickName("멤버 닉네임"), socialId, MemberProvider.KAKAO, RoleType.USER);
+        return memberRepository.save(member);
+    }
+
+    private Child createChild(String nickname, Member member) {
+        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+                .willReturn("image.png");
+        Long childId = childService.create(new ChildCreateParam(nickname, "초등학교 1학년"), member.getId());
+
+        return childRepository.findById(childId)
+                .orElseThrow(() -> new IllegalStateException("아이를 생성하지 못했습니다."));
     }
 }
