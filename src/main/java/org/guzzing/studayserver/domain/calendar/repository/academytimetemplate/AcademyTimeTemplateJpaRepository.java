@@ -20,7 +20,7 @@ public interface AcademyTimeTemplateJpaRepository extends JpaRepository<AcademyT
 
     @Modifying(clearAutomatically = true)
     @Query("select att.id from AcademyTimeTemplate att where att.childId in :childIds")
-    List<Long> findByChildIds(List<Long> childIds);
+    List<Long> findByChildIdIn(List<Long> childIds);
 
     @Modifying(clearAutomatically = true)
     @Query("delete from AcademyTimeTemplate att where att.childId in :childIds")

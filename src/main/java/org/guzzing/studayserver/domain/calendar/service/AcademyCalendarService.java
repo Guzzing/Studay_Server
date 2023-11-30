@@ -188,7 +188,7 @@ public class AcademyCalendarService {
 
     @Transactional
     public void removeCalendar(final List<Long> childIds) {
-        academyTimeTemplateRepository.findByChildIds(childIds)
+        academyTimeTemplateRepository.findByChildIdIn(childIds)
                 .forEach(academyScheduleRepository::deleteAllByAcademyTimeTemplateId);
         academyTimeTemplateRepository.deleteAllByChildIds(childIds);
     }
