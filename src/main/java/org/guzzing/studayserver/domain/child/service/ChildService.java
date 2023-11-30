@@ -73,6 +73,10 @@ public class ChildService {
         member.removeChild(param.childId());
     }
 
+    public void removeChild(long memberId) {
+        childRepository.deleteByMemberId(memberId);
+    }
+
     @Transactional
     public Long modify(ChildModifyParam param) {
         Member member = getMember(param.memberId());

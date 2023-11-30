@@ -14,4 +14,7 @@ public interface AcademyTimeTemplateRepository {
 
     AcademyTimeTemplate getById(Long academyTimeTemplateId);
 
+    List<Long> findByChildIds(List<Long> childIds);
+
+    void deleteAllByChildIds(List<Long> childIds);
 }

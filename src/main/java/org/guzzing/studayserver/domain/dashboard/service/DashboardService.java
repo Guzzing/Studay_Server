@@ -43,6 +43,11 @@ public class DashboardService {
     }
 
     @Transactional
+    public void removeDashboard(final List<Long> childIds) {
+        dashboardRepository.deleteByChildIds(childIds);
+    }
+
+    @Transactional
     public DashboardResult editDashboard(final DashboardPutParam param) {
         final FeeInfo feeInfo = serviceConverter.convertToFeeInfo(param.paymentInfo());
         final Map<String, Boolean> simpleMemo = serviceConverter.convertToSimpleMemoMap(param.simpleMemo());

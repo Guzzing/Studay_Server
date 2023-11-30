@@ -58,6 +58,11 @@ public class LikeService {
         likeRepository.deleteById(likeId);
     }
 
+    @Transactional
+    public void removeLike(final long memberId) {
+        likeRepository.deleteByMemberId(memberId);
+    }
+
     @ValidMember
     public void deleteLikeOfAcademy(final Long academyId, @ValidatedMemberId final Long memberId) {
         likeRepository.deleteByAcademyId(academyId);
