@@ -16,8 +16,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LoggingAspect {
 
     private static final String FORMAT = "invoke method : {} - {} ({}) / elapsed time : {}";
-    private static final double MILLI_SECOND_TO_SECOND_UNIT = 0.001;
-    private static final double MAX_AFFORDABLE_TIME = 3;
+    private static final double MILLI_SECOND_TO_SECOND_UNIT = 1;
+    private static final double MAX_AFFORDABLE_TIME = 2;
+
 
     @Around("execution(* org.guzzing.studayserver.domain.*.controller.*Controller.*(..))")
     public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {

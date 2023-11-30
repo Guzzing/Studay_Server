@@ -39,11 +39,8 @@ public class LikeService {
         memberAccessService.validateMember(param.memberId());
         academyAccessService.validateAcademy(param.academyId());
 
-        final long likeCount = likeRepository.countByMemberId(param.memberId());
-
-        if (likeCount >= 10) {
-            throw new LikeException("좋아요 개수는 10개를 넘을 수 없습니다.");
-        }
+        validateLikeLimit(param);
+        validateExistsLike(param);
 
         final Like savedLike = likeRepository.save(
                 Like.of(param.memberId(), param.academyId()));
@@ -90,6 +87,22 @@ public class LikeService {
                 .sum();
 
         return LikeGetResult.of(likeAcademyFeeInfos, totalFee);
+    }
+
+    private void validateLikeLimit(LikePostParam param) {
+        final long likeCount = likeRepository.countByMemberId(param.memberId());
+
+        if (likeCount >= 10) {
+            throw new LikeException("좋아요 개수는 10개를 넘을 수 없습니다.");
+        }
+    }
+
+    private void validateExistsLike(LikePostParam param) {
+        boolean existsLike = likeRepository.existsByMemberIdAndAcademyId(param.memberId(), param.academyId());
+
+        if (existsLike) {
+            throw new LikeException("이미 좋아요한 학원입니다.");
+        }
     }
 
 }
