@@ -178,12 +178,19 @@ public class AcademyCalendarService {
     }
 
     @Transactional
-    public void deleteSchedulesByDashboard(AcademyCalendarDeleteByDashboardParam Param) {
+    public void deleteSchedulesByDashboard(AcademyCalendarDeleteByDashboardParam param) {
         List<AcademyTimeTemplateDateInfo> academyTimeTemplates
-                = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(Param.dashboardId());
+                = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
 
-        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, Param.requestedDate());
-        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, Param.requestedDate());
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, param.requestedDate());
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, param.requestedDate());
+    }
+
+    @Transactional
+    public void removeCalendar(final List<Long> childIds) {
+        academyTimeTemplateRepository.findByChildIds(childIds)
+                .forEach(academyScheduleRepository::deleteAllByAcademyTimeTemplateId);
+        academyTimeTemplateRepository.deleteAllByChildIds(childIds);
     }
 
     @Transactional(readOnly = true)

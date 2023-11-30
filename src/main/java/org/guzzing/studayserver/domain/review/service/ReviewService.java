@@ -60,6 +60,11 @@ public class ReviewService {
         return ReviewPostResult.from(savedReview);
     }
 
+    @Transactional
+    public void removeReview(final long memberId){
+        reviewRepository.deleteByMemberId(memberId);
+    }
+
     public ReviewableResult getReviewableToAcademy(final Long memberId, final Long academyId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(academyId);
