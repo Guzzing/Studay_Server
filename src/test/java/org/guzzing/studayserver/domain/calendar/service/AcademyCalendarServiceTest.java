@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
+
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
@@ -26,6 +27,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,17 +83,39 @@ class AcademyCalendarServiceTest {
     }
 
     @Test
-    @DisplayName("기존에 존재하는 학원 스케줄 일정과 중복된 일정을 생성하려고 하는 경우 예외를 던진다.")
-    void createOverlapSchedules_throwException() {
+    @DisplayName("같은 대시보드에서 생성된 스케줄과 중복된 일정을 생성하려고 하는 경우 예외를 던진다.")
+    void createOverlapSchedules_sameDashboard_throwException() {
         //Given
-        academyTimeTemplateRepository.save(AcademyCalenderFixture.overlapAcademyTimeTemplate());
+        AcademyCalendarCreateParam overlapAcademyCreateParam
+                = AcademyCalenderFixture.overlapAcademyCalenderCreateParam();
+        academyCalendarService.createSchedules(overlapAcademyCreateParam);
         AcademyCalendarCreateParam academyCalendarCreateParam
                 = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
 
         //When & Then
         assertThatThrownBy(
                 () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
-        ).isInstanceOf(DateOverlapException.class);
+        ).isInstanceOf(DateOverlapException.class)
+                .hasMessage(
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),ErrorCode.DATE_TIME_OVERLAP_ERROR));
+    }
+
+    @Test
+    @DisplayName("다른 대시보드에서 생성된 스케줄과 중복된 일정을 생성하려고 하는 경우 예외를 던진다.")
+    void createOverlapSchedules_notSameDashboard_throwException() {
+        //Given
+        AcademyCalendarCreateParam overlapAcademyCreateParam
+                = AcademyCalenderFixture.notSameOverlapAcademyCalenderCreateParam();
+        academyCalendarService.createSchedules(overlapAcademyCreateParam);
+        AcademyCalendarCreateParam academyCalendarCreateParam
+                = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
+
+        //When & Then
+        assertThatThrownBy(
+                () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
+        ).isInstanceOf(DateOverlapException.class)
+                .hasMessage(
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),ErrorCode.DATE_TIME_OVERLAP_ERROR));
     }
 
     @Test
@@ -325,7 +349,7 @@ class AcademyCalendarServiceTest {
                 .get();
 
         AcademyCalendarDetailParam academyCalendarDetailParam = new AcademyCalendarDetailParam(
-               firstChildAcademyCalendarCreateParam.childId(),firstChildScheduleId);
+                firstChildAcademyCalendarCreateParam.childId(), firstChildScheduleId);
 
         //When
         AcademyCalendarDetailResult academyCalendarDetailResult = academyCalendarService.detailSchedules(

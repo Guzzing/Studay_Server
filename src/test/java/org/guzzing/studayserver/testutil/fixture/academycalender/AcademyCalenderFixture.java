@@ -71,17 +71,29 @@ public class AcademyCalenderFixture {
         );
     }
 
-    public static AcademyCalendarCreateParam secondChildAcademyCalenderCreateParam() {
-        return new AcademyCalendarCreateParam(
+    public static AcademyCalendarCreateParam overlapAcademyCalenderCreateParam() {
+        return new AcademyCalendarCreateParam (
                 List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
                 false,
-                SECOND_CHILD_ID,
-                SECOND_CHILD_DASH_BOARD_ID,
-                "슬리퍼 챙기는 날",
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASH_BOARD_ID,
+                "매월 20일마다 상담 진행",
                 WEEKLY_PERIODICITY
+        );
+    }
 
+    public static AcademyCalendarCreateParam notSameOverlapAcademyCalenderCreateParam() {
+        return new AcademyCalendarCreateParam (
+                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+                START_DATE_OF_ATTENDANCE,
+                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
+                false,
+                FIRST_CHILD_ID,
+                FIRST_CHILD_DASH_BOARD_ID + 1L,
+                "매월 20일마다 상담 진행",
+                WEEKLY_PERIODICITY
         );
     }
 
@@ -98,18 +110,6 @@ public class AcademyCalenderFixture {
         return new AcademyCalendarDeleteParam(
                 academyScheduleId,
                 false
-        );
-    }
-
-    public static AcademyTimeTemplate overlapAcademyTimeTemplate() {
-        return AcademyTimeTemplate.of(
-                mondayDashboardScheduleParam().dayOfWeek(),
-                START_DATE_OF_ATTENDANCE,
-                END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
-                false,
-                FIRST_CHILD_ID,
-                FIRST_CHILD_DASH_BOARD_ID,
-                "매월 20일마다 상담 진행"
         );
     }
 
