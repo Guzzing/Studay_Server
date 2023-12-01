@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Service
-public class ChildScheduleReadService {
+public class ChildScheduleQuery {
 
     @PersistenceContext
     private EntityManager entityManager;

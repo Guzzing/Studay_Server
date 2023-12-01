@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-class ChildScheduleReadServiceTest {
+class ChildScheduleQueryTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -76,7 +76,7 @@ class ChildScheduleReadServiceTest {
     private AcademyCalendarService academyCalendarService;
 
     @Autowired
-    private ChildScheduleReadService childScheduleReadService;
+    private ChildScheduleQuery childScheduleQuery;
 
     @Test
     void findScheduleByMemberIdAndDate() {
@@ -134,7 +134,7 @@ class ChildScheduleReadServiceTest {
         LocalDate fridayWithSchedule = LocalDate.of(2023, 11, 17);
 
         // when
-        List<ChildDateScheduleResult> scheduleByMemberIdAndDate = childScheduleReadService.findScheduleByMemberIdAndDate(
+        List<ChildDateScheduleResult> scheduleByMemberIdAndDate = childScheduleQuery.findScheduleByMemberIdAndDate(
                 savedMember.getId(), fridayWithSchedule);
 
         // then

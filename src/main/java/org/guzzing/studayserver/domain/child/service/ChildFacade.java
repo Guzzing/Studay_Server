@@ -11,17 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChildFacade {
 
     private final ChildService childService;
-    private final ChildScheduleReadService childScheduleReadService;
+    private final ChildScheduleQuery childScheduleQuery;
 
-    public ChildFacade(ChildService childService, ChildScheduleReadService childScheduleReadService) {
+    public ChildFacade(ChildService childService, ChildScheduleQuery childScheduleQuery) {
         this.childService = childService;
-        this.childScheduleReadService = childScheduleReadService;
+        this.childScheduleQuery = childScheduleQuery;
     }
 
     public List<ChildWithScheduleResult> findChildrenByMemberIdAndDateTime(Long memberId, LocalDateTime dateTime) {
         ChildrenFindResult childrenFindResult = childService.findByMemberId(memberId);
 
-        List<ChildDateScheduleResult> childDateScheduleResults = childScheduleReadService.findScheduleByMemberIdAndDate(
+        List<ChildDateScheduleResult> childDateScheduleResults = childScheduleQuery.findScheduleByMemberIdAndDate(
                 memberId, dateTime.toLocalDate());
 
         List<ChildWithScheduleResult> childWithScheduleResults = childrenFindResult.children().stream()
