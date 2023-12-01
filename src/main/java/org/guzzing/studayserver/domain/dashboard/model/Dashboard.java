@@ -42,8 +42,9 @@ public class Dashboard {
     private Long lessonId;
 
     @OneToMany(
-            mappedBy = "dashboard", fetch = LAZY,
-            cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+            mappedBy = "dashboard",
+            fetch = LAZY,
+            cascade = {PERSIST})
     private List<DashboardSchedule> dashboardSchedules;
 
     @Embedded
