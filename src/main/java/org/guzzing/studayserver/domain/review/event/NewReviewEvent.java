@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.review.event;
 
-import java.util.List;
+import java.util.Map;
 import org.guzzing.studayserver.domain.review.model.Review;
-import org.guzzing.studayserver.domain.review.model.ReviewType;
 
 public class NewReviewEvent {
 
@@ -20,11 +19,8 @@ public class NewReviewEvent {
         return this.review.getAcademyId();
     }
 
-    public List<String> getReviews() {
-        return this.review.getReviewTypes()
-                .stream()
-                .map(ReviewType::name)
-                .toList();
+    public Map<String, Boolean> getReviewType() {
+        return this.review.getReviewType();
     }
 
 }

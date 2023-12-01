@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidAreaOfExpertiseValidator.class)
-public @interface ValidAreaOfExpertise {
+@Constraint(validatedBy = ValidCategoryNameValidator.class)
+public @interface ValidCategoryName {
 
     String message() default "유효하지 않은 학원 분야입니다.";
 

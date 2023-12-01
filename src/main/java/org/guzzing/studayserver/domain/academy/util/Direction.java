@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.util.model;
+package org.guzzing.studayserver.domain.academy.util;
 
 import lombok.Getter;
 

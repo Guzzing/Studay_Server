@@ -2,12 +2,17 @@ package org.guzzing.studayserver.domain.calendar.controller;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.calendar.controller.dto.request.*;
+import java.time.DayOfWeek;
+import java.util.List;
+import java.util.stream.Stream;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
+import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTime;
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
@@ -22,15 +27,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.DayOfWeek;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AcademyCalendarController.class)
 class AcademyCalendarControllerTest {
@@ -430,36 +426,6 @@ class AcademyCalendarControllerTest {
                             Periodicity.WEEKLY.toString(),
                             null
                     )
-            );
-        }
-
-        private static Stream<AcademyCalendarDeleteRequest> provideInvalidDeleteRequests() {
-            return Stream.of(
-                    new AcademyCalendarDeleteRequest(
-                            null,
-                            1L,
-                            true,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            null,
-                            true,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            1L,
-                            null,
-                            "2024-5-15"
-                    ),
-                    new AcademyCalendarDeleteRequest(
-                            1L,
-                            1L,
-                            null,
-                            "2024515"
-                    )
-
             );
         }
 

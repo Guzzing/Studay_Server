@@ -5,7 +5,7 @@ public record AcademyByFiltering(
         String academyName,
         String fullAddress,
         String phoneNumber,
-        String areaOfExpertise,
+        Long categoryId,
         Double latitude,
         Double longitude,
         String shuttleAvailable,

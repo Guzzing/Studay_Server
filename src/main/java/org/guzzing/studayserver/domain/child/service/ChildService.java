@@ -67,6 +67,11 @@ public class ChildService {
     }
 
     @Transactional
+    public void removeChild(long memberId) {
+        childRepository.deleteByMemberId(memberId);
+    }
+
+    @Transactional
     public Long modify(ChildModifyParam param) {
         Child child = getChildByIdAndMemberId(param.childId(), param.memberId());
 
@@ -84,7 +89,7 @@ public class ChildService {
 
         child.updateProfileImageUri(profileImageUri);
 
-        return new ChildProfileImagePatchResult(childId, profileImageUri);
+        return new ChildProfileImagePatchResult(childId, child.getProfileImageURLPath());
     }
 
     private Member getMember(Long memberId) {

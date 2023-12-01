@@ -30,7 +30,7 @@ public enum Grade {
     public static Grade increaseGrade(final Grade grade) {
         int level = grade.getGradeLevel();
 
-        return ++ level >= Grade.values().length
+        return ++level >= Grade.values().length
                 ? GRADUATED
                 : Grade.values()[level];
     }

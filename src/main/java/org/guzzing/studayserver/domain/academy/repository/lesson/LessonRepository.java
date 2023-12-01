@@ -1,13 +1,11 @@
 package org.guzzing.studayserver.domain.academy.repository.lesson;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-
-import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
-import org.guzzing.studayserver.global.error.response.ErrorCode;
-import org.springframework.data.repository.query.Param;
 import org.guzzing.studayserver.domain.academy.repository.dto.LessonInfoToCreateDashboard;
+import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 
 public interface LessonRepository {

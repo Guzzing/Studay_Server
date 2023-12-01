@@ -4,7 +4,7 @@ import org.guzzing.studayserver.domain.academy.model.Lesson;
 
 public record LessonInfo(
         long lessonId,
-        String subject,
+        String curriculum,
         int capacity,
         String duration,
         long totalFee
@@ -13,7 +13,7 @@ public record LessonInfo(
     public static LessonInfo from(final Lesson entity) {
         return new LessonInfo(
                 entity.getId(),
-                entity.getSubject(),
+                entity.getCurriculum(),
                 entity.getCapacity(),
                 entity.getDuration(),
                 entity.getTotalFee());

@@ -12,7 +12,9 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Entity
 @Table(name = "academy_schedules")
