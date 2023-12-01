@@ -1,8 +1,11 @@
 package org.guzzing.studayserver.domain.child.service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
+import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +24,38 @@ public class ChildFacade {
     public List<ChildWithScheduleResult> findChildrenByMemberIdAndDateTime(Long memberId, LocalDateTime dateTime) {
         ChildrenFindResult childrenFindResult = childService.findByMemberId(memberId);
 
-        List<ChildDateScheduleResult> childDateScheduleResults = childScheduleQuery.findScheduleByMemberIdAndDate(
-                memberId, dateTime.toLocalDate());
+        List<ChildDateScheduleResult> childDateScheduleResults =
+                childScheduleQuery.findScheduleByMemberIdAndDate(memberId, dateTime.toLocalDate());
 
-        List<ChildWithScheduleResult> childWithScheduleResults = childrenFindResult.children().stream()
-                .flatMap(childInfo ->
-                        childDateScheduleResults.stream()
-                                .filter(schedule -> childInfo.childId().equals(schedule.childId()))
-                                .map(schedule -> ChildWithScheduleResult.of(childInfo, schedule))
-                ).toList();
-
-        return childWithScheduleResults.stream()
-                .filter(r -> !r.lessonStartTime().isAfter(dateTime.toLocalTime()))
-                .filter(r -> !r.lessonEndTime().isBefore(dateTime.toLocalTime()))
+        return childrenFindResult.children().stream()
+                .flatMap(childInfo -> matchChildWithSchedule(childInfo, childDateScheduleResults, dateTime))
                 .toList();
+    }
+
+    private Stream<ChildWithScheduleResult> matchChildWithSchedule(
+            ChildFindResult childInfo, List<ChildDateScheduleResult> schedules, LocalDateTime dateTime) {
+        return schedules.stream()
+                .filter(schedule -> childInfo.childId().equals(schedule.childId()))
+                .findFirst()
+                .map(Stream::of)
+                .orElseGet(() -> Stream.of(createEmptyChildDateScheduleResult(childInfo, dateTime)))
+                .map(schedule -> ChildWithScheduleResult.of(childInfo, schedule))
+                .filter(result -> isScheduleTimeValid(result, dateTime));
+    }
+
+    private ChildDateScheduleResult createEmptyChildDateScheduleResult(ChildFindResult childInfo, LocalDateTime dateTime) {
+        return new ChildDateScheduleResult(
+                childInfo.childId(),
+                dateTime.toLocalDate(),
+                dateTime.toLocalTime(),
+                dateTime.toLocalTime(),
+                "수행 중인 학원이 없습니다.",
+                "수행 중인 수업이 없습니다."
+        );
+    }
+
+    private boolean isScheduleTimeValid(ChildWithScheduleResult result, LocalDateTime dateTime) {
+        LocalTime time = dateTime.toLocalTime();
+        return !result.lessonStartTime().isAfter(time) && !result.lessonEndTime().isBefore(time);
     }
 }
