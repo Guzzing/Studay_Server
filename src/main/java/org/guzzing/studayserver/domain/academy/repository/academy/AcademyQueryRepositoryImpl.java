@@ -3,9 +3,7 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.*;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 
@@ -29,7 +27,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 ON a.id = ac.academy_id
                 LEFT JOIN likes AS l
                 ON a.id = l.academy_id AND l.member_id = %s
-                WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s, a.point)=1""";
+                WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1""";
 
         String formattedQuery = String.format(nativeQuery, memberId, pointFormat);
 
@@ -83,7 +81,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 FROM academy_categories as ac
                 LEFT JOIN academies AS a ON ac.academy_id = a.id 
                 LEFT JOIN likes AS l ON a.id = l.academy_id AND l.member_id = %s
-                WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s, a.point)=1""";
+                WHERE MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1""";
 
         String formattedQuery = String.format(nativeQuery, memberId, academyFilterCondition.pointFormat());
 
@@ -134,4 +132,68 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 .getResultList();
     }
 
+    public AcademiesByLocationWithScroll findAcademiesByLocation(
+            String pointFormat,
+            Long memberId,
+            int pageNumber,
+            int pageSize) {
+
+        String nativeQuery = """
+        SELECT 
+            a.id AS academyId,
+            a.academy_name AS academyName,
+            a.phone_number AS phoneNumber,
+            a.full_address AS fullAddress,
+            a.latitude AS latitude,
+            a.longitude AS longitude,
+            a.shuttle AS shuttleAvailable,
+            (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked
+        FROM 
+            academies AS a
+        LEFT JOIN 
+            likes AS l ON a.id = l.academy_id AND l.member_id = %s
+        WHERE 
+            MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) = 1
+        ORDER BY a.academy_name
+        LIMIT %s OFFSET %s""";
+
+        int offset = pageNumber * pageSize;
+
+        String formattedQuery = String.format(nativeQuery, memberId, pointFormat, pageSize, offset);
+
+        Query emNativeQuery = em.createNativeQuery(
+                formattedQuery);
+
+        List<AcademyByLocationWithScroll> academiesByLocation =
+                emNativeQuery.unwrap(org.hibernate.query.NativeQuery.class)
+                .addScalar("academyId", StandardBasicTypes.LONG)
+                .addScalar("academyName", StandardBasicTypes.STRING)
+                .addScalar("fullAddress", StandardBasicTypes.STRING)
+                .addScalar("phoneNumber", StandardBasicTypes.STRING)
+                .addScalar("latitude", StandardBasicTypes.DOUBLE)
+                .addScalar("longitude", StandardBasicTypes.DOUBLE)
+                .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
+                .addScalar("isLiked", StandardBasicTypes.BOOLEAN)
+                .setResultTransformer((tuple, aliases) -> new AcademyByLocationWithScroll(
+                        (Long) tuple[0],
+                        (String) tuple[1],
+                        (String) tuple[2],
+                        (String) tuple[3],
+                        (Double) tuple[4],
+                        (Double) tuple[5],
+                        (String) tuple[6],
+                        (boolean) tuple[7]
+                ))
+                .getResultList();
+
+        return AcademiesByLocationWithScroll.of(
+                academiesByLocation,
+                isHasNest(academiesByLocation,pageSize)
+        );
+    }
+
+    private boolean isHasNest(List<AcademyByLocationWithScroll> academiesByLocation, int pageSize) {
+        return academiesByLocation.size() == pageSize;
+    }
+    
 }
