@@ -98,7 +98,7 @@ public class ChildService {
 
         child.updateProfileImageUri(profileImageUri);
 
-        return new ChildProfileImagePatchResult(childId, profileImageUri);
+        return new ChildProfileImagePatchResult(childId, child.getProfileImageURLPath());
     }
 
     private void setDefaultProfileImageToChild(final Child child, final Member member) {
