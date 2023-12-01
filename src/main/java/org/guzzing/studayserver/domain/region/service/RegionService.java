@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.region.service;
 import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SIDO;
 
 import java.util.List;
-import java.util.Optional;
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;

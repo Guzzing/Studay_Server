@@ -16,8 +16,8 @@ public interface DashboardJpaRepository extends
 
     @Modifying(clearAutomatically = true)
     @Query("""
-        delete from Dashboard d
-        where d.childId in :childIds
-    """)
+                delete from Dashboard d
+                where d.childId in :childIds
+            """)
     void deleteByChildIds(List<Long> childIds);
 }

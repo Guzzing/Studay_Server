@@ -44,12 +44,12 @@ public record AcademyCalendarLoadToUpdateResponse(
             return new LessonScheduleLoadToUpdateResponse(
                     result.dayOfWeek(),
                     new LessonTime(
-                    result.lessonStartTime(),
-                    result.lessonEndTime())
+                            result.lessonStartTime(),
+                            result.lessonEndTime())
             );
         }
 
-        public record LessonTime (
+        public record LessonTime(
                 String lessonStartTime,
                 String lessonEndTime
         ) {

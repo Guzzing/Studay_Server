@@ -61,7 +61,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void removeReview(final long memberId){
+    public void removeReview(final long memberId) {
         reviewRepository.deleteByMemberId(memberId);
     }
 

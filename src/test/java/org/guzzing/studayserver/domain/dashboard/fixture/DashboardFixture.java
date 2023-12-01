@@ -3,6 +3,8 @@ package org.guzzing.studayserver.domain.dashboard.fixture;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
+import static org.guzzing.studayserver.domain.academy.util.CategoryInfo.MATH;
+import static org.guzzing.studayserver.domain.academy.util.CategoryInfo.SCIENCE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
@@ -117,7 +119,7 @@ public class DashboardFixture {
                 "AVAILABLE",
                 100_000,
                 LocalDate.now(),
-                "예능(대)"
+                List.of(SCIENCE.getCategoryName(), MATH.getCategoryName())
         );
     }
 
