@@ -97,7 +97,7 @@ class AcademyCalendarServiceTest {
                 () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
         ).isInstanceOf(DateOverlapException.class)
                 .hasMessage(
-                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),ErrorCode.DATE_TIME_OVERLAP_ERROR));
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(), ErrorCode.DATE_TIME_OVERLAP_ERROR));
     }
 
     @Test
@@ -115,7 +115,7 @@ class AcademyCalendarServiceTest {
                 () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
         ).isInstanceOf(DateOverlapException.class)
                 .hasMessage(
-                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),ErrorCode.DATE_TIME_OVERLAP_ERROR));
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(), ErrorCode.DATE_TIME_OVERLAP_ERROR));
     }
 
     @Test

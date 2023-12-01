@@ -72,7 +72,7 @@ public class AcademyCalenderFixture {
     }
 
     public static AcademyCalendarCreateParam overlapAcademyCalenderCreateParam() {
-        return new AcademyCalendarCreateParam (
+        return new AcademyCalendarCreateParam(
                 List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
@@ -85,7 +85,7 @@ public class AcademyCalenderFixture {
     }
 
     public static AcademyCalendarCreateParam notSameOverlapAcademyCalenderCreateParam() {
-        return new AcademyCalendarCreateParam (
+        return new AcademyCalendarCreateParam(
                 List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
