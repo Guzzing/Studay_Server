@@ -5,6 +5,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
+import org.guzzing.studayserver.domain.member.annotation.ValidMember;
+import org.guzzing.studayserver.domain.member.annotation.ValidatedMemberId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,10 @@ public class ChildScheduleReadService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<ChildWithScheduleResult> findScheduleByMemberIdAndDate(Long memberId, LocalDate scheduleDate) {
+    @ValidMember
+    public List<ChildDateScheduleResult> findScheduleByMemberIdAndDate(
+            @ValidatedMemberId Long memberId,
+            LocalDate scheduleDate) {
         String sql = "SELECT c.child_id as child_id, " +
                 "acs.schedule_date as schedule_date, " +
                 "acs.lesson_start_time as lesson_start_time, " +

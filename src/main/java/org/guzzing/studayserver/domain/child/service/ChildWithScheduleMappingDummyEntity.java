@@ -16,7 +16,7 @@ import lombok.Getter;
 @SqlResultSetMapping(
         name = "ChildWithScheduleResultSetMapping",
         classes = @ConstructorResult(
-                targetClass = ChildWithScheduleResult.class,
+                targetClass = ChildDateScheduleResult.class,
                 columns = {
                         @ColumnResult(name = "child_id", type = Long.class),
                         @ColumnResult(name = "schedule_date", type = LocalDate.class),

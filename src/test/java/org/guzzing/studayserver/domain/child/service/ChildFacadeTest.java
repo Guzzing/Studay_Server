@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.child.service;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
@@ -15,6 +16,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-class ChildScheduleReadServiceTest {
+class ChildFacadeTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -76,10 +78,10 @@ class ChildScheduleReadServiceTest {
     private AcademyCalendarService academyCalendarService;
 
     @Autowired
-    private ChildScheduleReadService childScheduleReadService;
+    private ChildFacade childFacade;
 
     @Test
-    void findScheduleByMemberIdAndDate() {
+    void findChildrenByMemberIdAndDateTime() {
         // given
         Member member = Member.of(new NickName("멤버 아이디"), "123", MemberProvider.KAKAO, RoleType.USER);
         Member savedMember = memberRepository.save(member);
@@ -131,13 +133,23 @@ class ChildScheduleReadServiceTest {
         );
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
-        LocalDate fridayWithSchedule = LocalDate.of(2023, 11, 17);
+        LocalDateTime dateTime = LocalDateTime.of(2023, 11, 17, 18, 0);
+
 
         // when
-        List<ChildDateScheduleResult> scheduleByMemberIdAndDate = childScheduleReadService.findScheduleByMemberIdAndDate(
-                savedMember.getId(), fridayWithSchedule);
+        List<ChildWithScheduleResult> childrenByMemberIdAndDateTime = childFacade.findChildrenByMemberIdAndDateTime(
+                savedMember.getId(), dateTime);
 
         // then
-        assertThat(scheduleByMemberIdAndDate).isNotEmpty();
+        assertThat(childrenByMemberIdAndDateTime).hasSize(1);
+        ChildWithScheduleResult childWithScheduleResult = childrenByMemberIdAndDateTime.get(0);
+
+        assertThat(childWithScheduleResult.childId()).isEqualTo(childId);
+        assertThat(childWithScheduleResult.grade()).isEqualTo("초등학교 1학년");
+        assertThat(childWithScheduleResult.schedule_date()).isEqualTo(dateTime.toLocalDate());
+        assertThat(childWithScheduleResult.lessonStartTime()).isEqualTo(LocalTime.of(18, 0));
+        assertThat(childWithScheduleResult.lessonEndTime()).isEqualTo(LocalTime.of(20, 0));
+        assertThat(childWithScheduleResult.academyName()).isEqualTo("유원우 코딩학원");
+        assertThat(childWithScheduleResult.lessonSubject()).isEqualTo("DB에 대해서");
     }
 }
