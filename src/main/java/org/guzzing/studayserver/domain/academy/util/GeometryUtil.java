@@ -2,6 +2,10 @@ package org.guzzing.studayserver.domain.academy.util;
 
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 
 public class GeometryUtil {
 
@@ -9,6 +13,7 @@ public class GeometryUtil {
         throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());
     }
 
+    private static final GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
     private static final Double EARTH_RADIUS = 6371.01;
 
     public static Location calculateLocationWithinRadiusInDirection(
@@ -29,6 +34,10 @@ public class GeometryUtil {
         longitude = normalizeLongitude(longitude);
 
         return Location.of(toDegree(latitude), toDegree(longitude));
+    }
+
+    public static Point createPoint(double latitude, double longitude) {
+        return factory.createPoint(new Coordinate(longitude, latitude));
     }
 
     private static Double toRadian(Double coordinate) {

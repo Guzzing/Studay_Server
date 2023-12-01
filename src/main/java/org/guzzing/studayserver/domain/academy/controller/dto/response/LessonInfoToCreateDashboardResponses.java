@@ -17,14 +17,14 @@ public record LessonInfoToCreateDashboardResponses(
         );
     }
 
-
     public record LessonInfoToCreateDashboardResponse(
             Long lessonId,
             String subject
     ) {
 
-        public static LessonInfoToCreateDashboardResponse from(LessonInfoToCreateDashboardResults.
-                LessonInfoToCreateDashboardResult result) {
+        public static LessonInfoToCreateDashboardResponse from(
+                LessonInfoToCreateDashboardResults.
+                        LessonInfoToCreateDashboardResult result) {
             return new LessonInfoToCreateDashboardResponse(
                     result.lessonId(),
                     result.subject()

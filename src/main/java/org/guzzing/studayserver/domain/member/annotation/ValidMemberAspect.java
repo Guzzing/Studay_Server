@@ -39,4 +39,5 @@ public class ValidMemberAspect {
                     .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
         }
     }
+
 }

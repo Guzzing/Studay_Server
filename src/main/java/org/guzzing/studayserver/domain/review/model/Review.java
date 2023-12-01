@@ -1,16 +1,19 @@
 package org.guzzing.studayserver.domain.review.model;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,27 +31,33 @@ public class Review {
     @Column(name = "academy_id", nullable = false)
     private Long academyId;
 
-    @Column(name = "reviewed_type", nullable = false)
-    private List<ReviewType> reviewTypes;
+    @Type(JsonType.class)
+    @Column(name = "reviewed_type", nullable = false, columnDefinition = "LONGTEXT")
+    private Map<String, Boolean> reviewType;
 
     public Review(
             final Long memberId,
             final Long academyId,
-            final List<ReviewType> reviewTypes
+            final Map<String, Boolean> reviewType
     ) {
         this.memberId = memberId;
         this.academyId = academyId;
-        this.reviewTypes = reviewTypes;
+        this.reviewType = reviewType;
     }
 
     public static Review of(
             final Long memberId,
             final Long academyId,
-            final Map<ReviewType, Boolean> selectedReviewMap
+            final Map<ReviewType, Boolean> reviewType
     ) {
-        List<ReviewType> reviewTypes = ReviewType.convertReviewMapToReviewList(selectedReviewMap);
+        final Map<String, Boolean> selectedRevieType = reviewType.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().name(),
+                        Entry::getValue
+                ));
 
-        return new Review(memberId, academyId, reviewTypes);
+        return new Review(memberId, academyId, selectedRevieType);
     }
 
 }

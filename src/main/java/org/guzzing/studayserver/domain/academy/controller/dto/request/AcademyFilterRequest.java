@@ -4,9 +4,8 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidAreaOfExpertise;
+import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidCategoryName;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 
 public record AcademyFilterRequest(
@@ -21,18 +20,27 @@ public record AcademyFilterRequest(
         @DecimalMax(value = "130.0", message = "Invalid longitude")
         Double lng,
 
-        @ValidAreaOfExpertise
-        List<String> areaOfExpertises,
+        @ValidCategoryName
+        List<String> categories,
 
-        @PositiveOrZero
         Long desiredMinAmount,
 
-        @PositiveOrZero
         Long desiredMaxAmount
 ) {
 
     @AssertTrue(message = "최소 희망 금액이 최대 희망 금액보다 클 수 없습니다.")
     private boolean isValidDesiredAmount() {
+        if (desiredMinAmount != null && desiredMaxAmount != null) {
+            return isPositiveAmount() && isBiggerThanMinAmount();
+        }
+        return true;
+    }
+
+    private boolean isPositiveAmount() {
+        return desiredMinAmount >= 0 && desiredMaxAmount >= 0;
+    }
+
+    private boolean isBiggerThanMinAmount() {
         return desiredMaxAmount >= desiredMinAmount;
     }
 
@@ -40,7 +48,7 @@ public record AcademyFilterRequest(
         return new AcademyFilterParam(
                 request.lat,
                 request.lng,
-                request.areaOfExpertises(),
+                request.categories(),
                 request.desiredMinAmount,
                 request.desiredMaxAmount
         );

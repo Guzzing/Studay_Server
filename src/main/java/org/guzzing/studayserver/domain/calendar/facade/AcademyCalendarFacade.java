@@ -5,12 +5,10 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLess
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeParam;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AcademyCalendarFacade {
@@ -19,23 +17,26 @@ public class AcademyCalendarFacade {
     private final ChildAccessService childService;
     private final AcademyCalendarService academyCalendarService;
 
-    public AcademyCalendarFacade(AcademyAccessService academyService, ChildAccessService childService, AcademyCalendarService academyCalendarService) {
+    public AcademyCalendarFacade(AcademyAccessService academyService, ChildAccessService childService,
+            AcademyCalendarService academyCalendarService) {
         this.academyService = academyService;
         this.childService = childService;
         this.academyCalendarService = academyCalendarService;
     }
 
     public AcademyCalendarDetailFacadeResult getCalendarDetailInfo(AcademyCalendarDetailFacadeParam param) {
-        AcademyAndLessonDetailResult academyAndLessonDetailResult = academyService.getAcademyAndLessonDetail(param.lessonId());
-        List<AcademyCalendarDetailChildInfo> childImages = childService.getChildImages(param.getChildrenIds());
+        AcademyAndLessonDetailResult academyAndLessonDetailResult = academyService.getAcademyAndLessonDetail(
+                param.lessonId());
+        AcademyCalendarDetailChildInfo childImage = childService.getChildImages(param.childId());
 
-        AcademyCalendarDetailResults academyCalendarDetailResults = academyCalendarService.detailSchedules(AcademyCalendarDetailFacadeParam.to(param));
+        AcademyCalendarDetailResult academyCalendarDetailResult = academyCalendarService.detailSchedules(
+                AcademyCalendarDetailFacadeParam.to(param));
 
         return AcademyCalendarDetailFacadeResult.from(
                 academyAndLessonDetailResult,
-                childImages,
-                academyCalendarDetailResults,
-                param.requestedDate()
+                childImage,
+                academyCalendarDetailResult,
+                academyCalendarDetailResult.requestedDate()
         );
 
     }

@@ -3,6 +3,8 @@ package org.guzzing.studayserver.domain.dashboard.fixture;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
+import static org.guzzing.studayserver.domain.academy.util.CategoryInfo.MATH;
+import static org.guzzing.studayserver.domain.academy.util.CategoryInfo.SCIENCE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance.WEEKLY;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.CHEAP_FEE;
 import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.GOOD_FACILITY;
@@ -17,7 +19,6 @@ import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
-import org.guzzing.studayserver.domain.dashboard.controller.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.ChildInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
@@ -25,6 +26,7 @@ import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.DashboardSchedule;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
+import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
@@ -46,7 +48,6 @@ public class DashboardFixture {
     public DashboardPostRequest makePostRequest() {
         return new DashboardPostRequest(
                 childId, academyId, lessonId,
-//                List.of(new Schedule(6, "12:00", "21:04", "WEAKLY")),
                 List.of(new Schedule(6, "12:00", "21:04")),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
                 new SimpleMemo(true, false, false, true, false, true));
@@ -56,39 +57,23 @@ public class DashboardFixture {
         return new DashboardPostParam(
                 1L, 1L, 1L,
                 new ScheduleInfos(List.of(
-//                        new ScheduleInfo(null, "14:00", "18:00", DAILY),
-//                        new ScheduleInfo(SUNDAY, "12:30", "12:04", BIWEEKLY))),
                         new ScheduleInfo(MONDAY, "14:00", "18:00", WEEKLY),
                         new ScheduleInfo(SUNDAY, "12:30", "12:04", WEEKLY))),
                 new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
-                Map.of(
-                        KINDNESS, true,
-                        GOOD_FACILITY, false,
-                        GOOD_MANAGEMENT, true,
-                        CHEAP_FEE, true,
-                        LOVELY_TEACHING, false,
-                        SHUTTLE_AVAILABILITY, true));
+                new SimpleMemo(true, false, true, true, false, true));
     }
 
     public DashboardPutRequest makePutRequest() {
         return new DashboardPutRequest(
                 new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
-                new SimpleMemo(true, false, false, true, false, true)
-        );
+                new SimpleMemo(true, false, false, true, false, true));
     }
 
     public DashboardPutParam makePutParam(final long dashboardId) {
         return new DashboardPutParam(
                 dashboardId,
                 new PaymentInfo(4_000L, 4_000L, 4_000L, 4_000L, LocalDate.now()),
-                Map.of(
-                        KINDNESS, false,
-                        GOOD_FACILITY, true,
-                        GOOD_MANAGEMENT, true,
-                        CHEAP_FEE, false,
-                        LOVELY_TEACHING, true,
-                        SHUTTLE_AVAILABILITY, true)
-        );
+                new SimpleMemo(false, true, true, false, true, true));
     }
 
     public Dashboard makeEntity() {
@@ -97,9 +82,13 @@ public class DashboardFixture {
                 List.of(new DashboardSchedule(MONDAY, "14:00", "18:00", WEEKLY),
                         new DashboardSchedule(FRIDAY, "13:30", "15:40", WEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
-                List.of(CHEAP_FEE, LOVELY_TEACHING),
-                true, false
-        );
+                Map.of(KINDNESS.getType(), false,
+                        GOOD_FACILITY.getType(), false,
+                        CHEAP_FEE.getType(), true,
+                        GOOD_MANAGEMENT.getType(), true,
+                        LOVELY_TEACHING.getType(), false,
+                        SHUTTLE_AVAILABILITY.getType(), false),
+                true, false);
     }
 
     public Dashboard makeNotActiveEntity() {
@@ -108,9 +97,13 @@ public class DashboardFixture {
                 List.of(new DashboardSchedule(MONDAY, "14:00", "18:00", WEEKLY),
                         new DashboardSchedule(FRIDAY, "13:30", "15:40", WEEKLY)),
                 new FeeInfo(1_000L, 1_000L, 1_000L, 1_000L, LocalDate.of(LocalDate.now().getYear(), 4, 23)),
-                List.of(CHEAP_FEE, LOVELY_TEACHING),
-                false, false
-        );
+                Map.of(KINDNESS.getType(), false,
+                        GOOD_FACILITY.getType(), false,
+                        CHEAP_FEE.getType(), true,
+                        GOOD_MANAGEMENT.getType(), true,
+                        LOVELY_TEACHING.getType(), false,
+                        SHUTTLE_AVAILABILITY.getType(), false),
+                false, false);
     }
 
     public ChildInfo makeChildInfo() {
@@ -126,7 +119,7 @@ public class DashboardFixture {
                 "AVAILABLE",
                 100_000,
                 LocalDate.now(),
-                "예능(대)"
+                List.of(SCIENCE.getCategoryName(), MATH.getCategoryName())
         );
     }
 

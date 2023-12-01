@@ -61,6 +61,9 @@ dependencies {
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // Hypersistence Utils
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.6.1'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

@@ -17,18 +17,13 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResults;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AcademyCalendarService {
@@ -137,10 +132,15 @@ public class AcademyCalendarService {
             return;
         }
 
-        List<AcademyTimeTemplateDateInfo> academyTimeTemplates = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(
-                academyCalendarDeleteParam.dashboardId());
-        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
-        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, academyCalendarDeleteParam.requestDate());
+        Long dashboardId = academyScheduleRepository.findDashboardIdByAcademyScheduleId(
+                academyCalendarDeleteParam.academyScheduleId());
+        List<AcademyTimeTemplateDateInfo> academyTimeTemplates =
+                academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(dashboardId);
+        LocalDate requestedDate
+                = academyScheduleRepository.findScheduleDate(academyCalendarDeleteParam.academyScheduleId());
+
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, requestedDate);
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, requestedDate);
     }
 
     private void deleteAcademyTimeTemplates(
@@ -178,27 +178,28 @@ public class AcademyCalendarService {
     }
 
     @Transactional
-    public void deleteSchedulesByDashboard(AcademyCalendarDeleteByDashboardParam Param) {
+    public void deleteSchedulesByDashboard(AcademyCalendarDeleteByDashboardParam param) {
         List<AcademyTimeTemplateDateInfo> academyTimeTemplates
-                = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(Param.dashboardId());
+                = academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
 
-        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, Param.requestedDate());
-        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, Param.requestedDate());
+        deleteAcademySchedulesAfterStartDate(academyTimeTemplates, param.requestedDate());
+        changeBeforeTimeTemplateOfEndDate(academyTimeTemplates, param.requestedDate());
+    }
+
+    @Transactional
+    public void removeCalendar(final List<Long> childIds) {
+        academyTimeTemplateRepository.findByChildIdIn(childIds)
+                .forEach(academyScheduleRepository::deleteAllByAcademyTimeTemplateId);
+        academyTimeTemplateRepository.deleteAllByChildIds(childIds);
     }
 
     @Transactional(readOnly = true)
-    public AcademyCalendarDetailResults detailSchedules(AcademyCalendarDetailParam param) {
-        List<AcademyCalenderDetailInfo> academyCalenderDetailInfos =
-                param.childrenInfos()
-                        .stream()
-                        .map(
-                                childrenSchedule -> academyScheduleRepository.findTimeTemplateByChildIdAndScheduleId(
-                                        childrenSchedule.scheduleId(),
-                                        childrenSchedule.childId())
-                        )
-                        .toList();
+    public AcademyCalendarDetailResult detailSchedules(AcademyCalendarDetailParam param) {
+        AcademyCalenderDetailInfo academyCalenderDetailInfo
+                = academyScheduleRepository.findTimeTemplateByChildIdAndScheduleId(param.scheduleId(), param.childId());
 
-        return AcademyCalendarDetailResults.from(academyCalenderDetailInfos);
+        LocalDate requestedDate = academyScheduleRepository.findScheduleDate(param.scheduleId());
+        return AcademyCalendarDetailResult.from(academyCalenderDetailInfo, requestedDate);
     }
 
 }

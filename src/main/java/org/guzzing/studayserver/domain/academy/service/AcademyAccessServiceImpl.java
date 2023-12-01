@@ -1,15 +1,15 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
+import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
-
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.AcademyInfo;
 import org.guzzing.studayserver.domain.dashboard.facade.vo.LessonInfo;
-
 import org.guzzing.studayserver.global.exception.AcademyException;
 import org.guzzing.studayserver.global.exception.LessonException;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,18 @@ public class AcademyAccessServiceImpl implements
 
     private final AcademyRepository academyRepository;
     private final LessonRepository lessonRepository;
+    private final AcademyCategoryRepository academyCategoryRepository;
     private final AcademyService academyService;
 
     public AcademyAccessServiceImpl(
             final AcademyRepository academyRepository,
             final LessonRepository lessonRepository,
-            AcademyService academyService) {
+            final AcademyCategoryRepository academyCategoryRepository,
+            final AcademyService academyService
+    ) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
+        this.academyCategoryRepository = academyCategoryRepository;
         this.academyService = academyService;
     }
 
@@ -63,8 +67,9 @@ public class AcademyAccessServiceImpl implements
     public AcademyInfo findAcademyInfo(final Long academyId) {
         final Academy academy = academyRepository.findAcademyById(academyId)
                 .orElseThrow(() -> new AcademyException("존재하지 않는 학원입니다."));
+        List<Long> categoryIds = academyCategoryRepository.findCategoryIdsByAcademyId(academyId);
 
-        return AcademyInfo.from(academy);
+        return AcademyInfo.from(academy, categoryIds);
     }
 
     @Override

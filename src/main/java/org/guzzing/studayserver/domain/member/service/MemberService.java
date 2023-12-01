@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.member.service;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -35,6 +34,11 @@ public class MemberService {
         }
 
         return member.getId();
+    }
+
+    @Transactional
+    public void remove(final long memberId) {
+        memberRepository.deleteById(memberId);
     }
 
     public MemberInformationResult getById(Long memberId) {

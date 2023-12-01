@@ -101,6 +101,10 @@ public class Lesson {
         return valueToBeCompared;
     }
 
+    public Long getAcademyId() {
+        return academy.getId();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

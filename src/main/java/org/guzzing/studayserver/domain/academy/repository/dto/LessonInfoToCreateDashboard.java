@@ -4,5 +4,5 @@ public interface LessonInfoToCreateDashboard {
 
     Long getId();
 
-    String getSubject();
+    String getCurriculum();
 }

@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.child.service;
 
-import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
@@ -26,14 +25,11 @@ public class ChildAccessServiceImpl implements
     }
 
     @Override
-    public List<AcademyCalendarDetailChildInfo> getChildImages(List<Long> childrenIds) {
-        return childrenIds.stream()
-                .map(childId -> {
-                    Child child = this.getById(childId);
-                    return new AcademyCalendarDetailChildInfo(childId, child.getNickName(),
-                            child.getProfileImageURLPath());
-                })
-                .toList();
+    public AcademyCalendarDetailChildInfo getChildImages(Long childrenId) {
+        Child child = this.getById(childrenId);
+        return new AcademyCalendarDetailChildInfo(childrenId, child.getNickName(),
+                child.getProfileImageURLPath());
+
     }
 
     private Child getById(Long childId) {

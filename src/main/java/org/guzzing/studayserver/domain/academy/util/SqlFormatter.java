@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.util;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 
@@ -12,18 +13,8 @@ public class SqlFormatter {
         throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());
     }
 
-    public static String makeWhereInString(List<String> values) {
-        StringBuilder builder = new StringBuilder("(");
-        for (int i = 0; i < values.size(); i++) {
-            builder.append("'");
-            builder.append(values.get(i));
-            builder.append("'");
-            if (i < values.size() - 1) {
-                builder.append(", ");
-            }
-        }
-        builder.append(")");
-        return builder.toString();
+    public static String makeWhereInString(List<Long> values) {
+        return "(" + values.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")";
     }
 
     public static String makeDiagonalByLineString(Location northEast, Location southWest) {

@@ -9,15 +9,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long>, AcademyScheduleRepository {
 
     AcademySchedule save(AcademySchedule academySchedule);
 
-    @Query("SELECT distinct ash.academyTimeTemplate FROM AcademySchedule as ash WHERE ash.id = :academyScheduleId ")
+    @Query("SELECT ash.academyTimeTemplate FROM AcademySchedule as ash WHERE ash.id = :academyScheduleId ")
     AcademyTimeTemplate findDistinctAcademyTimeTemplate(@Param(value = "academyScheduleId") Long academyScheduleId);
+
+    @Query("SELECT at.dashboardId " +
+            "FROM AcademySchedule AS ash " +
+            "LEFT JOIN  AcademyTimeTemplate AS at " +
+            "ON ash.academyTimeTemplate.id = at.id " +
+            "WHERE ash.id =:academyScheduleId")
+    Long findDashboardIdByAcademyScheduleId(@Param(value = "academyScheduleId") Long academyScheduleId);
 
     void deleteAllByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
@@ -68,5 +74,9 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             + "WHERE att.childId IN :childIds "
             + "AND ash.scheduleDate = :date")
     List<AcademySchedule> findByDate(List<Long> childIds, LocalDate date);
+
+    @Query("select ash.scheduleDate from AcademySchedule as ash" +
+            " where ash.id = :scheduleId")
+    LocalDate findScheduleDate(@Param("scheduleId") Long scheduleId);
 
 }
