@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -40,9 +41,10 @@ public class Child {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public Child(String nickName, String grade) {
+    public Child(String nickName, String grade, String profileImageUri) {
         this.nickName = new ChildNickname(nickName);
         this.grade = Grade.fromDescription(grade);
+        this.profileImageUri = new ProfileImageUri(profileImageUri);
     }
 
     public void assignToNewMemberOnly(Member member) {
@@ -91,4 +93,16 @@ public class Child {
         this.grade = Grade.increaseGrade(this.grade);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Child child = (Child) o;
+        return Objects.equals(id, child.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
