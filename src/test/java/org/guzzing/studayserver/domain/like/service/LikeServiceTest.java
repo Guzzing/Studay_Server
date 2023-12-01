@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
+import java.util.Objects;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
@@ -90,7 +91,11 @@ class LikeServiceTest {
         likeService.deleteLikeOfAcademy(postResult.academyId(), postResult.memberId());
 
         // Then
-        List<Like> result = likeRepository.findByMemberId(postResult.memberId());
+        List<Like> likes = likeRepository.findByMemberId(postResult.memberId());
+        List<Long> result = likes.stream()
+                .map(Like::getAcademyId)
+                .filter(id -> Objects.equals(id, postResult.academyId()))
+                .toList();
 
         assertThat(result).isEmpty();
     }
