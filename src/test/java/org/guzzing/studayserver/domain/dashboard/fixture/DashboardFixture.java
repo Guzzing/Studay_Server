@@ -16,7 +16,6 @@ import static org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemoType.
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.vo.Schedule;
