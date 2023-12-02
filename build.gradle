@@ -43,13 +43,16 @@ repositories {
 }
 
 dependencies {
+
+    // Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // S3
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
     implementation 'com.amazonaws:aws-java-sdk-s3'
-    testImplementation 'io.findify:s3mock_2.13:0.2.6'
 
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -101,6 +104,12 @@ dependencies {
 
     // spatial type
     implementation 'org.hibernate:hibernate-spatial:6.3.1.Final'
+
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
 }
 
