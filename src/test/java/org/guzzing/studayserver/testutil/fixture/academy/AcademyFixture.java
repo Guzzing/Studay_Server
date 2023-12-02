@@ -12,7 +12,9 @@ import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.locationtech.jts.geom.Point;
@@ -116,6 +118,10 @@ public class AcademyFixture {
         return AcademiesByLocationParam.of(latitude, longitude, 1L);
     }
 
+    public static  AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude, double longitude) {
+        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L,0 );
+    }
+
     public static AcademyFilterParam academyFilterParam(
             Double latitude,
             Double longitude,
@@ -129,6 +135,23 @@ public class AcademyFixture {
                         CategoryInfo.MATH.getCategoryName()),
                 desiredMinAmount,
                 desiredMaxAmount
+        );
+    }
+
+    public static AcademyFilterWithScrollParam academyFilterWithScrollParam(
+            Double latitude,
+            Double longitude,
+            Long desiredMinAmount,
+            Long desiredMaxAmount) {
+        return new AcademyFilterWithScrollParam(
+                latitude,
+                longitude,
+                List.of(
+                        CategoryInfo.TUTORING_SCHOOL.getCategoryName(),
+                        CategoryInfo.MATH.getCategoryName()),
+                desiredMinAmount,
+                desiredMaxAmount,
+                0
         );
     }
 

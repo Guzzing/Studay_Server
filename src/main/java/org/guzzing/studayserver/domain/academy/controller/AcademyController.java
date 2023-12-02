@@ -1,18 +1,14 @@
 package org.guzzing.studayserver.domain.academy.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByLocationRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByNameRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByNameResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyFilterResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.*;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
@@ -63,6 +59,20 @@ public class AcademyController {
     }
 
     @GetMapping(
+            path = "/complexes-scroll",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AcademiesByLocationWithScrollResponses> findByLocationWithScroll(
+            @ModelAttribute @Valid AcademyByLocationWithScrollRequest request,
+            @MemberId Long memberId
+    ) {
+        AcademiesByLocationWithScrollFacadeResult response = academyFacade.findByLocationWithScroll(
+                AcademyByLocationWithScrollRequest.to(request, memberId));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(AcademiesByLocationWithScrollResponses.from(response));
+    }
+
+    @GetMapping(
             path = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByNameResponses> findByName(
@@ -87,6 +97,20 @@ public class AcademyController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyFilterResponses.from(academyFilterResults));
+    }
+
+    @GetMapping(
+            path = "/filter-scroll",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AcademiesFilterWithScrollResponses> filterAcademies(
+            @ModelAttribute @Valid AcademyFilterWithScrollRequest request,
+            @MemberId Long memberId
+    ) {
+        AcademiesFilterWithScrollResults academiesFilterWithScrollResults = academyService.filterAcademies(
+                AcademyFilterWithScrollRequest.to(request), memberId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(AcademiesFilterWithScrollResponses.from(academiesFilterWithScrollResults));
     }
 
     @GetMapping(

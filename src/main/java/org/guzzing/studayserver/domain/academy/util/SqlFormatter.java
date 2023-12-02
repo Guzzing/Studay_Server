@@ -7,7 +7,7 @@ import org.guzzing.studayserver.global.error.response.ErrorCode;
 
 public class SqlFormatter {
 
-    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)',4326)";
+    private static final String LINESTRING_SQL = "'LINESTRING(%f %f, %f %f)',4326";
 
     private SqlFormatter() {
         throw new RuntimeException(ErrorCode.UTIL_NOT_CONSTRUCTOR.getMessage());

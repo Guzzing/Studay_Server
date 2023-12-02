@@ -3,27 +3,18 @@ package org.guzzing.studayserver.domain.academy.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.guzzing.studayserver.domain.academy.model.Lesson;
-import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.*;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-import org.guzzing.studayserver.domain.academy.util.Direction;
-import org.guzzing.studayserver.domain.academy.util.FilterParser;
+import org.guzzing.studayserver.domain.academy.service.dto.param.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.parser.FilterParser;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
-import org.guzzing.studayserver.domain.academy.util.SqlFormatter;
 import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AcademyService {
 
     private static final Double DISTANCE = 2.0;
-    private static final int PAGE_SIZE = 5;
+    private static final int ACADEMY_NAME_SEARCH_PAGE_SIZE = 5;
+    private static final int ACADEMY_LOCATION_SEARCH_PAGE_SIZE = 10;
     private final AcademyRepository academyRepository;
     private final LessonRepository lessonRepository;
     private final ReviewCountRepository reviewCountRepository;
@@ -42,8 +34,8 @@ public class AcademyService {
     private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
-            AcademyCategoryRepository academyCategoryRepository) {
+                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
+                          AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
@@ -63,15 +55,7 @@ public class AcademyService {
 
     @Transactional(readOnly = true)
     public AcademiesByLocationResults findAcademiesByLocation(AcademiesByLocationParam param) {
-        Location northEast = calculateLocationWithinRadiusInDirection(
-                param.baseLatitude(),
-                param.baseLongitude(),
-                Direction.NORTHEAST);
-        Location southWest = calculateLocationWithinRadiusInDirection(
-                param.baseLatitude(),
-                param.baseLongitude(),
-                Direction.SOUTHWEST);
-        String diagonal = SqlFormatter.makeDiagonalByLineString(northEast, southWest);
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
 
         List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal,
                 param.memberId());
@@ -84,8 +68,39 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
+    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(AcademiesByLocationWithScrollParam param) {
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
+
+        AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
+                diagonal,
+                param.memberId(),
+                param.pageNumber(),
+                ACADEMY_LOCATION_SEARCH_PAGE_SIZE);
+
+        Map<Long, List<Long>> academyIdWithCategories
+                = makeCategoriesWithLocationScroll(academiesByLocation.academiesByLocation());
+
+        return AcademiesByLocationWithScrollResults.to(
+                academiesByLocation,
+                academyIdWithCategories);
+    }
+
+    private Map<Long, List<Long>> makeCategoriesWithLocationScroll(List<AcademyByLocationWithScroll> academiesByLocations) {
+        Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
+        academiesByLocations.forEach(
+                academyByLocationWithScroll -> {
+                    academyIdWithCategories.put(
+                            academyByLocationWithScroll.academyId(),
+                            academyCategoryRepository.findCategoryIdsByAcademyId(academyByLocationWithScroll.academyId()));
+                }
+        );
+
+        return academyIdWithCategories;
+    }
+
+    @Transactional(readOnly = true)
     public AcademiesByNameResults findAcademiesByName(AcademiesByNameParam param) {
-        PageRequest requestPageAble = PageRequest.of(param.pageNumber(), PAGE_SIZE);
+        PageRequest requestPageAble = PageRequest.of(param.pageNumber(), ACADEMY_NAME_SEARCH_PAGE_SIZE);
 
         return AcademiesByNameResults.to(
                 academyRepository.findAcademiesByName(param.academyName(), requestPageAble)
@@ -94,15 +109,7 @@ public class AcademyService {
 
     @Transactional(readOnly = true)
     public AcademyFilterResults filterAcademies(AcademyFilterParam param, Long memberId) {
-        Location northEast = calculateLocationWithinRadiusInDirection(
-                param.baseLatitude(),
-                param.baseLongitude(),
-                Direction.NORTHEAST);
-        Location southWest = calculateLocationWithinRadiusInDirection(
-                param.baseLatitude(),
-                param.baseLongitude(),
-                Direction.SOUTHWEST);
-        String diagonal = SqlFormatter.makeDiagonalByLineString(northEast, southWest);
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
 
         List<AcademyByFiltering> academiesByFiltering = academyRepository.filterAcademies(
                 AcademyFilterParam.to(param, diagonal), memberId);
@@ -114,16 +121,29 @@ public class AcademyService {
         return AcademyFilterResults.from(academyIdWithCategories, distinctFilteredAcademies);
     }
 
-    private Location calculateLocationWithinRadiusInDirection(
-            double latitude,
-            double longitude,
-            Direction direction) {
+    @Transactional(readOnly = true)
+    public AcademiesFilterWithScrollResults filterAcademies(AcademyFilterWithScrollParam param, Long memberId) {
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
 
-        return GeometryUtil.calculateLocationWithinRadiusInDirection(
-                latitude,
-                longitude,
-                direction.getBearing(),
-                DISTANCE);
+        AcademiesByFilterWithScroll academiesByFilterWithScroll = academyRepository.filterAcademies(
+                AcademyFilterWithScrollParam.to(param, diagonal), memberId, param.pageNumber(), ACADEMY_LOCATION_SEARCH_PAGE_SIZE);
+
+        Map<Long, List<Long>> academyIdWithCategories = makeCategoriesByFilterWithScroll(academiesByFilterWithScroll.academiesByLocation());
+
+        return AcademiesFilterWithScrollResults.from(academiesByFilterWithScroll, academyIdWithCategories);
+    }
+
+    private Map<Long, List<Long>> makeCategoriesByFilterWithScroll(List<AcademyByFilterWithScroll> academiesByFilterWithScroll) {
+        Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
+        academiesByFilterWithScroll.forEach(
+                academyByFilterWithScroll -> {
+                    academyIdWithCategories.put(
+                            academyByFilterWithScroll.academyId(),
+                            academyCategoryRepository.findCategoryIdsByAcademyId(academyByFilterWithScroll.academyId()));
+                }
+        );
+
+        return academyIdWithCategories;
     }
 
     private boolean isLiked(Long academyId, Long memberId) {

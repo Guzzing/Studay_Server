@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
 import java.time.LocalDate;
 import java.util.List;
+
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
@@ -31,4 +32,8 @@ public interface AcademyScheduleRepository {
     Long findDashboardIdByAcademyScheduleId(Long academyScheduleId);
 
     LocalDate findScheduleDate(Long scheduleId);
+
+    List<AcademySchedule> findByDate(LocalDate startDateOfAttendance,
+                                     LocalDate endDateOfAttendance,
+                                     Long childId);
 }
