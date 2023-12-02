@@ -28,7 +28,7 @@ openapi3 {
     servers = [
             { url = "http://localhost:8080" },
             { url = "https://studay.store" },
-            { url = "http://studay.store" }
+            { url = "http://3.114.43.57:8080" }
     ]
     title = "스터데이"
     description = "스터데이 API 문서"
@@ -53,6 +53,7 @@ dependencies {
     // S3
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
     implementation 'com.amazonaws:aws-java-sdk-s3'
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
 
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -105,11 +106,11 @@ dependencies {
     // spatial type
     implementation 'org.hibernate:hibernate-spatial:6.3.1.Final'
 
-    // Spring Actuator
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
     // Prometheus
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 }
 
