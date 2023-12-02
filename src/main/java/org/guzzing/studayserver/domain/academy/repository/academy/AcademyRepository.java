@@ -32,4 +32,10 @@ public interface AcademyRepository {
             Long memberId,
             int pageNumber,
             int pageSize);
+
+    AcademiesByFilterWithScroll filterAcademies(
+            AcademyFilterCondition academyFilterCondition,
+            Long memberId,
+            int pageNumber,
+            int pageSize);
 }
