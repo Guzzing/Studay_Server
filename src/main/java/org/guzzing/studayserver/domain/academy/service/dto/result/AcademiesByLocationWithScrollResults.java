@@ -6,15 +6,15 @@ import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import java.util.List;
 import java.util.Map;
 
-public record AcademiesByLocationResultsWithScroll(
+public record AcademiesByLocationWithScrollResults(
         List<AcademiesByLocationResultWithScroll> academiesByLocationResults,
         boolean hasNext
 ) {
 
-    public static AcademiesByLocationResultsWithScroll to(
+    public static AcademiesByLocationWithScrollResults to(
             AcademiesByLocationWithScroll academiesByLocationWithScroll,
             Map<Long, List<Long>> academyIdWithCategories) {
-        return new AcademiesByLocationResultsWithScroll(
+        return new AcademiesByLocationWithScrollResults(
                 academiesByLocationWithScroll
                         .academiesByLocation()
                         .stream()

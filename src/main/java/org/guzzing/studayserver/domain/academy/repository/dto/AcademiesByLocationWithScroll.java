@@ -15,4 +15,5 @@ public record AcademiesByLocationWithScroll(
                 hasNext
         );
     }
+
 }

@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.facade.dto;
 
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResultsWithScroll;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import java.util.List;
 
@@ -13,7 +13,7 @@ public record AcademiesByLocationWithScrollFacadeResult(
 ) {
 
     public static AcademiesByLocationWithScrollFacadeResult from(
-            AcademiesByLocationResultsWithScroll academiesByLocationResults,
+            AcademiesByLocationWithScrollResults academiesByLocationResults,
             RegionResult regionResult) {
         return new AcademiesByLocationWithScrollFacadeResult(
                 academiesByLocationResults
@@ -42,7 +42,7 @@ public record AcademiesByLocationWithScrollFacadeResult(
     ) {
 
         public static AcademyByLocationWithScrollFacadeResult from(
-                AcademiesByLocationResultsWithScroll.AcademiesByLocationResultWithScroll result) {
+                AcademiesByLocationWithScrollResults.AcademiesByLocationResultWithScroll result) {
             return new AcademyByLocationWithScrollFacadeResult(
                     result.academyId(),
                     result.academyName(),

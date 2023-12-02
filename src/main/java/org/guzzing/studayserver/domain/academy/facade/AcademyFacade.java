@@ -6,7 +6,7 @@ import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWit
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResultsWithScroll;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.region.service.RegionService;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
@@ -37,7 +37,7 @@ public class AcademyFacade {
 
 
     public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(AcademiesByLocationWithScrollFacadeParam param) {
-        AcademiesByLocationResultsWithScroll academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
+        AcademiesByLocationWithScrollResults academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
                 AcademiesByLocationWithScrollFacadeParam.to(param));
 
         RegionResult regionContainingPoint = regionService.findRegionContainingPoint(
