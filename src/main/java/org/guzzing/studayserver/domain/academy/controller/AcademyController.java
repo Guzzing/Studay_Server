@@ -1,16 +1,14 @@
 package org.guzzing.studayserver.domain.academy.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByLocationRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByNameRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByLocationWithScrollRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.*;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
@@ -99,6 +97,20 @@ public class AcademyController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyFilterResponses.from(academyFilterResults));
+    }
+
+    @GetMapping(
+            path = "/filter-scroll",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AcademiesFilterWithScrollResponses> filterAcademies(
+            @ModelAttribute @Valid AcademyFilterWithScrollRequest request,
+            @MemberId Long memberId
+    ) {
+        AcademiesFilterWithScrollResults academiesFilterWithScrollResults = academyService.filterAcademies(
+                AcademyFilterWithScrollRequest.to(request), memberId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(AcademiesFilterWithScrollResponses.from(academiesFilterWithScrollResults));
     }
 
     @GetMapping(
