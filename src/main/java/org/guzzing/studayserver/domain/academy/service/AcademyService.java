@@ -1,9 +1,10 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
@@ -85,7 +86,7 @@ public class AcademyService {
     }
 
     private Map<Long, List<Long>> makeCategoriesWithLocationScroll(List<AcademyByLocationWithScroll> academiesByLocations) {
-        Map<Long, List<Long>> academyIdWithCategories = new HashMap<>();
+        Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
         academiesByLocations.forEach(
                 academyByLocationWithScroll -> {
                     academyIdWithCategories.put(
@@ -133,7 +134,7 @@ public class AcademyService {
     }
 
     private Map<Long, List<Long>> makeCategoriesByFilterWithScroll(List<AcademyByFilterWithScroll> academiesByFilterWithScroll) {
-        Map<Long, List<Long>> academyIdWithCategories = new HashMap<>();
+        Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
         academiesByFilterWithScroll.forEach(
                 academyByFilterWithScroll -> {
                     academyIdWithCategories.put(
