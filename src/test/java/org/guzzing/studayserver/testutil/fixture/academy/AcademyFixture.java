@@ -14,6 +14,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvail
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.locationtech.jts.geom.Point;
@@ -134,6 +135,23 @@ public class AcademyFixture {
                         CategoryInfo.MATH.getCategoryName()),
                 desiredMinAmount,
                 desiredMaxAmount
+        );
+    }
+
+    public static AcademyFilterWithScrollParam academyFilterWithScrollParam(
+            Double latitude,
+            Double longitude,
+            Long desiredMinAmount,
+            Long desiredMaxAmount) {
+        return new AcademyFilterWithScrollParam(
+                latitude,
+                longitude,
+                List.of(
+                        CategoryInfo.TUTORING_SCHOOL.getCategoryName(),
+                        CategoryInfo.MATH.getCategoryName()),
+                desiredMinAmount,
+                desiredMaxAmount,
+                0
         );
     }
 

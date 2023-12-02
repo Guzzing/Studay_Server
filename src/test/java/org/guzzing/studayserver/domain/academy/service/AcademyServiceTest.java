@@ -15,6 +15,7 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -224,7 +225,6 @@ class AcademyServiceTest {
         }
     }
 
-
     @Test
     @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다.")
     void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise() {
@@ -265,6 +265,55 @@ class AcademyServiceTest {
                             result -> assertThat(academyFilterParam.categories()).contains(result)
                     );
         }
+    }
+
+    @Test
+    @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다." +
+            "또한 학원 목록 조회 결과가 "+LOCATION_PAGE_SIZE+" 이내로 조회된다.")
+    void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise_withScroll() {
+        //Given
+        Academy savedAcademyWithTwoCategories = academySetUpForFilterAndDetail().academy;
+
+        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
+        Long minFee = 10000L;
+        Long maxFee = 1000000L;
+
+        for (Academy academy : academies) {
+            Academy savedAcademy = academyRepository.save(academy);
+            savedAcademy.changeEducationFee(generateRandomAmount(minFee, maxFee));
+
+            AcademyFixture.academyCategoryAboutTwoCategories(savedAcademy)
+                    .forEach(
+                            academyCategory -> academyCategoryRepository.save(academyCategory)
+                    );
+
+            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+        }
+        AcademyFilterWithScrollParam academyFilterWithScrollParam = AcademyFixture.academyFilterWithScrollParam(LATITUDE, LONGITUDE, minFee, maxFee);
+
+        int totalSize = academies.size();
+        int expectedSearchedPageSize = totalSize >= LOCATION_PAGE_SIZE ? LOCATION_PAGE_SIZE : totalSize;
+        boolean expectedHasNext = totalSize >= LOCATION_PAGE_SIZE ? true : false;
+
+        //When
+        AcademiesFilterWithScrollResults academiesFilterWithScrollResults = academyService.filterAcademies(academyFilterWithScrollParam,
+                savedAcademyWithTwoCategories.getId());
+
+        //Then
+        for (AcademiesFilterWithScrollResults.AcademyFilterWithScrollResult academyFilterResult : academiesFilterWithScrollResults.academiesFilterWithScrollResults()) {
+            Academy filtedAcademy = academyRepository.getById(academyFilterResult.academyId());
+
+            assertThat(filtedAcademy.getMaxEducationFee()).
+                    isGreaterThanOrEqualTo(minFee)
+                    .isLessThanOrEqualTo(maxFee);
+            academyFilterResult.categories()
+                    .forEach(
+                            result -> assertThat(academyFilterWithScrollParam.categories()).contains(result)
+                    );
+        }
+        assertThat(academiesFilterWithScrollResults.academiesFilterWithScrollResults().size()).isEqualTo(expectedSearchedPageSize);
+        assertThat(academiesFilterWithScrollResults.hasNext()).isEqualTo(expectedHasNext);
     }
 
     private long generateRandomAmount(long min, long max) {

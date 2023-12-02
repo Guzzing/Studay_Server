@@ -166,10 +166,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) = 1
-                ORDER BY a.academy_name""";
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) = 1""";
 
         String formattedQuery = String.format(nativeQuery, memberId, pointFormat);
+        formattedQuery += orderBy("a.academy_name");
         formattedQuery = makeScroll(pageNumber, pageSize, formattedQuery);
 
         Query emNativeQuery = em.createNativeQuery(
@@ -209,7 +209,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
             int pageNumber,
             int pageSize) {
         String nativeQuery = """
-                SELECT  
+                SELECT  DISTINCT
                     a.id AS academyId, 
                     a.academy_name AS academyName, 
                     a.full_address AS fullAddress, 
@@ -225,8 +225,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
                     MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1
-                ORDER BY 
-                    a.academy_name""";
+                """;
 
 
         String formattedQuery = String.format(
@@ -234,6 +233,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 memberId,
                 academyFilterCondition.pointFormat());
         formattedQuery = addWhereConditionsWithFilter(formattedQuery, academyFilterCondition);
+        formattedQuery += orderBy("a.academy_name");
         formattedQuery = makeScroll(pageNumber, pageSize, formattedQuery);
 
         Query query = em.createNativeQuery(formattedQuery);
@@ -306,6 +306,10 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
         int offset = pageNumber * pageSize;
         formattedQuery += " LIMIT " + pageSize + " OFFSET " + offset;
         return formattedQuery;
+    }
+
+    private String orderBy(String columnName) {
+        return " ORDER BY "+columnName;
     }
 
 }
