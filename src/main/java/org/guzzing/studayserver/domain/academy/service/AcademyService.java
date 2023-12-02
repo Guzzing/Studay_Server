@@ -8,16 +8,10 @@ import java.util.Set;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.*;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.*;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.service.parser.FilterParser;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
@@ -74,7 +68,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public AcademiesByLocationResultsWithScroll findAcademiesByLocationWithScroll(AcademiesByLocationWithScrollParam param) {
+    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(AcademiesByLocationWithScrollParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
 
         AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
@@ -86,7 +80,7 @@ public class AcademyService {
         Map<Long, List<Long>> academyIdWithCategories
                 = makeCategoriesWithLocationScroll(academiesByLocation.academiesByLocation());
 
-        return AcademiesByLocationResultsWithScroll.to(
+        return AcademiesByLocationWithScrollResults.to(
                 academiesByLocation,
                 academyIdWithCategories);
     }
@@ -125,6 +119,31 @@ public class AcademyService {
                 academiesByFiltering);
 
         return AcademyFilterResults.from(academyIdWithCategories, distinctFilteredAcademies);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademiesFilterWithScrollResults filterAcademies(AcademyFilterWithScrollParam param, Long memberId) {
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(),DISTANCE);
+
+        AcademiesByFilterWithScroll academiesByFilterWithScroll = academyRepository.filterAcademies(
+                AcademyFilterWithScrollParam.to(param, diagonal), memberId, param.pageNumber(), ACADEMY_LOCATION_SEARCH_PAGE_SIZE);
+
+        Map<Long, List<Long>> academyIdWithCategories = makeCategoriesByFilterWithScroll(academiesByFilterWithScroll.academiesByLocation());
+
+        return AcademiesFilterWithScrollResults.from(academiesByFilterWithScroll, academyIdWithCategories);
+    }
+
+    private Map<Long, List<Long>> makeCategoriesByFilterWithScroll(List<AcademyByFilterWithScroll> academiesByFilterWithScroll) {
+        Map<Long, List<Long>> academyIdWithCategories = new HashMap<>();
+        academiesByFilterWithScroll.forEach(
+                academyByFilterWithScroll -> {
+                    academyIdWithCategories.put(
+                            academyByFilterWithScroll.academyId(),
+                            academyCategoryRepository.findCategoryIdsByAcademyId(academyByFilterWithScroll.academyId()));
+                }
+        );
+
+        return academyIdWithCategories;
     }
 
     private boolean isLiked(Long academyId, Long memberId) {
