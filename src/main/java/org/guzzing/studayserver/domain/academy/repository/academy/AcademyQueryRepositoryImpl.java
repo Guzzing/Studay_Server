@@ -224,7 +224,9 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1""";
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1
+                ORDER BY 
+                    a.academy_name""";
 
 
         String formattedQuery = String.format(
@@ -302,7 +304,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
 
     private String makeScroll(int pageNumber, int pageSize, String formattedQuery) {
         int offset = pageNumber * pageSize;
-        formattedQuery += " ORDER BY a.academy_name LIMIT " + pageSize + " OFFSET " + offset;
+        formattedQuery += " LIMIT " + pageSize + " OFFSET " + offset;
         return formattedQuery;
     }
 

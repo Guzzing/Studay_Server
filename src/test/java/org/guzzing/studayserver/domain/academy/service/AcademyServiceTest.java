@@ -15,16 +15,7 @@ import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepositor
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
@@ -44,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 class AcademyServiceTest {
 
     private static final String ACADEMY_NAME_FOR_SEARCH = "코딩";
+    private static final int LOCATION_PAGE_SIZE = 10;
     private static final double LATITUDE = 37.4449168;
     private static final double LONGITUDE = 127.1388684;
 
@@ -151,6 +143,7 @@ class AcademyServiceTest {
                 .map(academyCategory -> academyCategory.getCategoryId())
                 .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
                 .toList();
+
         //When
         AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
                 AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE));
@@ -163,7 +156,50 @@ class AcademyServiceTest {
                 .forEach(
                         categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
                 );
+    }
 
+    @Test
+    @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 "+LOCATION_PAGE_SIZE+" 이내로 조회된다.")
+    void findAcademiesByLocation_academiesWithinDistance_equalsPageSize() {
+        //Given
+        lessonRepository.deleteAll();
+        reviewCountRepository.deleteAll();
+        academyCategoryRepository.deleteAll();
+        academyRepository.deleteAll();
+
+        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
+        for (Academy academy : academies) {
+            Academy savedAcademy = academyRepository.save(academy);
+            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+
+            AcademyFixture.academyCategoryAboutSungnam(savedAcademy)
+                    .forEach(
+                            academyCategory -> academyCategoryRepository.save(academyCategory)
+                    );
+        }
+        List<String> categoryNames = AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam).stream()
+                .map(academyCategory -> academyCategory.getCategoryId())
+                .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                .toList();
+
+        int totalSize = academies.size();
+        int expectedSearchedPageSize = totalSize >= LOCATION_PAGE_SIZE ? LOCATION_PAGE_SIZE : totalSize;
+        boolean expectedHasNext = totalSize >= LOCATION_PAGE_SIZE ? true : false;
+
+        //When
+        AcademiesByLocationWithScrollResults academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
+                AcademyFixture.academiesByLocationWithScrollParam(LATITUDE, LONGITUDE));
+
+        //Then
+        assertThat(academiesByLocationWithScroll.academiesByLocationResults().size()).isEqualTo(expectedSearchedPageSize);
+        assertThat(academiesByLocationWithScroll.hasNext()).isEqualTo(expectedHasNext);
+        academiesByLocationWithScroll.academiesByLocationResults()
+                .stream()
+                .map(academiesByLocationResult -> academiesByLocationResult.categories())
+                .forEach(
+                        categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
+                );
     }
 
     @Test
