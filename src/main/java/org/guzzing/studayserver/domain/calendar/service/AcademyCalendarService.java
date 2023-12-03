@@ -152,7 +152,7 @@ public class AcademyCalendarService {
     @Transactional
     public void deleteSchedule(AcademyCalendarDeleteParam academyCalendarDeleteParam) {
         if (!academyCalendarDeleteParam.isAllDeleted()) {
-            academyScheduleRepository.deleteAcademyScheduleById(academyCalendarDeleteParam.academyScheduleId());
+            academyScheduleRepository.deleteById(academyCalendarDeleteParam.academyScheduleId());
             return;
         }
 

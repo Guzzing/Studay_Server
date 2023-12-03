@@ -21,7 +21,7 @@ public interface AcademyScheduleRepository {
 
     List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
-    void deleteAcademyScheduleById(Long academyScheduleId);
+    void deleteById(Long academyScheduleId);
 
     AcademyCalenderDetailInfo findTimeTemplateByChildIdAndScheduleId(Long scheduleId, Long childId);
 
