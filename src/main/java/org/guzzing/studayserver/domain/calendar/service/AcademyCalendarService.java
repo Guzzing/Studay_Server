@@ -214,6 +214,7 @@ public class AcademyCalendarService {
     public void removeCalendar(final List<Long> childIds) {
         academyTimeTemplateRepository.findByChildIdIn(childIds)
                 .forEach(academyScheduleRepository::deleteAllByAcademyTimeTemplateId);
+
         academyTimeTemplateRepository.deleteAllByChildIds(childIds);
     }
 

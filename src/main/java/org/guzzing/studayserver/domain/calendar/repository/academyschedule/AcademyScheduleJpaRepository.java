@@ -27,6 +27,8 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             "WHERE ash.id =:academyScheduleId")
     Long findDashboardIdByAcademyScheduleId(@Param(value = "academyScheduleId") Long academyScheduleId);
 
+    @Modifying(clearAutomatically = true)
+    @Query("delete from AcademySchedule acs where acs.academyTimeTemplate.id = :academyTimeTemplateId")
     void deleteAllByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
     @Modifying
