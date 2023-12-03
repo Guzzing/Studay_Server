@@ -106,6 +106,12 @@ dependencies {
     // spatial type
     implementation 'org.hibernate:hibernate-spatial:6.3.1.Final'
 
+    // Spring cache
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '3.2.0'
+
+    // Caffeine
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
+
     // Netty/Resolver/DNS/Native/MacOS
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
 
@@ -114,6 +120,7 @@ dependencies {
 
     // Spring Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 }
 
 tasks.named('test') {

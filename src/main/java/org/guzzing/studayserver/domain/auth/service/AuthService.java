@@ -1,14 +1,15 @@
 package org.guzzing.studayserver.domain.auth.service;
 
 import io.jsonwebtoken.Claims;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.auth.exception.TokenExpiredException;
 import org.guzzing.studayserver.domain.auth.exception.TokenIsLogoutException;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
-import org.guzzing.studayserver.domain.auth.jwt.JwtToken;
-import org.guzzing.studayserver.domain.auth.jwt.logout.LogoutToken;
 import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
@@ -22,15 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthTokenProvider authTokenProvider;
-    private final LogoutTokenRepository logoutTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LogoutTokenRepository logoutTokenRepository;
 
     public AuthService(AuthTokenProvider authTokenProvider,
-            LogoutTokenRepository logoutTokenRepository,
-            RefreshTokenRepository refreshTokenRepository) {
+                      RefreshTokenRepository refreshTokenCacheRepository,
+                       LogoutTokenRepository logoutTokenCacheRepository) {
         this.authTokenProvider = authTokenProvider;
-        this.logoutTokenRepository = logoutTokenRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenRepository = refreshTokenCacheRepository;
+        this.logoutTokenRepository = logoutTokenCacheRepository;
     }
 
     @Transactional
@@ -47,16 +48,16 @@ public class AuthService {
 
     @Transactional
     public AuthLogoutResult logout(AuthToken authToken) {
-        refreshTokenRepository.deleteById(authToken.getToken());
-        logoutTokenRepository.save(LogoutToken.of(authToken.getToken()));
+        refreshTokenRepository.deleteByAccessToken(authToken.getToken());
+        logoutTokenRepository.save(authToken.getToken());
 
         return new AuthLogoutResult(true);
     }
 
     @Transactional(readOnly = true)
     public boolean isLogout(String accessToken) {
-        Optional<LogoutToken> byAccessToken = logoutTokenRepository.findById(accessToken);
-        if (byAccessToken.isPresent()) {
+        Optional<String> logoutToken = logoutTokenRepository.findByLogoutToken(accessToken);
+        if (logoutToken.isPresent()) {
             throw new TokenIsLogoutException(ErrorCode.IS_LOGOUT_TOKEN);
         }
 
@@ -68,7 +69,7 @@ public class AuthService {
         AuthToken refreshToken = findRefreshToken(accessToken);
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
 
-        refreshTokenRepository.save(new JwtToken(refreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(newAccessToken.getToken(), refreshToken.getToken());
 
         return newAccessToken;
     }
@@ -78,7 +79,7 @@ public class AuthService {
         AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
         AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
 
-        refreshTokenRepository.save(new JwtToken(newRefreshToken.getToken(), newAccessToken.getToken()));
+        refreshTokenRepository.save(newAccessToken.getToken(), newRefreshToken.getToken());
 
         return newAccessToken;
     }
@@ -88,9 +89,13 @@ public class AuthService {
     }
 
     private AuthToken findRefreshToken(String accessToken) {
-        JwtToken jwtToken = refreshTokenRepository.findById(accessToken)
+        String refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
                 .orElseThrow(() -> new TokenExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN));
-        return authTokenProvider.convertAuthToken(jwtToken.getRefreshToken());
+        return authTokenProvider.convertAuthToken(refreshToken);
+    }
+
+    public List<Map.Entry<String, String>> findAll() {
+        return refreshTokenRepository.findAll();
     }
 
 }
