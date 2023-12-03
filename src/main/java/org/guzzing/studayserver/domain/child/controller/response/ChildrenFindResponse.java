@@ -1,7 +1,9 @@
 package org.guzzing.studayserver.domain.child.controller.response;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
+import org.guzzing.studayserver.domain.child.service.ChildWithScheduleResult;
 
 public record ChildrenFindResponse(
         List<ChildFindResponse> children
@@ -11,14 +13,20 @@ public record ChildrenFindResponse(
         this.children = List.copyOf(children);
     }
 
-    public static ChildrenFindResponse from(ChildrenFindResult result) {
-        List<ChildFindResponse> children = result.children().stream()
-                .map(child -> new ChildFindResponse(
-                        child.childId(),
-                        child.profileImageUrl(),
-                        child.nickname(),
-                        child.grade(),
-                        child.schedule()))
+    public static ChildrenFindResponse from(List<ChildWithScheduleResult> childWithScheduleResults) {
+        List<ChildFindResponse> children = childWithScheduleResults.stream()
+                .map(r -> new ChildFindResponse(
+                        r.childId(),
+                        r.profileImageUrl(),
+                        r.nickname(),
+                        r.grade(),
+                        new ChildScheduleResponse(
+                                r.schedule_date(),
+                                r.lessonStartTime(),
+                                r.lessonEndTime(),
+                                r.academyName(),
+                                r.lessonSubject()
+                        )))
                 .toList();
 
         return new ChildrenFindResponse(children);
@@ -29,9 +37,18 @@ public record ChildrenFindResponse(
             String profileImageUrl,
             String nickname,
             String grade,
-            String schedule
+            ChildScheduleResponse schedule
     ) {
 
     }
 
+    public record ChildScheduleResponse(
+            LocalDate schedule_date,
+            LocalTime lessonStartTime,
+            LocalTime lessonEndTime,
+            String academyName,
+            String lessonSubject
+    ) {
+
+    }
 }

@@ -63,7 +63,7 @@ public class ChildService {
     public void delete(ChildDeleteParam param) {
         Child child = getChildByIdAndMemberId(param.childId(), param.memberId());
 
-        childRepository.delete(child);
+        child.getMember().removeChild(child.getId());
     }
 
     @Transactional

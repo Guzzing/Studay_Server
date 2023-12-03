@@ -25,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
@@ -32,11 +34,11 @@ import org.guzzing.studayserver.domain.child.controller.request.ChildModifyReque
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
 import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
+import org.guzzing.studayserver.domain.child.service.ChildFacade;
 import org.guzzing.studayserver.domain.child.service.ChildService;
+import org.guzzing.studayserver.domain.child.service.ChildWithScheduleResult;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
-import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
-import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -69,10 +71,9 @@ class ChildRestControllerTest {
 
     @MockBean
     private ChildService childService;
+
     @MockBean
-    private ChildRepository childRepository;
-    @MockBean
-    private ProfileImageProvider profileImageProvider;
+    private ChildFacade childFacade;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -132,15 +133,15 @@ class ChildRestControllerTest {
     void findChildren_success() throws Exception {
         // Given
         final String profileImageUrl1 = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/icon_0_0.png";
-        final String profileImageUrl2 = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/icon_2_1.png";
-        ChildrenFindResult result = new ChildrenFindResult(List.of(
-                new ChildFindResult(1L, profileImageUrl1, "Nickname1", "초등학교 1학년", "휴식 중!"),
-                new ChildFindResult(2L, profileImageUrl2, "Nickname2", "초등학교 2학년", "휴식 중!")
-        ));
+        List<ChildWithScheduleResult> results = List.of(
+                new ChildWithScheduleResult(1L, profileImageUrl1, "아이1", "초등학교 1학년", LocalDate.now(),
+                        LocalTime.now().minusHours(1), LocalTime.now().plusHours(1),
+                        "유원우 코딩학원", "고수반")
+        );
 
-        given(childService.findByMemberId(1L)).willReturn(result);
+        given(childFacade.findChildrenByMemberIdAndDateTime(any(), any())).willReturn(results);
 
-        ChildrenFindResponse response = ChildrenFindResponse.from(result);
+        ChildrenFindResponse response = ChildrenFindResponse.from(results);
 
         // When & Then
         mockMvc.perform(get("/children")
