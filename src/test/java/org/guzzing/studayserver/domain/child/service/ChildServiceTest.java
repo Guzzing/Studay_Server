@@ -289,7 +289,7 @@ class ChildServiceTest {
             Child mockChild = new Child("원우주니어", Grade.MIDDLE_SCHOOL_3.getDescription(), "imageUrl");
 
             given(childRepository.findById(anyLong())).willReturn(Optional.of(mockChild));
-            given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
+            given(profileImageProvider.uploadProfileImage(any())).willReturn("YAAAAAAA");
 
             final String fileName = "file.png";
             final byte[] content = "file-content".getBytes();

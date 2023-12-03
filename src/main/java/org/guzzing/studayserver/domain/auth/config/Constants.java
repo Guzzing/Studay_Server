@@ -11,5 +11,6 @@ public class Constants {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
+            "/actuator/**"
     };
 }
