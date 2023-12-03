@@ -1,17 +1,24 @@
 package org.guzzing.studayserver.domain.child.provider;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.global.config.S3Config;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Component
 public class ProfileImageProvider {
 
@@ -22,16 +29,13 @@ public class ProfileImageProvider {
 
     private final S3Config s3Config;
     private final AmazonS3 s3Client;
-    private final Base62Provider base62Provider;
 
     public ProfileImageProvider(
             final S3Config s3Config,
-            final AmazonS3 s3Client,
-            final Base62Provider base62Provider
+            final AmazonS3 s3Client
     ) {
         this.s3Config = s3Config;
         this.s3Client = s3Client;
-        this.base62Provider = base62Provider;
     }
 
     public String provideDefaultProfileImageURI(final List<String> existsImageUris) {
@@ -47,19 +51,25 @@ public class ProfileImageProvider {
         }
     }
 
-    public String uploadProfileImage(final Long childId, final MultipartFile multipartFile) {
-        final String encodedFileName = base62Provider.encode(childId);
-        final String profileImageURI = makeProfileImageURI(s3Config.getCustomUrl(), encodedFileName);
-
+    public String uploadProfileImage(final MultipartFile multipartFile) {
         try {
+            final String originFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
+            final byte[] encodedFileName = Base64.getEncoder().encode(originFileName.getBytes());
+            final String profileImageURI = makeProfileImageURI(s3Config.getCustomUrl(),
+                    new String(encodedFileName, UTF_8));
+
             final PutObjectRequest putObjectRequest = getPutObjectRequest(multipartFile, profileImageURI);
 
             s3Client.putObject(putObjectRequest);
-        } catch (IOException e) {
-            throw new RuntimeException("해당하는 파일이 없습니다.");
-        }
 
-        return profileImageURI;
+            return profileImageURI;
+        } catch (IOException e) {
+            log.warn("해당하는 파일이 없습니다.");
+            throw new UncheckedIOException(e);
+        } catch (NullPointerException e) {
+            log.warn("이미지 파일 이름이 없습니다.");
+            throw e;
+        }
     }
 
     private PutObjectRequest getPutObjectRequest(MultipartFile multipartFile, String profileImageURI)

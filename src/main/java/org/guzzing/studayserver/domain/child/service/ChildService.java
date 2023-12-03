@@ -85,7 +85,7 @@ public class ChildService {
         final Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
 
-        final String profileImageUri = profileImageProvider.uploadProfileImage(childId, file);
+        final String profileImageUri = profileImageProvider.uploadProfileImage(file);
 
         child.updateProfileImageUri(profileImageUri);
 

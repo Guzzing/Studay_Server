@@ -210,7 +210,7 @@ class ChildServiceTest {
         final byte[] content = "file-content".getBytes();
         final MockMultipartFile multipartFile = new MockMultipartFile(fileName, content);
 
-        given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
+        given(profileImageProvider.uploadProfileImage(any())).willReturn("YAAAAAAA");
 
         // When
         ChildProfileImagePatchResult result = childService.modifyProfileImage(child.getId(), multipartFile);

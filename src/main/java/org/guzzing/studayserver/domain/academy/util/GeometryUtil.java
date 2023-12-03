@@ -36,6 +36,24 @@ public class GeometryUtil {
         return Location.of(toDegree(latitude), toDegree(longitude));
     }
 
+    public static String makeDiagonal(
+            Double baseLatitude,
+            Double baseLongitude,
+            Double distance) {
+        Location northEast = calculateLocationWithinRadiusInDirection(
+                baseLatitude,
+                baseLongitude,
+                Direction.NORTHEAST.getBearing(),
+                distance);
+        Location southWest = calculateLocationWithinRadiusInDirection(
+                baseLatitude,
+                baseLongitude,
+                Direction.SOUTHWEST.getBearing(),
+                distance);
+
+        return SqlFormatter.makeDiagonalByLineString(northEast, southWest);
+    }
+
     public static Point createPoint(double latitude, double longitude) {
         return factory.createPoint(new Coordinate(longitude, latitude));
     }

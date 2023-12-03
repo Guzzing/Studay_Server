@@ -1,11 +1,8 @@
-package org.guzzing.studayserver.domain.academy.util;
+package org.guzzing.studayserver.domain.academy.service.parser;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
@@ -35,7 +32,6 @@ public class FilterParser {
 
     public static Map<Long, List<Long>> makeCategoriesWithLocation(List<AcademiesByLocation> academiesByLocations) {
         Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
-
         academiesByLocations.forEach(
                 academyByFiltering -> {
                     List<Long> categories = academyIdWithCategories.computeIfAbsent(academyByFiltering.academyId(),

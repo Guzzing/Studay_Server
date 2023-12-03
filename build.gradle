@@ -28,7 +28,7 @@ openapi3 {
     servers = [
             { url = "http://localhost:8080" },
             { url = "https://studay.store" },
-            { url = "http://studay.store" }
+            { url = "http://3.114.43.57:8080" }
     ]
     title = "스터데이"
     description = "스터데이 API 문서"
@@ -43,7 +43,11 @@ repositories {
 }
 
 dependencies {
+
+    // Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // S3
@@ -104,6 +108,12 @@ dependencies {
 
     // Netty/Resolver/DNS/Native/MacOS
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
+
+    // Prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {

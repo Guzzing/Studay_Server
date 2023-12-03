@@ -1,21 +1,21 @@
 package org.guzzing.studayserver.domain.calendar.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
 import org.guzzing.studayserver.domain.calendar.repository.academytimetemplate.AcademyTimeTemplateRepository;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyTimeTemplateDateInfo;
+import org.guzzing.studayserver.domain.calendar.service.dto.GeneratedLessonSchedule;
 import org.guzzing.studayserver.domain.calendar.service.dto.RepeatPeriod;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteByDashboardParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDetailParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
-import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
@@ -46,54 +46,78 @@ public class AcademyCalendarService {
 
     @Transactional
     public AcademyCalendarCreateResults createSchedules(AcademyCalendarCreateParam param) {
-        List<AcademyTimeTemplateDateInfo> academyTimeTemplateDateInfos =
-                academyTimeTemplateRepository.findAcademyTimeTemplateByDashboardId(param.dashboardId());
-        DateTimeOverlapChecker.checkOverlap(
-                academyTimeTemplateDateInfos,
-                param.startDateOfAttendance(),
-                param.startDateOfAttendance()
-        );
-
-        List<Long> academyTimeTemplateIds = new ArrayList<>();
-        param.lessonScheduleParams().forEach(dashboardSchedule -> {
-            AcademyTimeTemplate savedAcademyTimeTemplate = saveAcademyTimeTemplate(param, dashboardSchedule);
-            academyTimeTemplateIds.add(savedAcademyTimeTemplate.getId());
-            saveAcademySchedules(param, dashboardSchedule, savedAcademyTimeTemplate);
-        });
-
-        return AcademyCalendarCreateResults.of(academyTimeTemplateIds);
-    }
-
-    private AcademyTimeTemplate saveAcademyTimeTemplate(
-            AcademyCalendarCreateParam param,
-            LessonScheduleParam dashboardSchedule) {
-
-        AcademyTimeTemplate academyTimeTemplate = AcademyCalendarCreateParam.to(param, dashboardSchedule.dayOfWeek());
-        return academyTimeTemplateRepository.save(academyTimeTemplate);
-    }
-
-    private void saveAcademySchedules(
-            AcademyCalendarCreateParam param,
-            LessonScheduleParam dashboardSchedule,
-            AcademyTimeTemplate savedAcademyTimeTemplate) {
-
-        List<LocalDate> schedules = periodicStrategy.createSchedules(
-                RepeatPeriod.of(
+        List<AcademySchedule> existedDateOverlappingSchedules =
+                academyScheduleRepository.findByDate(
                         param.startDateOfAttendance(),
                         param.endDateOfAttendance(),
-                        dashboardSchedule.dayOfWeek(),
-                        param.periodicity()
-                )
-        );
+                        param.childId());
+        List<GeneratedLessonSchedule> generatedSchedules = generateAcademySchedules(param);
+        DateTimeOverlapChecker.checkOverlap(existedDateOverlappingSchedules, generatedSchedules);
 
-        schedules.stream()
-                .map(scheduleDate -> AcademySchedule.of(
-                        savedAcademyTimeTemplate,
-                        scheduleDate,
-                        dashboardSchedule.lessonStartTime(),
-                        dashboardSchedule.lessonEndTime()
-                ))
-                .forEach(academyScheduleRepository::save);
+        List<AcademyTimeTemplate> academyTimeTemplates = saveAcademyTimeTemplate(param);
+        academyTimeTemplates
+                .forEach(academyTimeTemplate -> saveAcademySchedule(generatedSchedules, academyTimeTemplate));
+
+        return AcademyCalendarCreateResults.of(academyTimeTemplates);
+    }
+
+
+    private boolean isSameTimeTemplate(
+            GeneratedLessonSchedule generatedLessonSchedule,
+            AcademyTimeTemplate academyTimeTemplate) {
+        return generatedLessonSchedule.dayOfWeek().equals(academyTimeTemplate.getDayOfWeek());
+    }
+
+    private void saveAcademySchedule(
+            List<GeneratedLessonSchedule> generatedLessonSchedules,
+            AcademyTimeTemplate savedAcademyTimeTemplate
+    ) {
+        generatedLessonSchedules
+                .stream()
+                .filter(generatedLessonSchedule -> isSameTimeTemplate(generatedLessonSchedule, savedAcademyTimeTemplate))
+                .forEach(generatedLessonSchedule -> academyScheduleRepository.save(
+                        AcademySchedule.of(
+                                savedAcademyTimeTemplate,
+                                generatedLessonSchedule.scheduleDate(),
+                                generatedLessonSchedule.lessonStartTime(),
+                                generatedLessonSchedule.lessonEndTime())
+                ));
+    }
+
+    private List<AcademyTimeTemplate> saveAcademyTimeTemplate(
+            AcademyCalendarCreateParam param) {
+        return param.lessonScheduleParams()
+                .stream()
+                .map(
+                        lessonScheduleParam ->
+                                academyTimeTemplateRepository.save(AcademyCalendarCreateParam.to(param, lessonScheduleParam.dayOfWeek())))
+                .toList();
+    }
+
+    private List<GeneratedLessonSchedule> generateAcademySchedules(
+            AcademyCalendarCreateParam param) {
+        return param.lessonScheduleParams()
+                .stream()
+                .flatMap(lessonScheduleParam ->
+                        periodicStrategy.createSchedules(
+                                        RepeatPeriod.of(
+                                                param.startDateOfAttendance(),
+                                                param.endDateOfAttendance(),
+                                                lessonScheduleParam.dayOfWeek(),
+                                                param.periodicity()
+                                        ))
+                                .stream()
+                                .map(
+                                        scheduleDate ->
+                                                GeneratedLessonSchedule.of(
+                                                        scheduleDate,
+                                                        lessonScheduleParam.lessonStartTime(),
+                                                        lessonScheduleParam.lessonEndTime(),
+                                                        lessonScheduleParam.dayOfWeek()
+                                                )
+                                )
+                )
+                .toList();
     }
 
     @Transactional(readOnly = true)
