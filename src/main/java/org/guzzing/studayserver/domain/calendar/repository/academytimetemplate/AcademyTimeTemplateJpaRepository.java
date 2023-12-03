@@ -18,7 +18,6 @@ public interface AcademyTimeTemplateJpaRepository extends JpaRepository<AcademyT
 
     AcademyTimeTemplate getById(Long academyTimeTemplateId);
 
-    @Modifying(clearAutomatically = true)
     @Query("select att.id from AcademyTimeTemplate att where att.childId in :childIds")
     List<Long> findByChildIdIn(List<Long> childIds);
 

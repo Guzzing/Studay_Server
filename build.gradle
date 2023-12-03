@@ -112,12 +112,14 @@ dependencies {
     // Caffeine
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
 
+    // Netty/Resolver/DNS/Native/MacOS
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
+
     // Prometheus
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
     // Spring Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
 
 }
 
