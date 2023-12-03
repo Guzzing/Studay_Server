@@ -27,12 +27,13 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             "WHERE ash.id =:academyScheduleId")
     Long findDashboardIdByAcademyScheduleId(@Param(value = "academyScheduleId") Long academyScheduleId);
 
+    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("delete from AcademySchedule acs where acs.academyTimeTemplate.id = :academyTimeTemplateId")
     void deleteAllByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
-    @Modifying
     @Transactional
+    @Modifying(clearAutomatically = true)
     @Query("""
             DELETE FROM AcademySchedule AS ash 
             WHERE ash.academyTimeTemplate.id = :academyTimeTemplateId 
@@ -43,7 +44,7 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
-    void deleteAcademyScheduleById(Long academyScheduleId);
+    void deleteById(Long academyScheduleId);
 
     @Query("SELECT ash FROM AcademySchedule ash "
             + "JOIN FETCH ash.academyTimeTemplate att "
