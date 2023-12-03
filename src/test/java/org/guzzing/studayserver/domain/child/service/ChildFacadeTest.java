@@ -124,7 +124,7 @@ class ChildFacadeTest {
         );
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
-        LocalDateTime dateTime = LocalDateTime.of(2023, 11, 17, 18, 0);
+        LocalDateTime dateTime = LocalDateTime.of(2023, 11, 17, 18, 1);
 
         // when
         List<ChildWithScheduleResult> childrenByMemberIdAndDateTime = childFacade.findChildrenByMemberIdAndDateTime(
@@ -156,6 +156,74 @@ class ChildFacadeTest {
         Long childId = childService.create(childCreateParam, savedMember.getId());
 
         LocalDateTime dateTime = LocalDateTime.of(2023, 11, 17, 18, 0);
+
+        // when
+        List<ChildWithScheduleResult> childrenByMemberIdAndDateTime = childFacade.findChildrenByMemberIdAndDateTime(
+                savedMember.getId(), dateTime);
+
+        // then
+        assertThat(childrenByMemberIdAndDateTime).hasSize(1);
+        ChildWithScheduleResult childWithScheduleResult = childrenByMemberIdAndDateTime.get(0);
+
+        assertThat(childWithScheduleResult.childId()).isEqualTo(childId);
+        assertThat(childWithScheduleResult.grade()).isEqualTo("초등학교 1학년");
+        assertThat(childWithScheduleResult.schedule_date()).isEqualTo(dateTime.toLocalDate());
+        assertThat(childWithScheduleResult.lessonStartTime()).isEqualTo(dateTime.toLocalTime());
+        assertThat(childWithScheduleResult.lessonEndTime()).isEqualTo(dateTime.toLocalTime());
+        assertThat(childWithScheduleResult.academyName()).isEqualTo("수행 중인 학원이 없습니다.");
+        assertThat(childWithScheduleResult.lessonSubject()).isEqualTo("수행 중인 수업이 없습니다.");
+    }
+
+    @DisplayName("아이의 스케쥴이 오늘 존재하지만 현재가 아니라면 수행 중이지 않는다고 알려준다.")
+    @Test
+    void findChildrenByMemberIdAndDateTime_ScheduleIsNotCurrent() {
+        // given
+        Member member = Member.of(new NickName("멤버 아이디"), "123", MemberProvider.KAKAO, RoleType.USER);
+        Member savedMember = memberRepository.save(member);
+
+        ChildCreateParam childCreateParam = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
+        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+                .willReturn("image.png");
+        Long childId = childService.create(childCreateParam, savedMember.getId());
+
+        Academy academy = Academy.of(
+                (long) Objects.hash("수원", "유원우 코딩학원", "경기도 성남시 중원구 망포동", "유원우"),
+                AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "예능(대)"),
+                Address.of("경기도 성남시 중원구 망포동"),
+                Location.of(37.4449168, 127.1388684));
+        academy.changePoint(GeometryUtil.createPoint(37.4449168, 127.1388684));
+        Academy savedAcademy = academyRepository.save(academy);
+
+        Lesson lesson = Lesson.of(savedAcademy, "DB에 대해서", "인덱스란 뭘까", "20", "1개월", "100000");
+        Lesson savedLesson = lessonRepository.save(lesson);
+
+        DashboardPostParam dashboardPostParam = new DashboardPostParam(childId, savedLesson.getId(),
+                savedLesson.getId(),
+                new ScheduleInfos(List.of(
+                        new ScheduleInfo(MONDAY, "14:00", "18:00", WEEKLY),
+                        new ScheduleInfo(SUNDAY, "12:30", "12:04", WEEKLY))),
+                new PaymentInfo(1_000L, 2_000L, 3_000L, 4_000L, LocalDate.now()),
+                new SimpleMemo(true, false, true, true, false, true));
+        DashboardResult savedDashboard = dashboardService.saveDashboard(dashboardPostParam);
+
+        LessonScheduleParam mondayDashboardScheduleParam = new LessonScheduleParam(MONDAY, LocalTime.of(18, 0),
+                LocalTime.of(20, 0));
+        LessonScheduleParam fridayDashboardScheduleParam = new LessonScheduleParam(DayOfWeek.FRIDAY,
+                LocalTime.of(18, 0),
+                LocalTime.of(20, 0));
+        AcademyCalendarCreateParam academyCalendarCreateParam = new AcademyCalendarCreateParam(
+                List.of(mondayDashboardScheduleParam, fridayDashboardScheduleParam),
+                LocalDate.of(2023, 11, 15),
+                LocalDate.of(2024, 11, 15),
+                false,
+                childId,
+                savedDashboard.dashboardId(),
+                "매월 20일마다 상담 진행",
+                Periodicity.WEEKLY
+        );
+        academyCalendarService.createSchedules(academyCalendarCreateParam);
+
+        LocalDateTime dateTime = LocalDateTime.of(2023, 11, 17, 17, 59);
 
         // when
         List<ChildWithScheduleResult> childrenByMemberIdAndDateTime = childFacade.findChildrenByMemberIdAndDateTime(
