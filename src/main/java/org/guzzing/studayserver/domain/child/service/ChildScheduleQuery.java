@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.guzzing.studayserver.domain.member.annotation.ValidMember;
 import org.guzzing.studayserver.domain.member.annotation.ValidatedMemberId;
@@ -20,7 +21,8 @@ public class ChildScheduleQuery {
     @ValidMember
     public List<ChildDateScheduleResult> findScheduleByMemberIdAndDate(
             @ValidatedMemberId Long memberId,
-            LocalDate scheduleDate) {
+            LocalDate scheduleDate,
+            LocalTime scheduleTime) {
         String sql = "SELECT c.child_id as child_id, " +
                 "acs.schedule_date as schedule_date, " +
                 "acs.lesson_start_time as lesson_start_time, " +
@@ -34,11 +36,13 @@ public class ChildScheduleQuery {
                 "INNER JOIN academy_time_templates att ON d.id = att.dashboard_id " +
                 "INNER JOIN academy_schedules acs ON acs.academy_time_template_id = att.id " +
                 "WHERE c.member_id = :memberId " +
-                "AND acs.schedule_date = :scheduleDate";
+                "AND acs.schedule_date = :scheduleDate " +
+                "AND :scheudleTime BETWEEN acs.lesson_start_time and acs.lesson_end_time";
 
         Query query = entityManager.createNativeQuery(sql, "ChildWithScheduleResultSetMapping");
         query.setParameter("memberId", memberId);
         query.setParameter("scheduleDate", scheduleDate);
+        query.setParameter("scheudleTime", scheduleTime);
 
         return query.getResultList();
     }

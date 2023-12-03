@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -121,11 +122,11 @@ class ChildScheduleQueryTest {
         );
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
-        LocalDate fridayWithSchedule = LocalDate.of(2023, 11, 17);
+        LocalDateTime fridayWithSchedule = LocalDateTime.of(2023, 11, 17, 18, 1);
 
         // when
         List<ChildDateScheduleResult> scheduleByMemberIdAndDate = childScheduleQuery.findScheduleByMemberIdAndDate(
-                savedMember.getId(), fridayWithSchedule);
+                savedMember.getId(), fridayWithSchedule.toLocalDate(), fridayWithSchedule.toLocalTime());
 
         // then
         assertThat(scheduleByMemberIdAndDate).isNotEmpty();

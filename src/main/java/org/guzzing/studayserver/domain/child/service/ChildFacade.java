@@ -25,7 +25,7 @@ public class ChildFacade {
         ChildrenFindResult childrenFindResult = childService.findByMemberId(memberId);
 
         List<ChildDateScheduleResult> childDateScheduleResults =
-                childScheduleQuery.findScheduleByMemberIdAndDate(memberId, dateTime.toLocalDate());
+                childScheduleQuery.findScheduleByMemberIdAndDate(memberId, dateTime.toLocalDate(), dateTime.toLocalTime());
 
         return childrenFindResult.children().stream()
                 .flatMap(childInfo -> matchChildWithSchedule(childInfo, childDateScheduleResults, dateTime))
@@ -39,8 +39,7 @@ public class ChildFacade {
                 .findFirst()
                 .map(Stream::of)
                 .orElseGet(() -> Stream.of(createEmptyChildDateScheduleResult(childInfo, dateTime)))
-                .map(schedule -> ChildWithScheduleResult.of(childInfo, schedule))
-                .filter(result -> isScheduleTimeValid(result, dateTime));
+                .map(schedule -> ChildWithScheduleResult.of(childInfo, schedule));
     }
 
     private ChildDateScheduleResult createEmptyChildDateScheduleResult(ChildFindResult childInfo, LocalDateTime dateTime) {
@@ -52,10 +51,5 @@ public class ChildFacade {
                 "수행 중인 학원이 없습니다.",
                 "수행 중인 수업이 없습니다."
         );
-    }
-
-    private boolean isScheduleTimeValid(ChildWithScheduleResult result, LocalDateTime dateTime) {
-        LocalTime time = dateTime.toLocalTime();
-        return !result.lessonStartTime().isAfter(time) && !result.lessonEndTime().isBefore(time);
     }
 }
