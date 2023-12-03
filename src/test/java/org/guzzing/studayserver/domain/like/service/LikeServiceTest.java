@@ -4,13 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import java.util.List;
+import java.util.Objects;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
+import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.domain.member.annotation.ValidMemberAspect;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +39,8 @@ class LikeServiceTest {
     private AcademyAccessService academyAccessService;
     @MockBean
     private MemberAccessService memberAccessService;
+    @MockBean
+    private ValidMemberAspect validMemberAspect;
 
     private final Long memberId = 1L;
     private final Long academyId = 1L;
@@ -66,12 +72,32 @@ class LikeServiceTest {
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
 
         // When
-        likeService.removeLikeOfAcademy(savedLike.likeId(), memberId);
+        likeService.removeLike(savedLike.likeId(), memberId);
 
         // Then
         boolean result = likeRepository.existsById(savedLike.likeId());
 
         assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("학원 아이디로 등록한 좋아요를 제거한다.")
+    @WithMockCustomOAuth2LoginUser
+    void deleteLikeOfAcademy_AcademyId_Delete() {
+        // Given
+        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+
+        // When
+        likeService.deleteLikeOfAcademy(postResult.academyId(), postResult.memberId());
+
+        // Then
+        List<Like> likes = likeRepository.findByMemberId(postResult.memberId());
+        List<Long> result = likes.stream()
+                .map(Like::getAcademyId)
+                .filter(id -> Objects.equals(id, postResult.academyId()))
+                .toList();
+
+        assertThat(result).isEmpty();
     }
 
     @Test

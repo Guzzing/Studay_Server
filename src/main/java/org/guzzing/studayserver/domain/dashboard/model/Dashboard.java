@@ -42,8 +42,9 @@ public class Dashboard {
     private Long lessonId;
 
     @OneToMany(
-            mappedBy = "dashboard", fetch = LAZY,
-            cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+            mappedBy = "dashboard",
+            fetch = LAZY,
+            cascade = {PERSIST})
     private List<DashboardSchedule> dashboardSchedules;
 
     @Embedded
@@ -91,6 +92,7 @@ public class Dashboard {
             throw new DashboardException("비활성화된 대시보드만 삭제가 가능합니다.");
         }
 
+        this.isActive = false;
         this.isDeleted = true;
     }
 

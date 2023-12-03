@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
+import org.guzzing.studayserver.domain.member.service.MemberFacade;
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
@@ -41,6 +42,8 @@ class MemberRestControllerTest {
 
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private MemberFacade memberFacade;
 
     @Autowired
     private ObjectMapper objectMapper;

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class AcademyCalendarDetailRequestTest {
+
     @Test
     @DisplayName("아이디가 음수인 경우 예외를 던진다.")
     void construct_invalidLessonId_throwException() {

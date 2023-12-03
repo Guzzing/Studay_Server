@@ -1,7 +1,5 @@
 package org.guzzing.studayserver.domain.child.service;
 
-import java.util.List;
-
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;

@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.calendar.model;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

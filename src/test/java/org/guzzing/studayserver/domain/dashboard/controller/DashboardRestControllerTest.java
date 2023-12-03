@@ -282,7 +282,7 @@ class DashboardRestControllerTest {
                                                         .description("셔틀 운행 여부"),
                                                 fieldWithPath("academyInfo.expectedFee").type(NUMBER).description("예상 교육비"),
                                                 fieldWithPath("academyInfo.updatedDate").type(STRING).description("업데이트 날짜"),
-                                                fieldWithPath("academyInfo.areaOfExpertise").type(STRING)
+                                                fieldWithPath("academyInfo.categories").type(ARRAY)
                                                         .description("강의 분야 구분"),
                                                 fieldWithPath("lessonInfo").type(OBJECT).description("수업 정보"),
                                                 fieldWithPath("lessonInfo.lessonId").type(NUMBER).description("수업 아이디"),
@@ -397,7 +397,7 @@ class DashboardRestControllerTest {
                                                         .description("예상 교육비"),
                                                 fieldWithPath("responses[].academyInfo.updatedDate").type(STRING)
                                                         .description("업데이트 날짜"),
-                                                fieldWithPath("responses[].academyInfo.areaOfExpertise").type(STRING)
+                                                fieldWithPath("responses[].academyInfo.categories").type(ARRAY)
                                                         .description("강의 분야 구분"),
                                                 fieldWithPath("responses[].lessonInfo").type(OBJECT).description("수업 정보"),
                                                 fieldWithPath("responses[].lessonInfo.lessonId").type(NUMBER)

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
+import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleJpaRepository;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
@@ -19,13 +20,16 @@ public class DashboardService {
 
     private final DashboardServiceConverter serviceConverter;
     private final DashboardRepository dashboardRepository;
+    private final DashboardScheduleJpaRepository dashboardScheduleJpaRepository;
 
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
-            final DashboardRepository dashboardRepository
+            final DashboardRepository dashboardRepository,
+            final DashboardScheduleJpaRepository dashboardScheduleJpaRepository
     ) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
+        this.dashboardScheduleJpaRepository = dashboardScheduleJpaRepository;
     }
 
     @Transactional
@@ -40,6 +44,12 @@ public class DashboardService {
     public void deleteDashboard(final long dashboardId) {
         this.findDashboardById(dashboardId)
                 .delete();
+    }
+
+    @Transactional
+    public void removeDashboard(final List<Long> childIds) {
+        dashboardScheduleJpaRepository.deleteByChildIds(childIds);
+        dashboardRepository.deleteByChildIds(childIds);
     }
 
     @Transactional

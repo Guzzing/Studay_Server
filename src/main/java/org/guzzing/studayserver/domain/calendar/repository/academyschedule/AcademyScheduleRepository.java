@@ -6,7 +6,6 @@ import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
-import org.springframework.data.repository.query.Param;
 
 public interface AcademyScheduleRepository {
 

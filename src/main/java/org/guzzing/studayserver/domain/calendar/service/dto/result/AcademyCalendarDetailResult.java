@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.calendar.service.dto.result;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
+
 public record AcademyCalendarDetailResult(
         Long dashboardId,
         LocalTime lessonStartTime,

@@ -8,6 +8,8 @@ public interface ReviewRepository {
 
     boolean existsByMemberIdAndAcademyId(final Long memberId, final Long academyId);
 
+    void deleteByMemberId(final long memberId);
+
     void deleteAll();
 
 }

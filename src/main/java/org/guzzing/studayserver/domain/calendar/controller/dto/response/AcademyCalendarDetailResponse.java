@@ -20,12 +20,12 @@ public record AcademyCalendarDetailResponse(
                 AcademyInfoResponseAboutScheduleDetail.from(
                         academyCalendarDetailFacadeResult.academyInfoAboutScheduleDetail()),
                 LessonInfoResponse.from(academyCalendarDetailFacadeResult.lessonInfo()),
-               new ChildInfoResponse(
-                       academyCalendarDetailFacadeResult.childrenInfo().childId(),
-                               academyCalendarDetailFacadeResult.childrenInfo().childName(),
-                       academyCalendarDetailFacadeResult.childrenInfo().imageUrl(),
-                       academyCalendarDetailFacadeResult.childrenInfo().memo(),
-                       academyCalendarDetailFacadeResult.childrenInfo().dashBoardId()),
+                new ChildInfoResponse(
+                        academyCalendarDetailFacadeResult.childrenInfo().childId(),
+                        academyCalendarDetailFacadeResult.childrenInfo().childName(),
+                        academyCalendarDetailFacadeResult.childrenInfo().imageUrl(),
+                        academyCalendarDetailFacadeResult.childrenInfo().memo(),
+                        academyCalendarDetailFacadeResult.childrenInfo().dashBoardId()),
                 academyCalendarDetailFacadeResult.categories()
         );
     }
@@ -57,9 +57,9 @@ public record AcademyCalendarDetailResponse(
                     lessonInfo.lessonName(),
                     lessonInfo.capacity(),
                     lessonInfo.totalFee(),
-                     new LessonTimeResponse(
-                             lessonInfo.lessonTimes().startTime(),
-                             lessonInfo.lessonTimes().endTime()),
+                    new LessonTimeResponse(
+                            lessonInfo.lessonTimes().startTime(),
+                            lessonInfo.lessonTimes().endTime()),
                     Periodicity.WEEKLY);
         }
 

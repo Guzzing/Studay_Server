@@ -32,6 +32,7 @@ import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostReque
 import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.domain.member.annotation.ValidMemberAspect;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.TestConfig;
@@ -71,6 +72,8 @@ class LikeRestControllerTest {
     private AcademyAccessService academyAccessService;
     @MockBean
     private MemberAccessService memberAccessService;
+    @MockBean
+    private ValidMemberAspect validMemberAspect;
 
     private final Long academyId = 1L;
     private LikePostParam param;
@@ -148,6 +151,44 @@ class LikeRestControllerTest {
                                 .summary("좋아요 제거")
                                 .pathParameters(
                                         parameterWithName("likeId").description("좋아요 아이디")
+                                )
+                                .build()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("학원 아이디로 좋아요를 삭제한다.")
+    @WithMockCustomOAuth2LoginUser
+    void removeLikeOfAcademy_AcademyId_Delete() throws Exception {
+        // Given
+        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+
+        // When
+        ResultActions perform = mockMvc.perform(delete("/likes")
+                .header(AUTHORIZATION_HEADER, BEARER)
+                .queryParam("academyId", String.valueOf(postResult.academyId())));
+
+        // Then
+        perform.andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-like-academyId",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+//                        requestHeaders(
+//                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰 (Bearer)")
+//                        ),
+//                        queryParameters(
+//                                parameterWithName("academyId").description("학원 아이디")
+//                        )
+                        resource(ResourceSnippetParameters.builder()
+                                .tag(TAG)
+                                .summary("학원 아이디로 좋아요 제거")
+                                .requestHeaders(
+                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
+                                )
+                                .queryParameters(
+                                        parameterWithName("academyId").description("학원 아이디")
                                 )
                                 .build()
                         )

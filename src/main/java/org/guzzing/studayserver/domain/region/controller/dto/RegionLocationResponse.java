@@ -17,8 +17,8 @@ public record RegionLocationResponse(
                 regionResult.sido(),
                 regionResult.sigungu(),
                 regionResult.upmyeondong(),
-                regionResult.point().getX(),
-                regionResult.point().getY());
+                regionResult.point().getY(),
+                regionResult.point().getX());
     }
 
 }

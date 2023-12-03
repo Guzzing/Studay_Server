@@ -36,6 +36,11 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
+    public void remove(final long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
     public MemberInformationResult getById(Long memberId) {
         Member member = getMember(memberId);
 

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
@@ -45,8 +46,10 @@ class ChildServiceTest {
 
     @MockBean
     private ChildRepository childRepository;
+
     @MockBean
     private MemberRepository memberRepository;
+
     @MockBean
     private ProfileImageProvider profileImageProvider;
 
@@ -105,7 +108,7 @@ class ChildServiceTest {
 
             ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
 
-            given(childRepository.save(any())).willReturn(new Child(param.nickname(), param.grade()));
+            given(childRepository.save(any())).willReturn(new Child(param.nickname(), param.grade(), "imageUrl"));
 
             // When & Then
             assertThatThrownBy(() -> childService.create(param, memberId))
@@ -126,9 +129,9 @@ class ChildServiceTest {
 
             Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
 
-            Child child1 = new Child("아이 닉네임1", "초등학교 1학년");
+            Child child1 = new Child("아이 닉네임1", "초등학교 1학년", "imageUrl");
             child1.updateProfileImageUri("icon_1_1.png");
-            Child child2 = new Child("아이 닉네임2", "초등학교 2학년");
+            Child child2 = new Child("아이 닉네임2", "초등학교 2학년", "imageUrl");
             child2.updateProfileImageUri("icon_2_0.png");
 
             Child spyChild1 = spy(child1);
@@ -183,15 +186,9 @@ class ChildServiceTest {
             Long memberId = 1L;
             Long childId = 20L;
 
-            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+            Child child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
 
-            Child child = new Child("아이 닉네임", "초등학교 1학년");
-
-            Child spyChild = spy(child);
-            spyChild.assignToNewMemberOnly(member);
-            given(spyChild.getId()).willReturn(childId);
-
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+            given(childRepository.findByIdAndMemberId(childId, memberId)).willReturn(Optional.of(child));
 
             ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
 
@@ -199,7 +196,7 @@ class ChildServiceTest {
             childService.delete(param);
 
             // Then
-            assertThat(member.getChildren()).isEmpty();
+            verify(childRepository).delete(child);
         }
 
         @DisplayName("멤버에 할당되지 않은 아이일 경우 삭제하지 않는다.")
@@ -208,24 +205,12 @@ class ChildServiceTest {
             Long memberId = 1L;
             Long childId = 20L;
 
-            Member member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
-            Member differentMember = Member.of(new NickName("다른 멤버 닉네임"), "456", MemberProvider.KAKAO, RoleType.USER);
-
-            Child child = new Child("아이 닉네임", "초등학교 1학년");
-            Child spyChild = spy(child);
-            spyChild.assignToNewMemberOnly(differentMember);
-            given(spyChild.getId()).willReturn(childId);
-
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-            given(childRepository.findById(childId)).willReturn(Optional.of(spyChild));
-
             ChildDeleteParam param = new ChildDeleteParam(memberId, childId);
 
-            // When
-            childService.delete(param);
-
-            // Then
-            assertThat(differentMember.getChildren()).containsExactly(spyChild);
+            // When & Then
+            assertThatThrownBy(() -> childService.delete(param))
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessageContaining("존재하지 않는 아이입니다.");
         }
 
         @DisplayName("잘못된 멤버 아이디인 경우 예외를 발생시킨다.")
@@ -240,8 +225,8 @@ class ChildServiceTest {
 
             // When & Then
             Assertions.assertThatThrownBy(() -> childService.delete(param))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("잘못된 멤버 아이디입니다");
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessageContaining("존재하지 않는 아이입니다.");
         }
     }
 
@@ -257,10 +242,8 @@ class ChildServiceTest {
             Child mockChild = mock(Child.class);
             given(mockChild.getId()).willReturn(param.childId());
 
-            Member mockMember = mock(Member.class);
-            given(mockMember.findChild(param.childId())).willReturn(Optional.of(mockChild));
-
-            given(memberRepository.findById(param.memberId())).willReturn(Optional.of(mockMember));
+            given(childRepository.findByIdAndMemberId(param.childId(), param.memberId()))
+                    .willReturn(Optional.of(mockChild));
 
             // When
             Long updatedChildId = childService.modify(param);
@@ -276,12 +259,10 @@ class ChildServiceTest {
             // Given
             ChildModifyParam param = new ChildModifyParam("수정할 아이 닉네임", "초등학교 2학년", 1L, 10L);
 
-            given(memberRepository.findById(param.memberId())).willReturn(Optional.empty());
-
             // When & Then
             assertThatThrownBy(() -> childService.modify(param))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("잘못된 멤버 아이디입니다");
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessageContaining("존재하지 않는 아이입니다.");
         }
 
         @DisplayName("멤버에 존재하지 않는 아이라면 예외를 발생시킨다.")
@@ -296,8 +277,8 @@ class ChildServiceTest {
 
             // When & Then
             assertThatThrownBy(() -> childService.modify(param))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("찾을 수 없는 아이입니다");
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessageContaining("존재하지 않는 아이입니다.");
         }
 
         @Test
@@ -305,7 +286,7 @@ class ChildServiceTest {
         void modifyProfileImage_ChildIdAndMultipartFile_ChangeProfileImageUri() {
             // Given
             long childId = 24L;
-            Child mockChild = new Child("원우주니어", Grade.MIDDLE_SCHOOL_3.getDescription());
+            Child mockChild = new Child("원우주니어", Grade.MIDDLE_SCHOOL_3.getDescription(), "imageUrl");
 
             given(childRepository.findById(anyLong())).willReturn(Optional.of(mockChild));
             given(profileImageProvider.uploadProfileImage(anyLong(), any())).willReturn("YAAAAAAA");
