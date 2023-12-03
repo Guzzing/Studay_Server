@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.member.service;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
+import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
@@ -21,6 +23,7 @@ public class MemberFacade {
     private final DashboardService dashboardService;
     private final LikeService likeService;
     private final ReviewService reviewService;
+    private final AuthService authService;
 
     public MemberFacade(
             final MemberService memberService,
@@ -28,7 +31,8 @@ public class MemberFacade {
             final AcademyCalendarService calendarService,
             final DashboardService dashboardService,
             final LikeService likeService,
-            final ReviewService reviewService
+            final ReviewService reviewService,
+            AuthService authService
     ) {
         this.memberService = memberService;
         this.childService = childService;
@@ -36,10 +40,11 @@ public class MemberFacade {
         this.dashboardService = dashboardService;
         this.likeService = likeService;
         this.reviewService = reviewService;
+        this.authService = authService;
     }
 
     @Transactional
-    public void removeMember(final long memberId) {
+    public void removeMember(final long memberId, final AuthToken authToken) {
         List<Long> childIds = childService.findByMemberId(memberId).children()
                 .stream()
                 .map(ChildFindResult::childId)
@@ -51,6 +56,7 @@ public class MemberFacade {
         dashboardService.removeDashboard(childIds);
         childService.removeChild(memberId);
         memberService.remove(memberId);
+        authService.secede(authToken);
     }
 
 }

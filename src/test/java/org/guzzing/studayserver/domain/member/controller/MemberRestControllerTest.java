@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
+import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.service.MemberFacade;
@@ -44,6 +45,8 @@ class MemberRestControllerTest {
     private MemberService memberService;
     @MockBean
     private MemberFacade memberFacade;
+    @MockBean
+    private AuthTokenProvider authTokenProvider;
 
     @Autowired
     private ObjectMapper objectMapper;

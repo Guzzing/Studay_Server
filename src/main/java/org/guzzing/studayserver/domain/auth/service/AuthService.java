@@ -14,6 +14,7 @@ import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
+import org.guzzing.studayserver.domain.auth.service.dto.AuthSecedeResult;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,14 @@ public class AuthService {
         }
 
         return AuthRefreshResult.of(authToken.getToken(), memberId);
+    }
+
+    @Transactional
+    public AuthSecedeResult secede(AuthToken authToken) {
+        refreshTokenRepository.deleteByAccessToken(authToken.getToken());
+        logoutTokenRepository.delete(authToken.getToken());
+
+        return new AuthSecedeResult(true);
     }
 
     @Transactional

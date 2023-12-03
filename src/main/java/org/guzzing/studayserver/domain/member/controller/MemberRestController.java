@@ -1,6 +1,10 @@
 package org.guzzing.studayserver.domain.member.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
+import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
+import org.guzzing.studayserver.domain.auth.jwt.JwtHeaderUtil;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.controller.response.MemberInformationResponse;
@@ -23,10 +27,16 @@ public class MemberRestController {
 
     private final MemberService memberService;
     private final MemberFacade memberFacade;
+    private final AuthTokenProvider authTokenProvider;
 
-    public MemberRestController(MemberService memberService, MemberFacade memberFacade) {
+    public MemberRestController(
+            MemberService memberService,
+            MemberFacade memberFacade,
+            AuthTokenProvider authTokenProvider
+    ) {
         this.memberService = memberService;
         this.memberFacade = memberFacade;
+        this.authTokenProvider = authTokenProvider;
     }
 
     @PatchMapping(
@@ -51,9 +61,13 @@ public class MemberRestController {
      */
     @DeleteMapping
     public ResponseEntity<Void> remove(
-            @MemberId final Long memberId
+            @MemberId final Long memberId,
+            HttpServletRequest request
     ) {
-        memberFacade.removeMember(memberId);
+        String appToken = JwtHeaderUtil.getAccessToken(request);
+        AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
+
+        memberFacade.removeMember(memberId, authToken);
 
         return ResponseEntity
                 .noContent()
