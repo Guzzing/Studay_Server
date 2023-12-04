@@ -25,8 +25,7 @@ public class DashboardService {
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
             final DashboardRepository dashboardRepository,
-            final DashboardScheduleJpaRepository dashboardScheduleJpaRepository
-    ) {
+            final DashboardScheduleJpaRepository dashboardScheduleJpaRepository) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
         this.dashboardScheduleJpaRepository = dashboardScheduleJpaRepository;
