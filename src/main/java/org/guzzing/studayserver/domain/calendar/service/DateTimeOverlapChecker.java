@@ -26,8 +26,8 @@ public class DateTimeOverlapChecker {
             throw new DateOverlapException(ErrorCode.DATE_TIME_OVERLAP_ERROR,
                     overlappingSchedules
                             .stream()
-                            .map(overlappingSchedule -> overlappingSchedule.getDashboardId()
-                            ).collect(Collectors.toSet()));
+                            .map(AcademySchedule::getDashboardId)
+                            .collect(Collectors.toSet()));
         }
     }
 
