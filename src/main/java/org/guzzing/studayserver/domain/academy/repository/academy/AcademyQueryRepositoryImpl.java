@@ -38,7 +38,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1""";
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)""";
 
         String formattedQuery = String.format(nativeQuery, memberId, pointFormat);
 
@@ -102,7 +102,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1""";
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)""";
 
         String formattedQuery = String.format(nativeQuery, memberId, academyFilterCondition.pointFormat());
         formattedQuery = addWhereConditionsWithFilter(formattedQuery, academyFilterCondition);
@@ -166,7 +166,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) = 1""";
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) """;
 
         String formattedQuery = String.format(nativeQuery, memberId, pointFormat);
         formattedQuery += orderBy("a.academy_name");
@@ -224,7 +224,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s
                 WHERE 
-                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)=1
+                    MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)
                 """;
 
 
