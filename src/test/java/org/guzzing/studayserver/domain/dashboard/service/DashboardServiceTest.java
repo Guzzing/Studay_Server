@@ -103,6 +103,20 @@ class DashboardServiceTest {
     }
 
     @Test
+    @DisplayName("활성화되어 있는 기존 대시보드와 겹치는 스케쥴이 있을때 대시보드를 활성화하면 예외가 발생한다.")
+    void toggleActive_DuplicatedDashboardSchedule_Exception() {
+        // Given
+        dashboardFixture.createActiveEntity();
+
+        final Dashboard duplicatedScheduleDashboard = dashboardFixture.createNotActiveEntity();
+
+        // When & Then
+        assertThatThrownBy(() -> dashboardService.toggleDashboardActiveness(duplicatedScheduleDashboard.getId()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("시간이 겹치는 대시보드 스케줄이 있습니다.");
+    }
+
+    @Test
     @DisplayName("아이디로 대시보드를 조회한다.")
     void findDashboard_ByDashboardId() {
         // Given
