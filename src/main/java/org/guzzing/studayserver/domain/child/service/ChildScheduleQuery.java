@@ -27,12 +27,12 @@ public class ChildScheduleQuery {
                 "acs.lesson_end_time as lesson_end_time, " +
                 "a.academy_name as academy_name, " +
                 "l.subject as lesson_subject " +
-                "FROM children c " +
-                "INNER JOIN dashboards d ON c.child_id = d.child_id " +
-                "INNER JOIN academies a ON d.academy_id = a.id " +
-                "INNER JOIN lessons l ON l.id = d.lesson_id " +
-                "INNER JOIN academy_time_templates att ON d.id = att.dashboard_id " +
-                "INNER JOIN academy_schedules acs ON acs.academy_time_template_id = att.id " +
+                "FROM children as c " +
+                "INNER JOIN dashboards as d ON c.child_id = d.child_id " +
+                "INNER JOIN academies as a ON d.academy_id = a.id " +
+                "INNER JOIN lessons as l ON l.id = d.lesson_id " +
+                "INNER JOIN academy_time_templates as att ON d.id = att.dashboard_id " +
+                "INNER JOIN academy_schedules as acs ON acs.academy_time_template_id = att.id " +
                 "WHERE c.member_id = :memberId " +
                 "AND acs.schedule_date = :scheduleDate";
 

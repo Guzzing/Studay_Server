@@ -306,6 +306,7 @@ class AcademyCalendarServiceTest {
         AcademyCalendarCreateParam academyCalendarCreateParam
                 = AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
         academyCalendarService.createSchedules(academyCalendarCreateParam);
+        List<AcademySchedule> beforeDashboards = academyScheduleRepository.findAll();
 
         AcademyCalendarDeleteByDashboardParam param
                 = AcademyCalenderFixture.academyCalendarDeleteByDashboardParam();
