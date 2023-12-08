@@ -18,7 +18,8 @@ public record AcademyByLocationWithScrollRequest(
         int pageNumber
 ) {
 
-    public static AcademiesByLocationWithScrollFacadeParam to(AcademyByLocationWithScrollRequest request, Long memberId) {
+    public static AcademiesByLocationWithScrollFacadeParam to(AcademyByLocationWithScrollRequest request,
+            Long memberId) {
         return new AcademiesByLocationWithScrollFacadeParam(
                 request.lat,
                 request.lng,

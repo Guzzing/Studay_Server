@@ -1,10 +1,10 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
+import java.util.List;
+import java.util.Map;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
-import java.util.List;
-import java.util.Map;
 
 public record AcademiesByLocationWithScrollResults(
         List<AcademiesByLocationResultWithScroll> academiesByLocationResults,
@@ -41,7 +41,7 @@ public record AcademiesByLocationWithScrollResults(
     ) {
 
         public static AcademiesByLocationResultWithScroll from(AcademyByLocationWithScroll academyByLocationWithScroll,
-                                                               List<Long> categories) {
+                List<Long> categories) {
             return new AcademiesByLocationResultWithScroll(
                     academyByLocationWithScroll.academyId(),
                     academyByLocationWithScroll.academyName(),

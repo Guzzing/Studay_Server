@@ -36,7 +36,8 @@ public class AcademyFacade {
     }
 
 
-    public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(AcademiesByLocationWithScrollFacadeParam param) {
+    public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(
+            AcademiesByLocationWithScrollFacadeParam param) {
         AcademiesByLocationWithScrollResults academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
                 AcademiesByLocationWithScrollFacadeParam.to(param));
 

@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.repository.dto;
 
-public record AcademyByFilterWithScroll (
+public record AcademyByFilterWithScroll(
         Long academyId,
         String academyName,
         String fullAddress,
@@ -10,4 +10,5 @@ public record AcademyByFilterWithScroll (
         String shuttleAvailable,
         boolean isLiked
 ) {
+
 }

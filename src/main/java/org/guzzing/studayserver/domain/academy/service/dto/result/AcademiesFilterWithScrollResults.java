@@ -1,18 +1,18 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
+import java.util.List;
+import java.util.Map;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
-
-import java.util.List;
-import java.util.Map;
 
 public record AcademiesFilterWithScrollResults(
         List<AcademyFilterWithScrollResult> academiesFilterWithScrollResults,
         boolean hasNext
 ) {
+
     public static AcademiesFilterWithScrollResults from(AcademiesByFilterWithScroll academiesByFilterWithScroll,
-                                                        Map<Long,List<Long>> academyIdWithCategories) {
+            Map<Long, List<Long>> academyIdWithCategories) {
 
         return new AcademiesFilterWithScrollResults(
                 academiesByFilterWithScroll.academiesByLocation()
@@ -39,7 +39,8 @@ public record AcademiesFilterWithScrollResults(
             boolean isLiked
     ) {
 
-        public static AcademyFilterWithScrollResult from(AcademyByFilterWithScroll academyByFilterWithScroll, List<Long> categoryIds) {
+        public static AcademyFilterWithScrollResult from(AcademyByFilterWithScroll academyByFilterWithScroll,
+                List<Long> categoryIds) {
             return new AcademyFilterWithScrollResult(
                     academyByFilterWithScroll.academyId(),
                     academyByFilterWithScroll.academyName(),

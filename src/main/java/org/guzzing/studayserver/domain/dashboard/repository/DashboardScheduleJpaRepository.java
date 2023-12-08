@@ -10,9 +10,9 @@ public interface DashboardScheduleJpaRepository extends JpaRepository<DashboardS
 
     @Modifying(clearAutomatically = true)
     @Query("""
-        delete from DashboardSchedule ds
-        where ds.dashboard.childId in :childIds
-    """)
+                delete from DashboardSchedule ds
+                where ds.dashboard.childId in :childIds
+            """)
     void deleteByChildIds(final List<Long> childIds);
 
 }

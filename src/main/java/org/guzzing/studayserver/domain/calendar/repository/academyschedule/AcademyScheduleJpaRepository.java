@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long>, AcademyScheduleRepository {
@@ -40,7 +38,7 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             AND ash.scheduleDate >= :startDateOfAttendanceToUpdate
             """)
     void deleteAfterUpdatedStartDate(@Param(value = "academyTimeTemplateId") Long academyTimeTemplateId,
-                                     @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
+            @Param(value = "startDateOfAttendanceToUpdate") LocalDate startDateOfAttendanceToUpdate);
 
     List<AcademySchedule> findByAcademyTimeTemplateId(Long academyTimeTemplateId);
 
@@ -89,7 +87,7 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
             "where att.childId =:childId " +
             "and ash.scheduleDate between :startDateOfAttendance and :endDateOfAttendance ")
     List<AcademySchedule> findByDate(@Param("startDateOfAttendance") LocalDate startDateOfAttendance,
-                                     @Param("endDateOfAttendance") LocalDate endDateOfAttendance,
-                                     @Param("childId") Long childId);
+            @Param("endDateOfAttendance") LocalDate endDateOfAttendance,
+            @Param("childId") Long childId);
 
 }
