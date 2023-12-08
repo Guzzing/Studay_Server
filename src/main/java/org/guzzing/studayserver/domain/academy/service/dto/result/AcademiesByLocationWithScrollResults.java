@@ -8,7 +8,6 @@ import java.util.Map;
 
 public record AcademiesByLocationWithScrollResults(
         List<AcademiesByLocationResultWithScroll> academiesByLocationResults,
-        Long beforeLastId,
         boolean hasNext
 ) {
 
@@ -26,7 +25,6 @@ public record AcademiesByLocationWithScrollResults(
                                                 academyIdWithCategories.get(academyByLocationWithScroll.academyId())
                                         ))
                         .toList(),
-                academiesByLocationWithScroll.beforeLastId(),
                 academiesByLocationWithScroll.hasNext());
     }
 

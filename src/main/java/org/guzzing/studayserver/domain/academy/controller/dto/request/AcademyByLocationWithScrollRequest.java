@@ -15,7 +15,7 @@ public record AcademyByLocationWithScrollRequest(
         Double lng,
 
         @PositiveOrZero
-        Long beforeLastId
+        int pageNumber
 ) {
 
     public static AcademiesByLocationWithScrollFacadeParam to(AcademyByLocationWithScrollRequest request, Long memberId) {
@@ -23,7 +23,7 @@ public record AcademyByLocationWithScrollRequest(
                 request.lat,
                 request.lng,
                 memberId,
-                request.beforeLastId
+                request.pageNumber
         );
     }
 }

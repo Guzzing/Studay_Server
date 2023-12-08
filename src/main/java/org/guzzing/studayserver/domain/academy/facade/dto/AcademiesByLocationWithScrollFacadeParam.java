@@ -6,7 +6,7 @@ public record AcademiesByLocationWithScrollFacadeParam(
         Double lat,
         Double lng,
         Long memberId,
-        Long beforeLastId
+        int pageNumber
 
 ) {
 
@@ -15,7 +15,7 @@ public record AcademiesByLocationWithScrollFacadeParam(
                 param.lat,
                 param.lng,
                 param.memberId,
-                param.beforeLastId
+                param.pageNumber
         );
     }
 }

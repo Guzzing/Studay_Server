@@ -57,7 +57,7 @@ public class AcademyService {
         AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
                 diagonal,
                 param.memberId(),
-                param.beforeLastId(),
+                param.pageNumber(),
                 ACADEMY_LOCATION_SEARCH_PAGE_SIZE);
 
         Map<Long, List<Long>> academyIdWithCategories
