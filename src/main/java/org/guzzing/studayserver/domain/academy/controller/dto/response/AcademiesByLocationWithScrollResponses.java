@@ -9,6 +9,7 @@ public record AcademiesByLocationWithScrollResponses (
         String sido,
         String sigungu,
         String upmyeondong,
+        Long beforeLastId,
         boolean hasNext
 ) {
 
@@ -16,13 +17,12 @@ public record AcademiesByLocationWithScrollResponses (
         return new AcademiesByLocationWithScrollResponses(
                 academiesByLocationResult.academiesByLocationResults()
                         .stream()
-                        .map(academiesByLocationFacadeResult ->
-                                AcademyByLocationWithScrollResponse.from(
-                                academiesByLocationFacadeResult))
+                        .map(AcademyByLocationWithScrollResponse::from)
                         .toList(),
                 academiesByLocationResult.sido(),
                 academiesByLocationResult.sigungu(),
                 academiesByLocationResult.upmyeondong(),
+                academiesByLocationResult.beforeLastId(),
                 academiesByLocationResult.hasNext()
         );
     }
