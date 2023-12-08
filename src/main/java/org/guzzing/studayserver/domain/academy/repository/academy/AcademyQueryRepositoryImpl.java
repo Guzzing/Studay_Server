@@ -22,7 +22,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     public AcademiesByLocationWithScroll findAcademiesByLocation(
             String pointFormat,
             Long memberId,
-            Long beforeLastId,
+            int pageNumber,
             int pageSize) {
 
         String nativeQuery = """
@@ -43,12 +43,9 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
         String formattedQuery = String.format(nativeQuery, memberId);
 
         formattedQuery += builderWhere();
-        if(!whereIsGreaterTan("a.id",beforeLastId).equals(BLANK_QUERY)) {
-            formattedQuery+= whereIsGreaterTan("a.id",beforeLastId)+ " and " ;
-        }
+
         formattedQuery += whereWithinDistance(pointFormat);
-        formattedQuery += orderByDesc("a.id");
-        formattedQuery = makeScroll(pageSize, formattedQuery);
+        formattedQuery = makeScroll(pageNumber, pageSize, formattedQuery);
 
         Query emNativeQuery = em.createNativeQuery(
                 formattedQuery);
@@ -75,11 +72,9 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                         ))
                         .getResultList();
 
-        beforeLastId = getBeforeLastId(academiesByLocation);
 
         return AcademiesByLocationWithScroll.of(
                 academiesByLocation,
-                beforeLastId,
                 isHasNest(academiesByLocation.size(), pageSize)
         );
     }
@@ -115,7 +110,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                 academyFilterCondition.pointFormat());
         formattedQuery = whereFilters(formattedQuery, academyFilterCondition);
         formattedQuery += orderByDesc("a.id");
-        formattedQuery = makeScroll(pageSize, formattedQuery);
+        formattedQuery = makeScroll(pageNumber, pageSize, formattedQuery);
 
         Query query = em.createNativeQuery(formattedQuery);
 
@@ -159,7 +154,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     }
 
     private String builderWhere() {
-        return " where " ;
+        return " where ";
 
     }
 
@@ -174,14 +169,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     }
 
     private String whereWithinDistance(String pointFormat) {
-        return String.format(" MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) ",pointFormat);
-    }
-
-    private String whereIsGreaterTan(String columnName, Long value) {
-        if(value != null) {
-            return String.format(" %s < %s ",columnName,value);
-        }
-        return BLANK_QUERY;
+        return String.format(" MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point) ", pointFormat);
     }
 
     private String whereInCategories(AcademyFilterCondition academyFilterCondition) {
@@ -199,13 +187,13 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
         return BLANK_QUERY;
     }
 
-    private String makeScroll(int pageSize, String formattedQuery) {
-        formattedQuery += " LIMIT " + pageSize;
+    private String makeScroll(int pageNumber, int pageSize, String formattedQuery) {
+        formattedQuery += " LIMIT " + pageSize + " OFFSET " + pageNumber * pageSize;
         return formattedQuery;
     }
 
     private String orderByDesc(String columnName) {
-        return String.format(" ORDER BY %s %s " ,columnName," DESC ");
+        return String.format(" ORDER BY %s %s ", columnName, " DESC ");
     }
 
     private Long getBeforeLastId(List<AcademyByLocationWithScroll> academiesByLocation) {

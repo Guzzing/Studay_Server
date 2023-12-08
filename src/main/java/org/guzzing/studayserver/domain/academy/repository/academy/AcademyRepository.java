@@ -26,7 +26,7 @@ public interface AcademyRepository {
     AcademiesByLocationWithScroll findAcademiesByLocation(
             String pointFormat,
             Long memberId,
-            Long beforeLastId,
+            int pageNumber,
             int pageSize);
 
     AcademiesByFilterWithScroll filterAcademies(
