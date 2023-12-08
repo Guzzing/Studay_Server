@@ -11,9 +11,7 @@ import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
@@ -114,28 +112,8 @@ public class AcademyFixture {
         return ReviewCount.makeDefaultReviewCount(academy);
     }
 
-    public static AcademiesByLocationParam academiesByLocationParam(double latitude, double longitude) {
-        return AcademiesByLocationParam.of(latitude, longitude, 1L);
-    }
-
     public static  AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude, double longitude) {
         return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L,0 );
-    }
-
-    public static AcademyFilterParam academyFilterParam(
-            Double latitude,
-            Double longitude,
-            Long desiredMinAmount,
-            Long desiredMaxAmount) {
-        return new AcademyFilterParam(
-                latitude,
-                longitude,
-                List.of(
-                        CategoryInfo.TUTORING_SCHOOL.getCategoryName(),
-                        CategoryInfo.MATH.getCategoryName()),
-                desiredMinAmount,
-                desiredMaxAmount
-        );
     }
 
     public static AcademyFilterWithScrollParam academyFilterWithScrollParam(

@@ -4,12 +4,10 @@ import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.*;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
-import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.springframework.http.HttpStatus;
@@ -45,20 +43,6 @@ public class AcademyController {
     }
 
     @GetMapping(
-            path = "/complexes",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademiesByLocationResponses> findByLocation(
-            @ModelAttribute @Valid AcademiesByLocationRequest request,
-            @MemberId Long memberId
-    ) {
-        AcademiesByLocationFacadeResult response = academyFacade.findByLocation(
-                AcademiesByLocationRequest.to(request, memberId));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademiesByLocationResponses.from(response));
-    }
-
-    @GetMapping(
             path = "/complexes-scroll",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByLocationWithScrollResponses> findByLocationWithScroll(
@@ -83,20 +67,6 @@ public class AcademyController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByNameResponses.from(academiesByNameResults));
-    }
-
-    @GetMapping(
-            path = "/filter",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademyFilterResponses> filterAcademies(
-            @ModelAttribute @Valid AcademyFilterRequest request,
-            @MemberId Long memberId
-    ) {
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(
-                AcademyFilterRequest.to(request), memberId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademyFilterResponses.from(academyFilterResults));
     }
 
     @GetMapping(

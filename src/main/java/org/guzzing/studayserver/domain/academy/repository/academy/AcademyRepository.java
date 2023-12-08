@@ -15,10 +15,6 @@ public interface AcademyRepository {
 
     Slice<AcademiesByName> findAcademiesByName(String academyName, Pageable pageable);
 
-    List<AcademiesByLocation> findAcademiesByLocation(String pointFormat, Long memberId);
-
-    List<AcademyByFiltering> filterAcademies(AcademyFilterCondition academyFilterCondition, Long memberId);
-
     AcademyFee findAcademyFeeInfo(Long academyId);
 
     boolean existsById(Long academyId);

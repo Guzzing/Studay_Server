@@ -14,7 +14,6 @@ import org.guzzing.studayserver.domain.academy.repository.academycategory.Academ
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
@@ -121,45 +120,6 @@ class AcademyServiceTest {
     }
 
     @Test
-    @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 조회된다.")
-    void findAcademiesByLocation_academiesWithinDistance_equalsSize() {
-        //Given
-        lessonRepository.deleteAll();
-        reviewCountRepository.deleteAll();
-        academyCategoryRepository.deleteAll();
-        academyRepository.deleteAll();
-
-        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
-        for (Academy academy : academies) {
-            Academy savedAcademy = academyRepository.save(academy);
-            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
-            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
-
-            AcademyFixture.academyCategoryAboutSungnam(savedAcademy)
-                    .forEach(
-                            academyCategory -> academyCategoryRepository.save(academyCategory)
-                    );
-        }
-        List<String> categoryNames = AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam).stream()
-                .map(academyCategory -> academyCategory.getCategoryId())
-                .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
-                .toList();
-
-        //When
-        AcademiesByLocationResults academiesByLocations = academyService.findAcademiesByLocation(
-                AcademyFixture.academiesByLocationParam(LATITUDE, LONGITUDE));
-
-        //Then
-        assertThat(academiesByLocations.academiesByLocationResults().size()).isEqualTo(academies.size());
-        academiesByLocations.academiesByLocationResults()
-                .stream()
-                .map(academiesByLocationResult -> academiesByLocationResult.categories())
-                .forEach(
-                        categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
-                );
-    }
-
-    @Test
     @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 "+LOCATION_PAGE_SIZE+" 이내로 조회된다.")
     void findAcademiesByLocation_academiesWithinDistance_equalsPageSize() {
         //Given
@@ -222,48 +182,6 @@ class AcademyServiceTest {
         //Then
         for (AcademiesByNameResult academiesByNameResult : academiesByNameResults.academiesByNameResults()) {
             assertThat(academiesByNameResult.academyName()).contains(ACADEMY_NAME_FOR_SEARCH);
-        }
-    }
-
-    @Test
-    @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다.")
-    void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise() {
-        //Given
-        Academy savedAcademyWithTwoCategories = academySetUpForFilterAndDetail().academy;
-
-        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
-        Long minFee = 10000L;
-        Long maxFee = 1000000L;
-
-        for (Academy academy : academies) {
-            Academy savedAcademy = academyRepository.save(academy);
-            savedAcademy.changeEducationFee(generateRandomAmount(minFee, maxFee));
-
-            AcademyFixture.academyCategoryAboutTwoCategories(savedAcademy)
-                    .forEach(
-                            academyCategory -> academyCategoryRepository.save(academyCategory)
-                    );
-
-            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
-            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
-        }
-        AcademyFilterParam academyFilterParam = AcademyFixture.academyFilterParam(LATITUDE, LONGITUDE, minFee, maxFee);
-
-        //When
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(academyFilterParam,
-                savedAcademyWithTwoCategories.getId());
-
-        //Then
-        for (AcademyFilterResult academyFilterResult : academyFilterResults.academyFilterResults()) {
-            Academy filtedAcademy = academyRepository.getById(academyFilterResult.academyId());
-
-            assertThat(filtedAcademy.getMaxEducationFee()).
-                    isGreaterThanOrEqualTo(minFee)
-                    .isLessThanOrEqualTo(maxFee);
-            academyFilterResult.categories()
-                    .forEach(
-                            result -> assertThat(academyFilterParam.categories()).contains(result)
-                    );
         }
     }
 
