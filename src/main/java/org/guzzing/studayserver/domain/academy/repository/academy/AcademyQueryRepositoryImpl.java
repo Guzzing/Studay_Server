@@ -2,10 +2,14 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-
 import java.util.List;
-
-import org.guzzing.studayserver.domain.academy.repository.dto.*;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
@@ -227,7 +231,6 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                     MBRContains(ST_LINESTRINGFROMTEXT(%s), a.point)
                 """;
 
-
         String formattedQuery = String.format(
                 nativeQuery,
                 memberId,
@@ -309,7 +312,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
     }
 
     private String orderBy(String columnName) {
-        return " ORDER BY "+columnName;
+        return " ORDER BY " + columnName;
     }
 
 }

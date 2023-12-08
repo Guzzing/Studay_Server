@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service.dto.param;
 
-public record AcademiesByLocationWithScrollParam (
+public record AcademiesByLocationWithScrollParam(
         Double baseLatitude,
         Double baseLongitude,
         Long memberId,

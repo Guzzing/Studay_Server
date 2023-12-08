@@ -118,8 +118,9 @@ public class AcademyFixture {
         return AcademiesByLocationParam.of(latitude, longitude, 1L);
     }
 
-    public static  AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude, double longitude) {
-        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L,0 );
+    public static AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude,
+            double longitude) {
+        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L, 0);
     }
 
     public static AcademyFilterParam academyFilterParam(

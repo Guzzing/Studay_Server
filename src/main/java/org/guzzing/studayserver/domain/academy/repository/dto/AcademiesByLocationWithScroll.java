@@ -6,6 +6,7 @@ public record AcademiesByLocationWithScroll(
         List<AcademyByLocationWithScroll> academiesByLocation,
         boolean hasNext
 ) {
+
     public static AcademiesByLocationWithScroll of(
             List<AcademyByLocationWithScroll> academiesByLocation,
             boolean hasNext

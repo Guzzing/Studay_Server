@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.service.dto.GeneratedLessonSchedule;
@@ -15,7 +14,7 @@ public class DateTimeOverlapChecker {
     }
 
     public static void checkOverlap(List<AcademySchedule> existedDateOverlappingSchedules,
-                                    List<GeneratedLessonSchedule> generatedSchedules) throws DateOverlapException {
+            List<GeneratedLessonSchedule> generatedSchedules) throws DateOverlapException {
 
         List<AcademySchedule> overlappingSchedules = existedDateOverlappingSchedules.stream()
                 .filter(existedSchedule -> generatedSchedules.stream()

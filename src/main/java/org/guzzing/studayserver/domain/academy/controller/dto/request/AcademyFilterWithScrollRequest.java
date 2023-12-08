@@ -4,10 +4,9 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidCategoryName;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
-
-import java.util.List;
 
 public record AcademyFilterWithScrollRequest(
         @NotNull(message = "Latitude cannot be null")

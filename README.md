@@ -19,21 +19,29 @@
 |:---------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:---------------------------------------------------------------:|:---------------------------------------------------------------:|:--------------------------------------------------------------:|
 | ![image](https://avatars.githubusercontent.com/u/106604926?s=400&v=4) | ![image](https://avatars.githubusercontent.com/u/67894159?s=400&v=4) | ![image](https://avatars.githubusercontent.com/u/85999976?s=400&v=4) | ![image](https://avatars.githubusercontent.com/u/108210958?v=4) | ![image](https://avatars.githubusercontent.com/u/133995055?v=4) | ![image](https://avatars.githubusercontent.com/u/54990890?v=4) |
 |                 [김희석](https://github.com/HeeSeok-kim)                 |                 [김유진](https://github.com/eugene028)                  |                  [김지성](https://github.com/jisung24)                  |               [김별](https://github.com/byeolhaha)                |                [유원우](https://github.com/wonu606)                |                [박세영](https://github.com/SeYoE)                 |
+
 ## 백엔드 기술 스택
+
 ![image](https://github.com/Guzzing/Studay_Server/assets/108210958/c91fec01-658f-4c93-9b2e-fe72d6656755)
 
 ## 백엔드 인프라
+
 ### 배포
+
 ![image](https://github.com/Guzzing/Studay_Server/assets/108210958/38cd10c8-0767-4af3-866e-2384c4211fdd)
 
 ### 서버
+
 ![image](https://github.com/Guzzing/Studay_Server/assets/108210958/b69028c3-15d2-404a-8436-9d100e214ef3)
 
 ## 데이터 구축 파이프라인
+
 ### 학원 데이터
+
 ![image](https://github.com/Guzzing/Studay_Server/assets/108210958/54a375a9-aa26-4376-8773-092902f202f4)
 
 ## 시연영상
+
 https://github.com/Guzzing/Studay_Server/assets/108210958/72281f97-5a5a-497e-bf8f-d5437e63a422
 
 

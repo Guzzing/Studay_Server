@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
@@ -98,7 +97,8 @@ class AcademyCalendarServiceTest {
                 () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
         ).isInstanceOf(DateOverlapException.class)
                 .hasMessage(
-                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(), ErrorCode.DATE_TIME_OVERLAP_ERROR));
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),
+                                ErrorCode.DATE_TIME_OVERLAP_ERROR));
     }
 
     @Test
@@ -116,7 +116,8 @@ class AcademyCalendarServiceTest {
                 () -> academyCalendarService.createSchedules(academyCalendarCreateParam)
         ).isInstanceOf(DateOverlapException.class)
                 .hasMessage(
-                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(), ErrorCode.DATE_TIME_OVERLAP_ERROR));
+                        String.format("중복된 시간표:{} {}", overlapAcademyCreateParam.dashboardId(),
+                                ErrorCode.DATE_TIME_OVERLAP_ERROR));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.auth.service;
 
 import io.jsonwebtoken.Claims;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,8 +26,8 @@ public class AuthService {
     private final LogoutTokenRepository logoutTokenRepository;
 
     public AuthService(AuthTokenProvider authTokenProvider,
-                      RefreshTokenRepository refreshTokenCacheRepository,
-                       LogoutTokenRepository logoutTokenCacheRepository) {
+            RefreshTokenRepository refreshTokenCacheRepository,
+            LogoutTokenRepository logoutTokenCacheRepository) {
         this.authTokenProvider = authTokenProvider;
         this.refreshTokenRepository = refreshTokenCacheRepository;
         this.logoutTokenRepository = logoutTokenCacheRepository;

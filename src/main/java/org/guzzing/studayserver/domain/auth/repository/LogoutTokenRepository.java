@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.auth.repository;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import java.util.Optional;
 import org.guzzing.studayserver.domain.auth.config.JwtTokenCacheConfig;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class LogoutTokenRepository {

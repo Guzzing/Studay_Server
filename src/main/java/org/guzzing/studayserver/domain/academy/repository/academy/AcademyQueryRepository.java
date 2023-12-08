@@ -1,10 +1,11 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import java.util.List;
-
-import org.guzzing.studayserver.domain.academy.repository.dto.*;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 
 public interface AcademyQueryRepository {
 

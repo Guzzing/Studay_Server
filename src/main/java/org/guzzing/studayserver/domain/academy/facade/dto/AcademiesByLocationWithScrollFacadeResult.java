@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.academy.facade.dto;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
-import java.util.List;
 
 public record AcademiesByLocationWithScrollFacadeResult(
         List<AcademyByLocationWithScrollFacadeResult> academiesByLocationResults,

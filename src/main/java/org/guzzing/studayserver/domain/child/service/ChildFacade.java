@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.child.service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
@@ -25,7 +24,8 @@ public class ChildFacade {
         ChildrenFindResult childrenFindResult = childService.findByMemberId(memberId);
 
         List<ChildDateScheduleResult> childDateScheduleResults =
-                childScheduleQuery.findScheduleByMemberIdAndDate(memberId, dateTime.toLocalDate(), dateTime.toLocalTime());
+                childScheduleQuery.findScheduleByMemberIdAndDate(memberId, dateTime.toLocalDate(),
+                        dateTime.toLocalTime());
 
         return childrenFindResult.children().stream()
                 .flatMap(childInfo -> matchChildWithSchedule(childInfo, childDateScheduleResults, dateTime))
@@ -42,7 +42,8 @@ public class ChildFacade {
                 .map(schedule -> ChildWithScheduleResult.of(childInfo, schedule));
     }
 
-    private ChildDateScheduleResult createEmptyChildDateScheduleResult(ChildFindResult childInfo, LocalDateTime dateTime) {
+    private ChildDateScheduleResult createEmptyChildDateScheduleResult(ChildFindResult childInfo,
+            LocalDateTime dateTime) {
         return new ChildDateScheduleResult(
                 childInfo.childId(),
                 dateTime.toLocalDate(),

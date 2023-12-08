@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 
-import java.util.List;
-
-public record AcademiesByLocationWithScrollResponses (
+public record AcademiesByLocationWithScrollResponses(
         List<AcademyByLocationWithScrollResponse> academiesByLocationResponse,
         String sido,
         String sigungu,
@@ -12,13 +11,14 @@ public record AcademiesByLocationWithScrollResponses (
         boolean hasNext
 ) {
 
-    public static AcademiesByLocationWithScrollResponses from(AcademiesByLocationWithScrollFacadeResult academiesByLocationResult) {
+    public static AcademiesByLocationWithScrollResponses from(
+            AcademiesByLocationWithScrollFacadeResult academiesByLocationResult) {
         return new AcademiesByLocationWithScrollResponses(
                 academiesByLocationResult.academiesByLocationResults()
                         .stream()
                         .map(academiesByLocationFacadeResult ->
                                 AcademyByLocationWithScrollResponse.from(
-                                academiesByLocationFacadeResult))
+                                        academiesByLocationFacadeResult))
                         .toList(),
                 academiesByLocationResult.sido(),
                 academiesByLocationResult.sigungu(),

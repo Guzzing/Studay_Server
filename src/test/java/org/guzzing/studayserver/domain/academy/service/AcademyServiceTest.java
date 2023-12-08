@@ -16,7 +16,18 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
@@ -160,7 +171,7 @@ class AcademyServiceTest {
     }
 
     @Test
-    @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 "+LOCATION_PAGE_SIZE+" 이내로 조회된다.")
+    @DisplayName("사용자의 중심 위치가 주어졌을 때 반경 거리 이내의 학원 목록이 " + LOCATION_PAGE_SIZE + " 이내로 조회된다.")
     void findAcademiesByLocation_academiesWithinDistance_equalsPageSize() {
         //Given
         lessonRepository.deleteAll();
@@ -193,7 +204,8 @@ class AcademyServiceTest {
                 AcademyFixture.academiesByLocationWithScrollParam(LATITUDE, LONGITUDE));
 
         //Then
-        assertThat(academiesByLocationWithScroll.academiesByLocationResults().size()).isEqualTo(expectedSearchedPageSize);
+        assertThat(academiesByLocationWithScroll.academiesByLocationResults().size()).isEqualTo(
+                expectedSearchedPageSize);
         assertThat(academiesByLocationWithScroll.hasNext()).isEqualTo(expectedHasNext);
         academiesByLocationWithScroll.academiesByLocationResults()
                 .stream()
@@ -269,7 +281,7 @@ class AcademyServiceTest {
 
     @Test
     @DisplayName("중심 위치 반경 이내에 있는 학원 중에서 교육비가 최소와 최대 사이에 있고 선택한 학원 분류 분야에 해당하는 학원들을 반환한다." +
-            "또한 학원 목록 조회 결과가 "+LOCATION_PAGE_SIZE+" 이내로 조회된다.")
+            "또한 학원 목록 조회 결과가 " + LOCATION_PAGE_SIZE + " 이내로 조회된다.")
     void filterAcademy_BetweenEducationFeeAndLocationAndInExpertise_withScroll() {
         //Given
         Academy savedAcademyWithTwoCategories = academySetUpForFilterAndDetail().academy;
@@ -290,14 +302,16 @@ class AcademyServiceTest {
             lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
             reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
         }
-        AcademyFilterWithScrollParam academyFilterWithScrollParam = AcademyFixture.academyFilterWithScrollParam(LATITUDE, LONGITUDE, minFee, maxFee);
+        AcademyFilterWithScrollParam academyFilterWithScrollParam = AcademyFixture.academyFilterWithScrollParam(
+                LATITUDE, LONGITUDE, minFee, maxFee);
 
         int totalSize = academies.size();
         int expectedSearchedPageSize = totalSize >= LOCATION_PAGE_SIZE ? LOCATION_PAGE_SIZE : totalSize;
         boolean expectedHasNext = totalSize >= LOCATION_PAGE_SIZE ? true : false;
 
         //When
-        AcademiesFilterWithScrollResults academiesFilterWithScrollResults = academyService.filterAcademies(academyFilterWithScrollParam,
+        AcademiesFilterWithScrollResults academiesFilterWithScrollResults = academyService.filterAcademies(
+                academyFilterWithScrollParam,
                 savedAcademyWithTwoCategories.getId());
 
         //Then
@@ -312,7 +326,8 @@ class AcademyServiceTest {
                             result -> assertThat(academyFilterWithScrollParam.categories()).contains(result)
                     );
         }
-        assertThat(academiesFilterWithScrollResults.academiesFilterWithScrollResults().size()).isEqualTo(expectedSearchedPageSize);
+        assertThat(academiesFilterWithScrollResults.academiesFilterWithScrollResults().size()).isEqualTo(
+                expectedSearchedPageSize);
         assertThat(academiesFilterWithScrollResults.hasNext()).isEqualTo(expectedHasNext);
     }
 

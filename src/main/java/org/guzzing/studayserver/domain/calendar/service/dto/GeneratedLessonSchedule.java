@@ -10,6 +10,7 @@ public record GeneratedLessonSchedule(
         LocalTime lessonEndTime,
         DayOfWeek dayOfWeek
 ) {
+
     public static GeneratedLessonSchedule of(
             LocalDate scheduleDate,
             LocalTime lessonStartTime,

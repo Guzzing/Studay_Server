@@ -1,8 +1,18 @@
 package org.guzzing.studayserver.domain.academy.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.*;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByLocationRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByNameRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByLocationWithScrollRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterWithScrollRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationWithScrollResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByNameResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesFilterWithScrollResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyFilterResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
