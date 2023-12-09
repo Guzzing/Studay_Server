@@ -38,9 +38,12 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                     a.latitude AS latitude,
                     a.longitude AS longitude,
                     a.shuttle AS shuttleAvailable,
-                    (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked
+                    (CASE WHEN l.academy_id IS NOT NULL THEN true ELSE false END) AS isLiked,
+                    ac.category_id AS categoryId 
                 FROM 
                     academies AS a
+                INNER JOIN
+                    academy_categories AS ac ON a.id = ac.academy_id    
                 LEFT JOIN 
                     likes AS l ON a.id = l.academy_id AND l.member_id = %s """;
 
@@ -64,6 +67,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                         .addScalar("longitude", StandardBasicTypes.DOUBLE)
                         .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
                         .addScalar("isLiked", StandardBasicTypes.BOOLEAN)
+                        .addScalar("categoryId",StandardBasicTypes.LONG)
                         .setResultTransformer((tuple, aliases) -> new AcademyByLocationWithScroll(
                                 (Long) tuple[0],
                                 (String) tuple[1],
@@ -72,7 +76,8 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                 (Double) tuple[4],
                                 (Double) tuple[5],
                                 (String) tuple[6],
-                                (boolean) tuple[7]
+                                (boolean) tuple[7],
+                                (Long) tuple[8]
                         ))
                         .getResultList();
 

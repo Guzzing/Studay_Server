@@ -1,5 +1,7 @@
 package org.guzzing.studayserver.domain.academy.repository.dto;
 
+import java.util.Objects;
+
 public record AcademyByLocationWithScroll(
         Long academyId,
         String academyName,
@@ -8,7 +10,7 @@ public record AcademyByLocationWithScroll(
         Double latitude,
         Double longitude,
         String shuttleAvailable,
-        boolean isLiked
+        boolean isLiked,
+        Long categoryId
 ) {
-
 }
