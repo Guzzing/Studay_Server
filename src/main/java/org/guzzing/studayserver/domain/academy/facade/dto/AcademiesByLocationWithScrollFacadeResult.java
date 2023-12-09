@@ -57,6 +57,3 @@ public record AcademiesByLocationWithScrollFacadeResult(
 
     }
 }
-
-
-

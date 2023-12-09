@@ -1,9 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.guzzing.studayserver.domain.academy.model.Lesson;
@@ -12,7 +10,6 @@ import org.guzzing.studayserver.domain.academy.repository.academycategory.Academ
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
@@ -71,7 +68,7 @@ public class AcademyService {
         return AcademiesByLocationWithScrollResults.to(
                 academiesByLocation);
     }
-    
+
     @Transactional(readOnly = true)
     public AcademiesByNameResults findAcademiesByName(AcademiesByNameParam param) {
         PageRequest requestPageAble = PageRequest.of(param.pageNumber(), ACADEMY_NAME_SEARCH_PAGE_SIZE);
