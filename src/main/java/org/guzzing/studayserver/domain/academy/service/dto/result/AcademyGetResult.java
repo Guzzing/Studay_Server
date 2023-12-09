@@ -15,7 +15,6 @@ public record AcademyGetResult(
         String updatedDate,
         LessonGetResults lessonGetResults,
         ReviewPercentGetResult reviewPercentGetResult,
-        boolean isLiked,
         List<String> categories
 ) {
 
@@ -23,7 +22,6 @@ public record AcademyGetResult(
             Academy academy,
             List<Lesson> lessons,
             ReviewCount reviewCount,
-            boolean isLiked,
             List<Long> categories) {
         return new AcademyGetResult(
                 academy.getAcademyName(),
@@ -35,8 +33,6 @@ public record AcademyGetResult(
 
                 LessonGetResults.from(lessons),
                 ReviewPercentGetResult.from(reviewCount),
-
-                isLiked,
 
                 categories.stream()
                         .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))

@@ -106,8 +106,7 @@ class AcademyServiceTest {
                 savedAcademyAboutSungnam.getId());
 
         //When
-        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),
-                savedMember.getId());
+        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId());
 
         //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());

@@ -23,7 +23,6 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLess
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
-import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,26 +36,23 @@ public class AcademyService {
     private final AcademyRepository academyRepository;
     private final LessonRepository lessonRepository;
     private final ReviewCountRepository reviewCountRepository;
-    private final LikeAccessService likeAccessService;
     private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
+                          ReviewCountRepository reviewCountRepository,
                           AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
-        this.likeAccessService = likeAccessService;
         this.academyCategoryRepository = academyCategoryRepository;
     }
 
     @Transactional(readOnly = true)
-    public AcademyGetResult getAcademy(Long academyId, Long memberId) {
+    public AcademyGetResult getAcademy(Long academyId) {
         return AcademyGetResult.from(
                 academyRepository.getById(academyId),
                 lessonRepository.findAllByAcademyId(academyId),
                 reviewCountRepository.getByAcademyId(academyId),
-                isLiked(academyId, memberId),
                 academyCategoryRepository.findCategoryIdsByAcademyId(academyId));
     }
 
@@ -129,10 +125,6 @@ public class AcademyService {
         );
 
         return academyIdWithCategories;
-    }
-
-    private boolean isLiked(Long academyId, Long memberId) {
-        return likeAccessService.isLiked(academyId, memberId);
     }
 
     @Transactional(readOnly = true)
