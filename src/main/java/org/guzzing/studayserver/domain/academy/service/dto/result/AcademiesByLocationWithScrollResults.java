@@ -12,19 +12,18 @@ public record AcademiesByLocationWithScrollResults(
 ) {
 
     public static AcademiesByLocationWithScrollResults to(
-            AcademiesByLocationWithScroll academiesByLocationWithScroll,
-            Map<Long, List<Long>> academyIdWithCategories) {
+            AcademiesByLocationWithScroll academiesByLocationWithScroll) {
         return new AcademiesByLocationWithScrollResults(
                 academiesByLocationWithScroll
                         .academiesByLocation()
-                        .stream()
-                        .map(
-                                academyByLocationWithScroll ->
-                                        AcademiesByLocationResultWithScroll.from(
-                                                academyByLocationWithScroll,
-                                                academyIdWithCategories.get(academyByLocationWithScroll.academyId())
-                                        ))
-                        .toList(),
+                        .keySet()
+                                .stream()
+                                        .map(academyByLocation->
+                                                    AcademiesByLocationResultWithScroll.from(
+                                                            academyByLocation,
+                                                            academiesByLocationWithScroll.academiesByLocation().
+                                                                    get(academyByLocation)))
+                                                .toList(),
                 academiesByLocationWithScroll.hasNext());
     }
 
@@ -40,15 +39,15 @@ public record AcademiesByLocationWithScrollResults(
             boolean isLiked
     ) {
 
-        public static AcademiesByLocationResultWithScroll from(AcademyByLocationWithScroll academyByLocationWithScroll,
-                List<Long> categories) {
+        public static AcademiesByLocationResultWithScroll from(AcademiesByLocationWithScroll.AcademyByLocation academyByLocationWithScroll,
+                                                               List<Long> categories) {
             return new AcademiesByLocationResultWithScroll(
                     academyByLocationWithScroll.academyId(),
                     academyByLocationWithScroll.academyName(),
                     academyByLocationWithScroll.fullAddress(),
                     academyByLocationWithScroll.phoneNumber(),
                     categories.stream()
-                            .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                            .map(CategoryInfo::getCategoryNameById)
                             .toList(),
                     academyByLocationWithScroll.latitude(),
                     academyByLocationWithScroll.longitude(),

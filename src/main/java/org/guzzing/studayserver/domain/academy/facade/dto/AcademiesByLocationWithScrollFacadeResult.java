@@ -19,8 +19,7 @@ public record AcademiesByLocationWithScrollFacadeResult(
                 academiesByLocationResults
                         .academiesByLocationResults()
                         .stream()
-                        .map(academyByLocationResult ->
-                                AcademyByLocationWithScrollFacadeResult.from(academyByLocationResult))
+                        .map(AcademyByLocationWithScrollFacadeResult::from)
                         .toList(),
                 regionResult.sido(),
                 regionResult.sigungu(),
@@ -58,6 +57,3 @@ public record AcademiesByLocationWithScrollFacadeResult(
 
     }
 }
-
-
-
