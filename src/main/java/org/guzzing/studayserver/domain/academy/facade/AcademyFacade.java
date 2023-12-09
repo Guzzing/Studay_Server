@@ -35,7 +35,9 @@ public class AcademyFacade {
                         param.lat(),
                         param.lng()));
 
-        return AcademiesByLocationWithScrollFacadeResult.from(academiesByLocationWithScroll, regionContainingPoint);
+        return AcademiesByLocationWithScrollFacadeResult.from(
+                academiesByLocationWithScroll,
+                regionContainingPoint);
     }
 
     public AcademyDetailFacadeResult getDetailAcademy(AcademyDetailFacadeParam param) {
