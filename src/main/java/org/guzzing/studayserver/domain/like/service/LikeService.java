@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.like.service;
 
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.model.Like;
@@ -66,6 +67,11 @@ public class LikeService {
         academyAccessService.validateAcademy(academyId);
 
         likeRepository.deleteByAcademyIdAndMemberId(academyId, memberId);
+    }
+
+    @ValidMember
+    public boolean isLiked(final Long academyId, @ValidatedMemberId final Long memberId) {
+        return likeRepository.existsByMemberIdAndAcademyId(memberId, academyId);
     }
 
     public LikeGetResult findAllLikesOfMember(Long memberId) {

@@ -16,17 +16,18 @@ import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.annotation.ValidMemberAspect;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles({"dev","oauth"})
 class LikeServiceTest {
 
     @Autowired
@@ -54,7 +55,6 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
-    @WithMockCustomOAuth2LoginUser
     void createLikeOfAcademy_WithMemberId() {
         // Given & When
         LikePostResult result = likeService.createLikeOfAcademy(param);
@@ -66,7 +66,6 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
-    @WithMockCustomOAuth2LoginUser
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
         LikePostResult savedLike = likeService.createLikeOfAcademy(param);
@@ -82,7 +81,6 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("학원 아이디로 등록한 좋아요를 제거한다.")
-    @WithMockCustomOAuth2LoginUser
     void deleteLikeOfAcademy_AcademyId_Delete() {
         // Given
         LikePostResult postResult = likeService.createLikeOfAcademy(param);
@@ -102,7 +100,6 @@ class LikeServiceTest {
 
     @Test
     @DisplayName("내가 좋아요한 모든 학원 비용 정보를 조회한다.")
-    @WithMockCustomOAuth2LoginUser
     void findAllLikesOfMember_MemberId_AcademyInfo() {
         // Given
         given(academyAccessService.findAcademyFeeInfo(any()))
@@ -116,6 +113,38 @@ class LikeServiceTest {
         // Then
         assertThat(result.likeAcademyInfos()).isNotEmpty();
         assertThat(result.totalFee()).isEqualTo(100);
+    }
+
+    @Test
+    @DisplayName("멤버가 해당 학원에 대해서 좋아요를 했는지 여부를 반환한다.")
+    void isLiked_MemberAndAcademy_ReturnTrue() {
+        // Given
+        final Long memberId = 1L;
+        final Long academyId = 1L;
+        final Like like = Like.of(memberId, academyId);
+        likeRepository.save(like);
+
+        // When
+        final boolean result = likeService.isLiked(memberId, academyId);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("멤버가 해당 학원에 대해서 좋아요를 했는지 여부를 반환한다.")
+    void isLiked_MemberAndAcademy_ReturnFalse() {
+        // Given
+        final Long memberId = 1L;
+        final Long academyId = 1L;
+        final Like like = Like.of(memberId, academyId);
+        likeRepository.save(like);
+
+        // When
+        final boolean result = likeService.isLiked(memberId, 2L);
+
+        // Then
+        assertThat(result).isFalse();
     }
 
 }
