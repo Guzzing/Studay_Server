@@ -16,9 +16,7 @@ public record AcademiesByLocationWithScrollResponses(
         return new AcademiesByLocationWithScrollResponses(
                 academiesByLocationResult.academiesByLocationResults()
                         .stream()
-                        .map(academiesByLocationFacadeResult ->
-                                AcademyByLocationWithScrollResponse.from(
-                                        academiesByLocationFacadeResult))
+                        .map(AcademyByLocationWithScrollResponse::from)
                         .toList(),
                 academiesByLocationResult.sido(),
                 academiesByLocationResult.sigungu(),

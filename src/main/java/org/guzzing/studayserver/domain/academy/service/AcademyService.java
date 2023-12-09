@@ -2,35 +2,27 @@ package org.guzzing.studayserver.domain.academy.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocation;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFiltering;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-import org.guzzing.studayserver.domain.academy.service.parser.FilterParser;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
-import org.guzzing.studayserver.domain.academy.util.dto.DistinctFilteredAcademy;
 import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -49,8 +41,8 @@ public class AcademyService {
     private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-            ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
-            AcademyCategoryRepository academyCategoryRepository) {
+                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
+                          AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
@@ -69,22 +61,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public AcademiesByLocationResults findAcademiesByLocation(AcademiesByLocationParam param) {
-        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
-
-        List<AcademiesByLocation> academiesByLocation = academyRepository.findAcademiesByLocation(diagonal,
-                param.memberId());
-
-        Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithLocation(academiesByLocation);
-        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithLocation(
-                academiesByLocation);
-
-        return AcademiesByLocationResults.to(academyIdWithCategories, distinctFilteredAcademies);
-    }
-
-    @Transactional(readOnly = true)
-    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(
-            AcademiesByLocationWithScrollParam param) {
+    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(AcademiesByLocationWithScrollParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
 
         AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
@@ -123,20 +100,6 @@ public class AcademyService {
         return AcademiesByNameResults.to(
                 academyRepository.findAcademiesByName(param.academyName(), requestPageAble)
         );
-    }
-
-    @Transactional(readOnly = true)
-    public AcademyFilterResults filterAcademies(AcademyFilterParam param, Long memberId) {
-        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
-
-        List<AcademyByFiltering> academiesByFiltering = academyRepository.filterAcademies(
-                AcademyFilterParam.to(param, diagonal), memberId);
-
-        Map<Long, List<Long>> academyIdWithCategories = FilterParser.makeCategoriesWithFilter(academiesByFiltering);
-        Set<DistinctFilteredAcademy> distinctFilteredAcademies = FilterParser.distinctAcademiesWithFilter(
-                academiesByFiltering);
-
-        return AcademyFilterResults.from(academyIdWithCategories, distinctFilteredAcademies);
     }
 
     @Transactional(readOnly = true)

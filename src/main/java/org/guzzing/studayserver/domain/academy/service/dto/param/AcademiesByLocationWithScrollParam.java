@@ -12,7 +12,10 @@ public record AcademiesByLocationWithScrollParam(
             Double baseLongitude,
             Long memberId,
             int pageNumber) {
-        return new AcademiesByLocationWithScrollParam(baseLatitude, baseLongitude, memberId, pageNumber);
+        return new AcademiesByLocationWithScrollParam(
+                baseLatitude,
+                baseLongitude,
+                memberId,
+                pageNumber);
     }
 }
-

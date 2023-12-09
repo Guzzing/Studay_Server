@@ -1,25 +1,19 @@
 package org.guzzing.studayserver.domain.academy.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByLocationRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByNameRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByLocationWithScrollRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterWithScrollRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationResponses;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationWithScrollResponses;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByNameResponses;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesFilterWithScrollResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyFilterResponses;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
-import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResult;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFilterResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.springframework.http.HttpStatus;
@@ -55,20 +49,6 @@ public class AcademyController {
     }
 
     @GetMapping(
-            path = "/complexes",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademiesByLocationResponses> findByLocation(
-            @ModelAttribute @Valid AcademiesByLocationRequest request,
-            @MemberId Long memberId
-    ) {
-        AcademiesByLocationFacadeResult response = academyFacade.findByLocation(
-                AcademiesByLocationRequest.to(request, memberId));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademiesByLocationResponses.from(response));
-    }
-
-    @GetMapping(
             path = "/complexes-scroll",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByLocationWithScrollResponses> findByLocationWithScroll(
@@ -93,20 +73,6 @@ public class AcademyController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademiesByNameResponses.from(academiesByNameResults));
-    }
-
-    @GetMapping(
-            path = "/filter",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AcademyFilterResponses> filterAcademies(
-            @ModelAttribute @Valid AcademyFilterRequest request,
-            @MemberId Long memberId
-    ) {
-        AcademyFilterResults academyFilterResults = academyService.filterAcademies(
-                AcademyFilterRequest.to(request), memberId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademyFilterResponses.from(academyFilterResults));
     }
 
     @GetMapping(
