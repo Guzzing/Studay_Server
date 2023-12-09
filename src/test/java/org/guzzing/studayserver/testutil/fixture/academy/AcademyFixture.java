@@ -3,6 +3,8 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
@@ -144,6 +146,10 @@ public class AcademyFixture {
         return List.of(
                 AcademyCategory.of(sungnamAcademy, CategoryInfo.COMPUTER.getId())
         );
+    }
+
+    public static AcademyDetailFacadeParam academyDetailFacadeParam(Long memberId, Long academyId) {
+        return AcademyDetailFacadeParam.of(memberId, academyId);
     }
 
 
