@@ -12,6 +12,7 @@ import org.guzzing.studayserver.domain.like.service.LikeService;
 import org.guzzing.studayserver.domain.region.service.RegionService;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AcademyFacade {
@@ -26,6 +27,7 @@ public class AcademyFacade {
         this.likeService = likeService;
     }
 
+    @Transactional(readOnly = true)
     public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(AcademiesByLocationWithScrollFacadeParam param) {
         AcademiesByLocationWithScrollResults academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
                 AcademiesByLocationWithScrollFacadeParam.to(param));
@@ -40,6 +42,7 @@ public class AcademyFacade {
                 regionContainingPoint);
     }
 
+    @Transactional(readOnly = true)
     public AcademyDetailFacadeResult getDetailAcademy(AcademyDetailFacadeParam param) {
         AcademyGetResult academyGetResult = academyService.getAcademy(param.academyId());
         boolean liked = likeService.isLiked(param.academyId(), param.memberId());
