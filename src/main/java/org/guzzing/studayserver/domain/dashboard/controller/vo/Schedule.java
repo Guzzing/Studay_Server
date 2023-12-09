@@ -3,8 +3,6 @@ package org.guzzing.studayserver.domain.dashboard.controller.vo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
 import org.guzzing.studayserver.global.exception.DashboardException;
 import org.guzzing.studayserver.global.time.TimeConverter;
 

@@ -10,4 +10,5 @@ public record AcademyByLocationWithScroll(
         String shuttleAvailable,
         boolean isLiked
 ) {
+
 }

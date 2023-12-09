@@ -1,8 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.service.dto.result;
 
-import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
-
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 
 public record AcademyCalendarCreateResults(
         List<Long> academyTimeTemplateIds

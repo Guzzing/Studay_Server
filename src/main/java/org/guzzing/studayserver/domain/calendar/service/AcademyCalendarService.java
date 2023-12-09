@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.service;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
@@ -74,7 +73,8 @@ public class AcademyCalendarService {
     ) {
         generatedLessonSchedules
                 .stream()
-                .filter(generatedLessonSchedule -> isSameTimeTemplate(generatedLessonSchedule, savedAcademyTimeTemplate))
+                .filter(generatedLessonSchedule -> isSameTimeTemplate(generatedLessonSchedule,
+                        savedAcademyTimeTemplate))
                 .forEach(generatedLessonSchedule -> academyScheduleRepository.save(
                         AcademySchedule.of(
                                 savedAcademyTimeTemplate,
@@ -90,7 +90,8 @@ public class AcademyCalendarService {
                 .stream()
                 .map(
                         lessonScheduleParam ->
-                                academyTimeTemplateRepository.save(AcademyCalendarCreateParam.to(param, lessonScheduleParam.dayOfWeek())))
+                                academyTimeTemplateRepository.save(
+                                        AcademyCalendarCreateParam.to(param, lessonScheduleParam.dayOfWeek())))
                 .toList();
     }
 

@@ -1,7 +1,8 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
-import org.guzzing.studayserver.domain.academy.repository.dto.*;
-
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
 
 public interface AcademyQueryRepository {
 

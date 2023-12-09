@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.service;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyScheduleFindByDateResults;
