@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
 import org.guzzing.studayserver.domain.like.service.LikeCommandService;
+import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.review.service.ReviewService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,13 +41,15 @@ public class MemberFacade {
 
     @Transactional
     public void removeMember(final long memberId) {
-        List<Long> childIds = childService.findByMemberId(memberId).children()
+        final Member member = memberService.getMember(memberId);
+
+        final List<Long> childIds = childService.findByMemberId(memberId).children()
                 .stream()
                 .map(ChildFindResult::childId)
                 .toList();
 
         reviewService.removeReview(memberId);
-        likeCommandService.deleteLikesOfMember(memberId);
+        likeCommandService.deleteLikesOfMember(member);
         calendarService.removeCalendar(childIds);
         dashboardService.removeDashboard(childIds);
         childService.removeChild(memberId);

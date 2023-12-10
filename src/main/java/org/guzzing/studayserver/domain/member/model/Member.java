@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
@@ -116,5 +117,25 @@ public class Member {
 
     public String getNickname() {
         return nickName.getValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Member member = (Member) o;
+        return Objects.equals(id, member.id) && Objects.equals(nickName, member.nickName)
+                && Objects.equals(email, member.email) && Objects.equals(socialId, member.socialId)
+                && memberProvider == member.memberProvider && roleType == member.roleType && Objects.equals(
+                children, member.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nickName, email, socialId, memberProvider, roleType, children);
     }
 }
