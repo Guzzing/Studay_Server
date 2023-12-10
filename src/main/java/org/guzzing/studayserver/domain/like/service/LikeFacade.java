@@ -52,11 +52,6 @@ public class LikeFacade {
     }
 
     @Transactional
-    public void removeMemberLikes(final long memberId) {
-        likeCommandService.deleteLikesOfMember(memberId);
-    }
-
-    @Transactional
     public void deleteLikeOfAcademy(final long academyId, final long memberId) {
         memberAccessService.validateMember(memberId);
         academyAccessService.validateAcademy(academyId);
