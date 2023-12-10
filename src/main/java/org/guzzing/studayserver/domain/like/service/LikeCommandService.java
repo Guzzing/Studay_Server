@@ -1,7 +1,9 @@
 package org.guzzing.studayserver.domain.like.service;
 
+import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
+import org.guzzing.studayserver.domain.member.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +17,8 @@ public class LikeCommandService {
         this.likeRepository = likeRepository;
     }
 
-    public Like saveLike(final long memberId, final long academyId) {
-        final Like like = Like.of(memberId, academyId);
+    public Like saveLike(final Member member, final Academy academy) {
+        final Like like = Like.of(member, academy);
         return likeRepository.save(like);
     }
 
@@ -24,12 +26,12 @@ public class LikeCommandService {
         likeRepository.deleteById(likeId);
     }
 
-    public void deleteLikesOfMember(final long memberId) {
-        likeRepository.deleteByMemberId(memberId);
+    public void deleteLikesOfMember(final Member member) {
+        likeRepository.deleteByMember(member);
     }
 
-    public void deleteLikesOfAcademyAndMember(final long academyId, final long memberId) {
-        likeRepository.deleteByAcademyIdAndMemberId(academyId, memberId);
+    public void deleteLikesOfAcademyAndMember(final Member member, final Academy academy) {
+        likeRepository.deleteByMemberAndAcademy(member, academy);
     }
 
 }

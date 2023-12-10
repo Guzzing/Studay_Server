@@ -1,24 +1,26 @@
 package org.guzzing.studayserver.domain.like.repository;
 
 import java.util.List;
+import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.like.model.Like;
+import org.guzzing.studayserver.domain.member.model.Member;
 
 public interface LikeRepository {
 
     Like save(final Like like);
 
-    void deleteById(final Long likeId);
+    void deleteById(final long likeId);
 
-    void deleteByMemberId(final long memberId);
+    void deleteByMember(final Member member);
 
-    boolean existsById(final Long id);
+    boolean existsById(final long id);
 
-    List<Like> findByMemberId(final Long memberId);
+    List<Like> findByMember(final Member member);
 
-    long countByMemberId(final Long memberId);
+    long countByMember(final Member member);
 
-    boolean existsByMemberIdAndAcademyId(final Long memberId, final Long academyId);
+    boolean existsByMemberAndAcademy(final Member member, final Academy academy);
 
-    void deleteByAcademyIdAndMemberId(final long academyId, final long memberId);
+    void deleteByMemberAndAcademy(final Member member, final Academy academy);
 
 }

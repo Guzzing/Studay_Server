@@ -81,7 +81,7 @@ public class AcademyFacadeTest {
         savedReviewCountAboutSungnam = reviewCountRepository.save(
                 AcademyFixture.reviewCountDefault(savedAcademyAboutSungnam));
 
-        likeRepository.save(Like.of(savedMember.getId(),savedAcademyAboutSungnam.getId()));
+        likeRepository.save(Like.of(savedMember, savedAcademyAboutSungnam));
     }
 
     @Test

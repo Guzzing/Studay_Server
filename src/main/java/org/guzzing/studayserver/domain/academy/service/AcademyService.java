@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
@@ -44,6 +45,11 @@ public class AcademyService {
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
         this.academyCategoryRepository = academyCategoryRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public Academy getAcademy(final long academyId) {
+        return academyRepository.getById(academyId);
     }
 
     @Transactional(readOnly = true)

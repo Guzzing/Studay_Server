@@ -1,14 +1,16 @@
 package org.guzzing.studayserver.domain.like.service;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
+import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikedAcademyFeeInfo;
-import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,67 +19,68 @@ public class LikeFacade {
 
     private final LikeReadService likeReadService;
     private final LikeCommandService likeCommandService;
-    private final MemberAccessService memberAccessService;
-    private final AcademyAccessService academyAccessService;
+    private final MemberService memberService;
+    private final AcademyService academyService;
 
     public LikeFacade(
             final LikeReadService likeReadService,
             final LikeCommandService likeCommandService,
-            final MemberAccessService memberAccessService,
-            final AcademyAccessService academyAccessService
+            final MemberService memberService,
+            final AcademyService academyService
     ) {
         this.likeReadService = likeReadService;
         this.likeCommandService = likeCommandService;
-        this.memberAccessService = memberAccessService;
-        this.academyAccessService = academyAccessService;
+        this.memberService = memberService;
+        this.academyService = academyService;
     }
 
     @Transactional
     public LikePostResult createLikeOfAcademy(final LikePostParam param) {
-        memberAccessService.validateMember(param.memberId());
-        academyAccessService.validateAcademy(param.academyId());
+        final Member member = getValidMember(param.memberId());
+        final Academy academy = getValidAcademy(param.academyId(), member);
 
-        validateLikeCreation(param);
-
-        final Like savedLike = likeCommandService.saveLike(param.memberId(), param.academyId());
+        final Like savedLike = likeCommandService.saveLike(member, academy);
 
         return LikePostResult.from(savedLike);
     }
 
     @Transactional
     public void removeLike(final long likeId, final long memberId) {
-        memberAccessService.validateMember(memberId);
+        getValidMember(memberId);
 
         likeCommandService.deleteLike(likeId);
     }
 
     @Transactional
-    public void deleteLikeOfAcademy(final long academyId, final long memberId) {
-        memberAccessService.validateMember(memberId);
-        academyAccessService.validateAcademy(academyId);
+    public void deleteLikeOfAcademy(final long memberId, final long academyId) {
+        final Member member = getValidMember(memberId);
+        final Academy academy = academyService.getAcademy(academyId);
 
-        likeCommandService.deleteLikesOfAcademyAndMember(academyId, memberId);
+        likeCommandService.deleteLikesOfAcademyAndMember(member, academy);
     }
 
     @Transactional(readOnly = true)
-    public boolean isLiked(final long academyId, final long memberId) {
-        memberAccessService.validateMember(memberId);
-        academyAccessService.validateAcademy(academyId);
+    public boolean isLiked(final long memberId, final long academyId) {
+        final Member member = memberService.getMember(memberId);
+        final Academy academy = academyService.getAcademy(academyId);
 
-        return likeReadService.isLikedAcademy(academyId, memberId);
+        return likeReadService.isLikedAcademy(member, academy);
     }
 
     @Transactional(readOnly = true)
     public LikeGetResult getAllLikesOfMember(final long memberId) {
-        memberAccessService.validateMember(memberId);
+        final Member member = getValidMember(memberId);
 
-        final List<LikedAcademyFeeInfo> likedAcademyFeeInfos = likeReadService.findAllLikesOfMember(memberId).stream()
+        final List<LikedAcademyFeeInfo> likedAcademyFeeInfos = likeReadService.findAllLikesOfMember(member)
+                .stream()
                 .map(like -> {
-                    final AcademyFeeInfo academyFeeInfo = academyAccessService.findAcademyFeeInfo(like.getAcademyId());
+                    final long academyId = like.getAcademyId();
+
+                    final AcademyFeeInfo academyFeeInfo = academyService.findAcademyFeeInfo(academyId);
 
                     return new LikedAcademyFeeInfo(
                             like.getId(),
-                            like.getAcademyId(),
+                            academyId,
                             academyFeeInfo.academyName(),
                             academyFeeInfo.expectedFee());
                 })
@@ -86,9 +89,16 @@ public class LikeFacade {
         return LikeGetResult.of(likedAcademyFeeInfos);
     }
 
-    private void validateLikeCreation(final LikePostParam param) {
-        likeReadService.validateLikeLimit(param);
-        likeReadService.validateExistsLike(param);
+    private Member getValidMember(final long memberId) {
+        final Member member = memberService.getMember(memberId);
+        likeReadService.validateLikeLimit(member);
+        return member;
+    }
+
+    private Academy getValidAcademy(final long academyId, final Member member) {
+        final Academy academy = academyService.getAcademy(academyId);
+        likeReadService.validateExistsLike(member, academy);
+        return academy;
     }
 
 }
