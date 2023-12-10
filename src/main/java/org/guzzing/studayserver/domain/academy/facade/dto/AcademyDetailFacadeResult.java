@@ -1,10 +1,9 @@
 package org.guzzing.studayserver.domain.academy.facade.dto;
 
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonGetResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.ReviewPercentGetResult;
-
-import java.util.List;
 
 public record AcademyDetailFacadeResult(
         String academyName,

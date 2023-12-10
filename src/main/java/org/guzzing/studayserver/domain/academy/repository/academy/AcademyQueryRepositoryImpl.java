@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-
 import java.util.List;
-
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
@@ -67,7 +65,7 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                         .addScalar("longitude", StandardBasicTypes.DOUBLE)
                         .addScalar("shuttleAvailable", StandardBasicTypes.STRING)
                         .addScalar("isLiked", StandardBasicTypes.BOOLEAN)
-                        .addScalar("categoryId",StandardBasicTypes.LONG)
+                        .addScalar("categoryId", StandardBasicTypes.LONG)
                         .setResultTransformer((tuple, aliases) -> new AcademyByLocationWithScroll(
                                 (Long) tuple[0],
                                 (String) tuple[1],
@@ -80,7 +78,6 @@ public class AcademyQueryRepositoryImpl implements AcademyQueryRepository {
                                 (Long) tuple[8]
                         ))
                         .getResultList();
-
 
         return AcademiesByLocationWithScroll.of(
                 academiesByLocation,

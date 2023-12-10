@@ -1,5 +1,9 @@
 package org.guzzing.studayserver.domain.academy.facade;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
+
 import jakarta.transaction.Transactional;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeResult;
@@ -23,10 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
@@ -103,7 +103,8 @@ class AcademyFacadeTest {
                 () -> assertThat(detailAcademy.contact()).isEqualTo(savedAcademyAboutSungnam.getContact()),
                 () -> assertThat(detailAcademy.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee()),
                 () -> assertThat(detailAcademy.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getFullAddress()),
-                () -> assertThat(detailAcademy.shuttleAvailability()).isEqualTo(savedAcademyAboutSungnam.getShuttleAvailability())
+                () -> assertThat(detailAcademy.shuttleAvailability()).isEqualTo(
+                        savedAcademyAboutSungnam.getShuttleAvailability())
         );
     }
 

@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.review.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.nimbusds.oauth2.sdk.token.AccessTokenType.BEARER;
 import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;

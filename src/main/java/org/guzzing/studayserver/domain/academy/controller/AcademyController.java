@@ -46,7 +46,8 @@ public class AcademyController {
             @PathVariable Long academyId,
             @MemberId Long memberId
     ) {
-        AcademyDetailFacadeResult detailAcademy = academyFacade.getDetailAcademy(AcademyDetailFacadeParam.of(memberId, academyId));
+        AcademyDetailFacadeResult detailAcademy = academyFacade.getDetailAcademy(
+                AcademyDetailFacadeParam.of(memberId, academyId));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyGetResponse.from(detailAcademy));
