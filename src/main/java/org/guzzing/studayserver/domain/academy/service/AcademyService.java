@@ -20,6 +20,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLoc
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
@@ -50,6 +51,11 @@ public class AcademyService {
     @Transactional(readOnly = true)
     public Academy getAcademy(final long academyId) {
         return academyRepository.getById(academyId);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyFeeInfo findAcademyFeeInfo(final long academyId) {
+        return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
     @Transactional(readOnly = true)
