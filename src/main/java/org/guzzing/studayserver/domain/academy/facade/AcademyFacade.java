@@ -45,7 +45,7 @@ public class AcademyFacade {
     @Transactional(readOnly = true)
     public AcademyDetailFacadeResult getDetailAcademy(AcademyDetailFacadeParam param) {
         AcademyGetResult academyGetResult = academyService.getAcademy(param.academyId());
-        boolean liked = likeFacade.isLiked(param.academyId(), param.memberId());
+        boolean liked = likeFacade.isLiked(param.memberId(), param.academyId());
 
         return AcademyDetailFacadeResult.of(academyGetResult, liked);
     }

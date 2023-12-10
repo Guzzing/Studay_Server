@@ -82,7 +82,7 @@ public class LikeRestController {
             @RequestParam final Long academyId,
             @MemberId final Long memberId
     ) {
-        likeFacade.deleteLikeOfAcademy(academyId, memberId);
+        likeFacade.deleteLikeOfAcademy(memberId, academyId);
 
         return ResponseEntity
                 .noContent()

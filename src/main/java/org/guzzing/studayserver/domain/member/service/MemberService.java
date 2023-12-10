@@ -54,7 +54,7 @@ public class MemberService {
         return new MemberInformationResult(member.getNickName(), member.getEmail(), childInformationResults);
     }
 
-    private Member getMember(Long memberId) {
+    public Member getMember(final long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 아이디입니다."));
     }
