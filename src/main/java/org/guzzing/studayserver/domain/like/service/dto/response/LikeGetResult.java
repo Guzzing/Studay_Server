@@ -7,8 +7,14 @@ public record LikeGetResult(
         long totalFee
 ) {
 
-    public static LikeGetResult of(final List<LikedAcademyFeeInfo> likeAcademyInfos, final long totalFee) {
-        return new LikeGetResult(likeAcademyInfos, totalFee);
+    public static LikeGetResult of(final List<LikedAcademyFeeInfo> likedAcademyFeeInfos) {
+        return new LikeGetResult(likedAcademyFeeInfos, getTotalFee(likedAcademyFeeInfos));
+    }
+
+    private static long getTotalFee(final List<LikedAcademyFeeInfo> likeAcademyFeeInfos) {
+        return likeAcademyFeeInfos.stream()
+                .mapToLong(LikedAcademyFeeInfo::expectedFee)
+                .sum();
     }
 
 }
