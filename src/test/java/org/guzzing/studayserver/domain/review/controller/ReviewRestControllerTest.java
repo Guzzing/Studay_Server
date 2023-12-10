@@ -2,8 +2,8 @@ package org.guzzing.studayserver.domain.review.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
-import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
+import static com.nimbusds.oauth2.sdk.token.AccessTokenType.BEARER;
+import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -28,8 +28,8 @@ import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
 import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
+import org.guzzing.studayserver.testutil.JwtTestConfig;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
-import org.guzzing.studayserver.testutil.fixture.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,9 +53,9 @@ class ReviewRestControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TestConfig testConfig;
-    @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private JwtTestConfig jwtTestConfig;
 
     @MockBean
     private MemberAccessService memberAccessService;
@@ -82,7 +82,7 @@ class ReviewRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(post("/reviews")
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -133,7 +133,7 @@ class ReviewRestControllerTest {
         // When
         ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
                 .param("academyId", String.valueOf(academyId))
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 

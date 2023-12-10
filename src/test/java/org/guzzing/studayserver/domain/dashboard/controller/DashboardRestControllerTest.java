@@ -2,9 +2,9 @@ package org.guzzing.studayserver.domain.dashboard.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture.childId;
-import static org.guzzing.studayserver.testutil.fixture.TestConfig.AUTHORIZATION_HEADER;
-import static org.guzzing.studayserver.testutil.fixture.TestConfig.BEARER;
+import static com.nimbusds.oauth2.sdk.token.AccessTokenType.BEARER;
+import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
+import static org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture.childId;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -34,11 +34,11 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
-import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
+import org.guzzing.studayserver.testutil.JwtTestConfig;
+import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
-import org.guzzing.studayserver.testutil.fixture.TestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ class DashboardRestControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private TestConfig testConfig;
+    private JwtTestConfig jwtTestConfig;
 
     @MockBean
     private MemberAccessService memberAccessService;
@@ -84,7 +84,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(post("/dashboards")
-                .header(AUTHORIZATION_HEADER, TestConfig.BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .content(objectMapper.writeValueAsBytes(request))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -158,7 +158,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(put("/dashboards/{dashboardId}", dashboard.getId())
-                .header(AUTHORIZATION_HEADER, TestConfig.BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .content(objectMapper.writeValueAsBytes(request))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -240,7 +240,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(get("/dashboards/{dashboardId}", dashboard.getId())
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -336,7 +336,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(get("/dashboards")
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(String.valueOf(AUTHORIZATION_HEADER), BEARER)
                 .param("childId", String.valueOf(childId))
                 .param("active-only", String.valueOf(activeOnly))
                 .accept(APPLICATION_JSON_VALUE)
@@ -367,7 +367,7 @@ class DashboardRestControllerTest {
                                         .tag(TAG)
                                         .summary("아이 대시보드 전체 조회")
                                         .requestHeaders(
-                                                headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                                                headerWithName(String.valueOf(AUTHORIZATION_HEADER)).description("JWT 토큰")
                                         )
                                         .queryParameters(
                                                 parameterWithName("childId").description("아이 아이디"),
@@ -462,7 +462,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(patch("/dashboards/{dashboardId}", dashboard.getId())
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(String.valueOf(AUTHORIZATION_HEADER), BEARER)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -496,7 +496,7 @@ class DashboardRestControllerTest {
 
         // When
         final ResultActions perform = mockMvc.perform(patch("/dashboards/{dashboardId}/toggle", dashboard.getId())
-                .header(AUTHORIZATION_HEADER, BEARER + testConfig.getJwt())
+                .header(String.valueOf(AUTHORIZATION_HEADER), BEARER)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -513,7 +513,7 @@ class DashboardRestControllerTest {
                                 .tag(TAG)
                                 .summary("대시보드 활성화 반전")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION_HEADER).description("JWT 토큰")
+                                        headerWithName(String.valueOf(AUTHORIZATION_HEADER)).description("JWT 토큰")
                                 )
                                 .pathParameters(
                                         parameterWithName("dashboardId").description("대시보드 아이디")

@@ -13,7 +13,7 @@ import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardGetResults;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPatchResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
-import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
+import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
