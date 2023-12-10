@@ -79,7 +79,7 @@ class AcademyServiceTest {
     @BeforeEach
     void setUp() {
 
-        Member member = MemberFixture.member();
+        Member member = MemberFixture.makeMemberEntity();
         savedMember = memberRepository.save(member);
 
         Academy academyAboutSungnam = AcademyFixture.academySungnam();

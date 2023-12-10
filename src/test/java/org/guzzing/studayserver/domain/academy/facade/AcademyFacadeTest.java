@@ -31,7 +31,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
 @Import(TestDatabaseConfig.class)
-public class AcademyFacadeTest {
+class AcademyFacadeTest {
 
     @Autowired
     private AcademyFacade academyFacade;
@@ -63,7 +63,7 @@ public class AcademyFacadeTest {
     @BeforeEach
     void setUp() {
 
-        Member member = MemberFixture.member();
+        Member member = MemberFixture.makeMemberEntity();
         savedMember = memberRepository.save(member);
 
         Academy academyAboutSungnam = AcademyFixture.academySungnam();
@@ -99,7 +99,7 @@ public class AcademyFacadeTest {
         //Then
         assertAll("Academy Details",
                 () -> assertThat(detailAcademy.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName()),
-                () -> assertThat(detailAcademy.isLiked()).isEqualTo(true),
+                () -> assertThat(detailAcademy.isLiked()).isTrue(),
                 () -> assertThat(detailAcademy.contact()).isEqualTo(savedAcademyAboutSungnam.getContact()),
                 () -> assertThat(detailAcademy.expectedFee()).isEqualTo(savedAcademyAboutSungnam.getMaxEducationFee()),
                 () -> assertThat(detailAcademy.fullAddress()).isEqualTo(savedAcademyAboutSungnam.getFullAddress()),
