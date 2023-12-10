@@ -32,6 +32,13 @@ public class LikeRestController {
         this.likeFacade = likeFacade;
     }
 
+    /**
+     * 좋아요 등록
+     *
+     * @param request
+     * @param memberId
+     * @return LikePostResponse
+     */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LikePostResponse> createLike(
             @Validated @RequestBody final LikePostRequest request,
@@ -44,6 +51,13 @@ public class LikeRestController {
                 .body(LikePostResponse.from(result));
     }
 
+    /**
+     * 좋아요 단건 삭제
+     *
+     * @param likeId
+     * @param memberId
+     * @return void
+     */
     @DeleteMapping(path = "/{likeId}")
     public ResponseEntity<Void> removeLike(
             @PathVariable final Long likeId,
@@ -56,6 +70,13 @@ public class LikeRestController {
                 .build();
     }
 
+    /**
+     * 멤버의 좋아요 삭제 - 회원 탈퇴 시 사용
+     *
+     * @param academyId
+     * @param memberId
+     * @return void
+     */
     @DeleteMapping
     public ResponseEntity<Void> removeLikeOfAcademy(
             @RequestParam final Long academyId,
