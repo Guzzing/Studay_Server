@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
-import org.guzzing.studayserver.domain.like.service.LikeService;
+import org.guzzing.studayserver.domain.like.service.LikeFacade;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.guzzing.studayserver.domain.member.annotation.ValidMemberAspect;
@@ -66,7 +66,7 @@ class LikeRestControllerTest {
     private TestConfig testConfig;
 
     @Autowired
-    private LikeService likeService;
+    private LikeFacade likeFacade;
 
     @MockBean
     private AcademyAccessService academyAccessService;
@@ -134,7 +134,7 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLike_LikeId_Remove() throws Exception {
         // Given
-        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+        LikePostResult postResult = likeFacade.createLikeOfAcademy(param);
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", postResult.likeId())
@@ -162,7 +162,7 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void removeLikeOfAcademy_AcademyId_Delete() throws Exception {
         // Given
-        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+        LikePostResult postResult = likeFacade.createLikeOfAcademy(param);
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes")
@@ -203,7 +203,7 @@ class LikeRestControllerTest {
         given(academyAccessService.findAcademyFeeInfo(any()))
                 .willReturn(new AcademyFeeInfo("학원명", 100L));
 
-        likeService.createLikeOfAcademy(param);
+        likeFacade.createLikeOfAcademy(param);
 
         // When
         ResultActions perform = mockMvc.perform(get("/likes")

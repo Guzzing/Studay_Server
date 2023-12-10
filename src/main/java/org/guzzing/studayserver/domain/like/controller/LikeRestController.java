@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;
-import org.guzzing.studayserver.domain.like.service.LikeService;
+import org.guzzing.studayserver.domain.like.service.LikeFacade;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/likes")
 public class LikeRestController {
 
-    private final LikeService likeService;
+    private final LikeFacade likeFacade;
 
-    public LikeRestController(final LikeService likeService) {
-        this.likeService = likeService;
+    public LikeRestController(final LikeFacade likeFacade) {
+        this.likeFacade = likeFacade;
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -37,7 +37,7 @@ public class LikeRestController {
             @Validated @RequestBody final LikePostRequest request,
             @MemberId final Long memberId
     ) {
-        final LikePostResult result = likeService.createLikeOfAcademy(LikePostRequest.to(request, memberId));
+        final LikePostResult result = likeFacade.createLikeOfAcademy(LikePostRequest.to(request, memberId));
 
         return ResponseEntity
                 .status(CREATED)
@@ -49,7 +49,7 @@ public class LikeRestController {
             @PathVariable final Long likeId,
             @MemberId final Long memberId
     ) {
-        likeService.removeLike(likeId, memberId);
+        likeFacade.removeLike(likeId, memberId);
 
         return ResponseEntity
                 .noContent()
@@ -61,7 +61,7 @@ public class LikeRestController {
             @RequestParam final Long academyId,
             @MemberId final Long memberId
     ) {
-        likeService.deleteLikeOfAcademy(academyId, memberId);
+        likeFacade.deleteLikeOfAcademy(academyId, memberId);
 
         return ResponseEntity
                 .noContent()
@@ -72,7 +72,7 @@ public class LikeRestController {
     public ResponseEntity<LikeGetResponses> getAllLikes(
             @MemberId final Long memberId
     ) {
-        final LikeGetResult allLikedAcademyInfo = likeService.findAllLikesOfMember(memberId);
+        final LikeGetResult allLikedAcademyInfo = likeFacade.getAllLikesOfMember(memberId);
 
         final LikeGetResponses response = LikeGetResponses.from(allLikedAcademyInfo);
 

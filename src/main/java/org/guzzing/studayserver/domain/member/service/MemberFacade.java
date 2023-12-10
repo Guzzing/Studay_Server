@@ -6,7 +6,7 @@ import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.like.service.LikeService;
+import org.guzzing.studayserver.domain.like.service.LikeCommandService;
 import org.guzzing.studayserver.domain.review.service.ReviewService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ public class MemberFacade {
     private final ChildService childService;
     private final AcademyCalendarService calendarService;
     private final DashboardService dashboardService;
-    private final LikeService likeService;
+    private final LikeCommandService likeCommandService;
     private final ReviewService reviewService;
 
     public MemberFacade(
@@ -27,14 +27,14 @@ public class MemberFacade {
             final ChildService childService,
             final AcademyCalendarService calendarService,
             final DashboardService dashboardService,
-            final LikeService likeService,
+            final LikeCommandService likeCommandService,
             final ReviewService reviewService
     ) {
         this.memberService = memberService;
         this.childService = childService;
         this.calendarService = calendarService;
         this.dashboardService = dashboardService;
-        this.likeService = likeService;
+        this.likeCommandService = likeCommandService;
         this.reviewService = reviewService;
     }
 
@@ -46,7 +46,7 @@ public class MemberFacade {
                 .toList();
 
         reviewService.removeReview(memberId);
-        likeService.removeLike(memberId);
+        likeCommandService.deleteLikesOfMember(memberId);
         calendarService.removeCalendar(childIds);
         dashboardService.removeDashboard(childIds);
         childService.removeChild(memberId);

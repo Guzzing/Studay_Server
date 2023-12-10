@@ -14,7 +14,6 @@ import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
-import org.guzzing.studayserver.domain.member.annotation.ValidMemberAspect;
 import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class LikeServiceTest {
+class LikeFacadeTest {
 
     @Autowired
-    private LikeService likeService;
+    private LikeFacade likeFacade;
 
     @Autowired
     private LikeRepository likeRepository;
@@ -38,8 +37,6 @@ class LikeServiceTest {
     private AcademyAccessService academyAccessService;
     @MockBean
     private MemberAccessService memberAccessService;
-    @MockBean
-    private ValidMemberAspect validMemberAspect;
 
     private final Long memberId = 1L;
     private final Long academyId = 1L;
@@ -55,7 +52,7 @@ class LikeServiceTest {
     @DisplayName("학원에 대해서 좋아요를 등록한다.")
     void createLikeOfAcademy_WithMemberId() {
         // Given & When
-        LikePostResult result = likeService.createLikeOfAcademy(param);
+        LikePostResult result = likeFacade.createLikeOfAcademy(param);
 
         // Then
         assertThat(result.memberId()).isEqualTo(memberId);
@@ -66,10 +63,10 @@ class LikeServiceTest {
     @DisplayName("학원에 대해 등록한 좋아요를 제거한다.")
     void removeLikeOfAcademy_LikeId_Remove() {
         // Given
-        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
+        LikePostResult savedLike = likeFacade.createLikeOfAcademy(param);
 
         // When
-        likeService.removeLike(savedLike.likeId(), memberId);
+        likeFacade.removeLike(savedLike.likeId(), memberId);
 
         // Then
         boolean result = likeRepository.existsById(savedLike.likeId());
@@ -81,10 +78,10 @@ class LikeServiceTest {
     @DisplayName("학원 아이디로 등록한 좋아요를 제거한다.")
     void deleteLikeOfAcademy_AcademyId_Delete() {
         // Given
-        LikePostResult postResult = likeService.createLikeOfAcademy(param);
+        LikePostResult postResult = likeFacade.createLikeOfAcademy(param);
 
         // When
-        likeService.deleteLikeOfAcademy(postResult.academyId(), postResult.memberId());
+        likeFacade.deleteLikeOfAcademy(postResult.academyId(), postResult.memberId());
 
         // Then
         List<Like> likes = likeRepository.findByMemberId(postResult.memberId());
@@ -103,10 +100,10 @@ class LikeServiceTest {
         given(academyAccessService.findAcademyFeeInfo(any()))
                 .willReturn(new AcademyFeeInfo("학원명", 100L));
 
-        LikePostResult savedLike = likeService.createLikeOfAcademy(param);
+        LikePostResult savedLike = likeFacade.createLikeOfAcademy(param);
 
         // When
-        LikeGetResult result = likeService.findAllLikesOfMember(savedLike.memberId());
+        LikeGetResult result = likeFacade.getAllLikesOfMember(savedLike.memberId());
 
         // Then
         assertThat(result.likeAcademyInfos()).isNotEmpty();
@@ -123,7 +120,7 @@ class LikeServiceTest {
         likeRepository.save(like);
 
         // When
-        final boolean result = likeService.isLiked(memberId, academyId);
+        final boolean result = likeFacade.isLiked(memberId, academyId);
 
         // Then
         assertThat(result).isTrue();
@@ -139,7 +136,7 @@ class LikeServiceTest {
         likeRepository.save(like);
 
         // When
-        final boolean result = likeService.isLiked(memberId, 2L);
+        final boolean result = likeFacade.isLiked(memberId, 2L);
 
         // Then
         assertThat(result).isFalse();
