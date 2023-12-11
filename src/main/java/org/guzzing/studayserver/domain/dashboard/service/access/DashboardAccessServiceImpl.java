@@ -6,7 +6,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.springframework.stereotype.Service;
