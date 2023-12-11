@@ -21,7 +21,7 @@ public interface RegionJpaRepository extends JpaRepository<Region, Long>, Region
             final String upmyeondong);
 
     @Override
-    @Query("select r from Region r where ST_Contains(r.area, :point) = true")
+    @Query("select r from Region r where ST_Contains(r.area, :point)")
     Optional<Region> findByAreaContainingPoint(@Param("point") final Point point);
 
 }
