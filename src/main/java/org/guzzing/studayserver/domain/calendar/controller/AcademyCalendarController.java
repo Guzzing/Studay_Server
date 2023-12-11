@@ -12,6 +12,7 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyC
 import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarUpdateResponse;
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
+import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
@@ -38,7 +39,7 @@ public class AcademyCalendarController {
     private final AcademyCalendarFacade academyCalendarFacade;
 
     public AcademyCalendarController(AcademyCalendarService academyCalendarService,
-            AcademyCalendarFacade academyCalendarFacade) {
+                                     AcademyCalendarFacade academyCalendarFacade) {
         this.academyCalendarService = academyCalendarService;
         this.academyCalendarFacade = academyCalendarFacade;
     }
@@ -65,12 +66,12 @@ public class AcademyCalendarController {
     public ResponseEntity<AcademyCalendarLoadToUpdateResponse> loadTimeTemplateToUpdate(
             @PathVariable Long academyScheduleId) {
 
-        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
-                academyScheduleId);
+        AcademyScheduleLoadToUpdateFacadeResult academyScheduleLoadToUpdateFacadeResult
+                = academyCalendarFacade.loadTimeTemplateToUpdate(academyScheduleId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(AcademyCalendarLoadToUpdateResponse.from(academyCalendarLoadToUpdateResult));
+                .body(AcademyCalendarLoadToUpdateResponse.from(academyScheduleLoadToUpdateFacadeResult));
     }
 
     @PutMapping(

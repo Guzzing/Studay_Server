@@ -3,7 +3,8 @@ package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
+
+import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
 
 public record AcademyCalendarLoadToUpdateResponse(
         Long childId,
@@ -17,15 +18,14 @@ public record AcademyCalendarLoadToUpdateResponse(
         String memo
 ) {
 
-    public static AcademyCalendarLoadToUpdateResponse from(AcademyCalendarLoadToUpdateResult result) {
+    public static AcademyCalendarLoadToUpdateResponse from(AcademyScheduleLoadToUpdateFacadeResult result) {
         return new AcademyCalendarLoadToUpdateResponse(
                 result.childId(),
                 result.academyId(),
                 result.lessonId(),
                 result.dashboardId(),
-                result.lessonScheduleAccessResults().stream()
-                        .map(lessonScheduleAccessResult ->
-                                LessonScheduleLoadToUpdateResponse.from(lessonScheduleAccessResult))
+                result.lessonSchedule().stream()
+                        .map(LessonScheduleLoadToUpdateResponse::from)
                         .toList(),
                 result.startDateOfAttendance(),
                 result.endDateOfAttendance(),
@@ -40,7 +40,7 @@ public record AcademyCalendarLoadToUpdateResponse(
     ) {
 
         public static LessonScheduleLoadToUpdateResponse from(
-                AcademyCalendarLoadToUpdateResult.LessonScheduleInfo result) {
+                AcademyScheduleLoadToUpdateFacadeResult.LessonScheduleInfo result) {
             return new LessonScheduleLoadToUpdateResponse(
                     result.dayOfWeek(),
                     new LessonTime(
@@ -56,4 +56,5 @@ public record AcademyCalendarLoadToUpdateResponse(
 
         }
     }
+
 }
