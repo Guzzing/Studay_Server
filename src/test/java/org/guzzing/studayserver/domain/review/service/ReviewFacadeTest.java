@@ -30,10 +30,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-class ReviewServiceTest {
+class ReviewFacadeTest {
 
     @Autowired
-    private ReviewService reviewService;
+    private ReviewFacade reviewFacade;
 
     @MockBean
     private AcademyAccessService academyAccessService;
@@ -70,7 +70,7 @@ class ReviewServiceTest {
 
         // When
         int beforeKindnessCount = reviewCountRepository.getByAcademyId(param.academyId()).getKindnessCount();
-        ReviewPostResult result = reviewService.createReviewOfAcademy(param);
+        ReviewPostResult result = reviewFacade.createReviewOfAcademy(param);
         int afterKindnessCount = reviewCountRepository.getByAcademyId(param.academyId()).getKindnessCount();
 
         // Then
@@ -92,10 +92,10 @@ class ReviewServiceTest {
         boolean isValid = true;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 
-        reviewService.createReviewOfAcademy(param);
+        reviewFacade.createReviewOfAcademy(param);
 
         // When & Then
-        assertThatThrownBy(() -> reviewService.createReviewOfAcademy(param))
+        assertThatThrownBy(() -> reviewFacade.createReviewOfAcademy(param))
                 .isInstanceOf(ReviewException.class)
                 .hasMessage("이미 리뷰를 남겼습니다.");
     }
@@ -109,7 +109,7 @@ class ReviewServiceTest {
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 
         // When & Then
-        assertThatThrownBy(() -> reviewService.createReviewOfAcademy(param))
+        assertThatThrownBy(() -> reviewFacade.createReviewOfAcademy(param))
                 .isInstanceOf(ReviewException.class)
                 .hasMessage("리뷰는 3개 까지 가능합니다.");
     }
@@ -123,7 +123,7 @@ class ReviewServiceTest {
         final Long academyId = 100L;
 
         // When
-        ReviewableResult result = reviewService.getReviewableToAcademy(memberId, academyId);
+        ReviewableResult result = reviewFacade.getReviewableToAcademy(memberId, academyId);
 
         // Then
         assertThat(result.reviewable()).isTrue();
@@ -137,10 +137,10 @@ class ReviewServiceTest {
         boolean isValid = true;
         ReviewPostParam param = ReviewFixture.makeReviewPostParam(isValid);
 
-        reviewService.createReviewOfAcademy(param);
+        reviewFacade.createReviewOfAcademy(param);
 
         // When & Then
-        ReviewableResult result = reviewService.getReviewableToAcademy(param.memberId(), param.academyId());
+        ReviewableResult result = reviewFacade.getReviewableToAcademy(param.memberId(), param.academyId());
 
         assertThat(result.reviewable()).isFalse();
     }

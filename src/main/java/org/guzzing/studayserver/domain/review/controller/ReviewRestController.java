@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.controller.dto.response.ReviewPostResponse;
 import org.guzzing.studayserver.domain.review.controller.dto.response.ReviewableResponse;
-import org.guzzing.studayserver.domain.review.service.ReviewService;
+import org.guzzing.studayserver.domain.review.service.ReviewFacade;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/reviews")
 public class ReviewRestController {
 
-    private final ReviewService reviewService;
+    private final ReviewFacade reviewFacade;
 
-    public ReviewRestController(ReviewService reviewService) {
-        this.reviewService = reviewService;
+    public ReviewRestController(ReviewFacade reviewFacade) {
+        this.reviewFacade = reviewFacade;
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -37,7 +37,7 @@ public class ReviewRestController {
             @Validated @RequestBody ReviewPostRequest request
     ) {
         ReviewPostParam param = ReviewPostRequest.to(memberId, request);
-        ReviewPostResult result = reviewService.createReviewOfAcademy(param);
+        ReviewPostResult result = reviewFacade.createReviewOfAcademy(param);
         ReviewPostResponse response = ReviewPostResponse.from(result);
 
         return ResponseEntity
@@ -50,7 +50,7 @@ public class ReviewRestController {
             @MemberId Long memberId,
             @RequestParam Long academyId
     ) {
-        ReviewableResult result = reviewService.getReviewableToAcademy(memberId, academyId);
+        ReviewableResult result = reviewFacade.getReviewableToAcademy(memberId, academyId);
         ReviewableResponse response = ReviewableResponse.from(result);
 
         return ResponseEntity
