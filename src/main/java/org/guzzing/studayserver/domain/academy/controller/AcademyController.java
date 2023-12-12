@@ -18,6 +18,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNam
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,7 @@ public class AcademyController {
         AcademyDetailFacadeResult detailAcademy = academyFacade.getDetailAcademy(AcademyDetailFacadeParam.of(memberId, academyId));
 
         return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache())
                 .body(AcademyGetResponse.from(detailAcademy));
     }
 
@@ -63,6 +65,7 @@ public class AcademyController {
                 AcademyByLocationWithScrollRequest.to(request, memberId));
 
         return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache())
                 .body(AcademiesByLocationWithScrollResponses.from(response));
     }
 
@@ -76,6 +79,7 @@ public class AcademyController {
                 AcademiesByNameRequest.to(request));
 
         return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache())
                 .body(AcademiesByNameResponses.from(academiesByNameResults));
     }
 
@@ -90,6 +94,7 @@ public class AcademyController {
                 AcademyFilterWithScrollRequest.to(request), memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache())
                 .body(AcademiesFilterWithScrollResponses.from(academiesFilterWithScrollResults));
     }
 
@@ -103,6 +108,7 @@ public class AcademyController {
                 academyId);
 
         return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache())
                 .body(LessonInfoToCreateDashboardResponses.from(lessonsInfoAboutAcademy));
     }
 

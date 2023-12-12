@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.calendarInfo.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
+
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.CalendarFindSchedulesByDateResults;
 import org.guzzing.studayserver.domain.calendarInfo.controller.request.CalendarYearMonthMarkRequest;
@@ -11,6 +13,7 @@ import org.guzzing.studayserver.domain.calendarInfo.service.CalendarFacade;
 import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarYearMonthMarkResult;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
