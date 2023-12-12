@@ -4,7 +4,6 @@ import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeParam;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
@@ -15,10 +14,8 @@ import org.guzzing.studayserver.domain.calendar.repository.academytimetemplate.A
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
-import org.guzzing.studayserver.domain.child.service.result.AcademyCalendarDetailChildInfo;
 import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
@@ -33,19 +30,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
-@ActiveProfiles({"dev","oauth"})
 public class AcademyCalendarFacadeTest {
     @Autowired
     private DashboardRepository dashboardRepository;
@@ -150,7 +144,7 @@ public class AcademyCalendarFacadeTest {
                 () -> assertThat(calendarDetailInfo.childrenInfo().childId()).isEqualTo(savedChild.getId()),
                 () -> assertThat(calendarDetailInfo.childrenInfo().memo()).isEqualTo(academyTimeTemplate.getMemo()),
                 () -> assertThat(calendarDetailInfo.childrenInfo().childName()).isEqualTo(savedChild.getNickName()),
-                () -> assertThat(calendarDetailInfo.childrenInfo().imageUrl()).isEqualTo(imageUrlPrefix+savedChild.getProfileImageURIPath()),
+                () -> assertThat(calendarDetailInfo.childrenInfo().imageUrl()).isEqualTo(imageUrlPrefix + savedChild.getProfileImageURIPath()),
                 () -> assertThat(calendarDetailInfo.childrenInfo().dashBoardId()).isEqualTo(academyTimeTemplate.getDashboardId()),
                 () -> assertThat(calendarDetailInfo.lessonInfo().lessonName()).isEqualTo(savedALessonAboutSungnam.getCurriculum()),
                 () -> assertThat(calendarDetailInfo.lessonInfo().lessonTimes().endTime()).isEqualTo(academySchedule.getLessonEndTime().toString()),
