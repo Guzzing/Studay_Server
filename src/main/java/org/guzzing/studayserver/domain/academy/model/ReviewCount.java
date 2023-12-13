@@ -1,11 +1,11 @@
 package org.guzzing.studayserver.domain.academy.model;
 
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.CHEAP_FEE;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_FACILITY;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.GOOD_MANAGEMENT;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.KINDNESS;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.LOVELY_TEACHING;
-import static org.guzzing.studayserver.domain.academy.listener.NewReviewType.SHUTTLE_AVAILABILITY;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.CHEAP_FEE;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_FACILITY;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.GOOD_MANAGEMENT;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.KINDNESS;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.LOVELY_TEACHING;
+import static org.guzzing.studayserver.domain.review.model.ReviewType.SHUTTLE_AVAILABILITY;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Map;
 import lombok.Getter;
-import org.guzzing.studayserver.domain.academy.listener.NewReviewType;
+import org.guzzing.studayserver.domain.review.model.Review;
+import org.guzzing.studayserver.domain.review.model.ReviewType;
 
 @Getter
 @Entity
@@ -84,12 +85,14 @@ public class ReviewCount {
                 academy);
     }
 
-    public void updateSelectedReviewCount(final Map<NewReviewType, Integer> newReview) {
-        this.kindnessCount += newReview.get(KINDNESS);
-        this.goodFacilityCount += newReview.get(GOOD_FACILITY);
-        this.cheapFeeCount += newReview.get(CHEAP_FEE);
-        this.goodManagementCount += newReview.get(GOOD_MANAGEMENT);
-        this.lovelyTeachingCount += newReview.get(LOVELY_TEACHING);
-        this.shuttleAvailabilityCount += newReview.get(SHUTTLE_AVAILABILITY);
+    public void updateSelectedReviewCount(final Map<ReviewType, Boolean> newReview) {
+        final Map<ReviewType, Integer> reviewCountMap = ReviewType.convertToReviewTypeCountMap(newReview);
+
+        this.kindnessCount += reviewCountMap.get(KINDNESS);
+        this.goodFacilityCount += reviewCountMap.get(GOOD_FACILITY);
+        this.cheapFeeCount += reviewCountMap.get(CHEAP_FEE);
+        this.goodManagementCount += reviewCountMap.get(GOOD_MANAGEMENT);
+        this.lovelyTeachingCount += reviewCountMap.get(LOVELY_TEACHING);
+        this.shuttleAvailabilityCount += reviewCountMap.get(SHUTTLE_AVAILABILITY);
     }
 }
