@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import javax.lang.model.type.IntersectionType;
-import javax.swing.text.StyledEditorKit.BoldAction;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 
 public enum ReviewType {

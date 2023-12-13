@@ -15,13 +15,15 @@ import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostPara
 
 public class ReviewFixture {
 
-    public static ReviewPostParam makeReviewPostParam(final long memberId, final long academyId, final Map<ReviewType, Boolean> reviewMap) {
+    public static ReviewPostParam makeReviewPostParam(final long memberId, final long academyId,
+            final Map<ReviewType, Boolean> reviewMap) {
         ReviewPostRequest request = makeReviewPostRequest(academyId, reviewMap);
 
         return ReviewPostRequest.to(memberId, request);
     }
 
-    public static ReviewPostRequest makeReviewPostRequest(final long academyId, final Map<ReviewType, Boolean> reviewMap) {
+    public static ReviewPostRequest makeReviewPostRequest(final long academyId,
+            final Map<ReviewType, Boolean> reviewMap) {
         return new ReviewPostRequest(
                 academyId,
                 reviewMap.get(KINDNESS),
