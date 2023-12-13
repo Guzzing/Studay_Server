@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ReviewCountJpaRepository extends JpaRepository<ReviewCount, Long>, ReviewCountRepository {
 

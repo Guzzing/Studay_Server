@@ -21,29 +21,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.academy.listener.NewReviewListener;
-import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
-import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.model.ReviewCount;
+import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
+import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
+import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
 import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.guzzing.studayserver.testutil.JwtTestConfig;
 import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
+import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
+@Transactional
 class ReviewRestControllerTest {
 
     private static final String TAG = "리뷰 API";
@@ -56,27 +65,30 @@ class ReviewRestControllerTest {
     @Autowired
     private JwtTestConfig jwtTestConfig;
 
-    @MockBean
-    private MemberAccessService memberAccessService;
-    @MockBean
-    private AcademyAccessService academyAccessService;
-    @MockBean
-    private NewReviewListener newReviewListener;
-
     @Autowired
-    private ReviewRepository reviewRepository;
+    private MemberRepository memberRepository;
+    @Autowired
+    private AcademyRepository academyRepository;
+    @Autowired
+    private ReviewCountRepository reviewCountRepository;
+
+    private Academy savedAcademy;
 
     @BeforeEach
     void setUp() {
-        reviewRepository.deleteAll();
+        memberRepository.save(MemberFixture.makeMemberEntity());
+        savedAcademy = academyRepository.save(AcademyFixture.academySungnam());
+        reviewCountRepository.save(ReviewCount.makeDefaultReviewCount(savedAcademy));
     }
 
     @Test
+    @Order(value = 1)
     @DisplayName("리뷰 타입이 3개 이하고, 해당 학원에 대해서 등록한 학원이 없다면 리뷰를 등록한다.")
-    @WithMockCustomOAuth2LoginUser
+    @WithMockCustomOAuth2LoginUser(memberId = 1)
     void registerReview_Success() throws Exception {
         // Given
-        ReviewPostRequest request = ReviewFixture.makeReviewPostRequest(true);
+        ReviewPostRequest request = ReviewFixture.makeReviewPostRequest(savedAcademy.getId(),
+                ReviewFixture.makeValidReviewMap());
         String jsonBody = objectMapper.writeValueAsString(request);
 
         // When
@@ -91,7 +103,7 @@ class ReviewRestControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.reviewId").isNumber())
-                .andExpect(jsonPath("$.academyId").isNumber())
+                .andExpect(jsonPath("$.academyId").value(savedAcademy.getId()))
                 .andDo(document("post-review",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -122,16 +134,13 @@ class ReviewRestControllerTest {
     }
 
     @Test
+    @Order(value = 2)
     @DisplayName("리뷰를 등록한 적 없다면 리뷰 등록 가능함을 응답한다.")
-    @WithMockCustomOAuth2LoginUser
-    @Transactional
+    @WithMockCustomOAuth2LoginUser(memberId = 2)
     void getReviewable_NotExistsReview_Reviewable() throws Exception {
-        // Given
-        final Long academyId = 1L;
-
         // When
         ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
-                .param("academyId", String.valueOf(academyId))
+                .param("academyId", String.valueOf(savedAcademy.getId()))
                 .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -140,7 +149,7 @@ class ReviewRestControllerTest {
         perform.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.academyId").value(1L))
+                .andExpect(jsonPath("$.academyId").value(savedAcademy.getId()))
                 .andExpect(jsonPath("$.reviewable").value(true))
                 .andDo(document("get-reviewable",
                         preprocessRequest(prettyPrint()),

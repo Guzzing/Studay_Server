@@ -15,51 +15,21 @@ import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostPara
 
 public class ReviewFixture {
 
-    public static final Long memberId = 1L;
-    public static final Long academyId = 1L;
+    public static ReviewPostParam makeReviewPostParam(final long memberId, final long academyId, final Map<ReviewType, Boolean> reviewMap) {
+        ReviewPostRequest request = makeReviewPostRequest(academyId, reviewMap);
 
-    public static ReviewPostParam makeReviewPostParam(boolean isValid) {
-        ReviewPostRequest request = makeReviewPostRequest(isValid);
-
-        return ReviewPostRequest.to(1L, request);
+        return ReviewPostRequest.to(memberId, request);
     }
 
-    public static ReviewPostParam makeReviewPostParam(long academyId) {
-        return new ReviewPostParam(
-                1L,
-                academyId,
-                true,
-                true,
-                false,
-                false,
-                true,
-                false);
-    }
-
-    public static ReviewPostRequest makeReviewPostRequest(boolean isValid) {
-        Map<ReviewType, Boolean> reviewMap = isValid ? makeValidReviewMap() : makeInvalidReviewMap();
-
+    public static ReviewPostRequest makeReviewPostRequest(final long academyId, final Map<ReviewType, Boolean> reviewMap) {
         return new ReviewPostRequest(
-                1L,
+                academyId,
                 reviewMap.get(KINDNESS),
                 reviewMap.get(CHEAP_FEE),
                 reviewMap.get(GOOD_FACILITY),
                 reviewMap.get(GOOD_MANAGEMENT),
                 reviewMap.get(LOVELY_TEACHING),
                 reviewMap.get(SHUTTLE_AVAILABILITY));
-    }
-
-    public static Map<ReviewType, Boolean> makeInvalidReviewMap() {
-        Map<ReviewType, Boolean> invalidReviewMap = new ConcurrentHashMap<>();
-
-        invalidReviewMap.put(KINDNESS, true);
-        invalidReviewMap.put(CHEAP_FEE, true);
-        invalidReviewMap.put(GOOD_FACILITY, true);
-        invalidReviewMap.put(GOOD_MANAGEMENT, false);
-        invalidReviewMap.put(LOVELY_TEACHING, true);
-        invalidReviewMap.put(SHUTTLE_AVAILABILITY, false);
-
-        return invalidReviewMap;
     }
 
     public static Map<ReviewType, Boolean> makeValidReviewMap() {
@@ -73,6 +43,19 @@ public class ReviewFixture {
         validReviewMap.put(SHUTTLE_AVAILABILITY, false);
 
         return validReviewMap;
+    }
+
+    public static Map<ReviewType, Boolean> makeInvalidReviewMap() {
+        Map<ReviewType, Boolean> invalidReviewMap = new ConcurrentHashMap<>();
+
+        invalidReviewMap.put(KINDNESS, true);
+        invalidReviewMap.put(CHEAP_FEE, true);
+        invalidReviewMap.put(GOOD_FACILITY, true);
+        invalidReviewMap.put(GOOD_MANAGEMENT, false);
+        invalidReviewMap.put(LOVELY_TEACHING, true);
+        invalidReviewMap.put(SHUTTLE_AVAILABILITY, false);
+
+        return invalidReviewMap;
     }
 
 }

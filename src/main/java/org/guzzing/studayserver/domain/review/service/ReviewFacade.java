@@ -1,13 +1,16 @@
 package org.guzzing.studayserver.domain.review.service;
 
-import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
-import org.guzzing.studayserver.domain.member.service.MemberAccessService;
+import jakarta.persistence.EntityExistsException;
+import java.util.Map;
+import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.service.AcademyService;
+import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewableResult;
-import org.guzzing.studayserver.global.exception.ReviewException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,52 +18,56 @@ public class ReviewFacade {
 
     private final ReviewCommandService reviewCommandService;
     private final ReviewReadService reviewReadService;
-    private final AcademyAccessService academyAccessService;
-    private final MemberAccessService memberAccessService;
+    private final MemberService memberService;
+    private final AcademyService academyService;
 
     public ReviewFacade(
             final ReviewCommandService reviewCommandService,
             final ReviewReadService reviewReadService,
-            final AcademyAccessService academyAccessService,
-            final MemberAccessService memberAccessService
+            final MemberService memberService,
+            final AcademyService academyService
     ) {
         this.reviewCommandService = reviewCommandService;
         this.reviewReadService = reviewReadService;
-        this.academyAccessService = academyAccessService;
-        this.memberAccessService = memberAccessService;
+        this.memberService = memberService;
+        this.academyService = academyService;
     }
 
     public ReviewPostResult createReviewOfAcademy(final ReviewPostParam param) {
-        memberAccessService.validateMember(param.memberId());
-        academyAccessService.validateAcademy(param.academyId());
+        final Member member = memberService.getMember(param.memberId());
+        final Academy academy = academyService.getAcademy(param.academyId());
 
-        final ReviewableResult reviewableResult = getReviewableToAcademy(param.memberId(), param.academyId());
+        checkReviewExists(member, academy);
 
-        if (!reviewableResult.reviewable()) {
-            throw new ReviewException("이미 리뷰를 남겼습니다.");
-        }
+        final Map<ReviewType, Boolean> selectedReviewMap = ReviewType.getSelectedReviewMap(param);
 
-        final Review review = Review.of(
-                param.memberId(),
-                param.academyId(),
-                ReviewType.getSelectedReviewMap(param));
-
-        final Review savedReview = reviewCommandService.saveReview(review);
+        final Review savedReview = reviewCommandService.saveReview(
+                Review.of(member, academy, selectedReviewMap));
+        academyService.getReviewCountOfAcademy(academy.getId())
+                .updateSelectedReviewCount(selectedReviewMap);
 
         return ReviewPostResult.from(savedReview);
     }
 
-    public void removeReview(final long memberId) {
-        reviewCommandService.deleteReviewOfMember(memberId);
+    public void removeReview(final Member member) {
+        reviewCommandService.deleteReviewOfMember(member);
     }
 
-    public ReviewableResult getReviewableToAcademy(final Long memberId, final Long academyId) {
-        memberAccessService.validateMember(memberId);
-        academyAccessService.validateAcademy(academyId);
+    public ReviewableResult getReviewableToAcademy(final long memberId, final long academyId) {
+        final Member member = memberService.getMember(memberId);
+        final Academy academy = academyService.getAcademy(academyId);
 
-        boolean existsReview = reviewReadService.existsReview(memberId, academyId);
+        final boolean existsReview = reviewReadService.existsReview(member, academy);
 
-        return ReviewableResult.of(memberId, academyId, !existsReview);
+        return ReviewableResult.of(member.getId(), academy.getId(), !existsReview);
+    }
+
+    private void checkReviewExists(Member member, Academy academy) {
+        final boolean existsReview = reviewReadService.existsReview(member, academy);
+
+        if (existsReview) {
+            throw new EntityExistsException("이미 리뷰를 남겼습니다.");
+        }
     }
 
 }

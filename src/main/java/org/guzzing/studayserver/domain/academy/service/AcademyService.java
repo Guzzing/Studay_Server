@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
+import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
@@ -50,6 +51,11 @@ public class AcademyService {
     @Transactional(readOnly = true)
     public Academy getAcademy(final long academyId) {
         return academyRepository.getById(academyId);
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewCount getReviewCountOfAcademy(final long academyId) {
+        return reviewCountRepository.getByAcademyId(academyId);
     }
 
     @Transactional(readOnly = true)

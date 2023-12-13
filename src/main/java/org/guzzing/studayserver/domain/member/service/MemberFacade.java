@@ -43,12 +43,13 @@ public class MemberFacade {
     public void removeMember(final long memberId) {
         final Member member = memberService.getMember(memberId);
 
-        final List<Long> childIds = childService.findByMemberId(memberId).children()
+        final List<Long> childIds = childService.findByMemberId(member.getId())
+                .children()
                 .stream()
                 .map(ChildFindResult::childId)
                 .toList();
 
-        reviewFacade.removeReview(memberId);
+        reviewFacade.removeReview(member);
         likeCommandService.deleteLikesOfMember(member);
         calendarService.removeCalendar(childIds);
         dashboardService.removeDashboard(childIds);
