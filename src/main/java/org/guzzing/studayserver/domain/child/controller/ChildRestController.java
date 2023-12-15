@@ -66,7 +66,6 @@ public class ChildRestController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .cacheControl(CacheControl.noCache())
                 .body(ChildrenFindResponse.from(childrenByMemberIdAndDateTime));
     }
 
