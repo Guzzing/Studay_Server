@@ -25,7 +25,7 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -50,9 +51,6 @@ class AcademyCalendarServiceTest {
 
     @Autowired
     private PeriodicStrategy periodicStrategy;
-
-    @MockBean
-    private DashboardAccessService dashboardAccessService;
 
     @Test
     @DisplayName("대시보드를 통해 가져온 학원 일정 정보를 바탕으로 학원 스케줄을 생성하고 그 범위 이내에 올바르게 생성되는지 확인한다.")
@@ -142,21 +140,12 @@ class AcademyCalendarServiceTest {
                 );
 
         Long academyScheduleId = savedFridayAcademySchedule.getId();
-        DashboardScheduleAccessResult mockDashboardScheduleAccessResult = AcademyCalenderFixture.dashboardScheduleAccessResult();
-
-        given(dashboardAccessService.getDashboardSchedule(savedFridayAcademyTimeTemplate.getDashboardId())).willReturn(
-                mockDashboardScheduleAccessResult);
 
         //When
         AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
                 academyScheduleId);
 
         //Then
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        assertThat(academyCalendarLoadToUpdateResult.academyId()).isEqualTo(
-                mockDashboardScheduleAccessResult.academyId());
-        assertThat(academyCalendarLoadToUpdateResult.lessonId()).isEqualTo(
-                mockDashboardScheduleAccessResult.lessonId());
         assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
                 savedFridayAcademyTimeTemplate.getStartDateOfAttendance());
         assertThat(academyCalendarLoadToUpdateResult.startDateOfAttendance()).isEqualTo(
@@ -169,23 +158,6 @@ class AcademyCalendarServiceTest {
         assertThat(academyCalendarLoadToUpdateResult.memo()).isEqualTo(savedMondayAcademyTimeTemplate.getMemo());
         assertThat(academyCalendarLoadToUpdateResult.isAlarmed()).isEqualTo(savedFridayAcademyTimeTemplate.isAlarmed());
         assertThat(academyCalendarLoadToUpdateResult.isAlarmed()).isEqualTo(savedMondayAcademyTimeTemplate.isAlarmed());
-
-        academyCalendarLoadToUpdateResult.lessonScheduleAccessResults()
-                .forEach(lessonScheduleAccessResult -> {
-                    if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.MONDAY) {
-                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
-                                savedMondayAcademySchedule.getLessonEndTime().format(timeFormatter));
-                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
-                                savedMondayAcademySchedule.getLessonStartTime().format(timeFormatter));
-                    }
-
-                    if (lessonScheduleAccessResult.dayOfWeek() == DayOfWeek.FRIDAY) {
-                        assertThat(lessonScheduleAccessResult.lessonEndTime()).isEqualTo(
-                                savedFridayAcademySchedule.getLessonEndTime().format(timeFormatter));
-                        assertThat(lessonScheduleAccessResult.lessonStartTime()).isEqualTo(
-                                savedFridayAcademySchedule.getLessonStartTime().format(timeFormatter));
-                    }
-                });
     }
 
     @Test

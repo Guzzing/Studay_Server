@@ -18,6 +18,7 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNam
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

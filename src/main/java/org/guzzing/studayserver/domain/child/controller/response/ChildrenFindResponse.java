@@ -22,8 +22,8 @@ public record ChildrenFindResponse(
                         r.grade(),
                         new ChildScheduleResponse(
                                 r.schedule_date(),
-                                r.lessonStartTime(),
-                                r.lessonEndTime(),
+                                LocalTime.of(11,20,3),
+                                LocalTime.of(11,20,3),
                                 r.academyName(),
                                 r.lessonSubject()
                         )))
