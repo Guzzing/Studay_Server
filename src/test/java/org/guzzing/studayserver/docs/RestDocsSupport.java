@@ -1,16 +1,13 @@
 package org.guzzing.studayserver.docs;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
-import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.domain.child.service.ChildFacade;
-import org.guzzing.studayserver.domain.child.service.ChildService;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,11 +21,17 @@ public abstract class RestDocsSupport {
 
     @BeforeEach
     void setup(RestDocumentationContextProvider provider) {
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addSerializer(LocalDateTimeSerializer.INSTANCE);
+
+        objectMapper = new ObjectMapper()
+                .setSerializationInclusion(Include.NON_NULL)
+                .registerModule(javaTimeModule);
+
         mockMvc = MockMvcBuilders.standaloneSetup(initController())
+                .setMessageConverters()
                 .apply(documentationConfiguration(provider))
                 .build();
-
-        objectMapper = new ObjectMapper();
     }
 
     protected abstract Object initController();
