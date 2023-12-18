@@ -45,8 +45,8 @@ public record AcademyCalendarCreateRequest(
                         .stream()
                         .map(lesson -> LessonScheduleCreateRequest.to(lesson))
                         .toList(),
-                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
-                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().startDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().endDateOfAttendance()),
                 request.isAlarmed,
                 request.childId,
                 request.dashboardId,
@@ -67,8 +67,8 @@ public record AcademyCalendarCreateRequest(
         public static LessonScheduleParam to(LessonScheduleCreateRequest request) {
             return new LessonScheduleParam(
                     DayOfWeek.valueOf(request.dayOfWeek()),
-                    LocalTime.parse(request.lessonTime().getLessonStartTime()),
-                    LocalTime.parse(request.lessonTime().getLessonEndTime())
+                    LocalTime.parse(request.lessonTime().lessonStartTime()),
+                    LocalTime.parse(request.lessonTime().lessonEndTime())
             );
         }
     }
