@@ -1,14 +1,14 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.stream.Stream;
+import org.guzzing.studayserver.docs.RestDocsSupport;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarUpdateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AttendanceDate;
@@ -16,59 +16,47 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTim
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AcademyCalendarController.class)
-class AcademyCalendarControllerTest {
+class AcademyCalendarControllerTest extends RestDocsSupport {
 
-    @Autowired
-    private MockMvc mvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
     private AcademyCalendarService academyCalendarService;
-
-    @MockBean
     private AcademyCalendarFacade academyCalendarFacade;
+
+    @Override
+    protected Object initController() {
+        academyCalendarService = mock(AcademyCalendarService.class);
+        academyCalendarFacade = mock(AcademyCalendarFacade.class);
+        return new AcademyCalendarController(academyCalendarService, academyCalendarFacade);
+    }
 
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
     class ThrowException {
 
         @DisplayName("스케줄 생성할 때 요청값에 대해 검증한다.")
-        @WithMockCustomOAuth2LoginUser
         @ParameterizedTest
         @MethodSource("provideInvalidCreateRequests")
         void createAcademyCalendar(AcademyCalendarCreateRequest academyCalendarCreateRequest) throws Exception {
             //Then
-            mvc.perform(post("/academy-schedules")
+            mockMvc.perform(post("/academy-schedules")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(academyCalendarCreateRequest))
-                            .with(csrf()))
+                            .content(objectMapper.writeValueAsString(academyCalendarCreateRequest)))
                     .andExpect(status().isBadRequest());
         }
 
         @DisplayName("스케줄 수정할 때 요청값에 대해 검증한다.")
-        @WithMockCustomOAuth2LoginUser
         @ParameterizedTest
         @MethodSource("provideInvalidUpdateRequests")
         void updateSchedule(AcademyCalendarUpdateRequest academyCalendarUpdateRequest) throws Exception {
-            mvc.perform(put("/academy-schedules")
+            mockMvc.perform(put("/academy-schedules")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(academyCalendarUpdateRequest))
-                            .with(csrf()))
+                            .content(objectMapper.writeValueAsString(academyCalendarUpdateRequest)))
                     .andExpect(status().isBadRequest());
         }
 

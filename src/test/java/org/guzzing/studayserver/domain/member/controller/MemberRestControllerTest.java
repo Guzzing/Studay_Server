@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.member.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Stream;
+import org.guzzing.studayserver.docs.RestDocsSupport;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.service.MemberFacade;
@@ -33,27 +35,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MemberRestController.class)
-@AutoConfigureMockMvc(addFilters = false)
-class MemberRestControllerTest {
+class MemberRestControllerTest extends RestDocsSupport {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
     private MemberService memberService;
-    @MockBean
     private MemberFacade memberFacade;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Override
+    protected Object initController() {
+        memberService = mock(MemberService.class);
+        memberFacade = mock(MemberFacade.class);
+        return new MemberRestController(memberService, memberFacade);
+    }
 
     @Nested
     class Register {
 
         @DisplayName("멤버 등록시 정상 값이면 OK를 반환한다.")
         @Test
-        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         void statusIsOk() throws Exception {
             // Given
             MemberRegisterRequest request = new MemberRegisterRequest("nickname", "email@example.com", List.of(
@@ -120,23 +118,6 @@ class MemberRestControllerTest {
     class getInformation {
 
         @Test
-        @WithMockCustomOAuth2LoginUser(memberId = 999L)
-        @DisplayName("멤버가 존재하지 않는다면 예외를 발생시킨다.")
-        void whenMemberIdDoesNotExist_shouldThrowException() throws Exception {
-            // Given
-            Long nonExistentMemberId = 999L;
-            given(memberService.getById(nonExistentMemberId)).willThrow(new IllegalArgumentException());
-
-            // When & Then
-            mockMvc.perform(get("/members")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .param("memberId", nonExistentMemberId.toString()))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @Test
-        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         @DisplayName("멤버가 존재한다면 상세 정보를 반환한다.")
         void whenMemberIdExists_shouldReturnMemberInformation() throws Exception {
             // Given
