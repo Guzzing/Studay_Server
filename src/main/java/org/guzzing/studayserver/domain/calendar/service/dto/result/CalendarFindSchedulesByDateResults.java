@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonFindByIdsResults.LessonFindByIdsResult;
-import org.guzzing.studayserver.domain.calendarInfo.service.result.CalendarFindSchedulesByDateIncompleteResult;
+import org.guzzing.studayserver.domain.calendar_info.service.result.CalendarFindSchedulesByDateIncompleteResult;
 
 public record CalendarFindSchedulesByDateResults(
         List<CalendarFindSchedulesByDateResult> results

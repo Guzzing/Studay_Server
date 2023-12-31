@@ -2,7 +2,6 @@ package org.guzzing.studayserver.global.error.response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,7 +76,7 @@ public class ErrorResponse {
                             error.getField(),
                             error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
                             error.getDefaultMessage()))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         private FieldDetailError(String field, String value, String reason) {

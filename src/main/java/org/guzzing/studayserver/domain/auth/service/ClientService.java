@@ -4,7 +4,6 @@ import java.util.Optional;
 import org.guzzing.studayserver.domain.auth.client.ClientProxy;
 import org.guzzing.studayserver.domain.auth.client.ClientStrategy;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
-import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
@@ -15,14 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClientService {
 
     private final ClientStrategy clientStrategy;
-    private final AuthTokenProvider authTokenProvider;
     private final MemberRepository memberJpaRepository;
     private final AuthService authService;
 
-    public ClientService(ClientStrategy clientStrategy, AuthTokenProvider authTokenProvider,
-            MemberRepository memberJpaRepository, AuthService authService) {
+    public ClientService(
+            ClientStrategy clientStrategy,
+            MemberRepository memberJpaRepository,
+            AuthService authService
+    ) {
         this.clientStrategy = clientStrategy;
-        this.authTokenProvider = authTokenProvider;
         this.memberJpaRepository = memberJpaRepository;
         this.authService = authService;
     }
@@ -41,7 +41,7 @@ public class ClientService {
 
         return AuthLoginResult.of(
                 newAuthToken.getToken(),
-                !memberOptional.isPresent(),
+                memberOptional.isEmpty(),
                 savedMember.getId(),
                 savedMember.getNickName()
         );

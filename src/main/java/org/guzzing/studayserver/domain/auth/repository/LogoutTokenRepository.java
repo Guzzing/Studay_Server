@@ -8,11 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LogoutTokenRepository {
 
-    private final JwtTokenCacheConfig jwtTokenCacheConfig;
     private final Cache<String, String> logoutCache;
 
     public LogoutTokenRepository(JwtTokenCacheConfig jwtTokenCacheConfig) {
-        this.jwtTokenCacheConfig = jwtTokenCacheConfig;
         this.logoutCache = jwtTokenCacheConfig.logoutCacheConfig();
     }
 

@@ -2,7 +2,6 @@ package org.guzzing.studayserver.domain.calendar.service;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.academyschedule.AcademyScheduleRepository;
@@ -20,8 +19,6 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
-import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -177,9 +174,8 @@ public class AcademyCalendarService {
             List<AcademyTimeTemplateDateInfo> academyTimeTemplates,
             LocalDate startDateOfAttendance
     ) {
-        academyTimeTemplates.forEach(academyTimeTemplate -> {
-            academyScheduleRepository.deleteAfterUpdatedStartDate(academyTimeTemplate.getId(), startDateOfAttendance);
-        });
+        academyTimeTemplates.forEach(academyTimeTemplate -> academyScheduleRepository.deleteAfterUpdatedStartDate(
+                academyTimeTemplate.getId(), startDateOfAttendance));
     }
 
     private void changeBeforeTimeTemplateOfEndDate(

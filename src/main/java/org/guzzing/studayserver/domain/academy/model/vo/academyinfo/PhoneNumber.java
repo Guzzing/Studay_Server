@@ -12,7 +12,7 @@ import lombok.Getter;
 public class PhoneNumber {
 
     @Transient
-    private final String REGEX = "^\\d{2,3}-\\d{3,4}-\\d{3,4}$";
+    private static final String REGEX = "^\\d{2,3}-\\d{3,4}-\\d{3,4}$";
 
     @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
@@ -26,10 +26,9 @@ public class PhoneNumber {
     }
 
     private void validate(final String phoneNumber) {
-        if (!phoneNumber.isBlank()) {
-            if (!Pattern.matches(REGEX, phoneNumber)) {
-                throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
-            }
+        if (!phoneNumber.isBlank() && (!Pattern.matches(REGEX, phoneNumber))) {
+            throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
+
         }
     }
 

@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
@@ -24,7 +24,6 @@ import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;

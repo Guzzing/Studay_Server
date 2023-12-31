@@ -6,9 +6,9 @@ import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,21 +49,6 @@ public class DashboardAccessServiceImpl implements DashboardAccessService {
                 result.lessonId(),
                 Periodicity.WEEKLY,
                 schedules);
-    }
-
-    private String getChildNickName(final long childId) {
-        return childAccessService.findChildInfo(childId)
-                .childNickName();
-    }
-
-    private String getAcademyName(final long academyId) {
-        return academyAccessService.findAcademyInfo(academyId)
-                .academyName();
-    }
-
-    private String getLessonSubject(final long lessonId) {
-        return academyAccessService.findLessonInfo(lessonId)
-                .curriculum();
     }
 
     private LocalTime getTime(final String time) {

@@ -3,13 +3,15 @@ package org.guzzing.studayserver.domain.member.model.vo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Email {
 
-    private static final String REGEX = "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,}$";
+    private static final String REGEX = "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9])+\\.[a-zA-Z]{2,}$";
 
     @Column(name = "email")
     private String value;
@@ -28,7 +30,4 @@ public class Email {
         }
     }
 
-    public String getValue() {
-        return value;
-    }
 }

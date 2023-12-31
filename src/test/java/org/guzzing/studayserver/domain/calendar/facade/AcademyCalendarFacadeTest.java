@@ -31,7 +31,6 @@ import org.guzzing.studayserver.testutil.fixture.child.ChildFixture;
 import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

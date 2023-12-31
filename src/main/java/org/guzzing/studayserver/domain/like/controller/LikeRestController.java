@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;

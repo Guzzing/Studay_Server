@@ -10,11 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RefreshTokenRepository {
 
-    private final JwtTokenCacheConfig jwtTokenCacheConfig;
     private final Cache<String, String> refreshCache;
 
     public RefreshTokenRepository(JwtTokenCacheConfig jwtTokenCacheConfig) {
-        this.jwtTokenCacheConfig = jwtTokenCacheConfig;
         this.refreshCache = jwtTokenCacheConfig.refreshCacheConfig();
     }
 

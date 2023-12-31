@@ -9,11 +9,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class ClientStrategy {
 
-    private final WebClient webClient;
     private Map<String, ClientProxy> clients = new HashMap<>();
 
     public ClientStrategy(WebClient webClient) {
-        this.webClient = webClient;
         clients.put(MemberProvider.GOOGLE.name(), new ClientGoogle(webClient));
         clients.put(MemberProvider.KAKAO.name(), new ClientKakao(webClient));
     }
