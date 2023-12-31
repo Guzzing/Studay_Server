@@ -12,14 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
             @Override
             @PostConstruct
-            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-                if(request.getMethod().equals("GET")) {
-                    response.setHeader("Cache-Control","no-cache");
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                    throws Exception {
+                if (request.getMethod().equals("GET")) {
+                    response.setHeader("Cache-Control", "no-cache");
                 }
                 return HandlerInterceptor.super.preHandle(request, response, handler);
             }

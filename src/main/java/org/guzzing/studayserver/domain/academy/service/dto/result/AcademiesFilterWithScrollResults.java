@@ -47,7 +47,7 @@ public record AcademiesFilterWithScrollResults(
                     academyByFilterWithScroll.fullAddress(),
                     academyByFilterWithScroll.phoneNumber(),
                     categoryIds.stream()
-                            .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                            .map(CategoryInfo::getCategoryNameById)
                             .toList(),
                     academyByFilterWithScroll.latitude(),
                     academyByFilterWithScroll.longitude(),

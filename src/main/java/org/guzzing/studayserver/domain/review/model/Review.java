@@ -59,14 +59,14 @@ public class Review {
             final Academy academy,
             final Map<ReviewType, Boolean> reviewType
     ) {
-        final Map<String, Boolean> selectedRevieType = reviewType.entrySet()
+        final Map<String, Boolean> selectedReviewType = reviewType.entrySet()
                 .stream()
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().name(),
                         Entry::getValue
                 ));
 
-        return new Review(member, academy, selectedRevieType);
+        return new Review(member, academy, selectedReviewType);
     }
 
     public long getMemberId() {

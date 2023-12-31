@@ -5,21 +5,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtHeaderUtil;
 import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class LogoutAuthenticationFilter extends OncePerRequestFilter {
 
-    private final static String HEADER_AUTHORIZATION = "Authorization";
-    private final static String TOKEN_PREFIX = "Bearer ";
+    private static final String HEADER_AUTHORIZATION = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
 
-    private final AuthTokenProvider tokenProvider;
     private final AuthService authService;
 
-    public LogoutAuthenticationFilter(AuthTokenProvider tokenProvider, AuthService authService) {
-        this.tokenProvider = tokenProvider;
+    public LogoutAuthenticationFilter(AuthService authService) {
         this.authService = authService;
     }
 
@@ -27,7 +24,8 @@ public class LogoutAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         final String AUTHORIZATION_HEADER = request.getHeader(HEADER_AUTHORIZATION);
 

@@ -46,7 +46,7 @@ public record AcademyCalendarUpdateRequest(
         return new AcademyCalendarUpdateParam(
                 request.lessonScheduleUpdateRequests
                         .stream()
-                        .map(lesson -> LessonScheduleUpdateRequest.to(lesson))
+                        .map(LessonScheduleUpdateRequest::to)
                         .toList(),
                 LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
                 LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),

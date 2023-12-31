@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.member.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
 import org.guzzing.studayserver.domain.member.controller.response.MemberInformationResponse;
 import org.guzzing.studayserver.domain.member.service.MemberFacade;

@@ -35,7 +35,7 @@ public class ReviewFacade {
 
     public ReviewPostResult createReviewOfAcademy(final ReviewPostParam param) {
         final Member member = memberService.getMember(param.memberId());
-        final Academy academy = academyService.getAcademy(param.academyId());
+        final Academy academy = academyService.findAcademy(param.academyId());
 
         checkReviewExists(member, academy);
 
@@ -55,7 +55,7 @@ public class ReviewFacade {
 
     public ReviewableResult getReviewableToAcademy(final long memberId, final long academyId) {
         final Member member = memberService.getMember(memberId);
-        final Academy academy = academyService.getAcademy(academyId);
+        final Academy academy = academyService.findAcademy(academyId);
 
         final boolean existsReview = reviewReadService.existsReview(member, academy);
 

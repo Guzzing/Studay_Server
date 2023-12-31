@@ -4,15 +4,16 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import jakarta.validation.Valid;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;
 import org.guzzing.studayserver.domain.like.service.LikeFacade;
+import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,10 +42,11 @@ public class LikeRestController {
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LikePostResponse> createLike(
-            @Validated @RequestBody final LikePostRequest request,
+            @Valid @RequestBody final LikePostRequest request,
             @MemberId final Long memberId
     ) {
-        final LikePostResult result = likeFacade.createLikeOfAcademy(LikePostRequest.to(request, memberId));
+        final LikePostParam likePostParam = LikePostRequest.to(request, memberId);
+        final LikePostResult result = likeFacade.createLikeOfAcademy(likePostParam);
 
         return ResponseEntity
                 .status(CREATED)

@@ -43,7 +43,7 @@ public record AcademyCalendarCreateRequest(
         return new AcademyCalendarCreateParam(
                 request.lessonScheduleCreateRequests
                         .stream()
-                        .map(lesson -> LessonScheduleCreateRequest.to(lesson))
+                        .map(LessonScheduleCreateRequest::to)
                         .toList(),
                 LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
                 LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),

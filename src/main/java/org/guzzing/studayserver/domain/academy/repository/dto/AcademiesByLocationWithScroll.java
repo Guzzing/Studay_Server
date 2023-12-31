@@ -16,11 +16,10 @@ public record AcademiesByLocationWithScroll(
     ) {
         Map<AcademyByLocation, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
 
-        academiesByLocation.forEach(academyByLocationWithScroll -> {
-            academyIdWithCategories.computeIfAbsent(AcademyByLocation.of(academyByLocationWithScroll),
-                            k -> new ArrayList<>())
-                    .add(academyByLocationWithScroll.categoryId());
-        });
+        academiesByLocation.forEach(academyByLocationWithScroll -> academyIdWithCategories.computeIfAbsent(
+                        AcademyByLocation.of(academyByLocationWithScroll),
+                        k -> new ArrayList<>())
+                .add(academyByLocationWithScroll.categoryId()));
 
         return new AcademiesByLocationWithScroll(
                 academyIdWithCategories,

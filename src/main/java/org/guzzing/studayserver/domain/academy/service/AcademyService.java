@@ -49,17 +49,17 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public Academy getAcademy(final long academyId) {
+    public Academy findAcademy(final Long academyId) {
         return academyRepository.getById(academyId);
     }
 
     @Transactional(readOnly = true)
-    public ReviewCount getReviewCountOfAcademy(final long academyId) {
+    public ReviewCount getReviewCountOfAcademy(final Long academyId) {
         return reviewCountRepository.getByAcademyId(academyId);
     }
 
     @Transactional(readOnly = true)
-    public AcademyFeeInfo findAcademyFeeInfo(final long academyId) {
+    public AcademyFeeInfo findAcademyFeeInfo(final Long academyId) {
         return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
@@ -114,12 +114,10 @@ public class AcademyService {
             List<AcademyByFilterWithScroll> academiesByFilterWithScroll) {
         Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
         academiesByFilterWithScroll.forEach(
-                academyByFilterWithScroll -> {
-                    academyIdWithCategories.put(
-                            academyByFilterWithScroll.academyId(),
-                            academyCategoryRepository.findCategoryIdsByAcademyId(
-                                    academyByFilterWithScroll.academyId()));
-                }
+                academyByFilterWithScroll -> academyIdWithCategories.put(
+                        academyByFilterWithScroll.academyId(),
+                        academyCategoryRepository.findCategoryIdsByAcademyId(
+                                academyByFilterWithScroll.academyId()))
         );
 
         return academyIdWithCategories;
@@ -139,5 +137,4 @@ public class AcademyService {
 
         return AcademyAndLessonDetailResult.from(lesson, categoryIds);
     }
-
 }

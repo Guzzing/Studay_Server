@@ -2,12 +2,10 @@ package org.guzzing.studayserver.domain.calendar.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.calendar.exception.DateOverlapException;
@@ -24,16 +22,12 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
-import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -72,9 +66,9 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> academySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(academyCalendarCreateResults.academyTimeTemplateIds().size()).isEqualTo(
+        assertThat(academyCalendarCreateResults.academyTimeTemplateIds()).hasSize(
                 academyCalendarCreateParam.lessonScheduleParams().size());
-        assertThat(academySchedules.size()).isEqualTo(schedules.size());
+        assertThat(academySchedules).hasSize(schedules.size());
         academySchedules.forEach(academySchedule -> {
             assertThat(schedules).contains(academySchedule.getScheduleDate());
         });
@@ -182,7 +176,7 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> allAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(allAcademySchedules.size()).isEqualTo(schedules.size());
+        assertThat(allAcademySchedules).hasSize(schedules.size());
         allAcademySchedules.forEach(academySchedule -> {
             assertThat(schedules).contains(academySchedule.getScheduleDate());
         });
@@ -217,7 +211,7 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> allAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(allAcademySchedules.size()).isEqualTo(afterUpdatedSchedules.size() + existedSchedules.size());
+        assertThat(allAcademySchedules).hasSize(afterUpdatedSchedules.size() + existedSchedules.size());
     }
 
     @Test
@@ -242,7 +236,7 @@ class AcademyCalendarServiceTest {
         List<AcademySchedule> isOnlyDeletedScheduleAcademySchedules = academyScheduleRepository.findAll();
 
         //Then
-        assertThat(isOnlyDeletedScheduleAcademySchedules.size()).isEqualTo(allAcademySchedules.size() - 1);
+        assertThat(isOnlyDeletedScheduleAcademySchedules).hasSize(allAcademySchedules.size() - 1);
     }
 
     @Test

@@ -7,7 +7,7 @@ import org.guzzing.studayserver.domain.auth.controller.dto.AuthRefreshResponse;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtHeaderUtil;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.guzzing.studayserver.domain.auth.service.ClientService;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;

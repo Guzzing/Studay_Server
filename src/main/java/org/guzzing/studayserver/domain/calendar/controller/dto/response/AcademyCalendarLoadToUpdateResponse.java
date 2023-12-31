@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.calendar.controller.dto.response;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
 
 public record AcademyCalendarLoadToUpdateResponse(

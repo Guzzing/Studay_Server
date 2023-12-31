@@ -40,8 +40,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtTokenValidationFilter = new JwtAuthenticationFilter(authTokenProvider);
-        LogoutAuthenticationFilter logoutAuthenticationFilter = new LogoutAuthenticationFilter(authTokenProvider,
-                authService);
+        LogoutAuthenticationFilter logoutAuthenticationFilter = new LogoutAuthenticationFilter(authService);
 
         http
                 .authorizeHttpRequests(request -> request

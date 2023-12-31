@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDetailRequest;
@@ -15,7 +15,6 @@ import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetail
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +38,7 @@ public class AcademyCalendarController {
     private final AcademyCalendarFacade academyCalendarFacade;
 
     public AcademyCalendarController(AcademyCalendarService academyCalendarService,
-                                     AcademyCalendarFacade academyCalendarFacade) {
+            AcademyCalendarFacade academyCalendarFacade) {
         this.academyCalendarService = academyCalendarService;
         this.academyCalendarFacade = academyCalendarFacade;
     }

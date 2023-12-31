@@ -79,7 +79,7 @@ public class Academy extends BaseEntity {
     }
 
     public String getShuttleAvailability() {
-        return academyInfo.getShuttle().toString();
+        return academyInfo.getShuttle();
     }
 
     public String getAreaOfExpertise() {
