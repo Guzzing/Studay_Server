@@ -1,14 +1,14 @@
 package org.guzzing.studayserver.domain.review.service.dto.request;
 
 public record ReviewPostParam(
-        long memberId,
-        long academyId,
-        boolean kindness,
-        boolean cheapFee,
-        boolean goodFacility,
-        boolean goodManagement,
-        boolean lovelyTeaching,
-        boolean shuttleAvailability
+        Long memberId,
+        Long academyId,
+        Boolean kindness,
+        Boolean cheapFee,
+        Boolean goodFacility,
+        Boolean goodManagement,
+        Boolean lovelyTeaching,
+        Boolean shuttleAvailability
 ) {
 
 }
