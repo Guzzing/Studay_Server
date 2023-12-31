@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
@@ -58,7 +59,7 @@ public class DashboardRestController {
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPostResponse> registerDashboard(
-            @Validated @RequestBody final DashboardPostRequest request,
+            @Valid @RequestBody final DashboardPostRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
@@ -100,7 +101,7 @@ public class DashboardRestController {
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPutResponse> updateDashboard(
             @PathVariable final Long dashboardId,
-            @Validated @RequestBody final DashboardPutRequest request,
+            @Valid @RequestBody final DashboardPutRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPutParam param = controllerConverter.to(dashboardId, request);

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.springframework.validation.annotation.Validated;
 
-@Validated
 public record LikePostRequest(
         @NotNull @Positive Long academyId
 ) {

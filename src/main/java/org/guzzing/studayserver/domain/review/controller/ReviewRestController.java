@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.controller.dto.response.ReviewPostResponse;
@@ -34,7 +35,7 @@ public class ReviewRestController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReviewPostResponse> registerReview(
             @MemberId Long memberId,
-            @Validated @RequestBody ReviewPostRequest request
+            @Valid @RequestBody ReviewPostRequest request
     ) {
         ReviewPostParam param = ReviewPostRequest.to(memberId, request);
         ReviewPostResult result = reviewFacade.createReviewOfAcademy(param);
