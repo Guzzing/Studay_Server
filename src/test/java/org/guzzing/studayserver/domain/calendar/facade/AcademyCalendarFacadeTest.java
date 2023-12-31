@@ -1,5 +1,10 @@
 package org.guzzing.studayserver.domain.calendar.facade;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
+
+import java.util.List;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
@@ -16,7 +21,6 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
-import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.member.model.Member;
@@ -24,23 +28,20 @@ import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
 import org.guzzing.studayserver.testutil.fixture.child.ChildFixture;
+import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
-
 @Transactional
 @SpringBootTest(webEnvironment = NONE)
-public class AcademyCalendarFacadeTest {
+class AcademyCalendarFacadeTest {
+
     @Autowired
     private DashboardRepository dashboardRepository;
 
@@ -81,7 +82,8 @@ public class AcademyCalendarFacadeTest {
     void setUp() {
         AcademyCalendarCreateParam academyCalendarCreateParam =
                 AcademyCalenderFixture.firstChildAcademyCalenderCreateParam();
-        AcademyCalendarCreateResults createdTimeTemplates = academyCalendarService.createSchedules(academyCalendarCreateParam);
+        AcademyCalendarCreateResults createdTimeTemplates = academyCalendarService.createSchedules(
+                academyCalendarCreateParam);
 
         timeTemplateId = createdTimeTemplates.academyTimeTemplateIds().get(0);
         academyTimeTemplate = academyTimeTemplateRepository.getById(timeTemplateId);
@@ -102,13 +104,20 @@ public class AcademyCalendarFacadeTest {
 
         //Then
         assertAll("AcademySchedule Load To Update",
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.academyId()).isEqualTo(savedDashboard.getAcademyId()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.childId()).isEqualTo(savedDashboard.getChildId()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.dashboardId()).isEqualTo(savedDashboard.getId()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.lessonId()).isEqualTo(savedDashboard.getLessonId()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.endDateOfAttendance()).isEqualTo(academyTimeTemplate.getEndDateOfAttendance()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.startDateOfAttendance()).isEqualTo(academyTimeTemplate.getStartDateOfAttendance()),
-                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.memo()).isEqualTo(academyTimeTemplate.getMemo())
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.academyId()).isEqualTo(
+                        savedDashboard.getAcademyId()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.childId()).isEqualTo(
+                        savedDashboard.getChildId()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.dashboardId()).isEqualTo(
+                        savedDashboard.getId()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.lessonId()).isEqualTo(
+                        savedDashboard.getLessonId()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.endDateOfAttendance()).isEqualTo(
+                        academyTimeTemplate.getEndDateOfAttendance()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.startDateOfAttendance()).isEqualTo(
+                        academyTimeTemplate.getStartDateOfAttendance()),
+                () -> assertThat(academyScheduleLoadToUpdateFacadeResult.memo()).isEqualTo(
+                        academyTimeTemplate.getMemo())
         );
     }
 
@@ -124,7 +133,7 @@ public class AcademyCalendarFacadeTest {
         Lesson lessonAboutSungnam = AcademyFixture.lessonForSunganm(savedAcademyAboutSungnam);
         Lesson savedALessonAboutSungnam = lessonRepository.save(lessonAboutSungnam);
 
-        Member savedMember = memberRepository.save(MemberFixture.member());
+        Member savedMember = memberRepository.save(MemberFixture.makeMemberEntity());
         Child child = ChildFixture.child();
         child.assignToNewMemberOnly(savedMember);
         Child savedChild = childRepository.save(child);
@@ -144,15 +153,24 @@ public class AcademyCalendarFacadeTest {
                 () -> assertThat(calendarDetailInfo.childrenInfo().childId()).isEqualTo(savedChild.getId()),
                 () -> assertThat(calendarDetailInfo.childrenInfo().memo()).isEqualTo(academyTimeTemplate.getMemo()),
                 () -> assertThat(calendarDetailInfo.childrenInfo().childName()).isEqualTo(savedChild.getNickName()),
-                () -> assertThat(calendarDetailInfo.childrenInfo().imageUrl()).isEqualTo(imageUrlPrefix + savedChild.getProfileImageURIPath()),
-                () -> assertThat(calendarDetailInfo.childrenInfo().dashBoardId()).isEqualTo(academyTimeTemplate.getDashboardId()),
-                () -> assertThat(calendarDetailInfo.lessonInfo().lessonName()).isEqualTo(savedALessonAboutSungnam.getCurriculum()),
-                () -> assertThat(calendarDetailInfo.lessonInfo().lessonTimes().endTime()).isEqualTo(academySchedule.getLessonEndTime().toString()),
-                () -> assertThat(calendarDetailInfo.lessonInfo().lessonTimes().startTime()).isEqualTo(academySchedule.getLessonStartTime().toString()),
-                () -> assertThat(calendarDetailInfo.lessonInfo().capacity()).isEqualTo(savedALessonAboutSungnam.getCapacity()),
-                () -> assertThat(calendarDetailInfo.lessonInfo().totalFee()).isEqualTo(savedALessonAboutSungnam.getTotalFee()),
-                () -> assertThat(calendarDetailInfo.academyInfoAboutScheduleDetail().academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName()),
-                () -> assertThat(calendarDetailInfo.academyInfoAboutScheduleDetail().address()).isEqualTo(savedAcademyAboutSungnam.getFullAddress())
+                () -> assertThat(calendarDetailInfo.childrenInfo().imageUrl()).isEqualTo(
+                        imageUrlPrefix + savedChild.getProfileImageURIPath()),
+                () -> assertThat(calendarDetailInfo.childrenInfo().dashBoardId()).isEqualTo(
+                        academyTimeTemplate.getDashboardId()),
+                () -> assertThat(calendarDetailInfo.lessonInfo().lessonName()).isEqualTo(
+                        savedALessonAboutSungnam.getCurriculum()),
+                () -> assertThat(calendarDetailInfo.lessonInfo().lessonTimes().endTime()).isEqualTo(
+                        academySchedule.getLessonEndTime().toString()),
+                () -> assertThat(calendarDetailInfo.lessonInfo().lessonTimes().startTime()).isEqualTo(
+                        academySchedule.getLessonStartTime().toString()),
+                () -> assertThat(calendarDetailInfo.lessonInfo().capacity()).isEqualTo(
+                        savedALessonAboutSungnam.getCapacity()),
+                () -> assertThat(calendarDetailInfo.lessonInfo().totalFee()).isEqualTo(
+                        savedALessonAboutSungnam.getTotalFee()),
+                () -> assertThat(calendarDetailInfo.academyInfoAboutScheduleDetail().academyName()).isEqualTo(
+                        savedAcademyAboutSungnam.getAcademyName()),
+                () -> assertThat(calendarDetailInfo.academyInfoAboutScheduleDetail().address()).isEqualTo(
+                        savedAcademyAboutSungnam.getFullAddress())
         );
     }
 
