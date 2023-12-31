@@ -49,7 +49,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public Academy getAcademy(final long academyId) {
+    public Academy findAcademy(final Long academyId) {
         return academyRepository.getById(academyId);
     }
 
