@@ -54,12 +54,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewCount getReviewCountOfAcademy(final long academyId) {
-        return reviewCountRepository.getByAcademyId(academyId);
-    }
-
-    @Transactional(readOnly = true)
-    public AcademyFeeInfo findAcademyFeeInfo(final long academyId) {
+    public AcademyFeeInfo findAcademyFeeInfo(final Long academyId) {
         return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
