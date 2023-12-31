@@ -45,30 +45,30 @@ public class LikeFacade {
     }
 
     @Transactional
-    public void removeLike(final long likeId, final long memberId) {
+    public void removeLike(final Long likeId, final Long memberId) {
         getValidMember(memberId);
 
         likeCommandService.deleteLike(likeId);
     }
 
     @Transactional
-    public void deleteLikeOfAcademy(final long memberId, final long academyId) {
+    public void deleteLikeOfAcademy(final Long memberId, final Long academyId) {
         final Member member = getValidMember(memberId);
-        final Academy academy = academyService.getAcademy(academyId);
+        final Academy academy = academyService.findAcademy(academyId);
 
         likeCommandService.deleteLikesOfAcademyAndMember(member, academy);
     }
 
     @Transactional(readOnly = true)
-    public boolean isLiked(final long memberId, final long academyId) {
+    public boolean isLiked(final Long memberId, final Long academyId) {
         final Member member = memberService.getMember(memberId);
-        final Academy academy = academyService.getAcademy(academyId);
+        final Academy academy = academyService.findAcademy(academyId);
 
         return likeReadService.isLikedAcademy(member, academy);
     }
 
     @Transactional(readOnly = true)
-    public LikeGetResult getAllLikesOfMember(final long memberId) {
+    public LikeGetResult getAllLikesOfMember(final Long memberId) {
         final Member member = getValidMember(memberId);
 
         final List<LikedAcademyFeeInfo> likedAcademyFeeInfos = likeReadService.findAllLikesOfMember(member)
@@ -89,14 +89,14 @@ public class LikeFacade {
         return LikeGetResult.of(likedAcademyFeeInfos);
     }
 
-    private Member getValidMember(final long memberId) {
+    private Member getValidMember(final Long memberId) {
         final Member member = memberService.getMember(memberId);
         likeReadService.validateLikeLimit(member);
         return member;
     }
 
-    private Academy getValidAcademy(final long academyId, final Member member) {
-        final Academy academy = academyService.getAcademy(academyId);
+    private Academy getValidAcademy(final Long academyId, final Member member) {
+        final Academy academy = academyService.findAcademy(academyId);
         likeReadService.validateExistsLike(member, academy);
         return academy;
     }

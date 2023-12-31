@@ -48,12 +48,12 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public Academy getAcademy(final long academyId) {
+    public Academy findAcademy(final Long academyId) {
         return academyRepository.getById(academyId);
     }
 
     @Transactional(readOnly = true)
-    public AcademyFeeInfo findAcademyFeeInfo(final long academyId) {
+    public AcademyFeeInfo findAcademyFeeInfo(final Long academyId) {
         return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
     }
 
