@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.review.service.dto.request;
 
 public record ReviewPostParam(
-        Long memberId,
-        Long academyId,
+        long memberId,
+        long academyId,
         boolean kindness,
         boolean cheapFee,
         boolean goodFacility,

@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.dashboard.fixture;
+package org.guzzing.studayserver.testutil.fixture.dashboard;
 
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;

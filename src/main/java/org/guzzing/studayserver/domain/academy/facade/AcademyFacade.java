@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
-import org.guzzing.studayserver.domain.like.service.LikeService;
+import org.guzzing.studayserver.domain.like.service.LikeFacade;
 import org.guzzing.studayserver.domain.region.service.RegionService;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.stereotype.Service;
@@ -19,16 +19,17 @@ public class AcademyFacade {
 
     private final RegionService regionService;
     private final AcademyService academyService;
-    private final LikeService likeService;
+    private final LikeFacade likeFacade;
 
-    public AcademyFacade(RegionService regionService, AcademyService academyService, LikeService likeService) {
+    public AcademyFacade(RegionService regionService, AcademyService academyService, LikeFacade likeFacade) {
         this.regionService = regionService;
         this.academyService = academyService;
-        this.likeService = likeService;
+        this.likeFacade = likeFacade;
     }
 
     @Transactional(readOnly = true)
-    public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(AcademiesByLocationWithScrollFacadeParam param) {
+    public AcademiesByLocationWithScrollFacadeResult findByLocationWithScroll(
+            AcademiesByLocationWithScrollFacadeParam param) {
         AcademiesByLocationWithScrollResults academiesByLocationWithScroll = academyService.findAcademiesByLocationWithScroll(
                 AcademiesByLocationWithScrollFacadeParam.to(param));
 
@@ -45,7 +46,7 @@ public class AcademyFacade {
     @Transactional(readOnly = true)
     public AcademyDetailFacadeResult getDetailAcademy(AcademyDetailFacadeParam param) {
         AcademyGetResult academyGetResult = academyService.getAcademy(param.academyId());
-        boolean liked = likeService.isLiked(param.academyId(), param.memberId());
+        boolean liked = likeFacade.isLiked(param.memberId(), param.academyId());
 
         return AcademyDetailFacadeResult.of(academyGetResult, liked);
     }

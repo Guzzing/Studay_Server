@@ -1,9 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
-import java.util.Map;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 public record AcademiesByLocationWithScrollResults(
@@ -17,13 +15,13 @@ public record AcademiesByLocationWithScrollResults(
                 academiesByLocationWithScroll
                         .academiesByLocation()
                         .keySet()
-                                .stream()
-                                        .map(academyByLocation->
-                                                    AcademiesByLocationResultWithScroll.from(
-                                                            academyByLocation,
-                                                            academiesByLocationWithScroll.academiesByLocation().
-                                                                    get(academyByLocation)))
-                                                .toList(),
+                        .stream()
+                        .map(academyByLocation ->
+                                AcademiesByLocationResultWithScroll.from(
+                                        academyByLocation,
+                                        academiesByLocationWithScroll.academiesByLocation().
+                                                get(academyByLocation)))
+                        .toList(),
                 academiesByLocationWithScroll.hasNext());
     }
 
@@ -39,8 +37,9 @@ public record AcademiesByLocationWithScrollResults(
             boolean isLiked
     ) {
 
-        public static AcademiesByLocationResultWithScroll from(AcademiesByLocationWithScroll.AcademyByLocation academyByLocationWithScroll,
-                                                               List<Long> categories) {
+        public static AcademiesByLocationResultWithScroll from(
+                AcademiesByLocationWithScroll.AcademyByLocation academyByLocationWithScroll,
+                List<Long> categories) {
             return new AcademiesByLocationResultWithScroll(
                     academyByLocationWithScroll.academyId(),
                     academyByLocationWithScroll.academyName(),
