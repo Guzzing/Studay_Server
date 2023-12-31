@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Email {
 
-    private static final String REGEX = "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9])+\\.[a-zA-Z]{2,}$";
+    private static final String REGEX = "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9]+\\.)+[a-zA-Z]{2,}$";
 
     @Column(name = "email")
     private String value;
