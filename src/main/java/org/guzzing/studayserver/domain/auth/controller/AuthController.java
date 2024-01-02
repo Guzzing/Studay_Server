@@ -15,7 +15,6 @@ import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthWithdrawResult;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

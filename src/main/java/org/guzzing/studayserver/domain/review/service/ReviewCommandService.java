@@ -1,6 +1,5 @@
 package org.guzzing.studayserver.domain.review.service;
 
-import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
