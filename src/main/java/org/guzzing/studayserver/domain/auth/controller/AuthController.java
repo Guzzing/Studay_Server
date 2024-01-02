@@ -13,7 +13,9 @@ import org.guzzing.studayserver.domain.auth.service.ClientService;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
+import org.guzzing.studayserver.domain.auth.service.dto.AuthWithdrawResult;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -84,6 +86,18 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(authService.logout(authToken));
+    }
+
+    @DeleteMapping(path = "/withdraw")
+    public ResponseEntity<AuthWithdrawResult> withdraw(
+            HttpServletRequest request,
+            @MemberId Long memberId) {
+        String appToken = JwtHeaderUtil.getAccessToken(request);
+        AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(authService.withdraw(authToken, memberId));
     }
 
 }
