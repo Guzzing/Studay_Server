@@ -22,8 +22,4 @@ public class ReviewCommandService {
         return reviewRepository.save(review);
     }
 
-    public void deleteReviewOfMember(final Member member) {
-        reviewRepository.deleteByMember(member);
-    }
-
 }

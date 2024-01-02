@@ -9,6 +9,4 @@ public interface ReviewJpaRepository extends JpaRepository<Review, Long>, Review
 
     boolean existsByMemberAndAcademy(final Member member, final Academy academy);
 
-    void deleteByMember(final Member member);
-
 }

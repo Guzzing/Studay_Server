@@ -11,8 +11,6 @@ public interface LikeRepository {
 
     void deleteById(final long likeId);
 
-    void deleteByMember(final Member member);
-
     boolean existsById(final long id);
 
     List<Like> findByMember(final Member member);
