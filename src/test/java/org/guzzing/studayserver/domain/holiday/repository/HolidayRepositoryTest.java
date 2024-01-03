@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 import org.guzzing.studayserver.domain.holiday.model.Holiday;
-import org.guzzing.studayserver.testutil.QuerydslTestConfig;
+import org.guzzing.studayserver.config.QuerydslTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.review.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
+import static org.guzzing.studayserver.config.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -28,8 +28,8 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
-import org.guzzing.studayserver.testutil.JwtTestConfig;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.guzzing.studayserver.config.JwtTestConfig;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
