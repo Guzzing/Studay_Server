@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.testutil;
+package org.guzzing.studayserver.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
