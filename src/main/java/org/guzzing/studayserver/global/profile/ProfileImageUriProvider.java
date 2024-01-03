@@ -33,7 +33,8 @@ public class ProfileImageUriProvider {
         while (true) {
             final int index = random.nextInt(DEFAULT_IMAGE_URIS.size());
 
-            final String imageResource = makeProfileImageURI(s3Config.getDefaultUrl(), null, DEFAULT_IMAGE_URIS.get(index));
+            final String imageResource = makeProfileImageURI(s3Config.getDefaultUrl(), null,
+                    DEFAULT_IMAGE_URIS.get(index));
 
             if (!existsImageUris.contains(imageResource)) {
                 return imageResource;

@@ -3,8 +3,6 @@ package org.guzzing.studayserver.domain.child.service;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.global.profile.ProfileImageService;
-import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -14,6 +12,8 @@ import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
+import org.guzzing.studayserver.global.profile.ProfileImageService;
+import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +25,14 @@ public class ChildService {
     private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
     private final ProfileImageUriProvider profileImageUriProvider;
+    private final ProfileImageService profileImageService;
 
     public ChildService(MemberRepository memberRepository, ChildRepository childRepository,
             ProfileImageUriProvider profileImageUriProvider, ProfileImageService profileImageService) {
         this.memberRepository = memberRepository;
         this.childRepository = childRepository;
         this.profileImageUriProvider = profileImageUriProvider;
+        this.profileImageService = profileImageService;
     }
 
     @Transactional
@@ -85,6 +87,8 @@ public class ChildService {
         final String profileImageUri = profileImageUriProvider.provideCustomProfileImageURI(memberId, file);
 
         child.updateProfileImageUri(profileImageUri);
+
+        profileImageService.uploadProfileImage(file, profileImageUri);
 
         return new ChildProfileImagePatchResult(childId, child.getProfileImageURLPath());
     }
