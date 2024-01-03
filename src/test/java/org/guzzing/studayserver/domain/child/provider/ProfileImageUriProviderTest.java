@@ -1,23 +1,15 @@
 package org.guzzing.studayserver.domain.child.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCollection;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-import com.amazonaws.services.s3.AmazonS3;
-import io.findify.s3mock.S3Mock;
 import java.util.Base64;
 import java.util.List;
-import org.guzzing.studayserver.config.S3MockConfig;
 import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 
 @SpringBootTest(webEnvironment = NONE)

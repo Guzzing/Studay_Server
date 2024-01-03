@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -20,6 +19,7 @@ import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
+import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
