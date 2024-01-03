@@ -3,7 +3,8 @@ package org.guzzing.studayserver.domain.child.service;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
+import org.guzzing.studayserver.global.profile.ProfileImageService;
+import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -23,13 +24,13 @@ public class ChildService {
 
     private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
-    private final ProfileImageProvider profileImageProvider;
+    private final ProfileImageUriProvider profileImageUriProvider;
 
     public ChildService(MemberRepository memberRepository, ChildRepository childRepository,
-            ProfileImageProvider profileImageProvider) {
+            ProfileImageUriProvider profileImageUriProvider, ProfileImageService profileImageService) {
         this.memberRepository = memberRepository;
         this.childRepository = childRepository;
-        this.profileImageProvider = profileImageProvider;
+        this.profileImageUriProvider = profileImageUriProvider;
     }
 
     @Transactional
@@ -80,7 +81,8 @@ public class ChildService {
         final Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 아이입니다."));
 
-        final String profileImageUri = profileImageProvider.uploadProfileImage(file);
+        final Long memberId = child.getMember().getId();
+        final String profileImageUri = profileImageUriProvider.provideCustomProfileImageURI(memberId, file);
 
         child.updateProfileImageUri(profileImageUri);
 
@@ -103,7 +105,7 @@ public class ChildService {
                 .map(Child::getProfileImageURIPath)
                 .toList();
 
-        return profileImageProvider.provideDefaultProfileImageURI(uris);
+        return profileImageUriProvider.provideDefaultProfileImageURI(uris);
     }
 
 }

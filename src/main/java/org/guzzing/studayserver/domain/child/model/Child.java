@@ -41,10 +41,10 @@ public class Child {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public Child(String nickName, String grade, String profileImageUri) {
+    public Child(String nickName, String grade, String defaultProfileImageUri) {
         this.nickName = new ChildNickname(nickName);
         this.grade = Grade.fromDescription(grade);
-        this.profileImageUri = new ProfileImageUri(profileImageUri);
+        this.profileImageUri = new ProfileImageUri(defaultProfileImageUri);
     }
 
     public void assignToNewMemberOnly(Member member) {
@@ -85,8 +85,8 @@ public class Child {
         this.grade = Grade.fromDescription(grade);
     }
 
-    public void updateProfileImageUri(final String imageUri) {
-        this.profileImageUri = new ProfileImageUri(imageUri);
+    public void updateProfileImageUri(final String customProfileImageUri) {
+        this.profileImageUri = new ProfileImageUri(customProfileImageUri);
     }
 
     public void increaseGrade() {

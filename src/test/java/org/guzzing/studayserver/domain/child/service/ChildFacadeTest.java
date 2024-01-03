@@ -26,7 +26,7 @@ import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarCreateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
-import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
+import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.dashboard.model.dto.PaymentInfo;
 import org.guzzing.studayserver.domain.dashboard.model.vo.SimpleMemo;
@@ -58,7 +58,7 @@ class ChildFacadeTest {
     private ChildService childService;
 
     @MockBean
-    private ProfileImageProvider profileImageProvider;
+    private ProfileImageUriProvider profileImageUriProvider;
 
     @Autowired
     private AcademyRepository academyRepository;
@@ -83,7 +83,7 @@ class ChildFacadeTest {
         Member savedMember = memberRepository.save(member);
 
         ChildCreateParam childCreateParam = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
         Long childId = childService.create(childCreateParam, savedMember.getId());
 
@@ -151,7 +151,7 @@ class ChildFacadeTest {
         Member savedMember = memberRepository.save(member);
 
         ChildCreateParam childCreateParam = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
         Long childId = childService.create(childCreateParam, savedMember.getId());
 
@@ -182,7 +182,7 @@ class ChildFacadeTest {
         Member savedMember = memberRepository.save(member);
 
         ChildCreateParam childCreateParam = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
         Long childId = childService.create(childCreateParam, savedMember.getId());
 
