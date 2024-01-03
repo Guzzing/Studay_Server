@@ -37,6 +37,10 @@ public class ProfileImageService {
         }
     }
 
+    public void deleteProfileImage(String profileImageURI) {
+        s3Client.deleteObject(s3Config.getBucketName(), profileImageURI);
+    }
+
     private PutObjectRequest getPutObjectRequest(MultipartFile multipartFile, String profileImageURI)
             throws IOException {
         final ObjectMetadata objectMetadata = getObjectMetadata(multipartFile);
