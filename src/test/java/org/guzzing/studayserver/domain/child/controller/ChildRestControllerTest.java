@@ -195,15 +195,11 @@ class ChildRestControllerTest {
         }
 
         @Test
-        @Disabled
         @DisplayName("아이 프로필을 변경한다.")
         void modifyProfileImage() throws Exception {
             // Given
             long childId = 24L;
-            when(childService.modifyProfileImage(any(Long.class), any(MultipartFile.class)))
-                    .thenReturn(new ChildProfileImagePatchResult(childId,
-                            "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/test.png"));
-
+            String url = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/test.png";
             MockMultipartFile file = new MockMultipartFile(
                     "file",          // query parameter 이름
                     "filename.txt",  // 파일 이름
@@ -211,12 +207,13 @@ class ChildRestControllerTest {
                     "file content".getBytes()  // 파일 내용
             );
 
+            given(childService.modifyProfileImage(anyLong(), any(MultipartFile.class)))
+                    .willReturn(new ChildProfileImagePatchResult(childId, url));
+
             // When
             ResultActions perform = mockMvc.perform(RestDocumentationRequestBuilders
                     .multipart("/children/{childId}/profile", childId)
                     .file(file)
-                    .contentType(APPLICATION_JSON_VALUE)
-                    .accept(APPLICATION_JSON_VALUE)
             );
 
             // Then
@@ -234,9 +231,6 @@ class ChildRestControllerTest {
                                     .summary("아이 프로필 변경")
                                     .pathParameters(
                                             parameterWithName("childId").description("아이 아이디")
-                                    )
-                                    .queryParameters(
-                                            parameterWithName("file").description("프로필 파일")
                                     )
                                     .responseFields(
                                             fieldWithPath("childId").type(NUMBER).description("아이 아이디"),
