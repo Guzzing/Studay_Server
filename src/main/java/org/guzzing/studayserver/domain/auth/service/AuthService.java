@@ -13,8 +13,6 @@ import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
 import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
-import org.guzzing.studayserver.domain.auth.service.dto.AuthWithdrawResult;
-import org.guzzing.studayserver.domain.member.service.MemberFacade;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,18 +24,15 @@ public class AuthService {
     private final AuthTokenProvider authTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final LogoutTokenRepository logoutTokenRepository;
-    private final MemberFacade memberFacade;
 
     public AuthService(
             AuthTokenProvider authTokenProvider,
             RefreshTokenRepository refreshTokenCacheRepository,
-            LogoutTokenRepository logoutTokenCacheRepository,
-            MemberFacade memberFacade
+            LogoutTokenRepository logoutTokenCacheRepository
     ) {
         this.authTokenProvider = authTokenProvider;
         this.refreshTokenRepository = refreshTokenCacheRepository;
         this.logoutTokenRepository = logoutTokenCacheRepository;
-        this.memberFacade = memberFacade;
     }
 
     @Transactional
@@ -50,16 +45,6 @@ public class AuthService {
         }
 
         return AuthRefreshResult.of(authToken.getToken(), memberId);
-    }
-
-    @Transactional
-    public AuthWithdrawResult withdraw(AuthToken authToken, Long memberId) {
-        memberFacade.removeMember(memberId);
-
-        refreshTokenRepository.deleteByAccessToken(authToken.getToken());
-        logoutTokenRepository.save(authToken.getToken());
-
-        return new AuthWithdrawResult(true);
     }
 
     @Transactional
