@@ -7,13 +7,13 @@ import org.guzzing.studayserver.domain.auth.controller.dto.AuthRefreshResponse;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtHeaderUtil;
-import org.guzzing.studayserver.domain.auth.member_id.MemberId;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.guzzing.studayserver.domain.auth.service.ClientService;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +42,7 @@ public class AuthController {
     @PostMapping(value = "/kakao")
     public ResponseEntity<AuthLoginResponse> kakaoAuthRequest(HttpServletRequest request) {
         AuthLoginResult authLoginResult = clientService.login(
-                MemberProvider.KAKAO.name(),
+                OAuth2Provider.KAKAO.name(),
                 request.getHeader(HEADER_AUTHORIZATION)
         );
 
@@ -53,7 +53,7 @@ public class AuthController {
     @PostMapping(value = "/google")
     public ResponseEntity<AuthLoginResponse> googleAuthRequest(HttpServletRequest request) {
         AuthLoginResult authLoginResult = clientService.login(
-                MemberProvider.GOOGLE.name(),
+                OAuth2Provider.GOOGLE.name(),
                 request.getHeader(HEADER_AUTHORIZATION)
         );
 

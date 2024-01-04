@@ -49,7 +49,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "member_provider")
-    private MemberProvider memberProvider;
+    private OAuth2Provider OAuth2Provider;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "role_type")
@@ -62,15 +62,15 @@ public class Member {
 
     }
 
-    protected Member(NickName nickName, String socialId, MemberProvider memberProvider, RoleType roleType) {
+    protected Member(NickName nickName, String socialId, OAuth2Provider OAuth2Provider, RoleType roleType) {
         this.nickName = nickName;
         this.socialId = socialId;
-        this.memberProvider = memberProvider;
+        this.OAuth2Provider = OAuth2Provider;
         this.roleType = roleType;
     }
 
-    public static Member of(NickName nickName, String socialId, MemberProvider memberProvider, RoleType roleType) {
-        return new Member(nickName, socialId, memberProvider, roleType);
+    public static Member of(NickName nickName, String socialId, OAuth2Provider OAuth2Provider, RoleType roleType) {
+        return new Member(nickName, socialId, OAuth2Provider, roleType);
     }
 
     public void update(String nickname, String email) {
@@ -131,12 +131,12 @@ public class Member {
         Member member = (Member) o;
         return Objects.equals(id, member.id) && Objects.equals(nickName, member.nickName)
                 && Objects.equals(email, member.email) && Objects.equals(socialId, member.socialId)
-                && memberProvider == member.memberProvider && roleType == member.roleType && Objects.equals(
+                && OAuth2Provider == member.OAuth2Provider && roleType == member.roleType && Objects.equals(
                 children, member.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nickName, email, socialId, memberProvider, roleType, children);
+        return Objects.hash(id, nickName, email, socialId, OAuth2Provider, roleType, children);
     }
 }

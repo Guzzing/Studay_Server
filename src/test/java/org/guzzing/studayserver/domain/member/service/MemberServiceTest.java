@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
@@ -67,6 +67,6 @@ class MemberServiceTest {
     }
 
     private Member createMember() {
-        return Member.of(new NickName("TestUser"), "123", MemberProvider.KAKAO, RoleType.USER);
+        return Member.of(new NickName("TestUser"), "123", OAuth2Provider.KAKAO, RoleType.USER);
     }
 }

@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.auth.config;
 
-public class Constants {
+public class PermitAllEndpoint {
 
-    private Constants() {
+    private PermitAllEndpoint() {
     }
 
     protected static final String[] permitAllArray = new String[]{

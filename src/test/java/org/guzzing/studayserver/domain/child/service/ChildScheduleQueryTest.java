@@ -35,9 +35,9 @@ import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardR
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfo;
 import org.guzzing.studayserver.domain.dashboard.service.vo.ScheduleInfos;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.Test;
@@ -77,7 +77,7 @@ class ChildScheduleQueryTest {
     @Test
     void findScheduleByMemberIdAndDate() {
         // given
-        Member member = Member.of(new NickName("멤버 아이디"), "123", MemberProvider.KAKAO, RoleType.USER);
+        Member member = Member.of(new NickName("멤버 아이디"), "123", OAuth2Provider.KAKAO, RoleType.USER);
         Member savedMember = memberRepository.save(member);
 
         ChildCreateParam childCreateParam = new ChildCreateParam("아이 닉네임", "초등학교 1학년");

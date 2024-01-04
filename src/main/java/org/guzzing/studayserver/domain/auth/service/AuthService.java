@@ -36,15 +36,37 @@ public class AuthService {
     }
 
     @Transactional
+    public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
+        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
+        AuthToken refreshToken = findRefreshToken(accessToken);
+
+        refreshTokenRepository.save(newAccessToken.getToken(), refreshToken.getToken());
+
+        return newAccessToken;
+    }
+
+    @Transactional
+    public AuthToken saveAccessTokenCache(Long memberId, String socialId) {
+        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
+        AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
+
+        refreshTokenRepository.save(newAccessToken.getToken(), newRefreshToken.getToken());
+
+        return newAccessToken;
+    }
+
+    @Transactional
     public AuthRefreshResult updateToken(AuthToken authToken, Long memberId) {
         Claims claims = authToken.getTokenClaims();
         String socialId = claims.getSubject();
 
+        AuthToken newAccessToken = authToken;
+
         if (isNotExpiredRefreshToken(authToken.getToken())) {
-            authToken = saveNewAccessTokenInfo(memberId, socialId, authToken.getToken());
+            newAccessToken = saveNewAccessTokenInfo(memberId, socialId, authToken.getToken());
         }
 
-        return AuthRefreshResult.of(authToken.getToken(), memberId);
+        return AuthRefreshResult.of(newAccessToken.getToken(), memberId);
     }
 
     @Transactional
@@ -63,26 +85,6 @@ public class AuthService {
         }
 
         return false;
-    }
-
-    @Transactional
-    public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
-        AuthToken refreshToken = findRefreshToken(accessToken);
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-
-        refreshTokenRepository.save(newAccessToken.getToken(), refreshToken.getToken());
-
-        return newAccessToken;
-    }
-
-    @Transactional
-    public AuthToken saveAccessTokenCache(Long memberId, String socialId) {
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-        AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
-
-        refreshTokenRepository.save(newAccessToken.getToken(), newRefreshToken.getToken());
-
-        return newAccessToken;
     }
 
     private boolean isNotExpiredRefreshToken(String accessToken) {
