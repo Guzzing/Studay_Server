@@ -69,7 +69,7 @@ public class AuthController {
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
-        AuthRefreshResult authRefreshResult = authService.updateToken(authToken, memberId);
+        AuthRefreshResult authRefreshResult = authService.updateAccessToken(authToken, memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AuthRefreshResponse.from(authRefreshResult));

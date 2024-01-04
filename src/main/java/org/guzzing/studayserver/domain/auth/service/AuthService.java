@@ -22,54 +22,46 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthTokenProvider authTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtCacheRepository jwtCacheRepository;
     private final LogoutTokenRepository logoutTokenRepository;
 
     public AuthService(
             AuthTokenProvider authTokenProvider,
-            RefreshTokenRepository refreshTokenCacheRepository,
+            JwtCacheRepository refreshTokenCacheRepository,
             LogoutTokenRepository logoutTokenCacheRepository
     ) {
         this.authTokenProvider = authTokenProvider;
-        this.refreshTokenRepository = refreshTokenCacheRepository;
+        this.jwtCacheRepository = refreshTokenCacheRepository;
         this.logoutTokenRepository = logoutTokenCacheRepository;
     }
 
     @Transactional
-    public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-        AuthToken refreshToken = findRefreshToken(accessToken);
+    public AuthToken saveAccessToken(Long memberId, String socialId) {
+        AuthToken accessToken = authTokenProvider.createAccessToken(socialId, memberId);
+        AuthToken refreshToken = authTokenProvider.createRefreshToken();
 
-        refreshTokenRepository.save(newAccessToken.getToken(), refreshToken.getToken());
+        jwtCacheRepository.save(accessToken.getToken(), refreshToken.getToken());
 
-        return newAccessToken;
+        return accessToken;
     }
 
     @Transactional
-    public AuthToken saveAccessTokenCache(Long memberId, String socialId) {
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-        AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
-
-        refreshTokenRepository.save(newAccessToken.getToken(), newRefreshToken.getToken());
-
-        return newAccessToken;
-    }
-
-    @Transactional
-    public AuthRefreshResult updateToken(AuthToken authToken, Long memberId) {
-        Claims claims = authToken.getTokenClaims();
+    public AuthRefreshResult updateAccessToken(AuthToken accessToken, Long memberId) {
+        Claims claims = accessToken.getTokenClaims();
         String socialId = claims.getSubject();
 
-        AuthToken newAccessToken = authToken;
+        validateRefreshToken(accessToken.getToken());
 
-        if (isNotExpiredRefreshToken(authToken.getToken())) {
-            newAccessToken = saveNewAccessTokenInfo(memberId, socialId, authToken.getToken());
-        }
+        AuthToken newAccessToken = saveAccessToken(memberId, socialId);
 
         return AuthRefreshResult.of(newAccessToken.getToken(), memberId);
     }
 
     @Transactional
+    public void withdraw(AuthToken authToken) {
+        jwtCacheRepository.delete(authToken.getToken());
+    }
+
     public AuthLogoutResult logout(AuthToken authToken) {
         refreshTokenRepository.deleteByAccessToken(authToken.getToken());
         logoutTokenRepository.save(authToken.getToken());
@@ -84,21 +76,19 @@ public class AuthService {
             throw new TokenIsLogoutException(ErrorCode.IS_LOGOUT_TOKEN);
         }
 
-        return false;
-    }
+    private void validateRefreshToken(String accessToken) {
+        boolean isValidRefreshToken = findRefreshToken(accessToken).isValidTokenClaims();
 
-    private boolean isNotExpiredRefreshToken(String accessToken) {
-        return findRefreshToken(accessToken).isValidTokenClaims();
+        if (!isValidRefreshToken) {
+            throw new TokenExpiredException(EXPIRED_REFRESH_TOKEN);
+        }
     }
 
     private AuthToken findRefreshToken(String accessToken) {
-        String refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
-                .orElseThrow(() -> new TokenExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN));
-        return authTokenProvider.convertAuthToken(refreshToken);
-    }
+        String refreshToken = jwtCacheRepository.findRefreshToken(accessToken)
+                .orElseThrow(() -> new TokenExpiredException(EXPIRED_REFRESH_TOKEN));
 
-    public List<Map.Entry<String, String>> findAll() {
-        return refreshTokenRepository.findAll();
+        return authTokenProvider.convertAuthToken(refreshToken);
     }
 
 }

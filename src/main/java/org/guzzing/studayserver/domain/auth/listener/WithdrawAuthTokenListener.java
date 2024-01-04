@@ -28,7 +28,7 @@ public class WithdrawAuthTokenListener {
         String accessToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(accessToken);
 
-        authService.logout(authToken);
+        authService.withdraw(authToken);
     }
 
 }
