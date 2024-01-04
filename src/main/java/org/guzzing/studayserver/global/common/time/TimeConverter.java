@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global.time;
+package org.guzzing.studayserver.global.common.time;
 
 import java.time.LocalTime;
 import java.util.Arrays;

@@ -39,7 +39,7 @@ import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
+import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

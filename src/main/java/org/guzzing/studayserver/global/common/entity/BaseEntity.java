@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global;
+package org.guzzing.studayserver.global.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
