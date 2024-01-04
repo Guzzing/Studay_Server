@@ -61,7 +61,7 @@ public class Child {
     }
 
     public String getProfileImageURLPath() {
-        return profileImageUri.getImageURLPath();
+        return profileImageUri.getImageUrl();
     }
 
     public String getProfileImageURIPath() {
