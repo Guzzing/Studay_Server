@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.review.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -21,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
@@ -28,10 +27,9 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
 import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
-import org.guzzing.studayserver.testutil.JwtTestConfig;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -91,7 +89,6 @@ class ReviewRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(post("/reviews")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -108,9 +105,6 @@ class ReviewRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("리뷰 등록")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .requestFields(
                                         fieldWithPath("academyId").type(NUMBER).description("학원 아이디"),
                                         fieldWithPath("kindness").type(BOOLEAN).description("친절해요 리뷰 선택 여부"),
@@ -139,7 +133,6 @@ class ReviewRestControllerTest {
         // When
         ResultActions perform = mockMvc.perform(get("/reviews/reviewable")
                 .param("academyId", String.valueOf(savedAcademy.getId()))
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
@@ -155,9 +148,6 @@ class ReviewRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("리뷰 가능 여부 확인")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .queryParameters(
                                         parameterWithName("academyId").description("학원 아이디")
                                 )

@@ -3,8 +3,8 @@ package org.guzzing.studayserver.domain.dashboard.controller.vo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalTime;
+import org.guzzing.studayserver.global.common.time.TimeConverter;
 import org.guzzing.studayserver.global.exception.DashboardException;
-import org.guzzing.studayserver.global.time.TimeConverter;
 
 public record Schedule(
         @Positive Integer dayOfWeek,

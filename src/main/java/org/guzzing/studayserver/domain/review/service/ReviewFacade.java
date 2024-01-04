@@ -49,10 +49,6 @@ public class ReviewFacade {
         return ReviewPostResult.from(savedReview);
     }
 
-    public void removeReview(final Member member) {
-        reviewCommandService.deleteReviewOfMember(member);
-    }
-
     public ReviewableResult getReviewableToAcademy(final long memberId, final long academyId) {
         final Member member = memberService.getMember(memberId);
         final Academy academy = academyService.findAcademy(academyId);

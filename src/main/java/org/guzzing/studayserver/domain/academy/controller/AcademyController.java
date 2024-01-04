@@ -17,7 +17,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-import org.guzzing.studayserver.domain.auth.member_id.MemberId;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

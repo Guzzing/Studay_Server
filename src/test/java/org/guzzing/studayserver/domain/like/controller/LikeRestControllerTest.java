@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.like.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.testutil.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -23,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
@@ -30,10 +29,9 @@ import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.testutil.JwtTestConfig;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -94,7 +92,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(post("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId()))
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
@@ -113,9 +110,6 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("좋아요 등록")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .requestFields(
                                         fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
                                 )
@@ -139,7 +133,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", savedLike.getId())
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId())));
 
         // Then
@@ -169,7 +162,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .queryParam("academyId", String.valueOf(savedMember.getId())));
 
         // Then
@@ -181,9 +173,6 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("학원 아이디로 좋아요 제거")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .queryParameters(
                                         parameterWithName("academyId").description("학원 아이디")
                                 )
@@ -202,7 +191,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(get("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId()))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
