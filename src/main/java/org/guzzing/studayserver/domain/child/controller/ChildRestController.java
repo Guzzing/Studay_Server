@@ -6,7 +6,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.guzzing.studayserver.domain.auth.member_id.MemberId;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildProfileImagePatchResponse;

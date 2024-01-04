@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.member_id.MemberId;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;

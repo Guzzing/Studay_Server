@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.member_id.MemberId;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDetailRequest;

@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global.common.log;
+package org.guzzing.studayserver.global.log;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
