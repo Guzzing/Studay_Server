@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.auth.controller.dto.AuthLoginResponse;
+import org.guzzing.studayserver.domain.auth.controller.dto.AuthLogoutResponse;
 import org.guzzing.studayserver.domain.auth.controller.dto.AuthRefreshResponse;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
@@ -76,13 +77,15 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<AuthLogoutResult> logout(
+    public ResponseEntity<AuthLogoutResponse> logout(
             HttpServletRequest request) {
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
+        AuthLogoutResult authLogoutResult = authService.logout(authToken);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(authService.logout(authToken));
+                .body(AuthLogoutResponse.from(authLogoutResult));
     }
 
 }
