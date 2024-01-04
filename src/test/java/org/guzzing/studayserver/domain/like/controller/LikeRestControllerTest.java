@@ -2,9 +2,7 @@ package org.guzzing.studayserver.domain.like.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.guzzing.studayserver.config.JwtTestConfig.AUTHORIZATION_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -94,7 +92,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(post("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId()))
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
@@ -113,9 +110,6 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("좋아요 등록")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .requestFields(
                                         fieldWithPath("academyId").type(NUMBER).description("학원 아이디")
                                 )
@@ -139,7 +133,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", savedLike.getId())
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId())));
 
         // Then
@@ -169,7 +162,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .queryParam("academyId", String.valueOf(savedMember.getId())));
 
         // Then
@@ -181,9 +173,6 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("학원 아이디로 좋아요 제거")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰 (Bearer)")
-                                )
                                 .queryParameters(
                                         parameterWithName("academyId").description("학원 아이디")
                                 )
@@ -202,7 +191,6 @@ class LikeRestControllerTest {
 
         // When
         ResultActions perform = mockMvc.perform(get("/likes")
-                .header(AUTHORIZATION_HEADER, jwtTestConfig.getJwt())
                 .param("memberId", String.valueOf(savedMember.getId()))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
