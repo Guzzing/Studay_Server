@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.testutil;
+package org.guzzing.studayserver.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

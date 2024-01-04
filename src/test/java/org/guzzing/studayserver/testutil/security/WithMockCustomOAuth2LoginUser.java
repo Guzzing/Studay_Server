@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.testutil;
+package org.guzzing.studayserver.testutil.security;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

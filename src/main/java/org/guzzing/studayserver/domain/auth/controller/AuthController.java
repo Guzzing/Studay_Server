@@ -33,7 +33,6 @@ public class AuthController {
     private final ClientService clientService;
     private final AuthService authService;
 
-
     public AuthController(AuthTokenProvider authTokenProvider, ClientService clientService, AuthService authService) {
         this.authTokenProvider = authTokenProvider;
         this.clientService = clientService;

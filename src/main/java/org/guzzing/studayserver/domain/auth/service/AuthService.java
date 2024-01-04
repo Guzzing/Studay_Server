@@ -25,9 +25,11 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final LogoutTokenRepository logoutTokenRepository;
 
-    public AuthService(AuthTokenProvider authTokenProvider,
+    public AuthService(
+            AuthTokenProvider authTokenProvider,
             RefreshTokenRepository refreshTokenCacheRepository,
-            LogoutTokenRepository logoutTokenCacheRepository) {
+            LogoutTokenRepository logoutTokenCacheRepository
+    ) {
         this.authTokenProvider = authTokenProvider;
         this.refreshTokenRepository = refreshTokenCacheRepository;
         this.logoutTokenRepository = logoutTokenCacheRepository;

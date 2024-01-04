@@ -26,10 +26,6 @@ public class LikeCommandService {
         likeRepository.deleteById(likeId);
     }
 
-    public void deleteLikesOfMember(final Member member) {
-        likeRepository.deleteByMember(member);
-    }
-
     public void deleteLikesOfAcademyAndMember(final Member member, final Academy academy) {
         likeRepository.deleteByMemberAndAcademy(member, academy);
     }

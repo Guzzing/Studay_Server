@@ -10,6 +10,4 @@ public interface ReviewRepository {
 
     boolean existsByMemberAndAcademy(final Member member, final Academy academy);
 
-    void deleteByMember(final Member member);
-
 }
