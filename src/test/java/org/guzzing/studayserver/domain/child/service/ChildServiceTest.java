@@ -16,9 +16,9 @@ import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePat
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
 import org.guzzing.studayserver.global.common.auth.RoleType;
-import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

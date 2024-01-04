@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.global.common.member.MemberId;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikeGetResponses;
 import org.guzzing.studayserver.domain.like.controller.dto.response.LikePostResponse;
@@ -13,6 +12,7 @@ import org.guzzing.studayserver.domain.like.service.LikeFacade;
 import org.guzzing.studayserver.domain.like.service.dto.request.LikePostParam;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikeGetResult;
 import org.guzzing.studayserver.domain.like.service.dto.response.LikePostResult;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
