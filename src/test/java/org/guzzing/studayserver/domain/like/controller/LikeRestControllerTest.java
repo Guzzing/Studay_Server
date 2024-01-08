@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
@@ -60,8 +59,6 @@ class LikeRestControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private JwtTestConfig jwtTestConfig;
 
     @Autowired
     private LikeRepository likeRepository;

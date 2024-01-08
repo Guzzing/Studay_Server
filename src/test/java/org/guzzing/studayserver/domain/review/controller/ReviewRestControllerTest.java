@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
@@ -58,8 +57,6 @@ class ReviewRestControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private JwtTestConfig jwtTestConfig;
 
     @Autowired
     private MemberRepository memberRepository;

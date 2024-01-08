@@ -29,13 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.service.AcademyAccessService;
 import org.guzzing.studayserver.domain.child.service.ChildAccessService;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
-import org.guzzing.studayserver.domain.member.service.MemberAccessService;
 import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
@@ -64,11 +62,7 @@ class DashboardRestControllerTest {
     private DashboardFixture dashboardFixture;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private JwtTestConfig jwtTestConfig;
 
-    @MockBean
-    private MemberAccessService memberAccessService;
     @MockBean
     private AcademyAccessService academyAccessService;
     @MockBean
