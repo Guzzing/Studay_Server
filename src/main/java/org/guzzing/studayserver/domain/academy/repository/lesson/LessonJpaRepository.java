@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface LessonJpaRepository extends JpaRepository<Lesson, Long>, LessonRepository {
+public interface LessonJpaRepository extends JpaRepository<Lesson, Long> {
 
     @Query("select l from Lesson as l join fetch l.academy as ac where l.academy.id =:academyId")
     List<Lesson> findAllByAcademyId(@Param("academyId") Long academyId);
