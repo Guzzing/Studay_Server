@@ -8,7 +8,7 @@ import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
-import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleJpaRepository;
+import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleRepository;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
@@ -25,15 +25,15 @@ public class DashboardService {
     private static final String SEPARATOR = ":";
     private final DashboardServiceConverter serviceConverter;
     private final DashboardRepository dashboardRepository;
-    private final DashboardScheduleJpaRepository dashboardScheduleJpaRepository;
+    private final DashboardScheduleRepository dashboardScheduleRepository;
 
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
             final DashboardRepository dashboardRepository,
-            final DashboardScheduleJpaRepository dashboardScheduleJpaRepository) {
+            final DashboardScheduleRepository dashboardScheduleRepository) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
-        this.dashboardScheduleJpaRepository = dashboardScheduleJpaRepository;
+        this.dashboardScheduleRepository = dashboardScheduleRepository;
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class DashboardService {
 
     @Transactional
     public void removeDashboard(final List<Long> childIds) {
-        dashboardScheduleJpaRepository.deleteByChildIds(childIds);
+        dashboardScheduleRepository.deleteByChildIds(childIds);
         dashboardRepository.deleteByChildIds(childIds);
     }
 
