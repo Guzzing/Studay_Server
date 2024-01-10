@@ -18,7 +18,7 @@ import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult.MemberChildInformationResult;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

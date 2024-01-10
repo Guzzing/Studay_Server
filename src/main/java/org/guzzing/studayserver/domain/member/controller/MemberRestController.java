@@ -1,5 +1,10 @@
 package org.guzzing.studayserver.domain.member.controller;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.auth.member_id.MemberId;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
@@ -7,8 +12,6 @@ import org.guzzing.studayserver.domain.member.controller.response.MemberInformat
 import org.guzzing.studayserver.domain.member.service.MemberFacade;
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,45 +32,28 @@ public class MemberRestController {
         this.memberFacade = memberFacade;
     }
 
-    @PatchMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PatchMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> register(@MemberId Long memberId, @RequestBody @Valid MemberRegisterRequest request) {
         Long registeredMemberId = memberService.register(request.toParam(), memberId);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(OK)
                 .body(registeredMemberId);
     }
 
-    /**
-     * 회원탈퇴
-     * <p>
-     * 1. 회원 정보 제거 2. 아이 정보 제거 3. 학원 타임 템플릿 제거 3-1. 학원 스케줄 제거 4. 대시보드 제거 4-1. 대시보드 스케줄 5. 좋아요 제거 6. 리뷰 제거
-     *
-     * @param memberId
-     * @return void
-     */
     @DeleteMapping
-    public ResponseEntity<Void> remove(
-            @MemberId final Long memberId
-    ) {
-        memberFacade.removeMember(memberId);
-
+    public ResponseEntity<Long> withdraw(HttpServletRequest request, @MemberId Long memberId) {
         return ResponseEntity
-                .noContent()
-                .build();
+                .status(NO_CONTENT)
+                .body(memberFacade.removeMember(request, memberId));
     }
 
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberInformationResponse> getInformation(@MemberId Long memberId) {
         MemberInformationResult result = memberService.getById(memberId);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(OK)
                 .body(MemberInformationResponse.from(result));
     }
 }

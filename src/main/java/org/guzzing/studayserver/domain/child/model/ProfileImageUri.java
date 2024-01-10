@@ -24,7 +24,7 @@ public class ProfileImageUri {
         this.imageUri = imageUri;
     }
 
-    public String getImageURLPath() {
+    public String getImageUrl() {
         return MessageFormat.format("{0}{1}", URL_PATH, imageUri);
     }
 

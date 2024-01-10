@@ -1,14 +1,14 @@
 package org.guzzing.studayserver.domain.member.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.domain.child.service.ChildService;
-import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
+import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.dashboard.service.DashboardService;
-import org.guzzing.studayserver.domain.like.service.LikeCommandService;
+import org.guzzing.studayserver.domain.member.event.WithdrawEvent;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.review.service.ReviewFacade;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,44 +17,47 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberFacade {
 
     private final MemberService memberService;
-    private final ChildService childService;
     private final AcademyCalendarService calendarService;
     private final DashboardService dashboardService;
-    private final LikeCommandService likeCommandService;
-    private final ReviewFacade reviewFacade;
+    private final ApplicationEventPublisher eventPublisher;
 
     public MemberFacade(
             final MemberService memberService,
-            final ChildService childService,
             final AcademyCalendarService calendarService,
             final DashboardService dashboardService,
-            final LikeCommandService likeCommandService,
-            final ReviewFacade reviewFacade
+            final ApplicationEventPublisher eventPublisher
     ) {
         this.memberService = memberService;
-        this.childService = childService;
         this.calendarService = calendarService;
         this.dashboardService = dashboardService;
-        this.likeCommandService = likeCommandService;
-        this.reviewFacade = reviewFacade;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
-    public void removeMember(final long memberId) {
-        final Member member = memberService.getMember(memberId);
+    public Long removeMember(final HttpServletRequest request, final Long memberId) {
+        try {
+            final Member member = memberService.getMember(memberId);
+            final List<String> childProfileImageUris = member.getChildren()
+                    .stream()
+                    .map(Child::getProfileImageURIPath)
+                    .toList();
+            final List<Long> childIds = member.getChildren()
+                    .stream()
+                    .map(Child::getId)
+                    .toList();
 
-        final List<Long> childIds = childService.findByMemberId(member.getId())
-                .children()
-                .stream()
-                .map(ChildFindResult::childId)
-                .toList();
+            calendarService.removeCalendar(childIds);
+            // todo: 대시보드 엔티티 직접참조 전환하면 여기 수정할 것
+            dashboardService.removeDashboard(childIds);
+            memberService.remove(memberId);
 
-        reviewFacade.removeReview(member);
-        likeCommandService.deleteLikesOfMember(member);
-        calendarService.removeCalendar(childIds);
-        dashboardService.removeDashboard(childIds);
-        childService.removeChild(memberId);
-        memberService.remove(memberId);
+            eventPublisher.publishEvent(new WithdrawEvent(request, childProfileImageUris));
+
+            return memberId;
+        } catch (Exception e) {
+            log.info("회원 탈퇴 중 에러가 발생했습니다. memberId: {}", memberId, e);
+            throw e;
+        }
     }
 
 }

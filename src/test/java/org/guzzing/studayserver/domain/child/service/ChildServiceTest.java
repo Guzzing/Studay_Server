@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.child.provider.ProfileImageProvider;
 import org.guzzing.studayserver.domain.child.repository.ChildRepository;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
@@ -20,6 +19,7 @@ import org.guzzing.studayserver.domain.member.model.NickName;
 import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
 import org.guzzing.studayserver.domain.member.model.vo.RoleType;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
+import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ class ChildServiceTest {
     private MemberRepository memberRepository;
 
     @MockBean
-    private ProfileImageProvider profileImageProvider;
+    private ProfileImageUriProvider profileImageUriProvider;
 
     @DisplayName("아이를 등록한다.")
     @Test
@@ -55,7 +55,7 @@ class ChildServiceTest {
 
         ChildCreateParam param = new ChildCreateParam(childNickname, childGrade);
 
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
 
         // When
@@ -95,7 +95,7 @@ class ChildServiceTest {
         createChild("아이 닉네임", member);
 
         ChildCreateParam param = new ChildCreateParam("아이 닉네임", "초등학교 1학년");
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
 
         // When & Then
@@ -209,7 +209,7 @@ class ChildServiceTest {
         final byte[] content = "file-content".getBytes();
         final MockMultipartFile multipartFile = new MockMultipartFile(fileName, content);
 
-        given(profileImageProvider.uploadProfileImage(any())).willReturn("YAAAAAAA");
+        given(profileImageUriProvider.provideCustomProfileImageURI(any(), any())).willReturn("YAAAAAAA");
 
         // When
         ChildProfileImagePatchResult result = childService.modifyProfileImage(child.getId(), multipartFile);
@@ -224,7 +224,7 @@ class ChildServiceTest {
     }
 
     private Child createChild(String nickname, Member member) {
-        given(profileImageProvider.provideDefaultProfileImageURI(anyList()))
+        given(profileImageUriProvider.provideDefaultProfileImageURI(anyList()))
                 .willReturn("image.png");
         Long childId = childService.create(new ChildCreateParam(nickname, "초등학교 1학년"), member.getId());
 

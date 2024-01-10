@@ -16,8 +16,8 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTim
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
