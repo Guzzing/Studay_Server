@@ -6,6 +6,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -24,11 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
+import org.guzzing.studayserver.docs.RestDocsSupport;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildrenFindResponse;
@@ -37,7 +38,6 @@ import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.ChildWithScheduleResult;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -45,43 +45,31 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
 
-@WebMvcTest(ChildRestController.class)
-@AutoConfigureRestDocs
-@AutoConfigureMockMvc(addFilters = false)
-class ChildRestControllerTest {
+class ChildRestControllerTest extends RestDocsSupport {
 
     private static final String TAG = "아이 API";
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
     private ChildService childService;
-
-    @MockBean
     private ChildFacade childFacade;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Override
+    protected Object initController() {
+        childService = mock(ChildService.class);
+        childFacade = mock(ChildFacade.class);
+        return new ChildRestController(childService, childFacade);
+    }
 
     @Nested
     class Create {
 
         @DisplayName("아이 생성시 정상 값이면 OK를 반환한다.")
         @Test
-        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         void statusIsOk() throws Exception {
             // Given
             ChildCreateRequest request = new ChildCreateRequest("childName1", "초등학교 1학년");
@@ -100,7 +88,6 @@ class ChildRestControllerTest {
 
         @DisplayName("아이 생성시 잘못된 요청은 400에러를 반환한다.")
         @ParameterizedTest
-        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         @MethodSource("provideInvalidRequests")
         void statusIsBadRequest(ChildCreateRequest invalidRequest) throws Exception {
             // Then
@@ -126,7 +113,6 @@ class ChildRestControllerTest {
     }
 
     @DisplayName("멤버에 할당된 아이들의 정보를 반환한다.")
-    @WithMockCustomOAuth2LoginUser(memberId = 1L)
     @Test
     void findChildren_success() throws Exception {
         // Given
@@ -149,7 +135,6 @@ class ChildRestControllerTest {
     }
 
     @DisplayName("아이를 삭제한다.")
-    @WithMockCustomOAuth2LoginUser()
     @Test
     void delete_success() throws Exception {
         // Given
@@ -164,7 +149,6 @@ class ChildRestControllerTest {
     class modify {
 
         @DisplayName("아이의 정보를 수정한다.")
-        @WithMockCustomOAuth2LoginUser(memberId = 1L)
         @Test
         void success() throws Exception {
             // Given
@@ -183,7 +167,6 @@ class ChildRestControllerTest {
         }
 
         @DisplayName("잘못된 요청이 들어오면 예외를 발생시킨다.")
-        @WithMockCustomOAuth2LoginUser()
         @ParameterizedTest
         @MethodSource("provideInvalidRequests")
         void givenInvalidRequest_throwsException(ChildModifyRequest invalidRequest) throws Exception {
