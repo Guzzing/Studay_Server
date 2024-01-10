@@ -6,7 +6,7 @@ import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LikeJpaRepository extends JpaRepository<Like, Long>, LikeRepository {
+public interface LikeJpaRepository extends JpaRepository<Like, Long> {
 
     List<Like> findByMember(final Member member);
 
@@ -16,4 +16,5 @@ public interface LikeJpaRepository extends JpaRepository<Like, Long>, LikeReposi
 
     void deleteByMemberAndAcademy(final Member member, final Academy academy);
 
+    void deleteByMember(Member member);
 }
