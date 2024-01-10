@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long>, AcademyScheduleRepository {
+public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySchedule, Long> {
 
     AcademySchedule save(AcademySchedule academySchedule);
 
