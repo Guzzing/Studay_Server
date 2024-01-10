@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClientService {
 
     private final ClientStrategy clientStrategy;
-    private final MemberRepository memberJpaRepository;
+    private final MemberRepository memberRepository;
     private final AuthService authService;
 
     public ClientService(
@@ -23,7 +23,7 @@ public class ClientService {
             AuthService authService
     ) {
         this.clientStrategy = clientStrategy;
-        this.memberJpaRepository = memberJpaRepository;
+        this.memberRepository = memberJpaRepository;
         this.authService = authService;
     }
 
@@ -34,8 +34,8 @@ public class ClientService {
         Member clientMember = clientProxy.getUserData(accessToken);
         String socialId = clientMember.getSocialId();
 
-        Optional<Member> memberOptional = memberJpaRepository.findMemberIfExisted(socialId);
-        Member savedMember = memberOptional.orElseGet(() -> memberJpaRepository.save(clientMember));
+        Optional<Member> memberOptional = memberRepository.findMemberIfExisted(socialId);
+        Member savedMember = memberOptional.orElseGet(() -> memberRepository.save(clientMember));
 
         AuthToken newAuthToken = authService.saveAccessTokenCache(savedMember.getId(), socialId);
 
