@@ -1,22 +1,15 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
-import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AcademyJpaRepository extends JpaRepository<Academy, Long>, AcademyQueryRepository, AcademyRepository {
-
-    default Academy getById(Long academyId) {
-        return findById(academyId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.getMessage()));
-    }
+public interface AcademyJpaRepository extends JpaRepository<Academy, Long> {
 
     @Query(value =
             "SELECT a.id AS academyId, a.academy_name AS academyName, a.full_address AS fullAddress, a.latitude, a.longitude "
