@@ -1,16 +1,20 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
-import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleJpaRepository;
+import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleRepository;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class DashboardService {
 
+    private static final String SEPARATOR = ":";
     private final DashboardServiceConverter serviceConverter;
     private final DashboardRepository dashboardRepository;
-    private final DashboardScheduleJpaRepository dashboardScheduleJpaRepository;
+    private final DashboardScheduleRepository dashboardScheduleRepository;
 
     public DashboardService(
             final DashboardServiceConverter serviceConverter,
             final DashboardRepository dashboardRepository,
-            final DashboardScheduleJpaRepository dashboardScheduleJpaRepository) {
+            final DashboardScheduleRepository dashboardScheduleRepository) {
         this.serviceConverter = serviceConverter;
         this.dashboardRepository = dashboardRepository;
-        this.dashboardScheduleJpaRepository = dashboardScheduleJpaRepository;
+        this.dashboardScheduleRepository = dashboardScheduleRepository;
     }
 
     @Transactional
@@ -47,7 +52,7 @@ public class DashboardService {
 
     @Transactional
     public void removeDashboard(final List<Long> childIds) {
-        dashboardScheduleJpaRepository.deleteByChildIds(childIds);
+        dashboardScheduleRepository.deleteByChildIds(childIds);
         dashboardRepository.deleteByChildIds(childIds);
     }
 
@@ -90,6 +95,42 @@ public class DashboardService {
     private Dashboard findDashboardById(final Long dashboardId) {
         return dashboardRepository.findById(dashboardId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하는 대시보드가 없습니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public DashboardScheduleAccessResult getDashboardSchedule(Long dashboardId) {
+        final DashboardResult result = findDashboard(dashboardId);
+
+        final List<LessonScheduleAccessResult> schedules = result.scheduleInfos()
+                .schedules()
+                .stream()
+                .map(scheduleInfo -> new LessonScheduleAccessResult(
+                        scheduleInfo.dayOfWeek(),
+                        getTime(scheduleInfo.startTime()),
+                        getTime((scheduleInfo.endTime()))))
+                .toList();
+
+        return new DashboardScheduleAccessResult(
+                result.childId(),
+                result.academyId(),
+                result.lessonId(),
+                Periodicity.WEEKLY,
+                schedules);
+    }
+
+    private LocalTime getTime(final String time) {
+        String[] split = time.split(SEPARATOR);
+        try {
+            int hour = Integer.parseInt(split[0]);
+            int minute = Integer.parseInt(split[1]);
+
+            return LocalTime.of(hour, minute);
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("유효하지 않은 시간입니다.");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("시간은 숫자여야 합니다.");
+        }
     }
 
 }

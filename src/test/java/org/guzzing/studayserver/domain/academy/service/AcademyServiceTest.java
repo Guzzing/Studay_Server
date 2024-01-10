@@ -16,6 +16,7 @@ import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepo
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults.AcademiesByLocationResultWithScroll;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
@@ -79,7 +80,7 @@ class AcademyServiceTest {
     @BeforeEach
     void setUp() {
 
-        Member member = MemberFixture.member();
+        Member member = MemberFixture.makeMemberEntity();
         savedMember = memberRepository.save(member);
 
         Academy academyAboutSungnam = AcademyFixture.academySungnam();
@@ -106,8 +107,7 @@ class AcademyServiceTest {
                 savedAcademyAboutSungnam.getId());
 
         //When
-        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId(),
-                savedMember.getId());
+        AcademyGetResult academyGetResult = academyService.getAcademy(savedAcademyAboutSungnam.getId());
 
         //Then
         assertThat(academyGetResult.academyName()).isEqualTo(savedAcademyAboutSungnam.getAcademyName());
@@ -161,15 +161,13 @@ class AcademyServiceTest {
                 AcademyFixture.academiesByLocationWithScrollParam(LATITUDE, LONGITUDE));
 
         //Then
-        assertThat(academiesByLocationWithScroll.academiesByLocationResults().size()).isEqualTo(
-                expectedSearchedPageSize);
+        assertThat(academiesByLocationWithScroll.academiesByLocationResults())
+                .hasSize(expectedSearchedPageSize);
         assertThat(academiesByLocationWithScroll.hasNext()).isEqualTo(expectedHasNext);
         academiesByLocationWithScroll.academiesByLocationResults()
                 .stream()
-                .map(academiesByLocationResult -> academiesByLocationResult.categories())
-                .forEach(
-                        categoryName -> assertThat(categoryNames).isEqualTo(categoryName)
-                );
+                .map(AcademiesByLocationResultWithScroll::categories)
+                .forEach(categoryName -> assertThat(categoryNames).isEqualTo(categoryName));
     }
 
     @Test
@@ -241,8 +239,8 @@ class AcademyServiceTest {
                             result -> assertThat(academyFilterWithScrollParam.categories()).contains(result)
                     );
         }
-        assertThat(academiesFilterWithScrollResults.academiesFilterWithScrollResults().size()).isEqualTo(
-                expectedSearchedPageSize);
+        assertThat(academiesFilterWithScrollResults.academiesFilterWithScrollResults())
+                .hasSize(expectedSearchedPageSize);
         assertThat(academiesFilterWithScrollResults.hasNext()).isEqualTo(expectedHasNext);
     }
 

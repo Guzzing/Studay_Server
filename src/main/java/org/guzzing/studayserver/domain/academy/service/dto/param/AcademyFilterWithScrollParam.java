@@ -20,7 +20,7 @@ public record AcademyFilterWithScrollParam(
                 pointFormat,
                 SqlFormatter.makeWhereInString(
                         param.categories.stream()
-                                .map(categoryName -> CategoryInfo.getCategoryIdByName(categoryName))
+                                .map(CategoryInfo::getCategoryIdByName)
                                 .toList()),
                 param.desiredMinAmount,
                 param.desiredMaxAmount

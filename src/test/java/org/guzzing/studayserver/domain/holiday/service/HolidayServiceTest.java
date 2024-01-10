@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class HolidayServiceTest {
+class HolidayServiceTest {
 
     @Mock
     private HolidayRepository holidayRepository;

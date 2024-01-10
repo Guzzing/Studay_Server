@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface DashboardJpaRepository extends
-        JpaRepository<Dashboard, Long>, DashboardRepository, DashboardQuerydslRepository {
+public interface DashboardJpaRepository extends JpaRepository<Dashboard, Long> {
 
     @Query("SELECT dab FROM Dashboard AS dab "
             + "JOIN FETCH dab.dashboardSchedules dabschs "
@@ -20,4 +19,7 @@ public interface DashboardJpaRepository extends
                 where d.childId in :childIds
             """)
     void deleteByChildIds(List<Long> childIds);
+
+
+    List<Dashboard> findAllByChildId(Long childId);
 }

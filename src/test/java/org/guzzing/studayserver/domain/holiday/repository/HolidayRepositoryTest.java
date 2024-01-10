@@ -14,32 +14,27 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@Import(QuerydslTestConfig.class)
+@SpringBootTest
 class HolidayRepositoryTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Autowired
     private HolidayRepository holidayRepository;
 
-    @BeforeEach
-    void setUp() {
-        Holiday newYear = new Holiday(LocalDate.of(2022, 1, 1), "New Year");
-        Holiday lunarNewYear = new Holiday(LocalDate.of(2022, 1, 22), "Lunar New Year");
-        entityManager.persist(newYear);
-        entityManager.persist(lunarNewYear);
-        entityManager.flush();
-    }
+    @Autowired
+    private HolidayJpaRepository holidayJpaRepository;
 
     @DisplayName("해당 년,월에 공휴일을 반환한다.")
     @Test
     void whenFindByYearAndMonth_thenReturnHolidays() {
         // Given
+        Holiday newYear = new Holiday(LocalDate.of(2022, 1, 1), "New Year");
+        Holiday lunarNewYear = new Holiday(LocalDate.of(2022, 1, 22), "Lunar New Year");
+        holidayJpaRepository.save(newYear);
+        holidayJpaRepository.save(lunarNewYear);
+
         int year = 2022;
         int month = 1;
 

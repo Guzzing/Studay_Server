@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.academy.repository.dto;
 
 public interface AcademyFee {
 
-    long getMaxEducationFee();
+    Long getMaxEducationFee();
 
     String getAcademyName();
 

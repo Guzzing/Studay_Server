@@ -24,10 +24,7 @@ public interface LessonRepository {
 
     Optional<Lesson> findLessonById(Long lessonId);
 
-    default Lesson getLessonById(Long lessonId) {
-        return findLessonById(lessonId).orElseThrow(() ->
-                new EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.getMessage()));
-    }
+    Lesson getLessonById(Long lessonId);
 
     List<Lesson> findByIds(List<Long> lessonIds);
 

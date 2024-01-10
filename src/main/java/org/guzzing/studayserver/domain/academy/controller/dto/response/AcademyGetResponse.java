@@ -1,7 +1,7 @@
 package org.guzzing.studayserver.domain.academy.controller.dto.response;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeResult;
 
 public record AcademyGetResponse(
         String academyName,
@@ -16,7 +16,7 @@ public record AcademyGetResponse(
         boolean isLiked
 ) {
 
-    public static AcademyGetResponse from(AcademyGetResult academyGetResult) {
+    public static AcademyGetResponse from(AcademyDetailFacadeResult academyGetResult) {
         return new AcademyGetResponse(
                 academyGetResult.academyName(),
                 academyGetResult.contact(),

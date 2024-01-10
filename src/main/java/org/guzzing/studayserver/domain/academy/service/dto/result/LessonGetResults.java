@@ -11,7 +11,7 @@ public record LessonGetResults(
         return new LessonGetResults(
                 lessons
                         .stream()
-                        .map(lesson -> LessonGetResult.from(lesson))
+                        .map(LessonGetResult::from)
                         .toList());
     }
 

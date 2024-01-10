@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class ProfileImageProvider {
 
+    private static final Random random = new Random();
     private static final List<String> DEFAULT_IMAGE_URIS = List.of(
             "icon_0_0.png", "icon_0_1.png", "icon_0_2.png",
             "icon_1_0.png", "icon_1_1.png", "icon_1_2.png",
@@ -40,7 +41,6 @@ public class ProfileImageProvider {
 
     public String provideDefaultProfileImageURI(final List<String> existsImageUris) {
         while (true) {
-            Random random = new Random();
             int index = random.nextInt(DEFAULT_IMAGE_URIS.size());
 
             String imageResource = makeProfileImageURI(s3Config.getDefaultUrl(), DEFAULT_IMAGE_URIS.get(index));

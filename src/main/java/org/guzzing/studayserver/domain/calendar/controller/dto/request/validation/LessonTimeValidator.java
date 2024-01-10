@@ -29,12 +29,8 @@ public class LessonTimeValidator implements ConstraintValidator<ValidLessonTime,
             LocalTime startTime = LocalTime.parse(lessonTime.getLessonStartTime(), TIME_FORMATTER);
             LocalTime endTime = LocalTime.parse(lessonTime.getLessonEndTime(), TIME_FORMATTER);
 
-            if (!isValidTimeRange(startTime, endTime, context) || !isStartTimeBeforeEndTime(startTime, endTime,
-                    context)) {
-                return false;
-            }
-
-            return true;
+            return isValidTimeRange(startTime, endTime, context)
+                    && isStartTimeBeforeEndTime(startTime, endTime, context);
         } catch (DateTimeParseException e) {
             handleInvalidTimeFormat(context);
             return false;

@@ -10,7 +10,7 @@ public record AcademiesByNameResponses(
     public static AcademiesByNameResponses from(AcademiesByNameResults academiesByNameResults) {
         return new AcademiesByNameResponses(
                 academiesByNameResults.academiesByNameResults()
-                        .map(academiesByNameResult -> AcademiesByNameResponse.from(academiesByNameResult))
+                        .map(AcademiesByNameResponse::from)
         );
     }
 }

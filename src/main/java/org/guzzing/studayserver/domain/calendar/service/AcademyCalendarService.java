@@ -19,8 +19,6 @@ import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalend
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarDetailResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
-import org.guzzing.studayserver.domain.dashboard.service.access.DashboardAccessService;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,17 +28,14 @@ public class AcademyCalendarService {
     private final AcademyScheduleRepository academyScheduleRepository;
     private final AcademyTimeTemplateRepository academyTimeTemplateRepository;
     private final PeriodicStrategy periodicStrategy;
-    private final DashboardAccessService dashboardAccessService;
 
     public AcademyCalendarService(
             AcademyScheduleRepository academyScheduleRepository,
             AcademyTimeTemplateRepository academyTimeTemplateRepository,
-            PeriodicStrategy periodicStrategy,
-            DashboardAccessService dashboardAccessService) {
+            PeriodicStrategy periodicStrategy) {
         this.academyScheduleRepository = academyScheduleRepository;
         this.academyTimeTemplateRepository = academyTimeTemplateRepository;
         this.periodicStrategy = periodicStrategy;
-        this.dashboardAccessService = dashboardAccessService;
     }
 
     @Transactional
@@ -125,10 +120,8 @@ public class AcademyCalendarService {
     public AcademyCalendarLoadToUpdateResult loadTimeTemplateToUpdate(Long academyScheduleId) {
         AcademyTimeTemplate academyTimeTemplate = academyScheduleRepository.findDistinctAcademyTimeTemplate(
                 academyScheduleId);
-        DashboardScheduleAccessResult dashboardScheduleAccessResult =
-                dashboardAccessService.getDashboardSchedule(academyTimeTemplate.getDashboardId());
 
-        return AcademyCalendarLoadToUpdateResult.of(academyTimeTemplate, dashboardScheduleAccessResult);
+        return AcademyCalendarLoadToUpdateResult.of(academyTimeTemplate);
     }
 
     @Transactional
@@ -181,9 +174,8 @@ public class AcademyCalendarService {
             List<AcademyTimeTemplateDateInfo> academyTimeTemplates,
             LocalDate startDateOfAttendance
     ) {
-        academyTimeTemplates.forEach(academyTimeTemplate -> {
-            academyScheduleRepository.deleteAfterUpdatedStartDate(academyTimeTemplate.getId(), startDateOfAttendance);
-        });
+        academyTimeTemplates.forEach(academyTimeTemplate -> academyScheduleRepository.deleteAfterUpdatedStartDate(
+                academyTimeTemplate.getId(), startDateOfAttendance));
     }
 
     private void changeBeforeTimeTemplateOfEndDate(

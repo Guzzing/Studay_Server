@@ -13,8 +13,7 @@ public record AcademiesFilterWithScrollResponses(
         return new AcademiesFilterWithScrollResponses(
                 academiesFilterWithScrollResults.academiesFilterWithScrollResults()
                         .stream()
-                        .map(academyFilterWithScrollResult -> AcademyFilterWithScrollResponse.from(
-                                academyFilterWithScrollResult))
+                        .map(AcademyFilterWithScrollResponse::from)
                         .toList(),
                 academiesFilterWithScrollResults.hasNext()
         );

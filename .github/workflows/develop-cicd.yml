@@ -25,11 +25,6 @@ jobs:
         ports:
           - 3306:3306
         # options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
 
     # 순차적으로 실행될 단계들을 정의하는 섹션
     steps:
@@ -48,12 +43,12 @@ jobs:
           mkdir -p src/main/resources
           
           echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
+          echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > src/main/resources/application-prod.yml
           echo "${{ secrets.APPLICATION_AUTH_YML_CONTENT }}" > src/main/resources/application-auth.yml
+          echo "${{ secrets.APPLICATION_MONITORING_YML_CONTENT }}" > src/main/resources/application-monitoring.yml
           echo "${{ secrets.APPLICATION_S3_YML_CONTENT }}" > src/main/resources/application-s3.yml
           echo "${{ secrets.APPLICATION_SWAGGER_YML_CONTENT }}" > src/main/resources/application-swagger.yml
-          echo "${{ secrets.APPLICATION_MONITORING_YML_CONTENT }}" > src/main/resources/application-monitoring.yml
 
       - name: Build with gradle
         run: ./gradlew build

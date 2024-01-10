@@ -2,7 +2,10 @@ package org.guzzing.studayserver.domain.auth.config;
 
 public class Constants {
 
-    public static final String[] permitAllArray = new String[]{
+    private Constants() {
+    }
+
+    protected static final String[] permitAllArray = new String[]{
             "/",
             "/auth/**",
             "/error",

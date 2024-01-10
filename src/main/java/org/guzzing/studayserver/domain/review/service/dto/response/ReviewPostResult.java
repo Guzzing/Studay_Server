@@ -11,9 +11,9 @@ import org.guzzing.studayserver.domain.review.model.Review;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
 
 public record ReviewPostResult(
-        Long reviewId,
-        Long memberId,
-        Long academyId,
+        long reviewId,
+        long memberId,
+        long academyId,
         boolean kindness,
         boolean cheapFee,
         boolean goodFacility,
@@ -22,7 +22,7 @@ public record ReviewPostResult(
 ) {
 
     public static ReviewPostResult from(final Review entity) {
-        final Map<ReviewType, Boolean> reviewType = ReviewType.convertReviewListToReviewMap(entity.getReviewType());
+        final Map<ReviewType, Boolean> reviewType = ReviewType.convertToReviewTypeMap(entity.getReviewType());
 
         return new ReviewPostResult(
                 entity.getId(),
