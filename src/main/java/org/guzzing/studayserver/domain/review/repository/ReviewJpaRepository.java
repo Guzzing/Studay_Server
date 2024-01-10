@@ -5,7 +5,7 @@ import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.review.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReviewJpaRepository extends JpaRepository<Review, Long>, ReviewRepository {
+public interface ReviewJpaRepository extends JpaRepository<Review, Long> {
 
     boolean existsByMemberAndAcademy(final Member member, final Academy academy);
 
