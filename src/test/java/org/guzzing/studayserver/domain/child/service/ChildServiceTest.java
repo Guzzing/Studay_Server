@@ -15,11 +15,11 @@ import org.guzzing.studayserver.domain.child.service.param.ChildModifyParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
+import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,7 +219,7 @@ class ChildServiceTest {
     }
 
     private Member createMember(String socialId) {
-        Member member = Member.of(new NickName("멤버 닉네임"), socialId, MemberProvider.KAKAO, RoleType.USER);
+        Member member = Member.of(new NickName("멤버 닉네임"), socialId, OAuth2Provider.KAKAO, RoleType.USER);
         return memberRepository.save(member);
     }
 

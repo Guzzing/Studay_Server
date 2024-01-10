@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global.profile;
+package org.guzzing.studayserver.global.common.profile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;

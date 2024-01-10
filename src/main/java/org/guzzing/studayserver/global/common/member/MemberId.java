@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.auth.member_id;
+package org.guzzing.studayserver.global.common.member;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

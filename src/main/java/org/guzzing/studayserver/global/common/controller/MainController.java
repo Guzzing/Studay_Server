@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global;
+package org.guzzing.studayserver.global.common.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

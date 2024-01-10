@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.member.model.vo;
+package org.guzzing.studayserver.global.common.auth;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;

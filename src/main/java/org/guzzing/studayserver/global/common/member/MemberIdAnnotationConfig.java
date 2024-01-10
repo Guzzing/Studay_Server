@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.auth.member_id;
+package org.guzzing.studayserver.global.common.member;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

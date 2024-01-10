@@ -5,7 +5,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.util.Base64;
 import java.util.List;
-import org.guzzing.studayserver.global.profile.ProfileImageUriProvider;
+import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
