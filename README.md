@@ -6,6 +6,8 @@
 손쉽게 학원 정보를 얻고 내 아이 학원 스케줄을 관리하도록 도와줍니다.
 <br />
 ## 제공하는 기능
+![image](https://github.com/Guzzing/Studay_Server/assets/108210958/d795e4b3-2ae8-42fd-92b3-f08cdae60040)
+
 
 [🔗 UI & 기획 보러가기](https://docs.google.com/presentation/d/1hJgL1egziuzGhJqr2-rU9AKTz00zuXmgqWG40X9fCyA/edit?usp=sharing)
 - 카카오 로그인
@@ -23,6 +25,8 @@
    - 학원 재료비, 수업비, 납부 일자 등록 기능 제공
 <br />
 
+# 운영중인 사이트
+https://www.studay.me/
 # 프로젝트의 주요 관심사
 - 실제 서비스 가능한 완성도로 서버-클라이언트 구현(API, UI, 통신 규약, 기능성)
 - 제 3자가 자신의 코드를 리팩토링 할 수 있다는 생각을 갖고 작성하는 확장, 유지보수하기 좋은 코드
