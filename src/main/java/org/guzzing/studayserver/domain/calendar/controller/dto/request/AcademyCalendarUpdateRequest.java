@@ -48,8 +48,8 @@ public record AcademyCalendarUpdateRequest(
                         .stream()
                         .map(lesson -> LessonScheduleUpdateRequest.to(lesson))
                         .toList(),
-                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
-                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().startDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().endDateOfAttendance()),
                 request.isAlarmed,
                 memberId,
                 request.childId,

@@ -45,8 +45,8 @@ public record AcademyCalendarCreateRequest(
                         .stream()
                         .map(lesson -> LessonScheduleCreateRequest.to(lesson))
                         .toList(),
-                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
-                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().startDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().endDateOfAttendance()),
                 request.isAlarmed,
                 request.childId,
                 request.dashboardId,
