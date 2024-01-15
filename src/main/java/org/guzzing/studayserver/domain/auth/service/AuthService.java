@@ -3,7 +3,6 @@ package org.guzzing.studayserver.domain.auth.service;
 import static org.guzzing.studayserver.global.error.response.ErrorCode.EXPIRED_REFRESH_TOKEN;
 
 import io.jsonwebtoken.Claims;
-import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.auth.exception.TokenExpiredException;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
@@ -13,7 +12,6 @@ import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class AuthService {
 
@@ -45,6 +43,7 @@ public class AuthService {
 
         validateRefreshToken(accessToken.getToken());
 
+        jwtCacheRepository.delete(accessToken.getToken());
         AuthToken newAccessToken = saveAccessToken(memberId, socialId);
 
         return AuthRefreshResult.of(newAccessToken.getToken(), memberId);
@@ -53,7 +52,6 @@ public class AuthService {
     @Transactional
     public AuthLogoutResult logout(AuthToken authToken) {
         jwtCacheRepository.delete(authToken.getToken());
-
         return new AuthLogoutResult(true);
     }
 

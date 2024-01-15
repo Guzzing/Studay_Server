@@ -63,9 +63,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<AuthRefreshResponse> refreshToken(
-            HttpServletRequest request,
-            @MemberId Long memberId) {
+    public ResponseEntity<AuthRefreshResponse> refreshToken(HttpServletRequest request, @MemberId Long memberId) {
 
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
@@ -77,8 +75,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<AuthLogoutResponse> logout(
-            HttpServletRequest request) {
+    public ResponseEntity<AuthLogoutResponse> logout(HttpServletRequest request) {
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
