@@ -13,7 +13,7 @@ import org.guzzing.studayserver.domain.academy.repository.academy.AcademyReposit
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
+import org.guzzing.studayserver.testutil.fixture.review.ReviewFixture;
 import org.guzzing.studayserver.domain.review.model.ReviewType;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
 import org.guzzing.studayserver.domain.review.service.dto.response.ReviewPostResult;
