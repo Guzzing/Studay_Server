@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import lombok.Getter;
+import org.guzzing.studayserver.domain.dashboard.model.vo.Repeatance;
 
 @Getter
 @Entity
@@ -54,6 +55,9 @@ public class AcademyTimeTemplate {
             columnDefinition = "text")
     private String memo;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "periodicity")
+    private Periodicity periodicity;
 
     protected AcademyTimeTemplate() {
     }
