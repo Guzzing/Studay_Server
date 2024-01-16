@@ -7,7 +7,8 @@ public class PermitAllEndpoint {
 
     protected static final String[] permitAllArray = new String[]{
             "/",
-            "/auth/**",
+            "/auth/kakao",
+            "/auth/google",
             "/error",
             "/docs/**",
             "/favicon.ico",

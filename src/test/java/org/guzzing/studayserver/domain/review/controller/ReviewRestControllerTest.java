@@ -26,9 +26,9 @@ import org.guzzing.studayserver.domain.academy.repository.academy.AcademyReposit
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
 import org.guzzing.studayserver.domain.review.controller.dto.request.ReviewPostRequest;
-import org.guzzing.studayserver.domain.review.fixture.ReviewFixture;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
+import org.guzzing.studayserver.testutil.fixture.review.ReviewFixture;
 import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
