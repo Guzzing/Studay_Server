@@ -7,8 +7,21 @@ public record LikeGetResult(
         long totalFee
 ) {
 
-    public static LikeGetResult of(final List<LikedAcademyFeeInfo> likeAcademyInfos, final long totalFee) {
-        return new LikeGetResult(likeAcademyInfos, totalFee);
+    private static final long DEFAULT_TOTAL_FEE = 0L;
+
+    public static LikeGetResult of(final List<LikedAcademyFeeInfo> likedAcademyFeeInfos) {
+        return new LikeGetResult(likedAcademyFeeInfos, getTotalFee(likedAcademyFeeInfos));
+    }
+
+    private static long getTotalFee(final List<LikedAcademyFeeInfo> likeAcademyFeeInfos) {
+        try {
+            return likeAcademyFeeInfos.stream()
+                    .filter(likedAcademyFeeInfo -> likedAcademyFeeInfo.expectedFee() != null)
+                    .mapToLong(LikedAcademyFeeInfo::expectedFee)
+                    .sum();
+        } catch (NullPointerException e) {
+            return DEFAULT_TOTAL_FEE;
+        }
     }
 
 }

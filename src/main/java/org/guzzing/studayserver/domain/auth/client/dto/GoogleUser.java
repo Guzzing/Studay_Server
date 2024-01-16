@@ -3,7 +3,7 @@ package org.guzzing.studayserver.domain.auth.client.dto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
-import org.guzzing.studayserver.domain.member.model.NickName;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

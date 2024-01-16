@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.guzzing.studayserver.domain.review.service.dto.request.ReviewPostParam;
-import org.guzzing.studayserver.global.exception.ReviewException;
 
 public enum ReviewType {
     KINDNESS,
@@ -32,11 +31,19 @@ public enum ReviewType {
         return selectedReviewMap;
     }
 
-    public static Map<ReviewType, Boolean> convertReviewListToReviewMap(final Map<String, Boolean> map) {
+    public static Map<ReviewType, Boolean> convertToReviewTypeMap(final Map<String, Boolean> map) {
         return Arrays.stream(ReviewType.values())
                 .collect(Collectors.toMap(
                         reviewType -> reviewType,
                         reviewType -> map.get(reviewType.name())
+                ));
+    }
+
+    public static Map<ReviewType, Integer> convertToReviewTypeCountMap(final Map<ReviewType, Boolean> map) {
+        return Arrays.stream(ReviewType.values())
+                .collect(Collectors.toMap(
+                        reviewType -> reviewType,
+                        reviewType -> Boolean.TRUE.equals(map.get(reviewType)) ? 1 : 0
                 ));
     }
 
@@ -46,7 +53,7 @@ public enum ReviewType {
                 .count();
 
         if (count > MAX_REVIEW_COUNT) {
-            throw new ReviewException("리뷰는 3개 까지 가능합니다.");
+            throw new IllegalArgumentException("리뷰는 3개 까지 가능합니다.");
         }
     }
 

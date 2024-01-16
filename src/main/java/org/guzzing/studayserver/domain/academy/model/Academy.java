@@ -12,7 +12,7 @@ import lombok.Getter;
 import org.guzzing.studayserver.domain.academy.model.vo.Address;
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
-import org.guzzing.studayserver.global.BaseEntity;
+import org.guzzing.studayserver.global.common.entity.BaseEntity;
 import org.locationtech.jts.geom.Point;
 
 @Getter
@@ -79,7 +79,7 @@ public class Academy extends BaseEntity {
     }
 
     public String getShuttleAvailability() {
-        return academyInfo.getShuttle().toString();
+        return academyInfo.getShuttle();
     }
 
     public String getAreaOfExpertise() {

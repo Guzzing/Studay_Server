@@ -29,4 +29,5 @@ public class DashboardReadService {
 
         return new DashBoardFindByIdsResults(dashBoardFindByIdsResults);
     }
+
 }

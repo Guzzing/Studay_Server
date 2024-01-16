@@ -11,8 +11,7 @@ public record LessonInfoToCreateDashboardResults(
             List<LessonInfoToCreateDashboard> lessonInfoToCreateDashboards) {
         return new LessonInfoToCreateDashboardResults(
                 lessonInfoToCreateDashboards.stream()
-                        .map(lessonInfoToCreateDashboard -> LessonInfoToCreateDashboardResult.from(
-                                lessonInfoToCreateDashboard))
+                        .map(LessonInfoToCreateDashboardResult::from)
                         .toList()
         );
     }

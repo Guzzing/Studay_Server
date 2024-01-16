@@ -16,8 +16,8 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 
 public class AcademyCalenderFixture {
 
@@ -27,9 +27,7 @@ public class AcademyCalenderFixture {
     private static final LocalDate END_DATE_OF_ATTENDANCE_WITH_TWO_DAYS = LocalDate.of(2023, 11, 21);
     private static final Periodicity WEEKLY_PERIODICITY = Periodicity.WEEKLY;
     private static final Long FIRST_CHILD_ID = 1L;
-    private static final Long SECOND_CHILD_ID = 2L;
     private static final Long FIRST_CHILD_DASH_BOARD_ID = 1L;
-    private static final Long SECOND_CHILD_DASH_BOARD_ID = 2L;
     private static final LessonTime LESSON_TIME = new LessonTime("18:00", "20:00");
 
     public static AcademyCalendarCreateRequest.LessonScheduleCreateRequest mondayLessonScheduleCreateRequest() {

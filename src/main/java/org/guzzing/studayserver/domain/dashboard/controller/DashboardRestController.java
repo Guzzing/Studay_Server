@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
+import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.dashboard.controller.converter.DashboardControllerConverter;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPostRequest;
 import org.guzzing.studayserver.domain.dashboard.controller.dto.request.DashboardPutRequest;
@@ -22,8 +22,8 @@ import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPostResult;
 import org.guzzing.studayserver.domain.dashboard.facade.dto.DashboardPutResult;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,7 +58,7 @@ public class DashboardRestController {
      */
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPostResponse> registerDashboard(
-            @Validated @RequestBody final DashboardPostRequest request,
+            @Valid @RequestBody final DashboardPostRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPostParam param = controllerConverter.to(request);
@@ -100,7 +100,7 @@ public class DashboardRestController {
     @PutMapping(path = "/{dashboardId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardPutResponse> updateDashboard(
             @PathVariable final Long dashboardId,
-            @Validated @RequestBody final DashboardPutRequest request,
+            @Valid @RequestBody final DashboardPutRequest request,
             @MemberId final Long memberId
     ) {
         final DashboardPutParam param = controllerConverter.to(dashboardId, request);

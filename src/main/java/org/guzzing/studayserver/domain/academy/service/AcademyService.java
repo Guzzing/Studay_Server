@@ -3,14 +3,14 @@ package org.guzzing.studayserver.domain.academy.service;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
+import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
@@ -20,10 +20,10 @@ import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLoc
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
-import org.guzzing.studayserver.domain.like.service.LikeAccessService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,31 +37,44 @@ public class AcademyService {
     private final AcademyRepository academyRepository;
     private final LessonRepository lessonRepository;
     private final ReviewCountRepository reviewCountRepository;
-    private final LikeAccessService likeAccessService;
     private final AcademyCategoryRepository academyCategoryRepository;
 
     public AcademyService(AcademyRepository academyRepository, LessonRepository lessonRepository,
-                          ReviewCountRepository reviewCountRepository, LikeAccessService likeAccessService,
-                          AcademyCategoryRepository academyCategoryRepository) {
+            ReviewCountRepository reviewCountRepository,
+            AcademyCategoryRepository academyCategoryRepository) {
         this.academyRepository = academyRepository;
         this.lessonRepository = lessonRepository;
         this.reviewCountRepository = reviewCountRepository;
-        this.likeAccessService = likeAccessService;
         this.academyCategoryRepository = academyCategoryRepository;
     }
 
     @Transactional(readOnly = true)
-    public AcademyGetResult getAcademy(Long academyId, Long memberId) {
+    public Academy findAcademy(final Long academyId) {
+        return academyRepository.getById(academyId);
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewCount getReviewCountOfAcademy(final Long academyId) {
+        return reviewCountRepository.getByAcademyId(academyId);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyFeeInfo findAcademyFeeInfo(final Long academyId) {
+        return AcademyFeeInfo.from(academyRepository.findAcademyFeeInfo(academyId));
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyGetResult getAcademy(Long academyId) {
         return AcademyGetResult.from(
                 academyRepository.getById(academyId),
                 lessonRepository.findAllByAcademyId(academyId),
                 reviewCountRepository.getByAcademyId(academyId),
-                isLiked(academyId, memberId),
                 academyCategoryRepository.findCategoryIdsByAcademyId(academyId));
     }
 
     @Transactional(readOnly = true)
-    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(AcademiesByLocationWithScrollParam param) {
+    public AcademiesByLocationWithScrollResults findAcademiesByLocationWithScroll(
+            AcademiesByLocationWithScrollParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
 
         AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
@@ -70,27 +83,8 @@ public class AcademyService {
                 param.pageNumber(),
                 ACADEMY_LOCATION_SEARCH_PAGE_SIZE);
 
-        Map<Long, List<Long>> academyIdWithCategories
-                = makeCategoriesWithLocationScroll(academiesByLocation.academiesByLocation());
-
         return AcademiesByLocationWithScrollResults.to(
-                academiesByLocation,
-                academyIdWithCategories);
-    }
-
-    private Map<Long, List<Long>> makeCategoriesWithLocationScroll(
-            List<AcademyByLocationWithScroll> academiesByLocations) {
-        Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
-        academiesByLocations.forEach(
-                academyByLocationWithScroll -> {
-                    academyIdWithCategories.put(
-                            academyByLocationWithScroll.academyId(),
-                            academyCategoryRepository.findCategoryIdsByAcademyId(
-                                    academyByLocationWithScroll.academyId()));
-                }
-        );
-
-        return academyIdWithCategories;
+                academiesByLocation);
     }
 
     @Transactional(readOnly = true)
@@ -120,19 +114,13 @@ public class AcademyService {
             List<AcademyByFilterWithScroll> academiesByFilterWithScroll) {
         Map<Long, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
         academiesByFilterWithScroll.forEach(
-                academyByFilterWithScroll -> {
-                    academyIdWithCategories.put(
-                            academyByFilterWithScroll.academyId(),
-                            academyCategoryRepository.findCategoryIdsByAcademyId(
-                                    academyByFilterWithScroll.academyId()));
-                }
+                academyByFilterWithScroll -> academyIdWithCategories.put(
+                        academyByFilterWithScroll.academyId(),
+                        academyCategoryRepository.findCategoryIdsByAcademyId(
+                                academyByFilterWithScroll.academyId()))
         );
 
         return academyIdWithCategories;
-    }
-
-    private boolean isLiked(Long academyId, Long memberId) {
-        return likeAccessService.isLiked(academyId, memberId);
     }
 
     @Transactional(readOnly = true)
@@ -149,5 +137,4 @@ public class AcademyService {
 
         return AcademyAndLessonDetailResult.from(lesson, categoryIds);
     }
-
 }

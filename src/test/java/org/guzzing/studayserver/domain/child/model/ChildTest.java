@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +24,7 @@ class ChildTest {
         @BeforeEach
         void setUp() {
             child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
-            member = Member.of(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+            member = Member.of(new NickName("멤버 닉네임"), "123", OAuth2Provider.KAKAO, RoleType.USER);
         }
 
         @DisplayName("멤버가 없는 아이에게 새 멤버를 할당한다.")

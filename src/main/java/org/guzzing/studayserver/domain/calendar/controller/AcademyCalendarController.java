@@ -1,7 +1,6 @@
 package org.guzzing.studayserver.domain.calendar.controller;
 
 import jakarta.validation.Valid;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarCreateRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDeleteRequest;
 import org.guzzing.studayserver.domain.calendar.controller.dto.request.AcademyCalendarDetailRequest;
@@ -12,10 +11,11 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyC
 import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarUpdateResponse;
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyCalendarDetailFacadeResult;
+import org.guzzing.studayserver.domain.calendar.facade.dto.AcademyScheduleLoadToUpdateFacadeResult;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarCreateResults;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
 import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarUpdateResults;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,12 +65,12 @@ public class AcademyCalendarController {
     public ResponseEntity<AcademyCalendarLoadToUpdateResponse> loadTimeTemplateToUpdate(
             @PathVariable Long academyScheduleId) {
 
-        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
-                academyScheduleId);
+        AcademyScheduleLoadToUpdateFacadeResult academyScheduleLoadToUpdateFacadeResult
+                = academyCalendarFacade.loadTimeTemplateToUpdate(academyScheduleId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(AcademyCalendarLoadToUpdateResponse.from(academyCalendarLoadToUpdateResult));
+                .body(AcademyCalendarLoadToUpdateResponse.from(academyScheduleLoadToUpdateFacadeResult));
     }
 
     @PutMapping(

@@ -1,100 +1,79 @@
 package org.guzzing.studayserver.domain.auth.service;
 
+import static org.guzzing.studayserver.global.error.response.ErrorCode.EXPIRED_REFRESH_TOKEN;
+
 import io.jsonwebtoken.Claims;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.auth.exception.TokenExpiredException;
-import org.guzzing.studayserver.domain.auth.exception.TokenIsLogoutException;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
-import org.guzzing.studayserver.domain.auth.repository.LogoutTokenRepository;
-import org.guzzing.studayserver.domain.auth.repository.RefreshTokenRepository;
+import org.guzzing.studayserver.domain.auth.repository.JwtCacheRepository;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
-import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class AuthService {
 
     private final AuthTokenProvider authTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final LogoutTokenRepository logoutTokenRepository;
+    private final JwtCacheRepository jwtCacheRepository;
 
-    public AuthService(AuthTokenProvider authTokenProvider,
-            RefreshTokenRepository refreshTokenCacheRepository,
-            LogoutTokenRepository logoutTokenCacheRepository) {
+    public AuthService(
+            AuthTokenProvider authTokenProvider,
+            JwtCacheRepository refreshTokenCacheRepository
+    ) {
         this.authTokenProvider = authTokenProvider;
-        this.refreshTokenRepository = refreshTokenCacheRepository;
-        this.logoutTokenRepository = logoutTokenCacheRepository;
+        this.jwtCacheRepository = refreshTokenCacheRepository;
     }
 
     @Transactional
-    public AuthRefreshResult updateToken(AuthToken authToken, Long memberId) {
-        Claims claims = authToken.getTokenClaims();
+    public AuthToken saveAccessToken(Long memberId, String socialId) {
+        AuthToken accessToken = authTokenProvider.createAccessToken(socialId, memberId);
+        AuthToken refreshToken = authTokenProvider.createRefreshToken();
+
+        jwtCacheRepository.save(accessToken.getToken(), refreshToken.getToken());
+
+        return accessToken;
+    }
+
+    @Transactional
+    public AuthRefreshResult updateAccessToken(AuthToken accessToken, Long memberId) {
+        Claims claims = accessToken.getTokenClaims();
         String socialId = claims.getSubject();
 
-        if (isNotExpiredRefreshToken(authToken.getToken())) {
-            authToken = saveNewAccessTokenInfo(memberId, socialId, authToken.getToken());
-        }
+        validateRefreshToken(accessToken.getToken());
 
-        return AuthRefreshResult.of(authToken.getToken(), memberId);
+        jwtCacheRepository.delete(accessToken.getToken());
+        AuthToken newAccessToken = saveAccessToken(memberId, socialId);
+
+        return AuthRefreshResult.of(newAccessToken.getToken(), memberId);
     }
 
     @Transactional
     public AuthLogoutResult logout(AuthToken authToken) {
-        refreshTokenRepository.deleteByAccessToken(authToken.getToken());
-        logoutTokenRepository.save(authToken.getToken());
-
+        jwtCacheRepository.delete(authToken.getToken());
         return new AuthLogoutResult(true);
     }
 
     @Transactional(readOnly = true)
     public boolean isLogout(String accessToken) {
-        Optional<String> logoutToken = logoutTokenRepository.findByLogoutToken(accessToken);
-        if (logoutToken.isPresent()) {
-            throw new TokenIsLogoutException(ErrorCode.IS_LOGOUT_TOKEN);
+        return jwtCacheRepository.findRefreshToken(accessToken)
+                .isEmpty();
+    }
+
+    private void validateRefreshToken(String accessToken) {
+        boolean isValidRefreshToken = findRefreshToken(accessToken).isValidTokenClaims();
+
+        if (!isValidRefreshToken) {
+            throw new TokenExpiredException(EXPIRED_REFRESH_TOKEN);
         }
-
-        return false;
-    }
-
-    @Transactional
-    public AuthToken saveNewAccessTokenInfo(Long memberId, String socialId, String accessToken) {
-        AuthToken refreshToken = findRefreshToken(accessToken);
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-
-        refreshTokenRepository.save(newAccessToken.getToken(), refreshToken.getToken());
-
-        return newAccessToken;
-    }
-
-    @Transactional
-    public AuthToken saveAccessTokenCache(Long memberId, String socialId) {
-        AuthToken newAccessToken = authTokenProvider.createAccessToken(socialId, memberId);
-        AuthToken newRefreshToken = authTokenProvider.createRefreshToken();
-
-        refreshTokenRepository.save(newAccessToken.getToken(), newRefreshToken.getToken());
-
-        return newAccessToken;
-    }
-
-    private boolean isNotExpiredRefreshToken(String accessToken) {
-        return findRefreshToken(accessToken).isValidTokenClaims();
     }
 
     private AuthToken findRefreshToken(String accessToken) {
-        String refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
-                .orElseThrow(() -> new TokenExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN));
-        return authTokenProvider.convertAuthToken(refreshToken);
-    }
+        String refreshToken = jwtCacheRepository.findRefreshToken(accessToken)
+                .orElseThrow(() -> new TokenExpiredException(EXPIRED_REFRESH_TOKEN));
 
-    public List<Map.Entry<String, String>> findAll() {
-        return refreshTokenRepository.findAll();
+        return authTokenProvider.convertAuthToken(refreshToken);
     }
 
 }

@@ -8,7 +8,8 @@ public record AcademyByLocationWithScroll(
         Double latitude,
         Double longitude,
         String shuttleAvailable,
-        boolean isLiked
+        boolean isLiked,
+        Long categoryId
 ) {
 
 }

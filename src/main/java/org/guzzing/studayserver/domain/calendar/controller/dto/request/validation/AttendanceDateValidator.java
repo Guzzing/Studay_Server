@@ -24,11 +24,7 @@ public class AttendanceDateValidator implements ConstraintValidator<ValidAttenda
             LocalDate startDate = LocalDate.parse(attendanceDate.getStartDateOfAttendance());
             LocalDate endDate = LocalDate.parse(attendanceDate.getEndDateOfAttendance());
 
-            if (endDate.isAfter(startDate.plusYears(MAX_DIFFERENCE_YEAR)) || endDate.isBefore(startDate)) {
-                return false;
-            }
-
-            return true;
+            return !endDate.isAfter(startDate.plusYears(MAX_DIFFERENCE_YEAR)) && !endDate.isBefore(startDate);
         } catch (DateTimeParseException e) {
             return false;
         }

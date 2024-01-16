@@ -16,19 +16,26 @@ import org.guzzing.studayserver.domain.calendar.controller.dto.request.LessonTim
 import org.guzzing.studayserver.domain.calendar.facade.AcademyCalendarFacade;
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.calendar.service.AcademyCalendarService;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
 import org.guzzing.studayserver.testutil.fixture.academycalender.AcademyCalenderFixture;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-@WebMvcTest(AcademyCalendarController.class)
+@AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@SpringBootTest
+@Transactional
 class AcademyCalendarControllerTest {
 
     @Autowired
@@ -36,12 +43,6 @@ class AcademyCalendarControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private AcademyCalendarService academyCalendarService;
-
-    @MockBean
-    private AcademyCalendarFacade academyCalendarFacade;
 
     @DisplayName(" 예외가 발생하는 상황을 검증한다.")
     @Nested
