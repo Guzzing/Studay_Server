@@ -15,6 +15,7 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.guzzing.studayserver.domain.member.model.Member;
+import org.guzzing.studayserver.global.common.profile.model.ImageUri;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "children")
@@ -27,7 +28,7 @@ public class Child {
     private Long id;
 
     @Embedded
-    private ProfileImageUri profileImageUri;
+    private ImageUri imageUri;
 
     @Embedded
     @Column(nullable = false, name = "nick_name")
@@ -44,7 +45,7 @@ public class Child {
     public Child(String nickName, String grade, String defaultProfileImageUri) {
         this.nickName = new ChildNickname(nickName);
         this.grade = Grade.fromDescription(grade);
-        this.profileImageUri = new ProfileImageUri(defaultProfileImageUri);
+        this.imageUri = new ImageUri(defaultProfileImageUri);
     }
 
     public void assignToNewMemberOnly(Member member) {
@@ -61,11 +62,11 @@ public class Child {
     }
 
     public String getProfileImageURLPath() {
-        return profileImageUri.getImageUrl();
+        return imageUri.getImageUrl();
     }
 
     public String getProfileImageURIPath() {
-        return profileImageUri.getImageUri();
+        return imageUri.getImageUri();
     }
 
     public String getNickName() {
@@ -86,7 +87,7 @@ public class Child {
     }
 
     public void updateProfileImageUri(final String customProfileImageUri) {
-        this.profileImageUri = new ProfileImageUri(customProfileImageUri);
+        this.imageUri = new ImageUri(customProfileImageUri);
     }
 
     public void increaseGrade() {

@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.child.model;
+package org.guzzing.studayserver.global.common.profile.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
-public class ProfileImageUri {
+public class ImageUri {
 
     @Transient
     private static final String URL_PATH = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/";
@@ -20,7 +20,7 @@ public class ProfileImageUri {
     @Column(name = "image_uri", nullable = false)
     private String imageUri;
 
-    public ProfileImageUri(final String imageUri) {
+    public ImageUri(final String imageUri) {
         this.imageUri = imageUri;
     }
 
