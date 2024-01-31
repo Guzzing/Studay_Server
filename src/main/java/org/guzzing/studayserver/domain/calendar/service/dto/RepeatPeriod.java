@@ -7,21 +7,18 @@ import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 public record RepeatPeriod(
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
-        DayOfWeek dayOfWeek,
-        Periodicity periodicity
+        DayOfWeek dayOfWeek
 ) {
 
     public static RepeatPeriod of(
             LocalDate startDateOfAttendance,
             LocalDate endDateOfAttendance,
-            DayOfWeek dayOfWeek,
-            Periodicity periodicity
+            DayOfWeek dayOfWeek
     ) {
         return new RepeatPeriod(
                 startDateOfAttendance,
                 endDateOfAttendance,
-                dayOfWeek,
-                periodicity
+                dayOfWeek
         );
     }
 
