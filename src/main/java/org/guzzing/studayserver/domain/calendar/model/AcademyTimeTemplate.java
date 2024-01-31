@@ -55,10 +55,6 @@ public class AcademyTimeTemplate {
             columnDefinition = "text")
     private String memo;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "periodicity")
-    private Periodicity periodicity;
-
     protected AcademyTimeTemplate() {
     }
 
