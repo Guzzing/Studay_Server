@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.member.controller.request.MemberRegisterRequest;
-import org.guzzing.studayserver.domain.member.service.MemberFacade;
 import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.domain.member.service.param.MemberRegisterParam;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult;
 import org.guzzing.studayserver.domain.member.service.result.MemberInformationResult.MemberChildInformationResult;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,15 +25,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-@WebMvcTest(MemberRestController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs
+@AutoConfigureMockMvc
+@SpringBootTest
+@Transactional
 class MemberRestControllerTest {
 
     @Autowired
@@ -42,8 +45,6 @@ class MemberRestControllerTest {
 
     @MockBean
     private MemberService memberService;
-    @MockBean
-    private MemberFacade memberFacade;
 
     @Autowired
     private ObjectMapper objectMapper;

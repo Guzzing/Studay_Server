@@ -8,8 +8,9 @@ import static org.mockito.Mockito.spy;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.guzzing.studayserver.domain.child.model.Child;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,7 +22,7 @@ class MemberTest {
 
     @BeforeEach
     public void setUp() {
-        member = Member.of(new NickName("testNick"), "12345", MemberProvider.KAKAO, RoleType.USER);
+        member = Member.of(new NickName("testNick"), "12345", OAuth2Provider.KAKAO, RoleType.USER);
     }
 
     @DisplayName("업데이트 성공")
@@ -77,7 +78,7 @@ class MemberTest {
         @Test
         void success() {
             // Given
-            Member member = new Member(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+            Member member = new Member(new NickName("멤버 닉네임"), "123", OAuth2Provider.KAKAO, RoleType.USER);
 
             Long childId = 1L;
             Child child = new Child("아이 닉네임", "초등학교 1학년", "imageUrl");
@@ -97,7 +98,7 @@ class MemberTest {
         @Test
         void whenNonExistentChildId_returnedEmpty() {
             // Given
-            Member member = new Member(new NickName("멤버 닉네임"), "123", MemberProvider.KAKAO, RoleType.USER);
+            Member member = new Member(new NickName("멤버 닉네임"), "123", OAuth2Provider.KAKAO, RoleType.USER);
 
             Long nonExistentChildId = 1L;
 

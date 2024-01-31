@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProfileImageUri {
 
     @Transient
-    private static final String urlPath = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/";
+    private static final String URL_PATH = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/";
 
     @Column(name = "image_uri", nullable = false)
     private String imageUri;
@@ -24,8 +24,8 @@ public class ProfileImageUri {
         this.imageUri = imageUri;
     }
 
-    public String getImageURLPath() {
-        return MessageFormat.format("{0}{1}", urlPath, imageUri);
+    public String getImageUrl() {
+        return MessageFormat.format("{0}{1}", URL_PATH, imageUri);
     }
 
 }

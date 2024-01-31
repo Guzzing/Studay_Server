@@ -21,7 +21,7 @@ public record AcademyAndLessonDetailResult(
                 lesson.getCapacity(),
                 lesson.getTotalFee(),
                 categoryIds.stream()
-                        .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                        .map(CategoryInfo::getCategoryNameById)
                         .toList()
         );
     }

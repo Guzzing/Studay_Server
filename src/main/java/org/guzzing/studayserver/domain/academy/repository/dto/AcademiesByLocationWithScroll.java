@@ -3,11 +3,10 @@ package org.guzzing.studayserver.domain.academy.repository.dto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public record AcademiesByLocationWithScroll(
-        Map<AcademyByLocation,List<Long>> academiesByLocation,
+        Map<AcademyByLocation, List<Long>> academiesByLocation,
         boolean hasNext
 ) {
 
@@ -17,16 +16,17 @@ public record AcademiesByLocationWithScroll(
     ) {
         Map<AcademyByLocation, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
 
-        academiesByLocation.forEach(academyByLocationWithScroll -> {
-            academyIdWithCategories.computeIfAbsent(AcademyByLocation.of(academyByLocationWithScroll), k -> new ArrayList<>())
-                    .add(academyByLocationWithScroll.categoryId());
-        });
+        academiesByLocation.forEach(academyByLocationWithScroll -> academyIdWithCategories.computeIfAbsent(
+                        AcademyByLocation.of(academyByLocationWithScroll),
+                        k -> new ArrayList<>())
+                .add(academyByLocationWithScroll.categoryId()));
 
         return new AcademiesByLocationWithScroll(
                 academyIdWithCategories,
                 hasNext
         );
     }
+
     public record AcademyByLocation(
             Long academyId,
             String academyName,
@@ -37,6 +37,7 @@ public record AcademiesByLocationWithScroll(
             String shuttleAvailable,
             boolean isLiked
     ) {
+
         public static AcademyByLocation of(AcademyByLocationWithScroll academyByLocationWithScroll) {
             return new AcademyByLocation(
                     academyByLocationWithScroll.academyId(),

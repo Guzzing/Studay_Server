@@ -17,8 +17,7 @@ import org.guzzing.studayserver.domain.academy.service.AcademyService;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
-import org.springframework.http.CacheControl;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,8 @@ public class AcademyController {
             @PathVariable Long academyId,
             @MemberId Long memberId
     ) {
-        AcademyDetailFacadeResult detailAcademy = academyFacade.getDetailAcademy(AcademyDetailFacadeParam.of(memberId, academyId));
+        AcademyDetailFacadeResult detailAcademy = academyFacade.getDetailAcademy(
+                AcademyDetailFacadeParam.of(memberId, academyId));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AcademyGetResponse.from(detailAcademy));

@@ -3,7 +3,6 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
@@ -114,8 +113,9 @@ public class AcademyFixture {
         return ReviewCount.makeDefaultReviewCount(academy);
     }
 
-    public static  AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude, double longitude) {
-        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L,0 );
+    public static AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude,
+            double longitude) {
+        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L, 0);
     }
 
     public static AcademyFilterWithScrollParam academyFilterWithScrollParam(

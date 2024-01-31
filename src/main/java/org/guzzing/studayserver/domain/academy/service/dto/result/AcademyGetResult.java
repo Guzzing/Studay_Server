@@ -35,7 +35,7 @@ public record AcademyGetResult(
                 ReviewPercentGetResult.from(reviewCount),
 
                 categories.stream()
-                        .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+                        .map(CategoryInfo::getCategoryNameById)
                         .toList()
         );
     }

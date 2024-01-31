@@ -30,16 +30,16 @@ public class AuthToken {
 
     @Builder
     AuthToken(String socialId, String role, Long memberId, Date expiry, Key key) {
+        this.token = createAccessToken(socialId, role, memberId, expiry, key);
         this.key = key;
-        this.token = createAccessToken(socialId, role, memberId, expiry);
     }
 
     AuthToken(Date expiry, Key key) {
+        this.token = createRefreshToken(expiry, key);
         this.key = key;
-        this.token = createRefreshToken(expiry);
     }
 
-    private String createAccessToken(String socialId, String role, Long id, Date expiry) {
+    private String createAccessToken(String socialId, String role, Long id, Date expiry, Key key) {
         return Jwts
                 .builder()
                 .setSubject(socialId)
@@ -50,7 +50,7 @@ public class AuthToken {
                 .compact();
     }
 
-    public String createRefreshToken(Date expiry) {
+    private String createRefreshToken(Date expiry, Key key) {
         Claims claims = Jwts
                 .claims();
 

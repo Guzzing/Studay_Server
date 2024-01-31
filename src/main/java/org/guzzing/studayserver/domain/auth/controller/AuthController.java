@@ -3,17 +3,18 @@ package org.guzzing.studayserver.domain.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.guzzing.studayserver.domain.auth.controller.dto.AuthLoginResponse;
+import org.guzzing.studayserver.domain.auth.controller.dto.AuthLogoutResponse;
 import org.guzzing.studayserver.domain.auth.controller.dto.AuthRefreshResponse;
 import org.guzzing.studayserver.domain.auth.jwt.AuthToken;
 import org.guzzing.studayserver.domain.auth.jwt.AuthTokenProvider;
 import org.guzzing.studayserver.domain.auth.jwt.JwtHeaderUtil;
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.auth.service.AuthService;
 import org.guzzing.studayserver.domain.auth.service.ClientService;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLoginResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthLogoutResult;
 import org.guzzing.studayserver.domain.auth.service.dto.AuthRefreshResult;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,6 @@ public class AuthController {
     private final ClientService clientService;
     private final AuthService authService;
 
-
     public AuthController(AuthTokenProvider authTokenProvider, ClientService clientService, AuthService authService) {
         this.authTokenProvider = authTokenProvider;
         this.clientService = clientService;
@@ -43,7 +43,7 @@ public class AuthController {
     @PostMapping(value = "/kakao")
     public ResponseEntity<AuthLoginResponse> kakaoAuthRequest(HttpServletRequest request) {
         AuthLoginResult authLoginResult = clientService.login(
-                MemberProvider.KAKAO.name(),
+                OAuth2Provider.KAKAO.name(),
                 request.getHeader(HEADER_AUTHORIZATION)
         );
 
@@ -54,7 +54,7 @@ public class AuthController {
     @PostMapping(value = "/google")
     public ResponseEntity<AuthLoginResponse> googleAuthRequest(HttpServletRequest request) {
         AuthLoginResult authLoginResult = clientService.login(
-                MemberProvider.GOOGLE.name(),
+                OAuth2Provider.GOOGLE.name(),
                 request.getHeader(HEADER_AUTHORIZATION)
         );
 
@@ -63,27 +63,26 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<AuthRefreshResponse> refreshToken(
-            HttpServletRequest request,
-            @MemberId Long memberId) {
+    public ResponseEntity<AuthRefreshResponse> refreshToken(HttpServletRequest request, @MemberId Long memberId) {
 
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
-        AuthRefreshResult authRefreshResult = authService.updateToken(authToken, memberId);
+        AuthRefreshResult authRefreshResult = authService.updateAccessToken(authToken, memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AuthRefreshResponse.from(authRefreshResult));
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<AuthLogoutResult> logout(
-            HttpServletRequest request) {
+    public ResponseEntity<AuthLogoutResponse> logout(HttpServletRequest request) {
         String appToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(appToken);
 
+        AuthLogoutResult authLogoutResult = authService.logout(authToken);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(authService.logout(authToken));
+                .body(AuthLogoutResponse.from(authLogoutResult));
     }
 
 }

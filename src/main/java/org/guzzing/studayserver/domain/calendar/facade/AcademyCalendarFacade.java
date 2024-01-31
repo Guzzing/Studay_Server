@@ -24,7 +24,7 @@ public class AcademyCalendarFacade {
     private final DashboardService dashboardService;
 
     public AcademyCalendarFacade(AcademyAccessService academyService, ChildAccessService childService,
-                                 AcademyCalendarService academyCalendarService, DashboardService dashboardService) {
+            AcademyCalendarService academyCalendarService, DashboardService dashboardService) {
         this.academyService = academyService;
         this.childService = childService;
         this.academyCalendarService = academyCalendarService;
@@ -51,8 +51,10 @@ public class AcademyCalendarFacade {
 
     @Transactional(readOnly = true)
     public AcademyScheduleLoadToUpdateFacadeResult loadTimeTemplateToUpdate(Long academyScheduleId) {
-        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(academyScheduleId);
-        DashboardScheduleAccessResult dashboardScheduleAccessResult = dashboardService.getDashboardSchedule(academyCalendarLoadToUpdateResult.dashboardId());
+        AcademyCalendarLoadToUpdateResult academyCalendarLoadToUpdateResult = academyCalendarService.loadTimeTemplateToUpdate(
+                academyScheduleId);
+        DashboardScheduleAccessResult dashboardScheduleAccessResult = dashboardService.getDashboardSchedule(
+                academyCalendarLoadToUpdateResult.dashboardId());
 
         return AcademyScheduleLoadToUpdateFacadeResult.from(
                 academyCalendarLoadToUpdateResult,

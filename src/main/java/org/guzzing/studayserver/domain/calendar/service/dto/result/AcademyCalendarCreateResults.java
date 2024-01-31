@@ -11,7 +11,7 @@ public record AcademyCalendarCreateResults(
         return new AcademyCalendarCreateResults(
                 academyTimeTemplates
                         .stream()
-                        .map(academyTimeTemplate -> academyTimeTemplate.getId())
+                        .map(AcademyTimeTemplate::getId)
                         .toList()
         );
     }

@@ -4,7 +4,7 @@ public record LikedAcademyFeeInfo(
         long likeId,
         long academyId,
         String academyName,
-        long expectedFee
+        Long expectedFee
 ) {
 
 }

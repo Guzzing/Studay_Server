@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.dashboard.fixture.DashboardFixture;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
 import org.guzzing.studayserver.global.exception.DashboardException;
+import org.guzzing.studayserver.testutil.fixture.dashboard.DashboardFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

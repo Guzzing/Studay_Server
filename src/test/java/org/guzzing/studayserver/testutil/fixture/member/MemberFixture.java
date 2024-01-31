@@ -1,14 +1,14 @@
 package org.guzzing.studayserver.testutil.fixture.member;
 
 import org.guzzing.studayserver.domain.member.model.Member;
-import org.guzzing.studayserver.domain.member.model.NickName;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 
 public class MemberFixture {
 
-    public static Member member() {
-        return Member.of(new NickName("나는왕이다"), "12345678", MemberProvider.KAKAO, RoleType.USER);
+    public static Member makeMemberEntity() {
+        return Member.of(new NickName("나는왕이다"), "12345678", OAuth2Provider.KAKAO, RoleType.USER);
     }
 
 }

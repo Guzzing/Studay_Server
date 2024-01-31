@@ -4,7 +4,7 @@ import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
 
 public record AcademyFeeInfo(
         String academyName,
-        long expectedFee
+        Long expectedFee
 ) {
 
     public static AcademyFeeInfo from(AcademyFee academyFee) {

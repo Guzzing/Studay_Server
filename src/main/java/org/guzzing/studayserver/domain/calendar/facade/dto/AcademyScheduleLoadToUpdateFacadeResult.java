@@ -1,14 +1,12 @@
 package org.guzzing.studayserver.domain.calendar.facade.dto;
 
-import org.guzzing.studayserver.domain.calendar.controller.dto.response.AcademyCalendarLoadToUpdateResponse;
-import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
-import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.guzzing.studayserver.domain.calendar.service.dto.result.AcademyCalendarLoadToUpdateResult;
+import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 
 public record AcademyScheduleLoadToUpdateFacadeResult(
         Long childId,
@@ -21,6 +19,7 @@ public record AcademyScheduleLoadToUpdateFacadeResult(
         boolean isAlarmed,
         String memo
 ) {
+
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public static AcademyScheduleLoadToUpdateFacadeResult from(

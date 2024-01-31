@@ -16,8 +16,8 @@ import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalenda
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarDeleteParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.AcademyCalendarUpdateParam;
 import org.guzzing.studayserver.domain.calendar.service.dto.param.LessonScheduleParam;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 
 public class AcademyCalenderFixture {
 

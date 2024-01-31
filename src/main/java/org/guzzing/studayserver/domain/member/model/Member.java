@@ -15,12 +15,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.member.model.vo.Email;
-import org.guzzing.studayserver.domain.member.model.vo.MemberProvider;
-import org.guzzing.studayserver.domain.member.model.vo.RoleType;
+import org.guzzing.studayserver.domain.member.model.vo.NickName;
+import org.guzzing.studayserver.global.common.auth.OAuth2Provider;
+import org.guzzing.studayserver.global.common.auth.RoleType;
 
 @Getter
 @Table(name = "members", uniqueConstraints = @UniqueConstraint(columnNames = {"social_Id", "member_provider"}))
@@ -47,7 +49,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "member_provider")
-    private MemberProvider memberProvider;
+    private OAuth2Provider OAuth2Provider;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "role_type")
@@ -60,15 +62,15 @@ public class Member {
 
     }
 
-    protected Member(NickName nickName, String socialId, MemberProvider memberProvider, RoleType roleType) {
+    protected Member(NickName nickName, String socialId, OAuth2Provider OAuth2Provider, RoleType roleType) {
         this.nickName = nickName;
         this.socialId = socialId;
-        this.memberProvider = memberProvider;
+        this.OAuth2Provider = OAuth2Provider;
         this.roleType = roleType;
     }
 
-    public static Member of(NickName nickName, String socialId, MemberProvider memberProvider, RoleType roleType) {
-        return new Member(nickName, socialId, memberProvider, roleType);
+    public static Member of(NickName nickName, String socialId, OAuth2Provider OAuth2Provider, RoleType roleType) {
+        return new Member(nickName, socialId, OAuth2Provider, roleType);
     }
 
     public void update(String nickname, String email) {
@@ -116,5 +118,25 @@ public class Member {
 
     public String getNickname() {
         return nickName.getValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Member member = (Member) o;
+        return Objects.equals(id, member.id) && Objects.equals(nickName, member.nickName)
+                && Objects.equals(email, member.email) && Objects.equals(socialId, member.socialId)
+                && OAuth2Provider == member.OAuth2Provider && roleType == member.roleType && Objects.equals(
+                children, member.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nickName, email, socialId, OAuth2Provider, roleType, children);
     }
 }

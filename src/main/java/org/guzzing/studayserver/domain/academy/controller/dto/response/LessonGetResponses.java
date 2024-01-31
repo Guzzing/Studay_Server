@@ -12,7 +12,7 @@ public record LessonGetResponses(
                 lessonGetResults
                         .lessonGetResults()
                         .stream()
-                        .map(lesson -> LessonGetResponse.from(lesson))
+                        .map(LessonGetResponse::from)
                         .toList());
     }
 }

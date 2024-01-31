@@ -37,8 +37,7 @@ import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.ChildWithScheduleResult;
 import org.guzzing.studayserver.domain.child.service.param.ChildCreateParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
-import org.guzzing.studayserver.testutil.WithMockCustomOAuth2LoginUser;
-import org.junit.jupiter.api.Disabled;
+import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -48,7 +47,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -57,9 +56,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
 
-@WebMvcTest(ChildRestController.class)
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
+@SpringBootTest
 class ChildRestControllerTest {
 
     private static final String TAG = "아이 API";
@@ -195,15 +194,11 @@ class ChildRestControllerTest {
         }
 
         @Test
-        @Disabled
         @DisplayName("아이 프로필을 변경한다.")
         void modifyProfileImage() throws Exception {
             // Given
             long childId = 24L;
-            when(childService.modifyProfileImage(any(Long.class), any(MultipartFile.class)))
-                    .thenReturn(new ChildProfileImagePatchResult(childId,
-                            "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/test.png"));
-
+            String url = "https://team09-resources-bucket.s3.ap-northeast-1.amazonaws.com/default-profile-image/test.png";
             MockMultipartFile file = new MockMultipartFile(
                     "file",          // query parameter 이름
                     "filename.txt",  // 파일 이름
@@ -211,12 +206,13 @@ class ChildRestControllerTest {
                     "file content".getBytes()  // 파일 내용
             );
 
+            given(childService.modifyProfileImage(anyLong(), any(MultipartFile.class)))
+                    .willReturn(new ChildProfileImagePatchResult(childId, url));
+
             // When
             ResultActions perform = mockMvc.perform(RestDocumentationRequestBuilders
                     .multipart("/children/{childId}/profile", childId)
                     .file(file)
-                    .contentType(APPLICATION_JSON_VALUE)
-                    .accept(APPLICATION_JSON_VALUE)
             );
 
             // Then
@@ -234,9 +230,6 @@ class ChildRestControllerTest {
                                     .summary("아이 프로필 변경")
                                     .pathParameters(
                                             parameterWithName("childId").description("아이 아이디")
-                                    )
-                                    .queryParameters(
-                                            parameterWithName("file").description("프로필 파일")
                                     )
                                     .responseFields(
                                             fieldWithPath("childId").type(NUMBER).description("아이 아이디"),

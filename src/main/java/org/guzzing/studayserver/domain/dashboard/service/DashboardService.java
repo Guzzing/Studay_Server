@@ -1,22 +1,20 @@
 package org.guzzing.studayserver.domain.dashboard.service;
 
 import jakarta.persistence.EntityNotFoundException;
-
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-
 import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 import org.guzzing.studayserver.domain.dashboard.model.Dashboard;
 import org.guzzing.studayserver.domain.dashboard.model.vo.FeeInfo;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardRepository;
 import org.guzzing.studayserver.domain.dashboard.repository.DashboardScheduleJpaRepository;
-import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.access.dto.LessonScheduleAccessResult;
 import org.guzzing.studayserver.domain.dashboard.service.converter.DashboardServiceConverter;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPostParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.request.DashboardPutParam;
 import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardResult;
+import org.guzzing.studayserver.domain.dashboard.service.dto.response.DashboardScheduleAccessResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

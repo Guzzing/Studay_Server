@@ -41,6 +41,11 @@ public class CustomUser implements UserDetails {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(memberId, socialId, authorities);
+    }
+
+    @Override
     public String toString() {
         return "CustomUser[" +
                 "memberId=" + memberId + ", " +

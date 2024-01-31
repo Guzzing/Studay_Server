@@ -4,12 +4,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import jakarta.validation.Valid;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.guzzing.studayserver.domain.auth.memberId.MemberId;
 import org.guzzing.studayserver.domain.child.controller.request.ChildCreateRequest;
 import org.guzzing.studayserver.domain.child.controller.request.ChildModifyRequest;
 import org.guzzing.studayserver.domain.child.controller.response.ChildProfileImagePatchResponse;
@@ -19,7 +15,7 @@ import org.guzzing.studayserver.domain.child.service.ChildService;
 import org.guzzing.studayserver.domain.child.service.ChildWithScheduleResult;
 import org.guzzing.studayserver.domain.child.service.param.ChildDeleteParam;
 import org.guzzing.studayserver.domain.child.service.result.ChildProfileImagePatchResult;
-import org.springframework.http.CacheControl;
+import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
