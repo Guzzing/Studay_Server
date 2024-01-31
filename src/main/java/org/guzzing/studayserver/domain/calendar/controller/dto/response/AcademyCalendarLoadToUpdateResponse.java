@@ -11,7 +11,7 @@ public record AcademyCalendarLoadToUpdateResponse(
         Long academyId,
         Long lessonId,
         Long dashboardId,
-        List<LessonScheduleLoadToUpdateResponse> lessonSchedule,
+        LessonScheduleLoadToUpdateResponse lessonSchedule,
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
         boolean isAlarmed,
@@ -24,9 +24,7 @@ public record AcademyCalendarLoadToUpdateResponse(
                 result.academyId(),
                 result.lessonId(),
                 result.dashboardId(),
-                result.lessonSchedule().stream()
-                        .map(LessonScheduleLoadToUpdateResponse::from)
-                        .toList(),
+                LessonScheduleLoadToUpdateResponse.from(result.lessonSchedule()),
                 result.startDateOfAttendance(),
                 result.endDateOfAttendance(),
                 result.isAlarmed(),

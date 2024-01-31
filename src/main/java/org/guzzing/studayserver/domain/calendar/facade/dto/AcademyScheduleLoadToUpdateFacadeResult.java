@@ -15,7 +15,7 @@ public record AcademyScheduleLoadToUpdateFacadeResult(
         Long academyId,
         Long lessonId,
         Long dashboardId,
-        List<LessonScheduleInfo> lessonSchedule,
+        LessonScheduleInfo lessonSchedule,
         LocalDate startDateOfAttendance,
         LocalDate endDateOfAttendance,
         boolean isAlarmed,
@@ -32,10 +32,10 @@ public record AcademyScheduleLoadToUpdateFacadeResult(
                 dashboardScheduleAccessResult.academyId(),
                 dashboardScheduleAccessResult.lessonId(),
                 academyCalendarLoadToUpdateResult.dashboardId(),
-                dashboardScheduleAccessResult.lessonScheduleInAccessResponses()
-                        .stream()
-                        .map(LessonScheduleInfo::from)
-                        .toList(),
+                new LessonScheduleInfo(
+                    academyCalendarLoadToUpdateResult.dayOfWeek(),
+                    academyCalendarLoadToUpdateResult.lessonStartTime().format(TIME_FORMATTER),
+                    academyCalendarLoadToUpdateResult.lessonEndTime().format(TIME_FORMATTER)),
                 academyCalendarLoadToUpdateResult.startDateOfAttendance(),
                 academyCalendarLoadToUpdateResult.endDateOfAttendance(),
                 academyCalendarLoadToUpdateResult.isAlarmed(),
