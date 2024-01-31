@@ -119,8 +119,7 @@ class ChildFacadeTest {
                 false,
                 childId,
                 savedDashboard.dashboardId(),
-                "매월 20일마다 상담 진행",
-                Periodicity.WEEKLY
+                "매월 20일마다 상담 진행"
         );
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
@@ -218,8 +217,7 @@ class ChildFacadeTest {
                 false,
                 childId,
                 savedDashboard.dashboardId(),
-                "매월 20일마다 상담 진행",
-                Periodicity.WEEKLY
+                "매월 20일마다 상담 진행"
         );
         academyCalendarService.createSchedules(academyCalendarCreateParam);
 
