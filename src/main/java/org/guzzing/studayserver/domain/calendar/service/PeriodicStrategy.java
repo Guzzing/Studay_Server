@@ -33,7 +33,7 @@ public class PeriodicStrategy {
     }
 
     public List<LocalDate> createSchedules(RepeatPeriod repeatPeriod) {
-        List<LocalDate> generatedSchedules = periodicStrategies.get(repeatPeriod.periodicity())
+        List<LocalDate> generatedSchedules = periodicStrategies.get(Periodicity.WEEKLY)
                 .generateSchedules(repeatPeriod);
 
         if (generatedSchedules.size() == 0 || generatedSchedules == null) {
