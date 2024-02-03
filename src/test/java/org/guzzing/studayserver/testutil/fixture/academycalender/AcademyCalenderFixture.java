@@ -62,8 +62,7 @@ public class AcademyCalenderFixture {
                 false,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASH_BOARD_ID,
-                "매월 20일마다 상담 진행",
-                WEEKLY_PERIODICITY
+                "매월 20일마다 상담 진행"
 
         );
     }
@@ -76,8 +75,7 @@ public class AcademyCalenderFixture {
                 false,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASH_BOARD_ID,
-                "매월 20일마다 상담 진행",
-                WEEKLY_PERIODICITY
+                "매월 20일마다 상담 진행"
         );
     }
 
@@ -89,8 +87,7 @@ public class AcademyCalenderFixture {
                 false,
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASH_BOARD_ID + 1L,
-                "매월 20일마다 상담 진행",
-                WEEKLY_PERIODICITY
+                "매월 20일마다 상담 진행"
         );
     }
 
@@ -114,8 +111,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
-                fridayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                fridayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -124,8 +120,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_ONE_YEAR,
-                mondayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                mondayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -171,30 +166,10 @@ public class AcademyCalenderFixture {
         );
     }
 
-    public static DashboardScheduleAccessResult dashboardScheduleAccessResult() {
-        return new DashboardScheduleAccessResult(
-                1L,
-                1L,
-                1L,
-                WEEKLY_PERIODICITY,
-                List.of(
-                        new LessonScheduleAccessResult(
-                                fridayDashboardScheduleParam().dayOfWeek(),
-                                fridayDashboardScheduleParam().lessonStartTime(),
-                                fridayDashboardScheduleParam().lessonEndTime()
-                        ),
-                        new LessonScheduleAccessResult(
-                                mondayDashboardScheduleParam().dayOfWeek(),
-                                mondayDashboardScheduleParam().lessonStartTime(),
-                                mondayDashboardScheduleParam().lessonEndTime()
-                        )
-                )
-        );
-    }
 
     public static AcademyCalendarUpdateParam isAllUpdatedAcademyCalendarUpdateParam() {
         return new AcademyCalendarUpdateParam(
-                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+                mondayDashboardScheduleParam(),
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
                 false,
@@ -202,14 +177,13 @@ public class AcademyCalenderFixture {
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASH_BOARD_ID,
                 "매월 20일마다 상담 진행",
-                WEEKLY_PERIODICITY,
                 true
         );
     }
 
     public static AcademyCalendarUpdateParam isNotAllUpdatedAcademyCalendarUpdateParam() {
         return new AcademyCalendarUpdateParam(
-                List.of(mondayDashboardScheduleParam(), fridayDashboardScheduleParam()),
+               mondayDashboardScheduleParam(),
                 LocalDate.of(2023, 12, 14),
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
                 false,
@@ -217,7 +191,6 @@ public class AcademyCalenderFixture {
                 FIRST_CHILD_ID,
                 FIRST_CHILD_DASH_BOARD_ID,
                 "매월 20일마다 상담 진행",
-                WEEKLY_PERIODICITY,
                 false
         );
     }
@@ -226,8 +199,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
-                fridayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                fridayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -236,8 +208,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
-                mondayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                mondayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -245,8 +216,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 LocalDate.of(2023, 12, 13),
-                fridayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                fridayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -255,8 +225,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 START_DATE_OF_ATTENDANCE,
                 LocalDate.of(2023, 12, 13),
-                mondayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                mondayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -265,8 +234,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 LocalDate.of(2023, 12, 14),
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
-                fridayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                fridayDashboardScheduleParam().dayOfWeek()
         );
     }
 
@@ -275,8 +243,7 @@ public class AcademyCalenderFixture {
         return RepeatPeriod.of(
                 LocalDate.of(2023, 12, 14),
                 END_DATE_OF_ATTENDANCE_WITH_TWO_YEAR,
-                mondayDashboardScheduleParam().dayOfWeek(),
-                WEEKLY_PERIODICITY
+                mondayDashboardScheduleParam().dayOfWeek()
         );
     }
 

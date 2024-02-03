@@ -45,13 +45,12 @@ public record AcademyCalendarCreateRequest(
                         .stream()
                         .map(LessonScheduleCreateRequest::to)
                         .toList(),
-                LocalDate.parse(request.attendanceDate().getStartDateOfAttendance()),
-                LocalDate.parse(request.attendanceDate().getEndDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().startDateOfAttendance()),
+                LocalDate.parse(request.attendanceDate().endDateOfAttendance()),
                 request.isAlarmed,
                 request.childId,
                 request.dashboardId,
-                request.memo,
-                Periodicity.valueOf(request.periodicity)
+                request.memo
         );
     }
 

@@ -3,8 +3,8 @@ package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 import java.time.LocalDate;
 import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
-import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
+import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyScheduleLoadInfo;
 
 public interface AcademyScheduleRepository {
 
@@ -12,7 +12,7 @@ public interface AcademyScheduleRepository {
 
     List<AcademySchedule> findAll();
 
-    AcademyTimeTemplate findDistinctAcademyTimeTemplate(Long academyScheduleId);
+    AcademyScheduleLoadInfo findDistinctAcademyTimeTemplate(Long academyScheduleId);
 
     void deleteAllByAcademyTimeTemplateId(Long academyTimeTemplateId);
 

@@ -33,22 +33,10 @@ public class DashboardAccessServiceImpl implements DashboardAccessService {
     @Override
     public DashboardScheduleAccessResult getDashboardSchedule(Long dashboardId) {
         final DashboardResult result = dashboardService.findDashboard(dashboardId);
-
-        final List<LessonScheduleAccessResult> schedules = result.scheduleInfos()
-                .schedules()
-                .stream()
-                .map(scheduleInfo -> new LessonScheduleAccessResult(
-                        scheduleInfo.dayOfWeek(),
-                        getTime(scheduleInfo.startTime()),
-                        getTime((scheduleInfo.endTime()))))
-                .toList();
-
         return new DashboardScheduleAccessResult(
                 result.childId(),
                 result.academyId(),
-                result.lessonId(),
-                Periodicity.WEEKLY,
-                schedules);
+                result.lessonId());
     }
 
     private LocalTime getTime(final String time) {

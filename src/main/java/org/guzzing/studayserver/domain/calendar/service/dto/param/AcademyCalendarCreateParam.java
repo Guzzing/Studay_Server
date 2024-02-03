@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
-import org.guzzing.studayserver.domain.calendar.model.Periodicity;
 
 public record AcademyCalendarCreateParam(
         List<LessonScheduleParam> lessonScheduleParams,
@@ -13,10 +12,8 @@ public record AcademyCalendarCreateParam(
         boolean isAlarmed,
         Long childId,
         Long dashboardId,
-        String memo,
-        Periodicity periodicity
+        String memo
 ) {
-
     public static AcademyTimeTemplate to(AcademyCalendarCreateParam param, DayOfWeek dayOfWeek) {
         return AcademyTimeTemplate.of(
                 dayOfWeek,
@@ -31,14 +28,13 @@ public record AcademyCalendarCreateParam(
 
     public static AcademyCalendarCreateParam from(AcademyCalendarUpdateParam param) {
         return new AcademyCalendarCreateParam(
-                param.lessonScheduleParams(),
+                List.of(param.lessonScheduleParams()),
                 param.startDateOfAttendance(),
                 param.endDateOfAttendance(),
                 param.isAlarmed(),
                 param.childId(),
                 param.dashboardId(),
-                param.memo(),
-                param.periodicity()
+                param.memo()
         );
 
     }

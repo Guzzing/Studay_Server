@@ -1,5 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DatabaseInitializer {
@@ -8,10 +9,10 @@ public class DatabaseInitializer {
 
     public DatabaseInitializer(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        initializeDatabase();
     }
 
-    private void initializeDatabase() {
+    @PostConstruct
+    public void initializeDatabase() {
 
         String updateSIDQuery = "UPDATE academies SET point = ST_SRID(point, 4326) WHERE ST_SRID(point) <> 4326";
         jdbcTemplate.execute(updateSIDQuery);

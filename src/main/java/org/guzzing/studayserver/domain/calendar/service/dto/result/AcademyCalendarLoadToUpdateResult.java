@@ -1,25 +1,33 @@
 package org.guzzing.studayserver.domain.calendar.service.dto.result;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
+import java.time.LocalTime;
+import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyScheduleLoadInfo;
 
 public record AcademyCalendarLoadToUpdateResult(
-        Long dashboardId,
-        LocalDate startDateOfAttendance,
-        LocalDate endDateOfAttendance,
-        boolean isAlarmed,
-        String memo
+    Long dashboardId,
+    LocalDate startDateOfAttendance,
+    LocalDate endDateOfAttendance,
+    boolean isAlarmed,
+    String memo,
+    DayOfWeek dayOfWeek,
+    LocalTime lessonStartTime,
+    LocalTime lessonEndTime
 ) {
 
     public static AcademyCalendarLoadToUpdateResult of(
-            AcademyTimeTemplate academyTimeTemplate
+        AcademyScheduleLoadInfo academyTimeTemplate
     ) {
         return new AcademyCalendarLoadToUpdateResult(
-                academyTimeTemplate.getDashboardId(),
-                academyTimeTemplate.getStartDateOfAttendance(),
-                academyTimeTemplate.getEndDateOfAttendance(),
-                academyTimeTemplate.isAlarmed(),
-                academyTimeTemplate.getMemo()
+            academyTimeTemplate.getDashboardId(),
+            academyTimeTemplate.getStartDateOfAttendance(),
+            academyTimeTemplate.getEndDateOfAttendance(),
+            academyTimeTemplate.getIsAlarmed(),
+            academyTimeTemplate.getMemo(),
+            academyTimeTemplate.getDayOfWeek(),
+            academyTimeTemplate.getLessonStartTime(),
+            academyTimeTemplate.getLessonEndTime()
         );
     }
 

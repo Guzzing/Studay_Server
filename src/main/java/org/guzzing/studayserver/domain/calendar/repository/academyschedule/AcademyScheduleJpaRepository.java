@@ -1,10 +1,12 @@
 package org.guzzing.studayserver.domain.calendar.repository.academyschedule;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import org.guzzing.studayserver.domain.calendar.model.AcademySchedule;
 import org.guzzing.studayserver.domain.calendar.model.AcademyTimeTemplate;
 import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyCalenderDetailInfo;
+import org.guzzing.studayserver.domain.calendar.repository.dto.AcademyScheduleLoadInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,8 +17,18 @@ public interface AcademyScheduleJpaRepository extends JpaRepository<AcademySched
 
     AcademySchedule save(AcademySchedule academySchedule);
 
-    @Query("SELECT ash.academyTimeTemplate FROM AcademySchedule as ash WHERE ash.id = :academyScheduleId ")
-    AcademyTimeTemplate findDistinctAcademyTimeTemplate(@Param(value = "academyScheduleId") Long academyScheduleId);
+    @Query("SELECT " +
+        "ash.academyTimeTemplate.dashboardId as dashboardId, " +
+        "ash.academyTimeTemplate.startDateOfAttendance as startDateOfAttendance, " +
+        "ash.academyTimeTemplate.endDateOfAttendance as endDateOfAttendance, " +
+        "ash.academyTimeTemplate.isAlarmed as isAlarmed, " +
+        "ash.academyTimeTemplate.dayOfWeek as dayOfWeek, " +
+        "ash.academyTimeTemplate.memo as memo, " +
+        "ash.lessonStartTime as lessonStartTime, " +
+        "ash.lessonEndTime as lessonEndTime " +
+        "FROM AcademySchedule as ash " +
+        "WHERE ash.id = :academyScheduleId ")
+    AcademyScheduleLoadInfo findDistinctAcademyTimeTemplate(@Param(value = "academyScheduleId") Long academyScheduleId);
 
     @Query("SELECT at.dashboardId " +
             "FROM AcademySchedule AS ash " +
