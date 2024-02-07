@@ -2,6 +2,8 @@ package org.guzzing.studayserver.domain.like.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -21,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.guzzing.studayserver.config.JwtTestConfig;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.like.controller.dto.request.LikePostRequest;
@@ -29,6 +30,7 @@ import org.guzzing.studayserver.domain.like.model.Like;
 import org.guzzing.studayserver.domain.like.repository.LikeRepository;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
+import org.guzzing.studayserver.domain.member.service.MemberService;
 import org.guzzing.studayserver.testutil.fixture.academy.AcademyFixture;
 import org.guzzing.studayserver.testutil.fixture.member.MemberFixture;
 import org.guzzing.studayserver.testutil.security.WithMockCustomOAuth2LoginUser;
@@ -42,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,8 +63,6 @@ class LikeRestControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private JwtTestConfig jwtTestConfig;
 
     @Autowired
     private LikeRepository likeRepository;
@@ -69,6 +70,9 @@ class LikeRestControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private AcademyRepository academyRepository;
+
+    @MockBean
+    private MemberService memberService;
 
     private Member savedMember;
     private Academy savedAcademy;
@@ -87,12 +91,13 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser(memberId = 1)
     void createLike_MemberIdAndAcademyId_RegisterLike() throws Exception {
         // Given
+        given(memberService.getMember(anyLong())).willReturn(savedMember);
+
         LikePostRequest request = new LikePostRequest(like.getAcademyId());
         String jsonBody = objectMapper.writeValueAsString(request);
 
         // When
         ResultActions perform = mockMvc.perform(post("/likes")
-                .param("memberId", String.valueOf(savedMember.getId()))
                 .content(jsonBody)
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
@@ -129,11 +134,12 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser(memberId = 2)
     void removeLike_LikeId_Remove() throws Exception {
         // Given
+        given(memberService.getMember(anyLong())).willReturn(savedMember);
+
         Like savedLike = likeRepository.save(like);
 
         // When
-        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", savedLike.getId())
-                .param("memberId", String.valueOf(savedMember.getId())));
+        ResultActions perform = mockMvc.perform(delete("/likes/{likeId}", savedLike.getId()));
 
         // Then
         perform.andDo(print())
@@ -158,11 +164,13 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser(memberId = 3)
     void removeLikeOfAcademy_AcademyId_Delete() throws Exception {
         // Given
+        given(memberService.getMember(anyLong())).willReturn(savedMember);
+
         likeRepository.save(like);
 
         // When
         ResultActions perform = mockMvc.perform(delete("/likes")
-                .queryParam("academyId", String.valueOf(savedMember.getId())));
+                .param("academyId", savedAcademy.getId().toString()));
 
         // Then
         perform.andDo(print())
@@ -173,9 +181,9 @@ class LikeRestControllerTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag(TAG)
                                 .summary("학원 아이디로 좋아요 제거")
-                                .queryParameters(
-                                        parameterWithName("academyId").description("학원 아이디")
-                                )
+//                                .queryParameters(
+//                                        parameterWithName("academyId").description("학원 아이디")
+//                                )
                                 .build()
                         )
                 ));
@@ -187,11 +195,12 @@ class LikeRestControllerTest {
     @WithMockCustomOAuth2LoginUser(memberId = 4)
     void getAllLikes_MemberId() throws Exception {
         // Given
+        given(memberService.getMember(anyLong())).willReturn(savedMember);
+
         likeRepository.save(like);
 
         // When
         ResultActions perform = mockMvc.perform(get("/likes")
-                .param("memberId", String.valueOf(savedMember.getId()))
                 .accept(APPLICATION_JSON_VALUE)
                 .contentType(APPLICATION_JSON_VALUE));
 
