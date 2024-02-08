@@ -8,7 +8,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import io.findify.s3mock.S3Mock;
 import java.io.IOException;
 import org.guzzing.studayserver.config.S3MockConfig;
-import org.guzzing.studayserver.global.common.profile.ProfileImageService;
+import org.guzzing.studayserver.global.common.profile.service.S3ClientService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -22,12 +22,12 @@ import org.springframework.util.FileCopyUtils;
 
 @Import(value = S3MockConfig.class)
 @SpringBootTest(webEnvironment = NONE)
-class ProfileImageServiceTest {
+class S3ClientServiceTest {
 
     private static final String BUCKET_NAME = "team09-resources-bucket";
 
     @Autowired
-    private ProfileImageService service;
+    private S3ClientService service;
 
     @Autowired
     private AmazonS3 s3client;

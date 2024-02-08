@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global.common.profile;
+package org.guzzing.studayserver.global.common.profile.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
-public class ProfileImageService {
+public class S3ClientService {
 
     private final S3Config s3Config;
     private final AmazonS3 s3Client;
 
-    public ProfileImageService(S3Config s3Config, AmazonS3 s3Client) {
+    public S3ClientService(S3Config s3Config, AmazonS3 s3Client) {
         this.s3Config = s3Config;
         this.s3Client = s3Client;
     }

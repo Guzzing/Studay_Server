@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import lombok.Getter;
 import org.guzzing.studayserver.domain.child.model.Child;
 import org.guzzing.studayserver.domain.member.model.vo.Email;
@@ -139,4 +140,18 @@ public class Member {
     public int hashCode() {
         return Objects.hash(id, nickName, email, socialId, OAuth2Provider, roleType, children);
     }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Member.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("nickName=" + nickName)
+                .add("email=" + email)
+                .add("socialId='" + socialId + "'")
+                .add("OAuth2Provider=" + OAuth2Provider)
+                .add("roleType=" + roleType)
+                .add("children=" + children)
+                .toString();
+    }
+
 }

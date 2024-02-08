@@ -119,6 +119,9 @@ dependencies {
     // Spring Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // Slack WebHook
+    implementation 'com.slack.api:slack-api-client:1.30.0'
+
 }
 
 tasks.named('test') {

@@ -37,11 +37,13 @@ class ChildRepositoryTest {
         Child savedChild = childRepository.save(child);
 
         // when
-        Optional<Child> foundOptionalChild = childRepository.findByIdAndMemberId(child.getId(), savedChild.getId());
+        Optional<Child> foundOptionalChild = childRepository.findByIdAndMemberId(savedChild.getId(),
+                savedMember.getId());
 
         // then
         assertThat(foundOptionalChild).isPresent();
         assertThat(foundOptionalChild.get()).hasFieldOrPropertyWithValue("id", savedChild.getId());
         assertThat(foundOptionalChild.get().getMember()).hasFieldOrPropertyWithValue("id", savedMember.getId());
     }
+
 }

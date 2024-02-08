@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.global.common.profile;
+package org.guzzing.studayserver.global.common.profile.provider;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

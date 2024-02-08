@@ -12,8 +12,8 @@ import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult;
 import org.guzzing.studayserver.domain.child.service.result.ChildrenFindResult.ChildFindResult;
 import org.guzzing.studayserver.domain.member.model.Member;
 import org.guzzing.studayserver.domain.member.repository.MemberRepository;
-import org.guzzing.studayserver.global.common.profile.ProfileImageService;
-import org.guzzing.studayserver.global.common.profile.ProfileImageUriProvider;
+import org.guzzing.studayserver.global.common.profile.provider.ProfileImageUriProvider;
+import org.guzzing.studayserver.global.common.profile.service.S3ClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,14 +25,14 @@ public class ChildService {
     private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
     private final ProfileImageUriProvider profileImageUriProvider;
-    private final ProfileImageService profileImageService;
+    private final S3ClientService s3ClientService;
 
     public ChildService(MemberRepository memberRepository, ChildRepository childRepository,
-            ProfileImageUriProvider profileImageUriProvider, ProfileImageService profileImageService) {
+            ProfileImageUriProvider profileImageUriProvider, S3ClientService s3ClientService) {
         this.memberRepository = memberRepository;
         this.childRepository = childRepository;
         this.profileImageUriProvider = profileImageUriProvider;
-        this.profileImageService = profileImageService;
+        this.s3ClientService = s3ClientService;
     }
 
     @Transactional
@@ -88,7 +88,7 @@ public class ChildService {
 
         child.updateProfileImageUri(profileImageUri);
 
-        profileImageService.uploadProfileImage(file, profileImageUri);
+        s3ClientService.uploadProfileImage(file, profileImageUri);
 
         return new ChildProfileImagePatchResult(childId, child.getProfileImageURLPath());
     }
