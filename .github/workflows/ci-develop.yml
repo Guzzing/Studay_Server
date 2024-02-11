@@ -28,14 +28,12 @@ jobs:
 
     # 순차적으로 실행될 단계들을 정의하는 섹션
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.1.1
-
+      - uses: actions/checkout@v4
       - name: Set up JDK 17
-        uses: actions/setup-java@v3.13.0
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
