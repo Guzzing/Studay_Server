@@ -43,6 +43,7 @@ jobs:
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
+          mkdir -p src/test/resources
           
           echo "${{ secrets.APPLICATION_YML_CONTENT }}" > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > src/main/resources/application-dev.yml
@@ -51,6 +52,8 @@ jobs:
           echo "${{ secrets.APPLICATION_MONITORING_YML_CONTENT }}" > src/main/resources/application-monitoring.yml
           echo "${{ secrets.APPLICATION_S3_YML_CONTENT }}" > src/main/resources/application-s3.yml
           echo "${{ secrets.APPLICATION_SWAGGER_YML_CONTENT }}" > src/main/resources/application-swagger.yml
+          
+          echo "${{ secrets.APPLICATION_TEST_YML_CONTENT }}" > src/test/resources/application.yml
 
       - name: Clean with gradle
         run: ./gradlew clean
