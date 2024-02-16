@@ -1,8 +1,8 @@
 package org.guzzing.studayserver.domain.region.controller;
 
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sido;
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sigungu;
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.upmyeondong;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -88,7 +88,7 @@ class RegionRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getSubRegions_Sido_RegionResponse() throws Exception {
         // Given & When
-        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong/{sido}", sido)
+        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong/{sido}", SIDO)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));
 
@@ -96,7 +96,7 @@ class RegionRestControllerTest {
         perform.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.targetRegion").value(sido))
+                .andExpect(jsonPath("$.targetRegion").value(SIDO))
                 .andExpect(jsonPath("$.subRegion").isNotEmpty())
                 .andExpect(jsonPath("$.subRegionCount").isNumber())
                 .andDo(document("get-region-beopjungdong-sigungu",
@@ -118,7 +118,7 @@ class RegionRestControllerTest {
     @WithMockCustomOAuth2LoginUser
     void getSubRegions_SidoAndSigungu_RegionResponse() throws Exception {
         // Given & When
-        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong/{sido}/{sigungu}", sido, sigungu)
+        ResultActions perform = mockMvc.perform(get("/regions/beopjungdong/{sido}/{sigungu}", SIDO, SIGUNGU)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));
 
@@ -126,7 +126,7 @@ class RegionRestControllerTest {
         perform.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.targetRegion").value(sido + " " + sigungu))
+                .andExpect(jsonPath("$.targetRegion").value(SIDO + " " + SIGUNGU))
                 .andExpect(jsonPath("$.subRegion").isNotEmpty())
                 .andExpect(jsonPath("$.subRegionCount").isNumber())
                 .andDo(document("get-region-beopjungdong-upmyeondong",
@@ -150,9 +150,9 @@ class RegionRestControllerTest {
     void getLocation_AllAddress_RegionLocationResponse() throws Exception {
         // Given & When
         ResultActions perform = mockMvc.perform(get("/regions/location")
-                .param("sido", sido)
-                .param("sigungu", sigungu)
-                .param("upmyeondong", upmyeondong)
+                .param("sido", SIDO)
+                .param("sigungu", SIGUNGU)
+                .param("upmyeondong", UPMYEONDONG)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE));
 
@@ -160,9 +160,9 @@ class RegionRestControllerTest {
         perform.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.sido").value(sido))
-                .andExpect(jsonPath("$.sigungu").value(sigungu))
-                .andExpect(jsonPath("$.upmyeondong").value(upmyeondong))
+                .andExpect(jsonPath("$.sido").value(SIDO))
+                .andExpect(jsonPath("$.sigungu").value(SIGUNGU))
+                .andExpect(jsonPath("$.upmyeondong").value(UPMYEONDONG))
                 .andExpect(jsonPath("$.latitude").isNumber())
                 .andExpect(jsonPath("$.longitude").isNumber())
                 .andDo(document("get-region-location",
@@ -182,6 +182,36 @@ class RegionRestControllerTest {
                                 fieldWithPath("longitude").type(NUMBER).description("법정동 경도")
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("위도, 경도가 주어지면 해당 시도, 시군구, 읍면동을 반환한다.")
+    @WithMockCustomOAuth2LoginUser
+    void getRegionName_withLatAndLng_RegionNameResponse() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/regions")
+            .param("lat", String.valueOf(LATITUDE))
+            .param("lng", String.valueOf(LONGITUDE)));
+
+        // Then
+        perform.andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.sido").value(SIDO))
+            .andExpect(jsonPath("$.sigungu").value(SIGUNGU))
+            .andExpect(jsonPath("$.upmyeondong").value(UPMYEONDONG))
+            .andDo(document("get-region-name",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                queryParameters(
+                    parameterWithName("lat").description("위도"),
+                    parameterWithName("lng").description("경도")
+                ),
+                responseFields(
+                    fieldWithPath("sido").type(STRING).description("조회된 시도"),
+                    fieldWithPath("sigungu").type(STRING).description("조회된 시군구"),
+                    fieldWithPath("upmyeondong").type(STRING).description("조회된 읍면동")
+                )
+            ));
     }
 
 }

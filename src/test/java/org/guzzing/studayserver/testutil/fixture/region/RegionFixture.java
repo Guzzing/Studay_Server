@@ -11,8 +11,8 @@ public class RegionFixture {
     public static final String SIGUNGU = "테스트구";
     public static final String UPMYEONDONG = "테스트테스트동";
 
-    private static final double LATITUDE = 37.589187;
-    private static final double LONGITUDE = 126.969292;
+    public static final double LATITUDE = 37.589187;
+    public static final double LONGITUDE = 126.969292;
 
     public static Region makeRegionEntity() {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
