@@ -3,22 +3,23 @@ package org.guzzing.studayserver.domain.region.controller;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.guzzing.studayserver.domain.region.aop.ValidSido;
 import org.guzzing.studayserver.domain.region.aop.ValidSigungu;
 import org.guzzing.studayserver.domain.region.aop.ValidUpmyeondong;
+import org.guzzing.studayserver.domain.region.controller.dto.RegionGetNameRequest;
+import org.guzzing.studayserver.domain.region.controller.dto.RegionGetNameResponse;
 import org.guzzing.studayserver.domain.region.controller.dto.RegionLocationResponse;
 import org.guzzing.studayserver.domain.region.controller.dto.RegionResponse;
 import org.guzzing.studayserver.domain.region.service.RegionService;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionGetNameResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/regions")
@@ -79,6 +80,20 @@ public class RegionRestController {
         return ResponseEntity
                 .status(OK)
                 .body(RegionLocationResponse.from(regionResult));
+    }
+
+    @GetMapping(
+        produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<RegionGetNameResponse> getRegionName(
+        @ModelAttribute @Valid RegionGetNameRequest request
+    ) {
+        RegionGetNameResult regionContainingPoint = regionService.getRegionName(
+            request.toRegionGetNameParam());
+
+        return ResponseEntity
+            .status(OK)
+            .body(RegionGetNameResponse.to(regionContainingPoint));
     }
 
 }
