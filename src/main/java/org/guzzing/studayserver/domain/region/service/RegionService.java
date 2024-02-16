@@ -3,11 +3,15 @@ package org.guzzing.studayserver.domain.region.service;
 import static org.guzzing.studayserver.domain.region.model.Region.BASE_REGION_SIDO;
 
 import java.util.List;
+
+import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionGetNameParam;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionGetNameResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
@@ -42,9 +46,10 @@ public class RegionService {
         return RegionResult.from(region);
     }
 
-    public RegionResult findRegionContainingPoint(final Point point) {
+    public RegionGetNameResult getRegionName(final RegionGetNameParam param) {
+        Point point = GeometryUtil.createPoint(param.latitude(), param.longitude());
         Region byAreaContainingPoint = regionRepository.getByAreaContainingPoint(point);
-        return RegionResult.from(byAreaContainingPoint);
+        return RegionGetNameResult.from(byAreaContainingPoint);
     }
 
 }

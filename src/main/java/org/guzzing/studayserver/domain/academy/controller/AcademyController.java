@@ -10,10 +10,10 @@ import org.guzzing.studayserver.domain.academy.controller.dto.response.Academies
 import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
-import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationWithScrollFacadeResult;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
+import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
 import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
@@ -60,11 +60,11 @@ public class AcademyController {
             @ModelAttribute @Valid AcademyByLocationWithScrollRequest request,
             @MemberId Long memberId
     ) {
-        AcademiesByLocationWithScrollFacadeResult response = academyFacade.findByLocationWithScroll(
-                AcademyByLocationWithScrollRequest.to(request, memberId));
+        AcademiesByLocationWithScrollResults academiesByLocationWithScroll =
+            academyService.findAcademiesByLocationWithScroll(request.to(memberId));
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(AcademiesByLocationWithScrollResponses.from(response));
+                .body(AcademiesByLocationWithScrollResponses.from(academiesByLocationWithScroll));
     }
 
     @GetMapping(

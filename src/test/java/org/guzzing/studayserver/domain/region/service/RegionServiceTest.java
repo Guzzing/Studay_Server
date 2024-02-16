@@ -1,15 +1,17 @@
 package org.guzzing.studayserver.domain.region.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sido;
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.sigungu;
-import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.upmyeondong;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.SIDO;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.SIGUNGU;
+import static org.guzzing.studayserver.testutil.fixture.region.RegionFixture.UPMYEONDONG;
 
 import org.guzzing.studayserver.domain.region.model.Region;
 import org.guzzing.studayserver.domain.region.repository.RegionRepository;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SidoResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.SigunguResult;
 import org.guzzing.studayserver.domain.region.service.dto.beopjungdong.UpmyeondongResult;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionGetNameParam;
+import org.guzzing.studayserver.domain.region.service.dto.location.RegionGetNameResult;
 import org.guzzing.studayserver.domain.region.service.dto.location.RegionResult;
 import org.guzzing.studayserver.testutil.fixture.region.RegionFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +42,10 @@ class RegionServiceTest {
     @DisplayName("시도를 받아 해당 시도의 시군구를 반환한다.")
     void findSigungusBySido_Sido_SigunguResult() {
         // Given & When
-        SigunguResult result = regionService.findSigungusBySido(sido);
+        SigunguResult result = regionService.findSigungusBySido(SIDO);
 
         // Then
-        assertThat(result.sido()).isEqualTo(sido);
+        assertThat(result.sido()).isEqualTo(SIDO);
         assertThat(result.sigunguCount()).isPositive();
     }
 
@@ -51,11 +53,11 @@ class RegionServiceTest {
     @DisplayName("시도, 시군구를 받아 해당 시도군구의 읍면동을 반환한다.")
     void findUpmyeondongBySidoAndSigungu_SidoAndSigungu_UpmyeondongResult() {
         // Given & When
-        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(sido, sigungu);
+        UpmyeondongResult result = regionService.findUpmyeondongBySidoAndSigungu(SIDO, SIGUNGU);
 
         // Then
-        assertThat(result.sido()).isEqualTo(sido);
-        assertThat(result.sigungu()).isEqualTo(sigungu);
+        assertThat(result.sido()).isEqualTo(SIDO);
+        assertThat(result.sigungu()).isEqualTo(SIGUNGU);
         assertThat(result.upmyeondongCount()).isPositive();
     }
 
@@ -75,13 +77,28 @@ class RegionServiceTest {
     @DisplayName("시도, 시군구, 읍면동 데이터를 요청받아, 해당하는 위경도를 반환한다.")
     void findLocation_AllAddress_RegionResult() {
         // Given & When
-        RegionResult result = regionService.findLocation(sido, sigungu, upmyeondong);
+        RegionResult result = regionService.findLocation(SIDO, SIGUNGU, UPMYEONDONG);
 
         // Then
-        assertThat(result.sido()).isEqualTo(sido);
-        assertThat(result.upmyeondong()).isEqualTo(upmyeondong);
+        assertThat(result.sido()).isEqualTo(SIDO);
+        assertThat(result.upmyeondong()).isEqualTo(UPMYEONDONG);
         assertThat(result.point().getX()).isLessThanOrEqualTo(40.0);
         assertThat(result.point().getY()).isLessThanOrEqualTo(130.0);
+    }
+
+    @Test
+    @DisplayName("위, 경도를 주면 해당하는 지역의 시도, 시군구, 읍면동을 반환한다.")
+    void getRegionName() {
+        // Given
+        RegionGetNameParam regionGetNameParam = RegionFixture.regionGetNameParam();
+
+        // When
+        RegionGetNameResult regionName = regionService.getRegionName(regionGetNameParam);
+
+        // Then
+        assertThat(regionName.sido()).isEqualTo(SIDO);
+        assertThat(regionName.upmyeondong()).isEqualTo(UPMYEONDONG);
+        assertThat(regionName.sigungu()).isEqualTo(SIGUNGU);
     }
 
 }
