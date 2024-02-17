@@ -37,17 +37,17 @@ public class GeometryUtil {
     }
 
     public static String makeDiagonal(
-            Double baseLatitude,
-            Double baseLongitude,
+            Latitude baseLatitude,
+            Longitude baseLongitude,
             Double distance) {
         Location northEast = calculateLocationWithinRadiusInDirection(
-                baseLatitude,
-                baseLongitude,
+                baseLatitude.getValue(),
+                baseLongitude.getValue(),
                 Direction.NORTHEAST.getBearing(),
                 distance);
         Location southWest = calculateLocationWithinRadiusInDirection(
-                baseLatitude,
-                baseLongitude,
+                baseLatitude.getValue(),
+                baseLongitude.getValue(),
                 Direction.SOUTHWEST.getBearing(),
                 distance);
 

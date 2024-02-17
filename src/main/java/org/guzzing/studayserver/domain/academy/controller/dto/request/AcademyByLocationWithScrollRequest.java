@@ -4,6 +4,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
+import org.guzzing.studayserver.domain.academy.util.Latitude;
+import org.guzzing.studayserver.domain.academy.util.Longitude;
 
 public record AcademyByLocationWithScrollRequest(
     @NotNull(message = "Latitude cannot be null")
@@ -20,8 +22,8 @@ public record AcademyByLocationWithScrollRequest(
 
     public AcademiesByLocationWithScrollParam to(Long memberId) {
         return new AcademiesByLocationWithScrollParam(
-            lat,
-            lng,
+            Latitude.of(lat),
+            Longitude.of(lng),
             memberId,
             pageNumber
         );
