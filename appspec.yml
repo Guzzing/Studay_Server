@@ -5,7 +5,7 @@ files:
   - source: /
     destination: /home/ubuntu/studay
     overwrite: yes
-
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /home/ubuntu/studay/
     owner: ubuntu
