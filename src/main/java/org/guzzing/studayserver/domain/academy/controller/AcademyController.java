@@ -62,7 +62,7 @@ public class AcademyController {
     }
 
     @GetMapping(
-        path = "/complexes-cursor",
+        path = "/complexes",
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademyByLocationWithCursorResponses> findByLocationWithCursor(
         @ModelAttribute @Valid AcademyByLocationWithCursorRequest request,
