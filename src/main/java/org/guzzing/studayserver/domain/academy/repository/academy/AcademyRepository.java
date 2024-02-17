@@ -1,12 +1,9 @@
 package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import java.util.Optional;
+
 import org.guzzing.studayserver.domain.academy.model.Academy;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFilterCondition;
+import org.guzzing.studayserver.domain.academy.repository.dto.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -27,14 +24,17 @@ public interface AcademyRepository {
     Optional<Academy> findAcademyById(Long academyId);
 
     AcademiesByLocationWithScroll findAcademiesByLocation(
-            String pointFormat,
-            Long memberId,
-            int pageNumber,
-            int pageSize);
+        String pointFormat,
+        Long memberId,
+        int pageNumber,
+        int pageSize);
 
     AcademiesByFilterWithScroll filterAcademies(
-            AcademyFilterCondition academyFilterCondition,
-            Long memberId,
-            int pageNumber,
-            int pageSize);
+        AcademyFilterCondition academyFilterCondition,
+        Long memberId,
+        int pageNumber,
+        int pageSize);
+
+    AcademyByLocationWithCursorRepositoryResponse findAcademiesByLocationByCursor(
+        AcademyByLocationWithCursorRepositoryRequest request);
 }

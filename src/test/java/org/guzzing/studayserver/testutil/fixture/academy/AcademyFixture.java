@@ -3,6 +3,7 @@ package org.guzzing.studayserver.testutil.fixture.academy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
@@ -13,9 +14,12 @@ import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.AcademyInfo;
 import org.guzzing.studayserver.domain.academy.model.vo.academyinfo.ShuttleAvailability;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyByLocationWithCursorParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
+import org.guzzing.studayserver.domain.academy.util.Latitude;
+import org.guzzing.studayserver.domain.academy.util.Longitude;
 import org.locationtech.jts.geom.Point;
 
 public class AcademyFixture {
@@ -25,13 +29,13 @@ public class AcademyFixture {
 
     public static List<AcademyInfo> academyInfos() {
         return List.of(
-                AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("박세영 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("김별 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("김희석보스 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("김유진 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("김지성 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
-                AcademyInfo.of("김지성 보습학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "입시, 검정 및 보습")
+            AcademyInfo.of("유원우 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("박세영 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("김별 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("김희석보스 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("김유진 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("김지성 코딩학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "기타(대)"),
+            AcademyInfo.of("김지성 보습학원", "000-0000-0000", ShuttleAvailability.AVAILABLE.name(), "입시, 검정 및 보습")
         );
     }
 
@@ -39,10 +43,10 @@ public class AcademyFixture {
         AcademyInfo academyInfo = AcademyFixture.academyInfos().get(1);
 
         Academy academy = Academy.of(
-                hashCode(academyInfo.getAcademyName()),
-                academyInfo,
-                Address.of("경기도 성남시 중원구 망포동"),
-                Location.of(LATITUDE, LONGITUDE));
+            hashCode(academyInfo.getAcademyName()),
+            academyInfo,
+            Address.of("경기도 성남시 중원구 망포동"),
+            Location.of(LATITUDE, LONGITUDE));
         academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
         return academy;
@@ -52,10 +56,10 @@ public class AcademyFixture {
         AcademyInfo academyInfo = AcademyFixture.academyInfos().get(6);
 
         Academy academy = Academy.of(
-                hashCode(academyInfo.getAcademyName()),
-                academyInfo,
-                Address.of("경기도 성남시 중원구 망포동"),
-                Location.of(LATITUDE, LONGITUDE));
+            hashCode(academyInfo.getAcademyName()),
+            academyInfo,
+            Address.of("경기도 성남시 중원구 망포동"),
+            Location.of(LATITUDE, LONGITUDE));
         academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
         return academy;
@@ -63,16 +67,16 @@ public class AcademyFixture {
 
     public static List<Academy> academies() {
         return academyInfos().stream()
-                .map(academyInfo -> {
-                    Academy academy = Academy.of(
-                            hashCode(academyInfo.getAcademyName()),
-                            academyInfo,
-                            Address.of("경기도 성남시 중원구 망포동"),
-                            Location.of(37.4449168, 127.1388684));
-                    academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
+            .map(academyInfo -> {
+                Academy academy = Academy.of(
+                    hashCode(academyInfo.getAcademyName()),
+                    academyInfo,
+                    Address.of("경기도 성남시 중원구 망포동"),
+                    Location.of(37.4449168, 127.1388684));
+                academy.changePoint(GeometryUtil.createPoint(LATITUDE, LONGITUDE));
 
-                    return academy;
-                }).toList();
+                return academy;
+            }).toList();
     }
 
     /**
@@ -86,14 +90,14 @@ public class AcademyFixture {
 
         for (int i = 0; i < 5; i++) {
             Academy academy = Academy.of(
-                    hashCode(academyInfos().get(i).getAcademyName()),
-                    academyInfos().get(i),
-                    Address.of("경기도 성남시 중원구 망포동"),
-                    randomLocations.get(i));
+                hashCode(academyInfos().get(i).getAcademyName()),
+                academyInfos().get(i),
+                Address.of("경기도 성남시 중원구 망포동"),
+                randomLocations.get(i));
             academies.add(academy);
             Point point = GeometryUtil.createPoint(
-                    randomLocations.get(i).getLatitude(),
-                    randomLocations.get(i).getLongitude()
+                randomLocations.get(i).getLatitude(),
+                randomLocations.get(i).getLongitude()
             );
             academy.changePoint(point);
         }
@@ -114,37 +118,41 @@ public class AcademyFixture {
     }
 
     public static AcademiesByLocationWithScrollParam academiesByLocationWithScrollParam(double latitude,
-            double longitude) {
-        return AcademiesByLocationWithScrollParam.of(latitude, longitude, 1L, 0);
+                                                                                        double longitude) {
+        return AcademiesByLocationWithScrollParam.of(
+            Latitude.of(latitude),
+            Longitude.of(longitude),
+            1L,
+            0);
     }
 
     public static AcademyFilterWithScrollParam academyFilterWithScrollParam(
-            Double latitude,
-            Double longitude,
-            Long desiredMinAmount,
-            Long desiredMaxAmount) {
+        Double latitude,
+        Double longitude,
+        Long desiredMinAmount,
+        Long desiredMaxAmount) {
         return new AcademyFilterWithScrollParam(
-                latitude,
-                longitude,
-                List.of(
-                        CategoryInfo.TUTORING_SCHOOL.getCategoryName(),
-                        CategoryInfo.MATH.getCategoryName()),
-                desiredMinAmount,
-                desiredMaxAmount,
-                0
+            Latitude.of(latitude),
+            Longitude.of(longitude),
+            List.of(
+                CategoryInfo.TUTORING_SCHOOL.getCategoryName(),
+                CategoryInfo.MATH.getCategoryName()),
+            desiredMinAmount,
+            desiredMaxAmount,
+            0
         );
     }
 
     public static List<AcademyCategory> academyCategoryAboutTwoCategories(Academy academyWithTwoCategories) {
         return List.of(
-                AcademyCategory.of(academyWithTwoCategories, CategoryInfo.TUTORING_SCHOOL.getId()),
-                AcademyCategory.of(academyWithTwoCategories, CategoryInfo.MATH.getId())
+            AcademyCategory.of(academyWithTwoCategories, CategoryInfo.TUTORING_SCHOOL.getId()),
+            AcademyCategory.of(academyWithTwoCategories, CategoryInfo.MATH.getId())
         );
     }
 
     public static List<AcademyCategory> academyCategoryAboutSungnam(Academy sungnamAcademy) {
         return List.of(
-                AcademyCategory.of(sungnamAcademy, CategoryInfo.COMPUTER.getId())
+            AcademyCategory.of(sungnamAcademy, CategoryInfo.COMPUTER.getId())
         );
     }
 
@@ -152,6 +160,17 @@ public class AcademyFixture {
         return AcademyDetailFacadeParam.of(memberId, academyId);
     }
 
+    public static AcademyByLocationWithCursorParam academyByLocationWithCursorParam(
+        double latitude,
+        double longitude
+    ) {
+        return new AcademyByLocationWithCursorParam(
+            Latitude.of(latitude),
+            Longitude.of(longitude),
+            1L,
+            0L
+        );
+    }
 
     private static Long hashCode(String academyName) {
         return (long) Objects.hash("수원", academyName, "경기도 성남시 중원구 망포동", "김별");

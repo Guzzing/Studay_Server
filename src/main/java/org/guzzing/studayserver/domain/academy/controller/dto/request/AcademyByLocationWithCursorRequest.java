@@ -3,11 +3,11 @@ package org.guzzing.studayserver.domain.academy.controller.dto.request;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
+import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyByLocationWithCursorParam;
 import org.guzzing.studayserver.domain.academy.util.Latitude;
 import org.guzzing.studayserver.domain.academy.util.Longitude;
 
-public record AcademyByLocationWithScrollRequest(
+public record AcademyByLocationWithCursorRequest(
     @NotNull(message = "Latitude cannot be null")
     @DecimalMin(value = "-90", message = "Invalid latitude")
     Double lat,
@@ -16,16 +16,16 @@ public record AcademyByLocationWithScrollRequest(
     @DecimalMin(value = "-180", message = "Invalid longitude")
     Double lng,
 
-    @PositiveOrZero
-    int pageNumber
+    @PositiveOrZero(message = "학원 아이디는 음수일 수 없습니다.")
+    Long lastAcademyId
 ) {
 
-    public AcademiesByLocationWithScrollParam to(Long memberId) {
-        return new AcademiesByLocationWithScrollParam(
+    public AcademyByLocationWithCursorParam to(Long memberId) {
+        return new AcademyByLocationWithCursorParam(
             Latitude.of(lat),
             Longitude.of(lng),
             memberId,
-            pageNumber
+            lastAcademyId
         );
     }
 }

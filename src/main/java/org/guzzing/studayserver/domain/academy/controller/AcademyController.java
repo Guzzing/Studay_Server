@@ -2,21 +2,15 @@ package org.guzzing.studayserver.domain.academy.controller;
 
 import jakarta.validation.Valid;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademiesByNameRequest;
+import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByLocationWithCursorRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByLocationWithScrollRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterWithScrollRequest;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByLocationWithScrollResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesByNameResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademiesFilterWithScrollResponses;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.AcademyGetResponse;
-import org.guzzing.studayserver.domain.academy.controller.dto.response.LessonInfoToCreateDashboardResponses;
+import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.global.common.member.MemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -68,6 +62,20 @@ public class AcademyController {
     }
 
     @GetMapping(
+        path = "/complexes-cursor",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AcademyByLocationWithCursorResponses> findByLocationWithCursor(
+        @ModelAttribute @Valid AcademyByLocationWithCursorRequest request,
+        @MemberId Long memberId
+    ) {
+        AcademyByLocationWithCursorResults academiesByLocationWithCursor
+            = academyService.findAcademiesByLocationWithCursor(request.to(memberId));
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(AcademyByLocationWithCursorResponses.from(academiesByLocationWithCursor));
+    }
+
+    @GetMapping(
             path = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AcademiesByNameResponses> findByName(
@@ -98,7 +106,7 @@ public class AcademyController {
             path = "/{academyId}/lessons",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LessonInfoToCreateDashboardResponses> getLessonInfosToCreateDashboard(
+    public ResponseEntity<LessonInfoToCreateDashboardResponses> getLessonInfoToCreateDashboard(
             @PathVariable Long academyId) {
         LessonInfoToCreateDashboardResults lessonsInfoAboutAcademy = academyService.getLessonsInfoAboutAcademy(
                 academyId);

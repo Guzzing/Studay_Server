@@ -2,6 +2,7 @@ package org.guzzing.studayserver.domain.academy.util;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.guzzing.studayserver.domain.academy.model.vo.Location;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 
@@ -19,9 +20,21 @@ public class SqlFormatter {
 
     public static String makeDiagonalByLineString(Location northEast, Location southWest) {
         return String.format(
-                LINESTRING_SQL,
-                northEast.getLatitude(), northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
+            LINESTRING_SQL,
+            northEast.getLatitude(), northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
         );
 
+    }
+
+    public static String makeDiagonalByLineString(
+        Latitude northEastLatitude, Longitude northEastLongitude, Latitude southWestLatitude, Longitude southWestLongitude
+    ) {
+        return String.format(
+            LINESTRING_SQL,
+            northEastLatitude.getValue(),
+            northEastLongitude.getValue(),
+            southWestLatitude.getValue(),
+            southWestLongitude.getValue()
+        );
     }
 }

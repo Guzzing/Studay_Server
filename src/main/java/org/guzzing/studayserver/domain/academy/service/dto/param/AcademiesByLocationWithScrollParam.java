@@ -1,21 +1,24 @@
 package org.guzzing.studayserver.domain.academy.service.dto.param;
 
+import org.guzzing.studayserver.domain.academy.util.Latitude;
+import org.guzzing.studayserver.domain.academy.util.Longitude;
+
 public record AcademiesByLocationWithScrollParam(
-        Double baseLatitude,
-        Double baseLongitude,
-        Long memberId,
-        int pageNumber
+    Latitude baseLatitude,
+    Longitude baseLongitude,
+    Long memberId,
+    int pageNumber
 ) {
 
     public static AcademiesByLocationWithScrollParam of(
-            Double baseLatitude,
-            Double baseLongitude,
-            Long memberId,
-            int pageNumber) {
+        Latitude baseLatitude,
+        Longitude baseLongitude,
+        Long memberId,
+        int pageNumber) {
         return new AcademiesByLocationWithScrollParam(
-                baseLatitude,
-                baseLongitude,
-                memberId,
-                pageNumber);
+            baseLatitude,
+            baseLongitude,
+            memberId,
+            pageNumber);
     }
 }

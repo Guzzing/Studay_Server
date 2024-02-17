@@ -4,29 +4,33 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
+
 import org.guzzing.studayserver.domain.academy.controller.dto.validation.ValidCategoryName;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
+import org.guzzing.studayserver.domain.academy.util.Latitude;
+import org.guzzing.studayserver.domain.academy.util.Longitude;
 
 public record AcademyFilterWithScrollRequest(
-        @NotNull(message = "Latitude cannot be null")
-        @DecimalMin(value = "33.0", message = "Invalid latitude")
-        @DecimalMax(value = "38.0", message = "Invalid latitude")
-        Double lat,
+    @NotNull(message = "Latitude cannot be null")
+    @DecimalMin(value = "33.0", message = "Invalid latitude")
+    @DecimalMax(value = "38.0", message = "Invalid latitude")
+    Double lat,
 
-        @NotNull(message = "Longitude cannot be null")
-        @DecimalMin(value = "125.0", message = "Invalid longitude")
-        @DecimalMax(value = "130.0", message = "Invalid longitude")
-        Double lng,
+    @NotNull(message = "Longitude cannot be null")
+    @DecimalMin(value = "125.0", message = "Invalid longitude")
+    @DecimalMax(value = "130.0", message = "Invalid longitude")
+    Double lng,
 
-        @ValidCategoryName
-        List<String> categories,
+    @ValidCategoryName
+    List<String> categories,
 
-        Long desiredMinAmount,
+    Long desiredMinAmount,
 
-        Long desiredMaxAmount,
+    Long desiredMaxAmount,
 
-        int pageNumber
+    int pageNumber
 ) {
 
     @AssertTrue(message = "최소 희망 금액이 최대 희망 금액보다 클 수 없습니다.")
@@ -52,12 +56,12 @@ public record AcademyFilterWithScrollRequest(
 
     public static AcademyFilterWithScrollParam to(AcademyFilterWithScrollRequest request) {
         return new AcademyFilterWithScrollParam(
-                request.lat,
-                request.lng,
-                request.categories(),
-                request.desiredMinAmount,
-                request.desiredMaxAmount,
-                request.pageNumber
+            Latitude.of(request.lat),
+            Longitude.of(request.lng),
+            request.categories(),
+            request.desiredMinAmount,
+            request.desiredMaxAmount,
+            request.pageNumber
         );
     }
 }
