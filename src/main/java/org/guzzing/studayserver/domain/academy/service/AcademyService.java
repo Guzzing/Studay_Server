@@ -11,18 +11,11 @@ import org.guzzing.studayserver.domain.academy.repository.academycategory.Academ
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithCursorRepositoryResponse;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByLocationWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademiesByNameParam;
-import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyFilterWithScrollParam;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByLocationWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesByNameResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademiesFilterWithScrollResults;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyAndLessonDetailResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyFeeInfo;
-import org.guzzing.studayserver.domain.academy.service.dto.result.AcademyGetResult;
-import org.guzzing.studayserver.domain.academy.service.dto.result.LessonInfoToCreateDashboardResults;
+import org.guzzing.studayserver.domain.academy.service.dto.param.*;
+import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -85,6 +78,26 @@ public class AcademyService {
 
         return AcademiesByLocationWithScrollResults.to(
                 academiesByLocation);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyByLocationWithCursorResults findAcademiesByLocationWithCursor(
+        AcademyByLocationWithCursorParam param) {
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
+
+        AcademyByLocationWithCursorRepositoryResponse academiesByLocationByCursor = academyRepository.findAcademiesByLocationByCursor(
+            param.toAcademyByLocationWithCursorRequest(diagonal));
+
+        return AcademyByLocationWithCursorResults.to(academiesByLocationByCursor);
+    }
+
+    @Transactional(readOnly = true)
+    public AcademyByLocationWithCursorResults findAcademiesByLocation(
+        AcademyByLocationParam param) {
+        AcademyByLocationWithCursorRepositoryResponse academiesByLocationByCursor = academyRepository.findAcademiesByLocationByCursor(
+            param.toAcademyByLocationWithCursorRequest());
+
+        return AcademyByLocationWithCursorResults.to(academiesByLocationByCursor);
     }
 
     @Transactional(readOnly = true)
