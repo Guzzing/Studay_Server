@@ -24,7 +24,7 @@ import org.springframework.util.FileCopyUtils;
 @SpringBootTest(webEnvironment = NONE)
 class ProfileImageServiceTest {
 
-    private static final String BUCKET_NAME = "team09-resources-bucket";
+    private static final String BUCKET_NAME = "studay-resources-bucket";
 
     @Autowired
     private ProfileImageService service;
