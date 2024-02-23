@@ -91,7 +91,6 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "academyByLocation")
     public AcademyByLocationWithCursorAndNotLikeResults findAcademiesByLocationWithCursorAndNotLike(
         AcademyByLocationWithCursorParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
