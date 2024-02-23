@@ -8,15 +8,13 @@ import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
 import org.guzzing.studayserver.domain.academy.repository.academycategory.AcademyCategoryRepository;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithCursorRepositoryResponse;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.*;
 import org.guzzing.studayserver.domain.academy.repository.lesson.LessonRepository;
 import org.guzzing.studayserver.domain.academy.repository.review.ReviewCountRepository;
 import org.guzzing.studayserver.domain.academy.service.dto.param.*;
 import org.guzzing.studayserver.domain.academy.service.dto.result.*;
 import org.guzzing.studayserver.domain.academy.util.GeometryUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +68,7 @@ public class AcademyService {
             AcademiesByLocationWithScrollParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
 
-        AcademiesByLocationWithScroll academiesByLocation = academyRepository.findAcademiesByLocation(
+        AcademiesByLocationWithScrollRepositoryResponse academiesByLocation = academyRepository.findAcademiesByLocation(
                 diagonal,
                 param.memberId(),
                 param.pageNumber(),
@@ -92,12 +90,16 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
-    public AcademyByLocationWithCursorResults findAcademiesByLocation(
-        AcademyByLocationParam param) {
-        AcademyByLocationWithCursorRepositoryResponse academiesByLocationByCursor = academyRepository.findAcademiesByLocationByCursor(
-            param.toAcademyByLocationWithCursorRequest());
+    @Cacheable(cacheNames = "academyByLocation")
+    public AcademyByLocationWithCursorAndNotLikeResults findAcademiesByLocationWithCursorAndNotLike(
+        AcademyByLocationWithCursorParam param) {
+        String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
 
-        return AcademyByLocationWithCursorResults.to(academiesByLocationByCursor);
+        AcademyByLocationWithCursorNotLikeRepositoryResponse academiesByCursorAndNotLike
+            = academyRepository.findAcademiesByCursorAndNotLike(
+            param.toAcademyByLocationWithCursorRequest(diagonal));
+
+        return AcademyByLocationWithCursorAndNotLikeResults.to(academiesByCursorAndNotLike);
     }
 
     @Transactional(readOnly = true)
