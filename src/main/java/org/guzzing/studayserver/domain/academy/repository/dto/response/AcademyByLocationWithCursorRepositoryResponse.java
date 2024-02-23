@@ -12,7 +12,7 @@ public record AcademyByLocationWithCursorRepositoryResponse(
 ) {
 
     public static AcademyByLocationWithCursorRepositoryResponse of(
-        List<AcademyByLocationWithScroll> academiesByLocation,
+        List<AcademyByLocation> academiesByLocation,
         Long lastAcademyId,
         boolean hasNext
     ) {
@@ -28,31 +28,6 @@ public record AcademyByLocationWithCursorRepositoryResponse(
             lastAcademyId,
             hasNext
         );
-    }
-
-    public record AcademyByLocation(
-        Long academyId,
-        String academyName,
-        String fullAddress,
-        String phoneNumber,
-        Double latitude,
-        Double longitude,
-        String shuttleAvailable,
-        boolean isLiked
-    ) {
-
-        public static AcademyByLocation of(AcademyByLocationWithScroll academyByLocationWithScroll) {
-            return new AcademyByLocation(
-                academyByLocationWithScroll.academyId(),
-                academyByLocationWithScroll.academyName(),
-                academyByLocationWithScroll.fullAddress(),
-                academyByLocationWithScroll.phoneNumber(),
-                academyByLocationWithScroll.latitude(),
-                academyByLocationWithScroll.longitude(),
-                academyByLocationWithScroll.shuttleAvailable(),
-                academyByLocationWithScroll.isLiked()
-            );
-        }
     }
 
 }
