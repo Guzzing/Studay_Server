@@ -1,7 +1,9 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByLocationWithScroll;
+
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyWithLikeByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.AcademiesByLocationWithScrollRepositoryResponse;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 public record AcademiesByLocationWithScrollResults(
@@ -10,19 +12,19 @@ public record AcademiesByLocationWithScrollResults(
 ) {
 
     public static AcademiesByLocationWithScrollResults to(
-            AcademiesByLocationWithScroll academiesByLocationWithScroll) {
+            AcademiesByLocationWithScrollRepositoryResponse academiesByLocationWithScrollRepositoryResponse) {
         return new AcademiesByLocationWithScrollResults(
-                academiesByLocationWithScroll
+                academiesByLocationWithScrollRepositoryResponse
                         .academiesByLocation()
                         .keySet()
                         .stream()
                         .map(academyByLocation ->
                                 AcademiesByLocationResultWithScroll.from(
                                         academyByLocation,
-                                        academiesByLocationWithScroll.academiesByLocation().
+                                        academiesByLocationWithScrollRepositoryResponse.academiesByLocation().
                                                 get(academyByLocation)))
                         .toList(),
-                academiesByLocationWithScroll.hasNext());
+                academiesByLocationWithScrollRepositoryResponse.hasNext());
     }
 
     public record AcademiesByLocationResultWithScroll(
@@ -38,7 +40,7 @@ public record AcademiesByLocationWithScrollResults(
     ) {
 
         public static AcademiesByLocationResultWithScroll from(
-                AcademiesByLocationWithScroll.AcademyByLocation academyByLocationWithScroll,
+            AcademyWithLikeByLocation academyByLocationWithScroll,
                 List<Long> categories) {
             return new AcademiesByLocationResultWithScroll(
                     academyByLocationWithScroll.academyId(),

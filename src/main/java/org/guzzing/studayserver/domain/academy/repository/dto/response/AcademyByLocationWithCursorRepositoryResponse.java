@@ -1,4 +1,6 @@
-package org.guzzing.studayserver.domain.academy.repository.dto;
+package org.guzzing.studayserver.domain.academy.repository.dto.response;
+
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyWithLikeByLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,22 +8,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public record AcademyByLocationWithCursorRepositoryResponse(
-    Map<AcademyByLocation, List<Long>> academiesByLocation,
+    Map<AcademyWithLikeByLocation, List<Long>> academiesByLocation,
     Long lastAcademyId,
     boolean hasNext
 ) {
 
     public static AcademyByLocationWithCursorRepositoryResponse of(
-        List<AcademyByLocation> academiesByLocation,
+        List<AcademyByLocationWithLikeRepositoryResponse> academiesByLocation,
         Long lastAcademyId,
         boolean hasNext
     ) {
-        Map<AcademyByLocation, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
+        Map<AcademyWithLikeByLocation, List<Long>> academyIdWithCategories = new ConcurrentHashMap<>();
 
         academiesByLocation.forEach(academyByLocation -> academyIdWithCategories.computeIfAbsent(
-                AcademyByLocation.of(academyByLocation),
+                AcademyWithLikeByLocation.of(academyByLocation),
                 k -> new ArrayList<>())
-            .add(academyByLocation.categoryId()));
+            .add(academyByLocation.getCategoryId()));
 
         return new AcademyByLocationWithCursorRepositoryResponse(
             academyIdWithCategories,

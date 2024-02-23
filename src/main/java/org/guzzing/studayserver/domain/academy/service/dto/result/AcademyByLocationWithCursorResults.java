@@ -1,6 +1,7 @@
 package org.guzzing.studayserver.domain.academy.service.dto.result;
 
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithCursorRepositoryResponse;
+import org.guzzing.studayserver.domain.academy.repository.dto.AcademyWithLikeByLocation;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.AcademyByLocationWithCursorRepositoryResponse;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 import java.util.List;
@@ -41,20 +42,20 @@ public record AcademyByLocationWithCursorResults(
     ) {
 
         public static AcademiesByLocationWithCursorResult from(
-            AcademyByLocationWithCursorRepositoryResponse.AcademyByLocation academyByLocationWithScroll,
+            AcademyWithLikeByLocation academyByLocation,
             List<Long> categories) {
             return new AcademiesByLocationWithCursorResult(
-                academyByLocationWithScroll.academyId(),
-                academyByLocationWithScroll.academyName(),
-                academyByLocationWithScroll.fullAddress(),
-                academyByLocationWithScroll.phoneNumber(),
+                academyByLocation.academyId(),
+                academyByLocation.academyName(),
+                academyByLocation.fullAddress(),
+                academyByLocation.phoneNumber(),
                 categories.stream()
                     .map(CategoryInfo::getCategoryNameById)
                     .toList(),
-                academyByLocationWithScroll.latitude(),
-                academyByLocationWithScroll.longitude(),
-                academyByLocationWithScroll.shuttleAvailable(),
-                academyByLocationWithScroll.isLiked()
+                academyByLocation.latitude(),
+                academyByLocation.longitude(),
+                academyByLocation.shuttleAvailable(),
+                academyByLocation.isLiked()
             );
         }
 
