@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import javax.sql.DataSource;
 import org.guzzing.studayserver.domain.academy.model.Academy;
+import org.guzzing.studayserver.domain.academy.model.AcademyCategory;
 import org.guzzing.studayserver.domain.academy.model.Lesson;
 import org.guzzing.studayserver.domain.academy.model.ReviewCount;
 import org.guzzing.studayserver.domain.academy.repository.academy.AcademyRepository;
@@ -290,7 +291,7 @@ class AcademyServiceTest {
     }
 
     @Test
-    @DisplayName(" 해당 지도의 중심 위치가 주어졌을 때 커서 기반으로 목록 조회를 한다.")
+    @DisplayName("해당 지도의 중심 위치가 주어졌을 때 커서 기반으로 목록 조회를 한다.")
     void getAcademiesByLocationWithCursor() {
         // Given
         lessonRepository.deleteAll();
@@ -310,8 +311,8 @@ class AcademyServiceTest {
                 );
         }
         List<String> categoryNames = AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam).stream()
-            .map(academyCategory -> academyCategory.getCategoryId())
-            .map(categoryId -> CategoryInfo.getCategoryNameById(categoryId))
+            .map(AcademyCategory::getCategoryId)
+            .map(CategoryInfo::getCategoryNameById)
             .toList();
 
         int totalSize = academies.size();
@@ -329,6 +330,49 @@ class AcademyServiceTest {
         academiesByLocationWithCursor.academiesByLocationResults()
             .stream()
             .map(AcademyByLocationWithCursorResults.AcademiesByLocationWithCursorResult::categories)
+            .forEach(categoryName -> assertThat(categoryNames).isEqualTo(categoryName));
+    }
+
+    @Test
+    @DisplayName("해당 지도의 중심 위치가 주어졌을 때 커서 기반으로 목록 조회를 하며 좋아요 여부를 포함하지 않는다.")
+    void getAcademiesByLocationWithCursorAndNotLike() {
+        // Given
+        lessonRepository.deleteAll();
+        reviewCountRepository.deleteAll();
+        academyCategoryRepository.deleteAll();
+        academyRepository.deleteAll();
+
+        List<Academy> academies = AcademyFixture.randomAcademiesWithinDistance(LATITUDE, LONGITUDE);
+        for (Academy academy : academies) {
+            Academy savedAcademy = academyRepository.save(academy);
+            lessonRepository.save(AcademyFixture.lessonForSunganm(savedAcademy));
+            reviewCountRepository.save(AcademyFixture.reviewCountDefault(savedAcademy));
+
+            AcademyFixture.academyCategoryAboutSungnam(savedAcademy)
+                .forEach(
+                    academyCategory -> academyCategoryRepository.save(academyCategory)
+                );
+        }
+        List<String> categoryNames = AcademyFixture.academyCategoryAboutSungnam(savedAcademyAboutSungnam).stream()
+            .map(AcademyCategory::getCategoryId)
+            .map(CategoryInfo::getCategoryNameById)
+            .toList();
+
+        int totalSize = academies.size();
+        int expectedSearchedPageSize = Math.min(totalSize, LOCATION_PAGE_SIZE);
+        boolean expectedHasNext = totalSize >= LOCATION_PAGE_SIZE;
+
+        //When
+        AcademyByLocationWithCursorAndNotLikeResults academiesByLocationWithCursorAndNotLike = academyService.findAcademiesByLocationWithCursorAndNotLike(
+            AcademyFixture.academyByLocationWithCursorParam(LATITUDE, LONGITUDE));
+
+        //Then
+        assertThat(academiesByLocationWithCursorAndNotLike.academiesByLocationResults())
+            .hasSize(expectedSearchedPageSize);
+        assertThat(academiesByLocationWithCursorAndNotLike.hasNext()).isEqualTo(expectedHasNext);
+        academiesByLocationWithCursorAndNotLike.academiesByLocationResults()
+            .stream()
+            .map(AcademyByLocationWithCursorAndNotLikeResults.AcademiesByLocationWithCursorAndNotLikeResult::categories)
             .forEach(categoryName -> assertThat(categoryNames).isEqualTo(categoryName));
     }
 
