@@ -79,6 +79,7 @@ public class AcademyService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "academyByLocation")
     public AcademyByLocationWithCursorResults findAcademiesByLocationWithCursor(
         AcademyByLocationWithCursorParam param) {
         String diagonal = GeometryUtil.makeDiagonal(param.baseLatitude(), param.baseLongitude(), DISTANCE);
