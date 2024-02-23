@@ -1,6 +1,6 @@
-package org.guzzing.studayserver.domain.academy.repository.dto;
+package org.guzzing.studayserver.domain.academy.repository.dto.response;
 
-public record AcademyByLocationWithScroll(
+public record AcademyByFilterWithScroll(
         Long academyId,
         String academyName,
         String fullAddress,
@@ -8,8 +8,7 @@ public record AcademyByLocationWithScroll(
         Double latitude,
         Double longitude,
         String shuttleAvailable,
-        boolean isLiked,
-        Long categoryId
+        boolean isLiked
 ) {
 
 }

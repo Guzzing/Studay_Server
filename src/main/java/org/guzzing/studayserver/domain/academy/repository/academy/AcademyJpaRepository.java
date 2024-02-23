@@ -2,7 +2,7 @@ package org.guzzing.studayserver.domain.academy.repository.academy;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.guzzing.studayserver.domain.academy.model.Academy;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByName;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.AcademiesByName;
 import org.guzzing.studayserver.domain.academy.repository.dto.AcademyFee;
 import org.guzzing.studayserver.global.error.response.ErrorCode;
 import org.springframework.data.domain.Pageable;

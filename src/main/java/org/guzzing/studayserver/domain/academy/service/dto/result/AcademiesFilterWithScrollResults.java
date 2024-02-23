@@ -2,8 +2,8 @@ package org.guzzing.studayserver.domain.academy.service.dto.result;
 
 import java.util.List;
 import java.util.Map;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademiesByFilterWithScroll;
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.AcademiesByFilterWithScroll;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.AcademyByFilterWithScroll;
 import org.guzzing.studayserver.domain.academy.util.CategoryInfo;
 
 public record AcademiesFilterWithScrollResults(

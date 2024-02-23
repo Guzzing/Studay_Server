@@ -1,6 +1,6 @@
 package org.guzzing.studayserver.domain.academy.service.dto.param;
 
-import org.guzzing.studayserver.domain.academy.repository.dto.AcademyByLocationWithCursorRepositoryRequest;
+import org.guzzing.studayserver.domain.academy.repository.dto.request.AcademyByLocationWithCursorRepositoryRequest;
 import org.guzzing.studayserver.domain.academy.util.Latitude;
 import org.guzzing.studayserver.domain.academy.util.Longitude;
 import org.guzzing.studayserver.domain.academy.util.SqlFormatter;

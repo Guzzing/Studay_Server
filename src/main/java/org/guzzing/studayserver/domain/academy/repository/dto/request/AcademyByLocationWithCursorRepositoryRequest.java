@@ -1,4 +1,4 @@
-package org.guzzing.studayserver.domain.academy.repository.dto;
+package org.guzzing.studayserver.domain.academy.repository.dto.request;
 
 public record AcademyByLocationWithCursorRepositoryRequest(
     String pointFormat,

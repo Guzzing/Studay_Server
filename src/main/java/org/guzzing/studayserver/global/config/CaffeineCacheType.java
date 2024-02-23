@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum CaffeineCacheType {
     REFRESH_TOKEN("refreshTokenCache", 30),
-    LOGOUT_TOKEN("logoutTokenCache", 1);
+    LOGOUT_TOKEN("logoutTokenCache", 1),
+    ACADEMY_BY_LOCATION("academyByLocation", 60);
 
     private static final int MAXIMUM_CACHE_SIZE = 10000;
 
