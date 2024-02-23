@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.guzzing.studayserver.domain.academy.model.Academy;
 import org.guzzing.studayserver.domain.academy.repository.dto.*;
+import org.guzzing.studayserver.domain.academy.repository.dto.request.AcademyByLocationWithCursorRepositoryRequest;
+import org.guzzing.studayserver.domain.academy.repository.dto.response.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -23,7 +25,7 @@ public interface AcademyRepository {
 
     Optional<Academy> findAcademyById(Long academyId);
 
-    AcademiesByLocationWithScroll findAcademiesByLocation(
+    AcademiesByLocationWithScrollRepositoryResponse findAcademiesByLocation(
         String pointFormat,
         Long memberId,
         int pageNumber,
@@ -36,5 +38,8 @@ public interface AcademyRepository {
         int pageSize);
 
     AcademyByLocationWithCursorRepositoryResponse findAcademiesByLocationByCursor(
+        AcademyByLocationWithCursorRepositoryRequest request);
+
+    public AcademyByLocationWithCursorNotLikeRepositoryResponse findAcademiesByCursorAndNotLike(
         AcademyByLocationWithCursorRepositoryRequest request);
 }
