@@ -3,6 +3,7 @@ package org.guzzing.studayserver.domain.academy.controller.dto.request;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeParam;
 import org.guzzing.studayserver.domain.academy.service.dto.param.AcademyByLocationWithCursorParam;
 import org.guzzing.studayserver.domain.academy.util.Latitude;
 import org.guzzing.studayserver.domain.academy.util.Longitude;
@@ -20,8 +21,17 @@ public record AcademyByLocationWithCursorRequest(
     Long lastAcademyId
 ) {
 
-    public AcademyByLocationWithCursorParam to(Long memberId) {
+    public AcademyByLocationWithCursorParam toAcademyByLocationWithCursorParam(Long memberId) {
         return new AcademyByLocationWithCursorParam(
+            Latitude.of(lat),
+            Longitude.of(lng),
+            memberId,
+            lastAcademyId
+        );
+    }
+
+    public AcademiesByLocationFacadeParam toAcademiesByLocationFacadeParam(Long memberId) {
+        return new AcademiesByLocationFacadeParam(
             Latitude.of(lat),
             Longitude.of(lng),
             memberId,

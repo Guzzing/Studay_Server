@@ -7,6 +7,7 @@ import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyByL
 import org.guzzing.studayserver.domain.academy.controller.dto.request.AcademyFilterWithScrollRequest;
 import org.guzzing.studayserver.domain.academy.controller.dto.response.*;
 import org.guzzing.studayserver.domain.academy.facade.AcademyFacade;
+import org.guzzing.studayserver.domain.academy.facade.dto.AcademiesByLocationFacadeResults;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeParam;
 import org.guzzing.studayserver.domain.academy.facade.dto.AcademyDetailFacadeResult;
 import org.guzzing.studayserver.domain.academy.service.AcademyService;
@@ -69,10 +70,24 @@ public class AcademyController {
         @MemberId Long memberId
     ) {
         AcademyByLocationWithCursorResults academiesByLocationWithCursor
-            = academyService.findAcademiesByLocationWithCursor(request.to(memberId));
+            = academyService.findAcademiesByLocationWithCursor(request.toAcademyByLocationWithCursorParam(memberId));
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(AcademyByLocationWithCursorResponses.from(academiesByLocationWithCursor));
+    }
+
+    @GetMapping(
+        path = "/complexes-notLike",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AcademyByLocationWithCursorResponses> findByLocationWithCursorNotLike(
+        @ModelAttribute @Valid AcademyByLocationWithCursorRequest request,
+        @MemberId Long memberId
+    ) {
+        AcademiesByLocationFacadeResults academiesByLocation
+            = academyFacade.getAcademiesByLocation(request.toAcademiesByLocationFacadeParam(memberId));
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(AcademyByLocationWithCursorResponses.from(academiesByLocation));
     }
 
     @GetMapping(
